@@ -102,7 +102,7 @@ if (subcategoryParam) {
     deal.category === originalCategory ||
     deal.subcategory === originalCategory
   );
-  displayName = originalCategory.charAt(0).toUpperCase() + originalCategory.slice(1);
+  displayName = originalCategory.charAt(0).toUpperCase() + originalCategory.slice(1).replace(/&amp;/g, '&');
 }
 
 // Pagination
