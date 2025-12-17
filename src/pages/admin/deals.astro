@@ -296,7 +296,7 @@ const pageDescription = "View, edit, and delete course deals on CourseSpeak.";
       });
       
       if (searchInput) {
-        searchInput.addEventListener('input', function() {
+        searchInput.addEventListener('input', function(this: HTMLInputElement) {
           console.log('Input changed:', this.value);
           performSearch();
         });
@@ -305,7 +305,7 @@ const pageDescription = "View, edit, and delete course deals on CourseSpeak.";
       loadDataAndInitialize();
     });
     
-    let allDealsData = [];
+    let allDealsData: any[] = [];
     
     function loadDataAndInitialize() {
       try {
@@ -322,7 +322,7 @@ const pageDescription = "View, edit, and delete course deals on CourseSpeak.";
     function performSearch() {
       console.log('Searching...');
       
-      const searchInput = document.getElementById('searchInput');
+      const searchInput = document.getElementById('searchInput') as HTMLInputElement;
       const tableBody = document.getElementById('dealsTableBody');
       const searchResults = document.getElementById('searchResults');
       
@@ -408,16 +408,9 @@ const pageDescription = "View, edit, and delete course deals on CourseSpeak.";
         : `Showing ${filteredDeals.length} of ${allDealsData.length} deals`;
     }
     
-    function testSearch() {
-      console.log('=== TEST SEARCH ===');
-      console.log('Data length:', allDealsData.length);
-      console.log('First deal:', allDealsData[0]);
-      performSearch();
-    }
-    
     function clearFilters() {
       console.log('Clearing filters');
-      const searchInput = document.getElementById('searchInput');
+      const searchInput = document.getElementById('searchInput') as HTMLInputElement;
       
       if (searchInput) {
         searchInput.value = '';
@@ -425,6 +418,19 @@ const pageDescription = "View, edit, and delete course deals on CourseSpeak.";
       }
     }
     
+    function testSearch() {
+      console.log('Testing search function');
+      performSearch();
+    }
+    
+    // Add type declarations for global window
+    declare global {
+      interface Window {
+        performSearch: () => void;
+        clearFilters: () => void;
+        testSearch: () => void;
+      }
+    }
     window.performSearch = performSearch;
     window.clearFilters = clearFilters;
     window.testSearch = testSearch;

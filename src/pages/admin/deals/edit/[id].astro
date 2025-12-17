@@ -671,9 +671,10 @@ const pageDescription = `Edit course deal: ${deal.title} on CourseSpeak.`;
 
   <script>
     // Rich Text Editor Functions
-    function formatText(command) {
+    function formatText(command: string) {
       document.execCommand(command, false, null);
-      document.getElementById('contentEditor').focus();
+      const contentEditor = document.getElementById('contentEditor') as HTMLTextAreaElement;
+      if (contentEditor) contentEditor.focus();
     }
     
     function insertLink() {
@@ -732,10 +733,10 @@ const pageDescription = `Edit course deal: ${deal.title} on CourseSpeak.`;
     }
     
     // Handle paste events
-    function handlePaste(e) {
+    function handlePaste(e: ClipboardEvent) {
       e.preventDefault();
-      const clipboardData = e.clipboardData || window.clipboardData;
-      let html = clipboardData.getData('text/html');
+      const clipboardData = e.clipboardData || (window as any).clipboardData;
+      let html = clipboardData?.getData('text/html');
       let text = clipboardData.getData('text/plain');
       
       if (html) {
@@ -750,8 +751,8 @@ const pageDescription = `Edit course deal: ${deal.title} on CourseSpeak.`;
     
     // Sync rich text editor content to hidden textarea
     function syncContent() {
-      const editor = document.getElementById('contentEditor');
-      const textarea = document.getElementById('contentTextarea');
+      const editor = document.getElementById('contentEditor') as HTMLElement;
+      const textarea = document.getElementById('contentTextarea') as HTMLTextAreaElement;
       if (editor && textarea) {
         textarea.value = editor.innerHTML;
       }
@@ -778,6 +779,15 @@ const pageDescription = `Edit course deal: ${deal.title} on CourseSpeak.`;
     });
     
     // Make functions globally available
+    // Add type declarations for global window
+    declare global {
+      interface Window {
+        formatText: (command: string) => void;
+        insertLink: () => void;
+        cleanHTML: (html: string) => string;
+      }
+    }
+    
     window.formatText = formatText;
     window.insertLink = insertLink;
     window.cleanHTML = cleanHTML;
@@ -851,7 +861,8 @@ const pageDescription = `Edit course deal: ${deal.title} on CourseSpeak.`;
         
       } catch (error) {
         console.error('Update error:', error);
-        alert('Update failed: ' + error.message);
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        alert('Update failed: ' + errorMessage);
       }
     });
   </script>
