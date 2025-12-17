@@ -1,0 +1,175 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { readDeals } from "../lib/store";
+
+function normName(raw?: string | null) {
+  if (!raw) return undefined;
+  let v = String(raw).trim();
+  v = v.replace(/&amp;/gi, "&");
+  v = v.replace(/\s+/g, " ");
+  return v || undefined;
+}
+
+function slugifyCategory(name: string) {
+  if (name === "Uncategorized") return "uncategorized";
+  let v = name.toLowerCase();
+  v = v.replace(/&amp;/gi, "&");
+  v = v.replace(/&/g, " and ");
+  v = v.replace(/[^\w\s-]/g, "");
+  v = v.trim();
+  v = v.replace(/\s+/g, "-");
+  v = v.replace(/-+/g, "-");
+  return v;
+}
+
+// Get all deals and organize by categories
+const deals = await readDeals();
+const cats = new Map<string, { name: string; count: number; subs: Map<string, number> }>();
+
+for (const d of deals) {
+  const cName = normName(d.category) ?? "Uncategorized";
+  const cKey = cName.toLowerCase();
+  if (!cats.has(cKey)) cats.set(cKey, { name: cName, count: 0, subs: new Map() });
+  const bucket = cats.get(cKey)!;
+  bucket.count += 1;
+  const sName = normName(d.subcategory);
+  if (sName) {
+    bucket.subs.set(sName, (bucket.subs.get(sName) || 0) + 1);
+  }
+}
+
+const listRaw = Array.from(cats.values()).sort((a, b) => b.count - a.count);
+
+// Add icon paths
+const list = listRaw.map((c) => {
+  const cSlug = slugifyCategory(c.name);
+  let icon = "/categories/default.svg";
+  // You can add specific icon logic here if needed
+  return { ...c, icon, slug: cSlug };
+});
+
+const pageTitle = `All Categories & Subcategories | CourseSpeak`;
+const pageDescription = "Browse all primary categories and subcategories of Udemy deals and free coupons on CourseSpeak.";
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <div style={{ background: "#0b0d12", minHeight: "100vh", color: "#e2e8f0" }}>
+    <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "2rem 1rem" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+        <section
+          style={{
+            padding: "2rem",
+            borderRadius: "1.125rem",
+            display: "grid",
+            gap: "0.75rem",
+            border: "1px solid rgba(91, 140, 255, 0.24)",
+            background: "linear-gradient(140deg, rgba(11, 13, 18, 0.98) 0%, rgba(18, 24, 40, 0.98) 55%, rgba(42, 64, 110, 0.38) 100%)",
+            boxShadow: "0 18px 36px rgba(8, 12, 26, 0.45)",
+          }}
+        >
+          <span style={{ color: "#3b82f6", fontSize: "0.75rem", fontWeight: 600, textTransform: "uppercase" }}>Categories</span>
+          <h1 style={{ margin: 0, fontSize: "2rem", fontWeight: 700, color: "#fff" }}>All Categories & Subcategories</h1>
+          <p style={{ margin: 0, color: "#a9b0c0", maxWidth: "45rem" }}>
+            Explore every primary category and subcategory available on CourseSpeak. Select a topic to dive straight into updated Udemy coupons and 100% off courses curated for that niche.
+          </p>
+        </section>
+
+        {list.length === 0 ? (
+          <section
+            style={{
+              padding: "2rem",
+              borderRadius: "1.125rem",
+              border: "1px solid rgba(91, 140, 255, 0.24)",
+              background: "linear-gradient(140deg, rgba(11, 13, 18, 0.98) 0%, rgba(18, 24, 40, 0.98) 55%, rgba(42, 64, 110, 0.38) 100%)",
+              boxShadow: "0 18px 36px rgba(8, 12, 26, 0.45)",
+            }}
+          >
+            <span style={{ color: "#3b82f6", fontSize: "0.75rem", fontWeight: 600, textTransform: "uppercase" }}>Categories</span>
+            <h2 style={{ margin: 0, color: "#fff" }}>All Categories & Subcategories</h2>
+            <p style={{ margin: 0, color: "#a9b0c0" }}>
+              No categories were resolved from the current dataset. We loaded {deals.length} deals—try refreshing the deals source or verify each deal includes a category or subcategory value.
+            </p>
+          </section>
+        ) : (
+          <div style={{ 
+            display: "grid", 
+            gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", 
+            gap: "1rem" 
+          }}>
+            {list.map((c) => (
+              <div 
+                key={c.slug} 
+                style={{ 
+                  color: "#eaf4ff", 
+                  borderRadius: "0.875rem",
+                  border: "1px solid rgba(91, 140, 255, 0.24)",
+                  background: "linear-gradient(140deg, rgba(11, 13, 18, 0.98) 0%, rgba(18, 24, 40, 0.98) 55%, rgba(42, 64, 110, 0.38) 100%)",
+                  padding: "1rem"
+                }}
+              >
+                <div style={{ display: "grid", gap: "0.5rem" }}>
+                  <a 
+                    href={`/category/${c.slug}`} 
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.625rem" }}>
+                      <img 
+                        src={c.icon} 
+                        alt="" 
+                        width="20" 
+                        height="20" 
+                        style={{ filter: "brightness(1.2)" }}
+                      />
+                      <div style={{ fontWeight: 700, fontSize: "1rem" }}>{c.name}</div>
+                      <span style={{ 
+                        fontSize: "0.75rem", 
+                        marginLeft: "auto", 
+                        color: "#a9b0c0" 
+                      }}>
+                        {c.count} deals
+                      </span>
+                    </div>
+                  </a>
+                  {c.subs.size > 0 && (
+                    <div style={{ display: "flex", gap: "0.375rem", flexWrap: "wrap" }}>
+                      {Array.from(c.subs.entries())
+                        .sort((a, b) => b[1] - a[1])
+                        .slice(0, 3) // Show top 3 subcategories
+                        .map(([sub, n]) => (
+                          <a
+                            key={sub}
+                            href={`/category/${c.slug}?subcategory=${encodeURIComponent(sub)}`}
+                            style={{
+                              textDecoration: "none",
+                              padding: "0.25rem 0.5rem",
+                              borderRadius: "0.25rem",
+                              fontSize: "0.75rem",
+                              backgroundColor: "rgba(59, 130, 246, 0.1)",
+                              border: "1px solid rgba(59, 130, 246, 0.3)",
+                              color: "#93c5fd"
+                            }}
+                            title={`${sub} (${n})`}
+                          >
+                            {sub}
+                          </a>
+                        ))}
+                      {c.subs.size > 3 && (
+                        <span style={{ 
+                          fontSize: "0.75rem", 
+                          color: "#a9b0c0",
+                          padding: "0.25rem 0.5rem"
+                        }}>
+                          +{c.subs.size - 3} more
+                        </span>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</Layout>
