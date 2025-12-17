@@ -149,15 +149,19 @@ function useProvideAdminAuth(): {
 }
 
 export default function AdminAuthGate({ children }: { children: ReactNode }) {
-  // SECURITY: Only allow admin access in local development
-  const isLocalDevelopment = typeof window !== "undefined" && (
-    window.location.hostname === "localhost" || 
-    window.location.hostname === "127.0.0.1" ||
-    window.location.hostname.includes('.local')
-  );
+  // SIMPLE SECURITY: Check if we're in development
+  const hostname = typeof window !== "undefined" ? window.location.hostname : '';
+  
+  // Allow local development only
+  const isAllowed = hostname === 'localhost' || 
+                   hostname === '127.0.0.1' || 
+                   hostname.includes('.local') ||
+                   hostname.includes('localhost'); // fallback untuk port number
 
-  // BLOCK PRODUCTION ADMIN ACCESS - SECURITY REQUIREMENT
-  if (!isLocalDevelopment) {
+  console.log('🔍 AdminAuthGate Debug:', { hostname, isAllowed });
+
+  // BLOCK production access
+  if (!isAllowed) {
     return (
       <div className="container" style={{ padding: "4rem 0", textAlign: "center" }}>
         <div style={{ 
@@ -168,20 +172,20 @@ export default function AdminAuthGate({ children }: { children: ReactNode }) {
           color: "white", 
           borderRadius: "0.5rem" 
         }}>
-          <h2 style={{ margin: "0 0 1rem 0" }}>� Access Denied</h2>
+          <h2 style={{ margin: "0 0 1rem 0" }}>🚫 Access Denied</h2>
           <p style={{ margin: "0 0 1rem 0" }}>
             Admin access is only available in local development environment.
           </p>
           <p style={{ margin: "0", fontSize: "0.875rem", opacity: 0.9 }}>
-            For security reasons, admin panel is not accessible in production.
+            Current hostname: {hostname}
           </p>
         </div>
       </div>
     );
   }
 
-  // LOCAL DEVELOPMENT: Allow admin access
-  console.log('🛠️ Local development - Admin access granted');
+  // ALLOW local development
+  console.log('✅ Local development detected - Admin access granted');
   return <>{children}</>;
 }
 
