@@ -46,7 +46,7 @@ export default function DealCard({ deal }: { deal: any }) {
               loading="lazy"
               width="400"
               height="225"
-              style={{ width: "100%", borderRadius: 8, border: "1px solid #1f2330", display: "block" }}
+              style={{ width: "100%", height: "225px", borderRadius: 8, border: "1px solid #1f2330", display: "block", objectFit: "cover" }}
               referrerPolicy="no-referrer"
             />
             {deal.duration && (
