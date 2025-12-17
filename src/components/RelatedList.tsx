@@ -36,7 +36,7 @@ export default function RelatedList({ items, initial = 4, step = 4 }: { items: I
                     width="300"
                     height="200"
                     loading="lazy"
-                    style={{ width: "100%", height: "200px", borderRadius: 8, border: "1px solid #1f2330", objectFit: "cover" }} 
+                    style={{ width: "100%", height: "140px", borderRadius: 8, border: "1px solid #1f2330", objectFit: "cover" }} 
                   />
                   <div style={{ position: "absolute", top: 8, left: 8, display: "flex", gap: 6, flexWrap: "wrap" }}>
                     {isNew(r.updatedAt) && (
