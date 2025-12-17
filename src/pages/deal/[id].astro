@@ -1,0 +1,23 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getDealById, readDeals } from "../../lib/store";
+import DealPage from "../../components/DealPage";
+
+const { id } = Astro.params;
+if (!id) return Astro.redirect("/404");
+
+const deal = await getDealById(id);
+if (!deal) return Astro.redirect("/404");
+
+const allDeals = await readDeals();
+const relatedDeals = allDeals
+    .filter((d) => d.id !== deal.id && d.category === deal.category)
+    .slice(0, 4);
+---
+
+<Layout title={`${deal.title} - CourseSpeak`} description={deal.description}>
+    {
+        /* We pass client:load to ensure interactivity (tabs, hydration) works immediately */
+    }
+    <DealPage client:load deal={deal} relatedDeals={relatedDeals} />
+</Layout>

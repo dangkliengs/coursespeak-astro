@@ -1,0 +1,142 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+    title="Contact Us - CourseSpeak"
+    description="Get in touch with the CourseSpeak team for questions, feedback, or partnerships."
+>
+    <div
+        style={{
+            background: "#0b0d12",
+            minHeight: "80vh",
+            padding: "4rem 1rem",
+            color: "#e2e8f0",
+        }}
+    >
+        <div class="container" style={{ maxWidth: "800px", margin: "0 auto" }}>
+            <h1
+                style={{
+                    fontSize: "2.5rem",
+                    fontWeight: 800,
+                    marginBottom: "2rem",
+                    color: "#fff",
+                    textAlign: "center",
+                }}
+            >
+                Contact Us
+            </h1>
+
+            <div style={{ display: "grid", gap: "2rem" }}>
+                {/* Contact Info Card */}
+                <div
+                    style={{
+                        background: "#1f2330",
+                        padding: "2rem",
+                        borderRadius: "12px",
+                        border: "1px solid #2d3748",
+                    }}
+                >
+                    <h2
+                        style={{
+                            fontSize: "1.5rem",
+                            fontWeight: 700,
+                            marginBottom: "1rem",
+                            color: "#fff",
+                        }}
+                    >
+                        Get in Touch
+                    </h2>
+                    <p
+                        style={{
+                            marginBottom: "1.5rem",
+                            lineHeight: 1.6,
+                            color: "#cbd5e1",
+                        }}
+                    >
+                        We'd love to hear from you! Whether you have a question
+                        about a deal, feedback on our platform, or want to
+                        discuss a partnership, our team is here to help.
+                    </p>
+
+                    <div style={{ marginBottom: "1rem" }}>
+                        <strong
+                            style={{
+                                display: "block",
+                                marginBottom: "0.5rem",
+                                color: "#fff",
+                            }}>Email Us</strong
+                        >
+                        <a
+                            href="mailto:contact@coursespeak.com"
+                            style={{
+                                color: "#3b82f6",
+                                textDecoration: "none",
+                                fontSize: "1.1rem",
+                            }}>contact@coursespeak.com</a
+                        >
+                    </div>
+
+                    <p style={{ fontSize: "0.9rem", color: "#9ca3af" }}>
+                        We typically respond within 1-2 business days.
+                    </p>
+                </div>
+
+                {/* Socials Card */}
+                <div
+                    style={{
+                        background: "#1f2330",
+                        padding: "2rem",
+                        borderRadius: "12px",
+                        border: "1px solid #2d3748",
+                    }}
+                >
+                    <h2
+                        style={{
+                            fontSize: "1.5rem",
+                            fontWeight: 700,
+                            marginBottom: "1rem",
+                            color: "#fff",
+                        }}
+                    >
+                        Follow Us
+                    </h2>
+                    <p style={{ marginBottom: "1.5rem", color: "#cbd5e1" }}>
+                        Stay updated with the latest course deals and
+                        announcements.
+                    </p>
+                    <div style={{ display: "flex", gap: "1.5rem" }}>
+                        <a
+                            href="https://x.com/courses_peak"
+                            target="_blank"
+                            rel="noreferrer"
+                            style={{
+                                color: "#3b82f6",
+                                textDecoration: "none",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "8px",
+                            }}
+                        >
+                            Twitter / X
+                        </a>
+                        <a
+                            href="https://www.facebook.com/coursespeak24"
+                            target="_blank"
+                            rel="noreferrer"
+                            style={{
+                                color: "#3b82f6",
+                                textDecoration: "none",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "8px",
+                            }}
+                        >
+                            Facebook
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</Layout>

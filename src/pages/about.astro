@@ -1,0 +1,106 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+    title="About Us - CourseSpeak"
+    description="Learn more about CourseSpeak and our mission to help you learn for less."
+>
+    <div
+        style={{
+            background: "#0b0d12",
+            minHeight: "80vh",
+            padding: "4rem 1rem",
+            color: "#e2e8f0",
+        }}
+    >
+        <div class="container" style={{ maxWidth: "800px", margin: "0 auto" }}>
+            <h1
+                style={{
+                    fontSize: "2.5rem",
+                    fontWeight: 800,
+                    marginBottom: "2rem",
+                    color: "#fff",
+                    textAlign: "center",
+                }}
+            >
+                About CourseSpeak
+            </h1>
+
+            <div class="prose" style={{ lineHeight: 1.7, color: "#cbd5e1" }}>
+                <p style={{ fontSize: "1.1rem", marginBottom: "1.5rem" }}>
+                    CourseSpeak is your premier destination for finding the best
+                    deals on online learning. We believe education should be
+                    accessible and affordable for everyone.
+                </p>
+
+                <h2
+                    style={{
+                        fontSize: "1.5rem",
+                        fontWeight: 700,
+                        color: "#fff",
+                        marginTop: "2rem",
+                        marginBottom: "1rem",
+                    }}
+                >
+                    Our Mission
+                </h2>
+                <p>
+                    Our mission is simple: to help you <strong
+                        >learn more for less</strong
+                    >. We scour the web daily to find valid 100% off coupons and
+                    deep discounts for top rated courses on platforms like
+                    Udemy.
+                </p>
+
+                <h2
+                    style={{
+                        fontSize: "1.5rem",
+                        fontWeight: 700,
+                        color: "#fff",
+                        marginTop: "2rem",
+                        marginBottom: "1rem",
+                    }}
+                >
+                    Why Choose Us?
+                </h2>
+                <ul
+                    style={{
+                        listStyle: "disc",
+                        paddingLeft: "1.5rem",
+                        marginBottom: "2rem",
+                    }}
+                >
+                    <li style={{ marginBottom: "0.5rem" }}>
+                        <strong>Curated Deals:</strong> We verify coupons to ensure
+                        they work.
+                    </li>
+                    <li style={{ marginBottom: "0.5rem" }}>
+                        <strong>Daily Updates:</strong> New courses are added every
+                        single day.
+                    </li>
+                    <li style={{ marginBottom: "0.5rem" }}>
+                        <strong>Quality Focus:</strong> We prioritize high-rated courses
+                        with good student feedback.
+                    </li>
+                </ul>
+
+                <div style={{ textAlign: "center", marginTop: "3rem" }}>
+                    <a
+                        href="/deals"
+                        style={{
+                            background: "#3b82f6",
+                            color: "white",
+                            padding: "0.75rem 2rem",
+                            borderRadius: "99px",
+                            textDecoration: "none",
+                            fontWeight: "600",
+                        }}
+                    >
+                        Explore Deals
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</Layout>

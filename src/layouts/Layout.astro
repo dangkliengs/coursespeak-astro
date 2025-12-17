@@ -1,22 +1,214 @@
+---
+import "../styles/globals.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: string;
+  canonical?: string;
+}
+
+const {
+  title = "100% Off and Free Udemy Coupons December 2025 | Coursespeak",
+  description = "Discover 100% off Udemy coupons and free courses updated daily. Find the best deals on programming, design, marketing, and more.",
+  image = "/og-image.jpg", // Default OG image (ensure this exists or use text generation API if needed later)
+  type = "website",
+  canonical,
+} = Astro.props;
+
+const siteUrl = import.meta.env.SITE || "https://coursespeak.com";
+const canonicalURL = canonical || new URL(Astro.url.pathname, siteUrl).href;
+---
+
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonicalURL} />
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+    <title>{title}</title>
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={image} />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=cal:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header
+      style={{ borderBottom: "1px solid #1f2330", background: "#0b0d12" }}
+    >
+      <nav
+        class="container"
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "16px",
+        }}
+      >
+        <a href="/" class="logo">
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <svg
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+            <span
+              style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#fff" }}
+              >CourseSpeak</span
+            >
+          </div>
+        </a>
+        <div style={{ display: "flex", gap: "24px", alignItems: "center" }}>
+          {
+            /* Navigation Links if any in source, mostly footer driven but we add common ones */
+          }
+          <a
+            href="/"
+            style={{
+              color: "#9ca3af",
+              textDecoration: "none",
+              fontSize: "0.95rem",
+            }}>Home</a
+          >
+          <a
+            href="/deals"
+            style={{
+              color: "#9ca3af",
+              textDecoration: "none",
+              fontSize: "0.95rem",
+            }}>Deals</a
+          >
+        </div>
+      </nav>
+    </header>
+
+    <main style={{ minHeight: "calc(100vh - 300px)" }}>
+      <slot />
+    </main>
+
+    <footer
+      style={{
+        background: "#0b0d12",
+        borderTop: "1px solid #1f2330",
+        padding: "48px 0",
+        color: "#9ca3af",
+      }}
+    >
+      <div class="container">
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+            gap: "32px",
+            marginBottom: "48px",
+          }}
+        >
+          <div>
+            <h3
+              style={{
+                color: "#fff",
+                marginBottom: "16px",
+                fontSize: "1.1rem",
+              }}
+            >
+              CourseSpeak
+            </h3>
+            <p style={{ fontSize: "0.9rem", lineHeight: "1.5" }}>
+              Find the best online course deals and coupons. Daily updated
+              discounts for Udemy, Coursera, and more.
+            </p>
+          </div>
+          <div>
+            <h4 style={{ color: "#fff", marginBottom: "16px" }}>Links</h4>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+              <li style={{ marginBottom: "8px" }}>
+                <a href="/" style={{ color: "inherit", textDecoration: "none" }}
+                  >Home</a
+                >
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                <a
+                  href="/deals"
+                  style={{ color: "inherit", textDecoration: "none" }}>Deals</a
+                >
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                <a
+                  href="/about"
+                  style={{ color: "inherit", textDecoration: "none" }}>About</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 style={{ color: "#fff", marginBottom: "16px" }}>Company</h4>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+              <li style={{ marginBottom: "8px" }}>
+                <a
+                  href="/privacy"
+                  style={{ color: "inherit", textDecoration: "none" }}
+                  >Privacy</a
+                >
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                <a
+                  href="/terms"
+                  style={{ color: "inherit", textDecoration: "none" }}>Terms</a
+                >
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                <a
+                  href="/contact"
+                  style={{ color: "inherit", textDecoration: "none" }}
+                  >Contact</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div
+          style={{
+            borderTop: "1px solid #1f2330",
+            paddingTop: "24px",
+            textAlign: "center",
+            fontSize: "0.9rem",
+          }}
+        >
+          <p>
+            &copy; {new Date().getFullYear()} CourseSpeak. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

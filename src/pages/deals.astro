@@ -1,0 +1,43 @@
+---
+import Layout from "../layouts/Layout.astro";
+import DealsList from "../components/DealsList";
+import { readDeals } from "../lib/store";
+
+const allDeals = await readDeals();
+const PAGE_SIZE = 24;
+const initialItems = allDeals.slice(0, PAGE_SIZE);
+const totalPages = Math.ceil(allDeals.length / PAGE_SIZE);
+---
+
+<Layout 
+    title="All Course Deals - CourseSpeak" 
+    description="Browse all available online course deals and coupons. Find discounts on Udemy, Coursera, and more platforms. Save up to 100% on premium courses."
+>
+    <div
+        style={{
+            background: "#0b0d12",
+            minHeight: "100vh",
+            paddingBottom: "4rem",
+        }}
+    >
+        <div class="container" style={{ padding: "4rem 1rem" }}>
+            <h1
+                style={{
+                    fontSize: "2rem",
+                    fontWeight: "bold",
+                    color: "#fff",
+                    marginBottom: "2rem",
+                }}
+            >
+                All Deals
+            </h1>
+            <DealsList
+                client:load
+                initialItems={initialItems}
+                initialPage={1}
+                totalPages={totalPages}
+                baseParams={{ pageSize: String(PAGE_SIZE) }}
+            />
+        </div>
+    </div>
+</Layout>
