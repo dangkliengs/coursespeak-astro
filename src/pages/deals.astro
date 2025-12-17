@@ -34,6 +34,7 @@ const totalPages = Math.ceil(allDeals.length / PAGE_SIZE);
                 initialPage={1}
                 totalPages={totalPages}
                 baseParams={{ pageSize: String(PAGE_SIZE) }}
+                allDeals={allDeals}
             />
         </div>
     </div>

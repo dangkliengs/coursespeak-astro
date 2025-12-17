@@ -7,11 +7,13 @@ export default function DealsList({
   initialPage,
   totalPages,
   baseParams,
+  allDeals,
 }: {
   initialItems: any[];
   initialPage: number;
   totalPages: number;
   baseParams: Record<string, string | undefined>;
+  allDeals?: any[];
 }) {
   const [items, setItems] = useState<any[]>(initialItems || []);
   const [page, setPage] = useState<number>(initialPage || 1);
@@ -23,16 +25,38 @@ export default function DealsList({
     if (!canShowMore || loading) return;
     setLoading(true);
     try {
-      const params = new URLSearchParams();
-      Object.entries(baseParams).forEach(([k, v]) => {
-        if (v) params.set(k, v);
-      });
-      params.set("page", String(page + 1));
-      params.set("pageSize", baseParams.pageSize || "12");
-      const res = await fetch(`/api/deals?${params.toString()}`, { cache: "no-store" });
-      const data = await res.json();
-      setItems((prev) => prev.concat(data.items || []));
-      setPage(data.page || page + 1);
+      // For static build, use client-side pagination instead of API
+      const pageSize = parseInt(baseParams.pageSize || "12", 10);
+      const nextPage = page + 1;
+      const start = (nextPage - 1) * pageSize;
+      
+      // Filter deals based on baseParams
+      let filteredDeals = allDeals || [];
+      
+      if (baseParams.category) {
+        filteredDeals = filteredDeals.filter(d =>
+          d.category?.toLowerCase() === baseParams.category?.toLowerCase() ||
+          d.subcategory?.toLowerCase() === baseParams.category?.toLowerCase()
+        );
+      }
+
+      if (baseParams.provider) {
+        filteredDeals = filteredDeals.filter(d => 
+          d.provider?.toLowerCase() === baseParams.provider?.toLowerCase()
+        );
+      }
+
+      if (baseParams.q) {
+        const query = baseParams.q.toLowerCase();
+        filteredDeals = filteredDeals.filter(d =>
+          d.title?.toLowerCase().includes(query) ||
+          d.description?.toLowerCase().includes(query)
+        );
+      }
+
+      const newItems = filteredDeals.slice(start, start + pageSize);
+      setItems((prev) => prev.concat(newItems));
+      setPage(nextPage);
     } finally {
       setLoading(false);
     }
