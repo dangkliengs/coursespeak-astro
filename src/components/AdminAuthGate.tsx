@@ -49,9 +49,9 @@ function useProvideAdminAuth(): {
     }
     
     // Fallback: check localStorage for local development
-    if (typeof window !== "undefined" && window.location.hostname === "localhost") {
+    if (typeof window !== "undefined") {
       const token = localStorage.getItem("coursespeak:adminToken");
-      if (token) {
+      if (token === "admin-token") {
         setStatus("authenticated");
         setError(null);
         return true;
@@ -89,8 +89,8 @@ function useProvideAdminAuth(): {
         setStatus("unauthenticated");
         return;
       }
-      // Fallback: store token in localStorage for local development
-      if (typeof window !== "undefined" && window.location.hostname === "localhost") {
+      // Store token in localStorage for local development
+      if (typeof window !== "undefined") {
         localStorage.setItem("coursespeak:adminToken", token);
       }
       setTokenInput("");
