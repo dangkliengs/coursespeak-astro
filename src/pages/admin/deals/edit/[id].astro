@@ -567,28 +567,44 @@ const pageDescription = `Edit course deal: ${deal.title} on CourseSpeak.`;
   </div>
 
   <script>
-    document.getElementById('editForm').addEventListener('submit', async (e) => {
+    document.getElementById('editForm')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       
-      const formData = new FormData(e.target);
-      const dealData = Object.fromEntries(formData.entries());
+      const form = e.target as HTMLFormElement;
+      const formData = new FormData(form);
+      const dealData: any = {};
       
-      // Convert numeric fields
-      if (dealData.price) dealData.price = parseFloat(dealData.price);
-      if (dealData.originalPrice) dealData.originalPrice = parseFloat(dealData.originalPrice);
-      if (dealData.rating) dealData.rating = parseFloat(dealData.rating);
-      if (dealData.students) dealData.students = parseInt(dealData.students);
+      // Convert FormData to object with proper type checking
+      for (const [key, value] of formData.entries()) {
+        if (typeof value === 'string') {
+          dealData[key] = value;
+        }
+      }
+      
+      // Convert numeric fields with type checking
+      if (dealData.price && typeof dealData.price === 'string') {
+        dealData.price = parseFloat(dealData.price);
+      }
+      if (dealData.originalPrice && typeof dealData.originalPrice === 'string') {
+        dealData.originalPrice = parseFloat(dealData.originalPrice);
+      }
+      if (dealData.rating && typeof dealData.rating === 'string') {
+        dealData.rating = parseFloat(dealData.rating);
+      }
+      if (dealData.students && typeof dealData.students === 'string') {
+        dealData.students = parseInt(dealData.students);
+      }
       
       // Convert array fields from textarea (one per line)
-      if (dealData.learn) {
-        dealData.learn = dealData.learn.split('\n').filter(item => item.trim());
+      if (dealData.learn && typeof dealData.learn === 'string') {
+        dealData.learn = dealData.learn.split('\n').filter((item: string) => item.trim());
       }
-      if (dealData.requirements) {
-        dealData.requirements = dealData.requirements.split('\n').filter(item => item.trim());
+      if (dealData.requirements && typeof dealData.requirements === 'string') {
+        dealData.requirements = dealData.requirements.split('\n').filter((item: string) => item.trim());
       }
       
       // Convert datetime to ISO string
-      if (dealData.expiresAt) {
+      if (dealData.expiresAt && typeof dealData.expiresAt === 'string') {
         dealData.expiresAt = new Date(dealData.expiresAt).toISOString();
       }
       
@@ -609,7 +625,7 @@ const pageDescription = `Edit course deal: ${deal.title} on CourseSpeak.`;
           window.location.href = '/admin/deals';
         }
       } catch (error) {
-        alert('Error updating deal: ' + error.message);
+        alert('Error updating deal: ' + (error as Error).message);
       }
     });
   </script>
