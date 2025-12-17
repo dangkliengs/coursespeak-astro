@@ -84,18 +84,31 @@ if (isRedirect) {
 
 // Get all deals and filter by category
 const allDeals = await readDeals();
-const categoryDeals = allDeals.filter(deal => 
-  deal.category === originalCategory ||
-  deal.subcategory === originalCategory
-);
+const url = new URL(Astro.request.url);
+const subcategoryParam = url.searchParams.get('subcategory');
+
+let categoryDeals;
+let displayName;
+
+if (subcategoryParam) {
+  // Filter by specific subcategory
+  categoryDeals = allDeals.filter(deal => 
+    deal.subcategory === subcategoryParam
+  );
+  displayName = subcategoryParam.charAt(0).toUpperCase() + subcategoryParam.slice(1);
+} else {
+  // Filter by category (main category or any subcategory)
+  categoryDeals = allDeals.filter(deal => 
+    deal.category === originalCategory ||
+    deal.subcategory === originalCategory
+  );
+  displayName = originalCategory.charAt(0).toUpperCase() + originalCategory.slice(1);
+}
 
 // Pagination
 const PAGE_SIZE = 12;
 const initialItems = categoryDeals.slice(0, PAGE_SIZE);
 const totalPages = Math.ceil(categoryDeals.length / PAGE_SIZE);
-
-// Format category name for display
-const displayName = originalCategory.charAt(0).toUpperCase() + originalCategory.slice(1);
 
 const pageTitle = `${displayName} Courses & Deals - CourseSpeak`;
 const pageDescription = `Find the best ${displayName.toLowerCase()} courses and deals. Daily updated discounts on ${displayName.toLowerCase()} courses from top providers like Udemy, Coursera, and more.`;

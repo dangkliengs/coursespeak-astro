@@ -28,6 +28,19 @@ const categories = [
   ...new Set(allDeals.map((d) => d.category).filter(Boolean)),
 ].slice(0, 8);
 
+// Slugify function for category URLs
+function slugifyCategory(name: string) {
+  if (name === "Uncategorized") return "uncategorized";
+  let v = name.toLowerCase();
+  v = v.replace(/&amp;/gi, "&");
+  v = v.replace(/&/g, " and ");
+  v = v.replace(/[^\w\s-]/g, "");
+  v = v.trim();
+  v = v.replace(/\s+/g, "-");
+  v = v.replace(/-+/g, "-");
+  return v;
+}
+
 // Featured Deals (e.g. top rated)
 const featuredDeals = allDeals
   .filter((d) => d.rating && d.rating >= 4.5)
@@ -92,8 +105,8 @@ import DealCard from "../components/DealCard";
             <a href="/" class="pill active">All Deals</a>
             {
               categories.map((cat: any) => (
-                <a href={`/category/${cat.toLowerCase()}`} class="pill">
-                  {cat}
+                <a href={`/category/${slugifyCategory(cat)}`} class="pill">
+                  {cat.replace(/&amp;/g, '&')}
                 </a>
               ))
             }
