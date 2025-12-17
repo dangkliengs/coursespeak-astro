@@ -259,19 +259,120 @@ const pageDescription = `Edit course deal: ${deal.title} on CourseSpeak.`;
             <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
               Content (Full Course Content)
             </label>
-            <textarea 
-              name="content" 
-              rows="6"
+            
+            <!-- Rich Text Editor Toolbar -->
+            <div style={{
+              marginBottom: "0.5rem",
+              display: "flex",
+              gap: "0.5rem",
+              flexWrap: "wrap",
+              padding: "0.5rem",
+              backgroundColor: "rgba(31, 35, 48, 0.8)",
+              border: "1px solid rgba(91, 140, 255, 0.24)",
+              borderRadius: "0.5rem 0.5rem 0 0"
+            }}>
+              <button type="button" onclick="formatText('bold')" style={{
+                padding: "0.5rem 0.75rem",
+                backgroundColor: "#3b82f6",
+                color: "#fff",
+                border: "none",
+                borderRadius: "0.25rem",
+                cursor: "pointer",
+                fontWeight: "bold",
+                fontSize: "0.875rem"
+              }}>B</button>
+              
+              <button type="button" onclick="formatText('italic')" style={{
+                padding: "0.5rem 0.75rem",
+                backgroundColor: "#3b82f6",
+                color: "#fff",
+                border: "none",
+                borderRadius: "0.25rem",
+                cursor: "pointer",
+                fontStyle: "italic",
+                fontSize: "0.875rem"
+              }}>I</button>
+              
+              <button type="button" onclick="formatText('underline')" style={{
+                padding: "0.5rem 0.75rem",
+                backgroundColor: "#3b82f6",
+                color: "#fff",
+                border: "none",
+                borderRadius: "0.25rem",
+                cursor: "pointer",
+                textDecoration: "underline",
+                fontSize: "0.875rem"
+              }}>U</button>
+              
+              <div style={{ width: "1px", height: "24px", backgroundColor: "rgba(91, 140, 255, 0.24)" }}></div>
+              
+              <button type="button" onclick="formatText('insertUnorderedList')" style={{
+                padding: "0.5rem 0.75rem",
+                backgroundColor: "#3b82f6",
+                color: "#fff",
+                border: "none",
+                borderRadius: "0.25rem",
+                cursor: "pointer",
+                fontSize: "0.875rem"
+              }}>• List</button>
+              
+              <button type="button" onclick="formatText('insertOrderedList')" style={{
+                padding: "0.5rem 0.75rem",
+                backgroundColor: "#3b82f6",
+                color: "#fff",
+                border: "none",
+                borderRadius: "0.25rem",
+                cursor: "pointer",
+                fontSize: "0.875rem"
+              }}>1. List</button>
+              
+              <div style={{ width: "1px", height: "24px", backgroundColor: "rgba(91, 140, 255, 0.24)" }}></div>
+              
+              <button type="button" onclick="insertLink()" style={{
+                padding: "0.5rem 0.75rem",
+                backgroundColor: "#10b981",
+                color: "#fff",
+                border: "none",
+                borderRadius: "0.25rem",
+                cursor: "pointer",
+                fontSize: "0.875rem"
+              }}>Link</button>
+              
+              <button type="button" onclick="formatText('removeFormat')" style={{
+                padding: "0.5rem 0.75rem",
+                backgroundColor: "#ef4444",
+                color: "#fff",
+                border: "none",
+                borderRadius: "0.25rem",
+                cursor: "pointer",
+                fontSize: "0.875rem"
+              }}>Clear</button>
+            </div>
+            
+            <!-- Rich Text Editor Content Area -->
+            <div 
+              id="contentEditor"
+              contenteditable="true"
               style={{
                 width: "100%",
+                minHeight: "200px",
                 padding: "0.75rem",
                 backgroundColor: "rgba(31, 35, 48, 0.8)",
                 border: "1px solid rgba(91, 140, 255, 0.24)",
-                borderRadius: "0.5rem",
+                borderRadius: "0 0 0.5rem 0.5rem",
                 color: "#e2e8f0",
                 fontSize: "1rem",
-                resize: "vertical"
+                lineHeight: "1.5",
+                overflowY: "auto",
+                maxHeight: "400px"
               }}
+            >{deal.content || ""}</div>
+            
+            <!-- Hidden textarea to store content for form submission -->
+            <textarea 
+              name="content" 
+              id="contentTextarea"
+              style={{ display: "none" }}
             >{deal.content || ""}</textarea>
           </div>
 
@@ -567,8 +668,55 @@ const pageDescription = `Edit course deal: ${deal.title} on CourseSpeak.`;
   </div>
 
   <script>
+    // Rich Text Editor Functions
+    function formatText(command) {
+      document.execCommand(command, false, null);
+      document.getElementById('contentEditor').focus();
+    }
+    
+    function insertLink() {
+      const url = prompt('Enter the URL:');
+      if (url) {
+        document.execCommand('createLink', false, url);
+        document.getElementById('contentEditor').focus();
+      }
+    }
+    
+    // Sync rich text editor content to hidden textarea
+    function syncContent() {
+      const editor = document.getElementById('contentEditor');
+      const textarea = document.getElementById('contentTextarea');
+      if (editor && textarea) {
+        textarea.value = editor.innerHTML;
+      }
+    }
+    
+    // Initialize rich text editor
+    document.addEventListener('DOMContentLoaded', function() {
+      const editor = document.getElementById('contentEditor');
+      if (editor) {
+        // Sync content on input
+        editor.addEventListener('input', syncContent);
+        
+        // Sync content on paste
+        editor.addEventListener('paste', function() {
+          setTimeout(syncContent, 10);
+        });
+        
+        // Initial sync
+        syncContent();
+      }
+    });
+    
+    // Make functions globally available
+    window.formatText = formatText;
+    window.insertLink = insertLink;
+    
     document.getElementById('editForm')?.addEventListener('submit', async (e) => {
       e.preventDefault();
+      
+      // Sync rich text editor content before submission
+      syncContent();
       
       const form = e.target as HTMLFormElement;
       const formData = new FormData(form);
@@ -614,8 +762,24 @@ const pageDescription = `Edit course deal: ${deal.title} on CourseSpeak.`;
       console.log('Updated deal data:', dealData);
       
       try {
-        // For local development, this would update the deals.json file
-        // For now, we'll show the data and instructions
+        // Read existing deals
+        const response = await fetch('/api/update-deal', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dealData)
+        });
+        
+        if (response.ok) {
+          alert('Deal updated successfully! The changes will be reflected on the site.');
+          window.location.href = '/admin/deals';
+        } else {
+          throw new Error('Failed to update deal');
+        }
+      } catch (error) {
+        console.error('Update error:', error);
+        // Fallback to manual update if API fails
         alert('Deal data prepared for update!\n\nIn production, this would:\n1. Update the deals.json file\n2. Rebuild the site\n3. Deploy changes\n\nCurrent data: ' + JSON.stringify(dealData, null, 2));
         
         // Optional: Copy to clipboard for manual update
@@ -624,8 +788,6 @@ const pageDescription = `Edit course deal: ${deal.title} on CourseSpeak.`;
         if (confirm('Data copied to clipboard! Would you like to go back to deals list?')) {
           window.location.href = '/admin/deals';
         }
-      } catch (error) {
-        alert('Error updating deal: ' + (error as Error).message);
       }
     });
   </script>

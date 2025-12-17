@@ -28,17 +28,125 @@ const pageDescription = "View, edit, and delete course deals on CourseSpeak.";
             {allDeals.length} total deals
           </p>
         </div>
-        <a href="/admin/deals/create" style={{
-          display: "inline-block",
-          padding: "0.75rem 1.5rem",
-          backgroundColor: "#3b82f6",
-          color: "#fff",
-          textDecoration: "none",
-          borderRadius: "0.5rem",
-          fontWeight: 600
+        <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+          <a 
+            href="/deals" 
+            target="_blank"
+            style={{
+              padding: "0.75rem 1.5rem",
+              backgroundColor: "#10b981",
+              color: "#fff",
+              textDecoration: "none",
+              borderRadius: "0.5rem",
+              fontWeight: 600,
+              border: "1px solid #10b981",
+              transition: "all 0.2s ease"
+            }}
+            onmouseover="this.style.backgroundColor='#059669'"
+            onmouseout="this.style.backgroundColor='#10b981'"
+          >
+            View Posts/Deals →
+          </a>
+          <a href="/admin/deals/create" style={{
+            display: "inline-block",
+            padding: "0.75rem 1.5rem",
+            backgroundColor: "#3b82f6",
+            color: "#fff",
+            textDecoration: "none",
+            borderRadius: "0.5rem",
+            fontWeight: 600
+          }}>
+            + Create New Deal
+          </a>
+        </div>
+      </div>
+
+      <!-- Search Form -->
+      <div style={{ marginBottom: "2rem" }}>
+        <div style={{
+          borderRadius: "1rem",
+          border: "1px solid rgba(91, 140, 255, 0.24)",
+          background: "linear-gradient(140deg, rgba(11, 13, 18, 0.98) 0%, rgba(18, 24, 40, 0.98) 55%, rgba(42, 64, 110, 0.38) 100%)",
+          boxShadow: "0 18px 36px rgba(8, 12, 26, 0.45)",
+          padding: "1.5rem"
         }}>
-          + Create New Deal
-        </a>
+          <div style={{ display: "flex", gap: "1rem", alignItems: "flex-end", flexWrap: "wrap" }}>
+            <div style={{ flex: 1, minWidth: "200px" }}>
+              <label for="searchInput" style={{ display: "block", color: "#fff", marginBottom: "0.5rem", fontWeight: 600 }}>
+                Search Courses
+              </label>
+              <input 
+                type="text" 
+                id="searchInput"
+                name="searchInput"
+                placeholder="Search by title, provider, or category..."
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  backgroundColor: "rgba(255, 255, 255, 0.1)",
+                  border: "1px solid rgba(91, 140, 255, 0.24)",
+                  borderRadius: "0.5rem",
+                  color: "#fff",
+                  fontSize: "1rem"
+                }}
+                oninput="performSearch()"
+                onkeypress="if(event.key === 'Enter') performSearch()"
+              />
+            </div>
+            <div style={{ minWidth: "150px" }}>
+              <label for="categoryFilter" style={{ display: "block", color: "#fff", marginBottom: "0.5rem", fontWeight: 600 }}>
+                Category
+              </label>
+              <select 
+                id="categoryFilter"
+                name="categoryFilter"
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  backgroundColor: "rgba(255, 255, 255, 0.1)",
+                  border: "1px solid rgba(91, 140, 255, 0.24)",
+                  borderRadius: "0.5rem",
+                  color: "#fff",
+                  fontSize: "1rem"
+                }}
+                onchange="filterDeals()"
+              >
+                <option value="">All Categories</option>
+              </select>
+            </div>
+            <button 
+              onclick="clearFilters()"
+              style={{
+                padding: "0.75rem 1.5rem",
+                backgroundColor: "transparent",
+                color: "#a9b0c0",
+                border: "1px solid #a9b0c0",
+                borderRadius: "0.5rem",
+                fontWeight: 600,
+                cursor: "pointer"
+              }}
+            >
+              Clear
+            </button>
+            <button 
+              onclick="performSearch()"
+              style={{
+                padding: "0.75rem 1.5rem",
+                backgroundColor: "#3b82f6",
+                color: "#fff",
+                border: "1px solid #3b82f6",
+                borderRadius: "0.5rem",
+                fontWeight: 600,
+                cursor: "pointer"
+              }}
+            >
+              Search
+            </button>
+          </div>
+          <div id="searchResults" style={{ marginTop: "1rem", color: "#a9b0c0", fontSize: "0.875rem" }}>
+            Showing all {allDeals.length} deals
+          </div>
+        </div>
       </div>
 
       <div style={{
@@ -56,12 +164,14 @@ const pageDescription = "View, edit, and delete course deals on CourseSpeak.";
                 <th style={{ padding: "1rem", textAlign: "left", color: "#fff", fontWeight: 600 }}>Provider</th>
                 <th style={{ padding: "1rem", textAlign: "left", color: "#fff", fontWeight: 600 }}>Category</th>
                 <th style={{ padding: "1rem", textAlign: "left", color: "#fff", fontWeight: 600 }}>Price</th>
+                <th style={{ padding: "1rem", textAlign: "left", color: "#fff", fontWeight: 600 }}>Date</th>
+                <th style={{ padding: "1rem", textAlign: "left", color: "#fff", fontWeight: 600 }}>Coupon</th>
                 <th style={{ padding: "1rem", textAlign: "left", color: "#fff", fontWeight: 600 }}>Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="dealsTableBody">
               {allDeals.slice(0, 50).map((deal) => (
-                <tr key={deal.id} style={{ borderBottom: "1px solid rgba(91, 140, 255, 0.1)" }}>
+                <tr style={{ borderBottom: "1px solid rgba(91, 140, 255, 0.1)" }} data-deal-id={deal.id}>
                   <td style={{ padding: "1rem", color: "#e2e8f0" }}>
                     <div style={{ maxWidth: "300px" }}>
                       <div style={{ fontWeight: 600, marginBottom: "0.25rem" }}>{deal.title}</div>
@@ -89,8 +199,37 @@ const pageDescription = "View, edit, and delete course deals on CourseSpeak.";
                       </span>
                     )}
                   </td>
+                  <td style={{ padding: "1rem", color: "#e2e8f0" }}>
+                    <div style={{ fontSize: "0.875rem" }}>
+                      {deal.createdAt ? new Date(deal.createdAt).toLocaleDateString() : 'Unknown'}
+                    </div>
+                  </td>
+                  <td style={{ padding: "1rem", color: "#e2e8f0" }}>
+                    <div style={{ 
+                      fontSize: "0.875rem", 
+                      fontFamily: "monospace",
+                      backgroundColor: "rgba(91, 140, 255, 0.1)",
+                      padding: "0.25rem 0.5rem",
+                      borderRadius: "0.25rem",
+                      display: "inline-block"
+                    }}>
+                      {deal.coupon || 'N/A'}
+                    </div>
+                  </td>
                   <td style={{ padding: "1rem" }}>
-                    <div style={{ display: "flex", gap: "0.5rem" }}>
+                    <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+                      <a href={`/deal/${deal.id}`} target="_blank" style={{
+                        padding: "0.5rem 1rem",
+                        backgroundColor: "#10b981",
+                        color: "#fff",
+                        textDecoration: "none",
+                        borderRadius: "0.375rem",
+                        fontSize: "0.875rem",
+                        fontWeight: 600,
+                        border: "1px solid #10b981"
+                      }}>
+                        View
+                      </a>
                       <a href={`/admin/deals/edit/${deal.id}`} style={{
                         padding: "0.5rem 1rem",
                         backgroundColor: "transparent",
@@ -135,24 +274,158 @@ const pageDescription = "View, edit, and delete course deals on CourseSpeak.";
     </div>
   </div>
 
+  <!-- Hidden element to store deals data for JavaScript -->
+  <div id="deals-data" style="display: none;">{JSON.stringify(allDeals)}</div>
+
   <script>
-    async function deleteDeal(id) {
-      if (!confirm('Are you sure you want to delete this deal?')) return;
+    console.log('Script loaded!');
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('DOM loaded');
       
-      try {
-        const response = await fetch(`/api/deals/${id}`, {
-          method: 'DELETE'
+      const searchInput = document.getElementById('searchInput');
+      const categoryFilter = document.getElementById('categoryFilter');
+      const tableBody = document.getElementById('dealsTableBody');
+      
+      console.log('Elements found:', {
+        searchInput: !!searchInput,
+        categoryFilter: !!categoryFilter,
+        tableBody: !!tableBody
+      });
+      
+      if (searchInput) {
+        searchInput.addEventListener('input', function() {
+          console.log('Input changed:', this.value);
+          performSearch();
         });
-        
-        if (response.ok) {
-          alert('Deal deleted successfully');
-          window.location.reload();
-        } else {
-          alert('Failed to delete deal');
+      }
+      
+      loadDataAndInitialize();
+    });
+    
+    let allDealsData = [];
+    
+    function loadDataAndInitialize() {
+      try {
+        const dealsElement = document.getElementById('deals-data');
+        if (dealsElement) {
+          allDealsData = JSON.parse(dealsElement.textContent);
+          console.log('Data loaded:', allDealsData.length, 'deals');
         }
       } catch (error) {
-        alert('Error deleting deal: ' + error.message);
+        console.error('Error loading data:', error);
       }
     }
+    
+    function performSearch() {
+      console.log('Searching...');
+      
+      const searchInput = document.getElementById('searchInput');
+      const tableBody = document.getElementById('dealsTableBody');
+      const searchResults = document.getElementById('searchResults');
+      
+      if (!searchInput || !tableBody || !searchResults) return;
+      
+      const searchTerm = searchInput.value.toLowerCase();
+      console.log('Search term:', searchTerm);
+      
+      let filteredDeals = allDealsData.filter(deal => {
+        return !searchTerm || 
+          (deal.title && deal.title.toLowerCase().includes(searchTerm)) ||
+          (deal.provider && deal.provider.toLowerCase().includes(searchTerm)) ||
+          (deal.category && deal.category.toLowerCase().includes(searchTerm)) ||
+          (deal.coupon && deal.coupon.toLowerCase().includes(searchTerm));
+      });
+      
+      console.log('Found:', filteredDeals.length, 'deals');
+      
+      tableBody.innerHTML = '';
+      
+      filteredDeals.slice(0, 50).forEach(deal => {
+        const row = document.createElement('tr');
+        row.style.borderBottom = '1px solid rgba(91, 140, 255, 0.1)';
+        
+        row.innerHTML = `
+          <td style="padding: 1rem; color: #e2e8f0;">
+            <div style="max-width: 300px;">
+              <div style="font-weight: 600; margin-bottom: 0.25rem;">${deal.title || 'Untitled'}</div>
+              <div style="font-size: 0.875rem; color: #a9b0c0;">ID: ${deal.id || 'Unknown'}</div>
+            </div>
+          </td>
+          <td style="padding: 1rem; color: #e2e8f0;">${deal.provider || 'Unknown'}</td>
+          <td style="padding: 1rem; color: #e2e8f0;">${deal.category || 'Uncategorized'}</td>
+          <td style="padding: 1rem; color: #e2e8f0;">$${deal.price || '0'}</td>
+          <td style="padding: 1rem; color: #e2e8f0;">
+            <div style="font-size: 0.875rem;">
+              ${deal.createdAt ? new Date(deal.createdAt).toLocaleDateString() : 'Unknown'}
+            </div>
+          </td>
+          <td style="padding: 1rem; color: #e2e8f0;">
+            <div style="
+              font-size: 0.875rem;
+              font-family: monospace;
+              background-color: rgba(91, 140, 255, 0.1);
+              padding: 0.25rem 0.5rem;
+              border-radius: 0.25rem;
+              display: inline-block;
+            ">
+              ${deal.coupon || 'N/A'}
+            </div>
+          </td>
+          <td style="padding: 1rem;">
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <a href="/deal/${deal.id || ''}" target="_blank" style="
+                padding: 0.5rem 1rem;
+                background-color: #10b981;
+                color: #fff;
+                text-decoration: none;
+                border-radius: 0.375rem;
+                font-size: 0.875rem;
+                font-weight: 600;
+                border: 1px solid #10b981;
+              ">View</a>
+              <a href="/admin/deals/edit/${deal.id || ''}" style="
+                padding: 0.5rem 1rem;
+                background-color: transparent;
+                color: #3b82f6;
+                border: 1px solid #3b82f6;
+                text-decoration: none;
+                border-radius: 0.375rem;
+                font-size: 0.875rem;
+                font-weight: 600;
+              ">Edit</a>
+            </div>
+          </td>
+        `;
+        
+        tableBody.appendChild(row);
+      });
+      
+      searchResults.textContent = filteredDeals.length === 0 
+        ? 'No deals found' 
+        : `Showing ${filteredDeals.length} of ${allDealsData.length} deals`;
+    }
+    
+    function testSearch() {
+      console.log('=== TEST SEARCH ===');
+      console.log('Data length:', allDealsData.length);
+      console.log('First deal:', allDealsData[0]);
+      performSearch();
+    }
+    
+    function clearFilters() {
+      console.log('Clearing filters');
+      const searchInput = document.getElementById('searchInput');
+      
+      if (searchInput) {
+        searchInput.value = '';
+        performSearch();
+      }
+    }
+    
+    window.performSearch = performSearch;
+    window.clearFilters = clearFilters;
+    window.testSearch = testSearch;
+    console.log('Functions exposed');
   </script>
 </Layout>
