@@ -149,13 +149,21 @@ function useProvideAdminAuth(): {
 }
 
 export default function AdminAuthGate({ children }: { children: ReactNode }) {
-  // TEMPORARY BYPASS - REMOVE IN PRODUCTION
-  // For development purposes, always render children
-  console.log('🚀 AdminAuthGate bypassed - rendering children directly');
-  return <>{children}</>;
+  // ENVIRONMENT-BASED AUTHENTICATION
+  // Development: Bypass for easy access
+  // Production: Full authentication required
+  const isDevelopment = typeof window !== "undefined" && (
+    window.location.hostname === "localhost" || 
+    window.location.hostname === "127.0.0.1" ||
+    window.location.hostname.includes('.local')
+  );
 
-  // Original code below (commented out for now)
-  /*
+  if (isDevelopment) {
+    console.log('�️ Development mode - Admin access bypassed');
+    return <>{children}</>;
+  }
+
+  // Production: Full authentication
   const { status, error, pending, tokenInput, setTokenInput, login, refresh, logout } =
     useProvideAdminAuth();
 
@@ -203,12 +211,16 @@ export default function AdminAuthGate({ children }: { children: ReactNode }) {
             {pending ? "Memproses..." : "Masuk"}
           </button>
         </form>
+        <div style={{ marginTop: "1rem", padding: "1rem", backgroundColor: "rgba(59, 130, 246, 0.1)", borderRadius: "0.5rem" }}>
+          <p style={{ fontSize: "0.875rem", color: "#a9b0c0", margin: 0 }}>
+            <strong>🔒 Production Mode:</strong> Authentication required for security.
+          </p>
+        </div>
       </div>
     );
   }
 
   return <AdminAuthContext.Provider value={contextValue}>{children}</AdminAuthContext.Provider>;
-  */
 }
 
 export function useAdminAuth(): AdminAuthContextValue {
