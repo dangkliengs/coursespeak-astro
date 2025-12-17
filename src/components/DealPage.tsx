@@ -229,18 +229,12 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                     <div style={{ marginBottom: "2rem" }}>
                         <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1rem", color: "#fff" }}>Description</h2>
                         {/* Render Markdown Content */}
-                        {isClient ? (
-                            <div
-                                ref={markdownRef}
-                                className="prose prose-invert max-w-none"
-                                style={{ lineHeight: 1.7, color: "#cbd5e1" }}
-                            />
-                        ) : (
-                            <div
-                                className="prose prose-invert max-w-none"
-                                style={{ lineHeight: 1.7, color: "#cbd5e1" }}
-                            />
-                        )}
+                        <div
+                            ref={markdownRef}
+                            className="prose prose-invert max-w-none"
+                            style={{ lineHeight: 1.7, color: "#cbd5e1" }}
+                            suppressHydrationWarning={true}
+                        />
                     </div>
 
                     {/* FAQs Section */}
