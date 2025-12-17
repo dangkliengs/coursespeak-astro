@@ -3,11 +3,15 @@ import Layout from "../../layouts/Layout.astro";
 import { getDealById, readDeals } from "../../lib/store";
 import DealPage from "../../components/DealPage";
 
-const { id } = Astro.params;
-if (!id) return Astro.redirect("/404");
+export async function getStaticPaths() {
+  const allDeals = await readDeals();
+  return allDeals.map((deal) => ({
+    params: { id: deal.id },
+    props: { deal },
+  }));
+}
 
-const deal = await getDealById(id);
-if (!deal) return Astro.redirect("/404");
+const { deal } = Astro.props;
 
 const allDeals = await readDeals();
 const relatedDeals = allDeals

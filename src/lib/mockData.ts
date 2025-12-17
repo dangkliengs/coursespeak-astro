@@ -1,5 +1,5 @@
 import { slugifyCategory } from "./slug";
-import { Deal } from "@/types/deal";
+import type { Deal } from "../types/deal";
 
 export const deals: Deal[] = [
   {
