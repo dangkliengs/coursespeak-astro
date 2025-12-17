@@ -107,6 +107,13 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
             markdownRef.current.innerHTML = htmlContent;
         }
     }, [htmlContent]);
+    
+    // Provide empty div on server side, populate on client
+    const [isClient, setIsClient] = useState(false);
+    
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
 
     // Calculate time remaining for coupon
     const timeRemaining = useMemo(() => {
@@ -169,7 +176,11 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 Created by <span style={{ color: "#3b82f6", textDecoration: "underline" }}>{deal.instructor || deal.provider || "Instructor"}</span>
                             </span>
                             {deal.updatedAt && (
-                                <span style={{ color: "#9ca3af" }}>Last updated {new Date(deal.updatedAt).toLocaleDateString()}</span>
+                                <span style={{ color: "#9ca3af" }}>Last updated {new Date(deal.updatedAt).toLocaleDateString('en-US', { 
+                                    year: 'numeric', 
+                                    month: 'short', 
+                                    day: 'numeric' 
+                                })}</span>
                             )}
                             {deal.language && (
                                 <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
@@ -218,11 +229,18 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                     <div style={{ marginBottom: "2rem" }}>
                         <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1rem", color: "#fff" }}>Description</h2>
                         {/* Render Markdown Content */}
-                        <div
-                            ref={markdownRef}
-                            className="prose prose-invert max-w-none"
-                            style={{ lineHeight: 1.7, color: "#cbd5e1" }}
-                        />
+                        {isClient ? (
+                            <div
+                                ref={markdownRef}
+                                className="prose prose-invert max-w-none"
+                                style={{ lineHeight: 1.7, color: "#cbd5e1" }}
+                            />
+                        ) : (
+                            <div
+                                className="prose prose-invert max-w-none"
+                                style={{ lineHeight: 1.7, color: "#cbd5e1" }}
+                            />
+                        )}
                     </div>
 
                     {/* FAQs Section */}
