@@ -98,7 +98,6 @@ const pageDescription = "Browse all primary categories and subcategories of Udem
           }}>
             {list.map((c) => (
               <div 
-                key={c.slug} 
                 style={{ 
                   color: "#eaf4ff", 
                   borderRadius: "0.875rem",
@@ -137,7 +136,6 @@ const pageDescription = "Browse all primary categories and subcategories of Udem
                         .slice(0, 3) // Show top 3 subcategories
                         .map(([sub, n]) => (
                           <a
-                            key={sub}
                             href={`/category/${c.slug}?subcategory=${encodeURIComponent(sub)}`}
                             style={{
                               textDecoration: "none",
