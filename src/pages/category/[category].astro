@@ -35,9 +35,24 @@ export async function getStaticPaths() {
   
   // Add old URL paths for redirects
   categories.forEach(category => {
-    const oldSlug = category.toLowerCase().replace(/\s+/g, '%20').replace(/&/g, '%26');
+    // URL with %26 (encoded &)
+    const oldSlugEncoded = category.toLowerCase().replace(/\s+/g, '%20').replace(/&/g, '%26');
     paths.push({
-      params: { category: oldSlug },
+      params: { category: oldSlugEncoded },
+      props: { category: category, isRedirect: true }
+    });
+    
+    // URL with literal & (unencoded)
+    const oldSlugLiteral = category.toLowerCase().replace(/\s+/g, '%20').replace(/&/g, '&');
+    paths.push({
+      params: { category: oldSlugLiteral },
+      props: { category: category, isRedirect: true }
+    });
+    
+    // URL with %26amp; (HTML entity)
+    const oldSlugHtmlEntity = category.toLowerCase().replace(/\s+/g, '%20').replace(/&/g, '%26amp;');
+    paths.push({
+      params: { category: oldSlugHtmlEntity },
       props: { category: category, isRedirect: true }
     });
   });
