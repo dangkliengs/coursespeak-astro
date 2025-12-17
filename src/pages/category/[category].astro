@@ -6,22 +6,38 @@ import DealsList from "../../components/DealsList";
 export async function getStaticPaths() {
   const allDeals = await readDeals();
   
-  // Get unique categories
+  // Get unique categories and slugify them
   const categories = [...new Set(allDeals.map(deal => deal.category).filter(Boolean))];
   
-  return categories.map(category => ({
-    params: { category },
-    props: { category }
-  }));
+  function slugifyCategory(name: string) {
+    if (name === "Uncategorized") return "uncategorized";
+    let v = name.toLowerCase();
+    v = v.replace(/&amp;/gi, "&");
+    v = v.replace(/&/g, " and ");
+    v = v.replace(/[^\w\s-]/g, "");
+    v = v.trim();
+    v = v.replace(/\s+/g, "-");
+    v = v.replace(/-+/g, "-");
+    return v;
+  }
+  
+  return categories.map(category => {
+    const slug = slugifyCategory(category);
+    return {
+      params: { category: slug },
+      props: { category: category } // Pass original category name for filtering
+    };
+  });
 }
 
-const { category } = Astro.params;
+const { category: categorySlug } = Astro.params; // Get category slug from params
+const { category: originalCategory } = Astro.props; // Get original category name from props
 
 // Get all deals and filter by category
 const allDeals = await readDeals();
 const categoryDeals = allDeals.filter(deal => 
-  deal.category?.toLowerCase() === category.toLowerCase() ||
-  deal.subcategory?.toLowerCase() === category.toLowerCase()
+  deal.category === originalCategory ||
+  deal.subcategory === originalCategory
 );
 
 // Pagination
@@ -30,7 +46,7 @@ const initialItems = categoryDeals.slice(0, PAGE_SIZE);
 const totalPages = Math.ceil(categoryDeals.length / PAGE_SIZE);
 
 // Format category name for display
-const displayName = category.charAt(0).toUpperCase() + category.slice(1);
+const displayName = originalCategory.charAt(0).toUpperCase() + originalCategory.slice(1);
 
 const pageTitle = `${displayName} Courses & Deals - CourseSpeak`;
 const pageDescription = `Find the best ${displayName.toLowerCase()} courses and deals. Daily updated discounts on ${displayName.toLowerCase()} courses from top providers like Udemy, Coursera, and more.`;
@@ -68,7 +84,7 @@ const pageDescription = `Find the best ${displayName.toLowerCase()} courses and 
         initialItems={initialItems}
         initialPage={1}
         totalPages={totalPages}
-        baseParams={{ category }}
+        baseParams={{ category: categorySlug }}
         allDeals={categoryDeals}
       />
     </div>
