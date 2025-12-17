@@ -5,12 +5,13 @@ import HeaderSearch from "../components/HeaderSearch";
 import { readDeals } from "../lib/store";
 import { uniqueProviders } from "../lib/mockData";
 
-// Get current month and year for dynamic title
+// Get current month and year for dynamic title (consistent timezone)
 const currentDate = new Date();
+const utcDate = new Date(currentDate.toISOString());
 const monthNames = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"];
-const currentMonth = monthNames[currentDate.getMonth()];
-const currentYear = currentDate.getFullYear();
+const currentMonth = monthNames[utcDate.getMonth()];
+const currentYear = utcDate.getFullYear();
 
 // Dynamic title and description
 const pageTitle = `100% Off and Free Udemy Coupons ${currentMonth} ${currentYear} | Coursespeak`;

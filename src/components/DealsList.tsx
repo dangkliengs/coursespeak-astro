@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import DealCard from "@/components/DealCard";
 
 export default function DealsList({
@@ -15,9 +15,15 @@ export default function DealsList({
   baseParams: Record<string, string | undefined>;
   allDeals?: any[];
 }) {
+  const [isClient, setIsClient] = useState(false);
   const [items, setItems] = useState<any[]>(initialItems || []);
   const [page, setPage] = useState<number>(initialPage || 1);
   const [loading, setLoading] = useState(false);
+
+  // Detect client environment to prevent hydration mismatch
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const canShowMore = page < totalPages;
 
@@ -68,12 +74,20 @@ export default function DealsList({
 
   return (
     <>
-      <div className="grid">
-        {items.map((d: any) => (
-          <DealCard key={d.id} deal={d} />
-        ))}
-      </div>
-      {canShowMore && (
+      {isClient ? (
+        <div className="grid">
+          {items.map((d: any) => (
+            <DealCard key={d.id} deal={d} />
+          ))}
+        </div>
+      ) : (
+        <div className="grid">
+          {initialItems.map((d: any) => (
+            <DealCard key={d.id} deal={d} />
+          ))}
+        </div>
+      )}
+      {isClient && canShowMore && (
         <div style={{ display: "flex", justifyContent: "center", marginTop: 16 }}>
           <button className="pill" onClick={loadMore} disabled={loading}>
             {loading ? "Loading..." : "Show more"}
