@@ -41,7 +41,7 @@ export default function RelatedList({ items, initial = 4, step = 4 }: { items: I
                 </div>
               )}
               <h4 style={{ margin: 0, fontSize: 14 }}>
-                <a href={`/deal/${r.slug || r.id}`} style={{ color: "inherit", textDecoration: "none" }}>
+                <a href={r.url} target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: "none" }}>
                   {r.title}
                 </a>
               </h4>
@@ -64,7 +64,7 @@ export default function RelatedList({ items, initial = 4, step = 4 }: { items: I
               )}
             </div>
             <div className="card-footer" style={{ display: "flex", justifyContent: "flex-end" }}>
-              <a className="btn" href={`/deal/${r.slug || r.id}`}>View</a>
+              <a className="btn" href={r.url} target="_blank" rel="noopener noreferrer">View</a>
             </div>
           </article>
         ))}
