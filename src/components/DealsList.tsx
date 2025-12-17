@@ -74,20 +74,12 @@ export default function DealsList({
 
   return (
     <>
-      {isClient ? (
-        <div className="grid">
-          {items.map((d: any) => (
-            <DealCard key={d.id} deal={d} />
-          ))}
-        </div>
-      ) : (
-        <div className="grid">
-          {initialItems.map((d: any) => (
-            <DealCard key={d.id} deal={d} />
-          ))}
-        </div>
-      )}
-      {isClient && canShowMore && (
+      <div className="grid" suppressHydrationWarning={true}>
+        {items.map((d: any) => (
+          <DealCard key={d.id} deal={d} />
+        ))}
+      </div>
+      {canShowMore && (
         <div style={{ display: "flex", justifyContent: "center", marginTop: 16 }}>
           <button className="pill" onClick={loadMore} disabled={loading}>
             {loading ? "Loading..." : "Show more"}
