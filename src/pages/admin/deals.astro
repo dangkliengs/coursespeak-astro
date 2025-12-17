@@ -1,5 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import AdminAuthGate from "../../components/AdminAuthGate";
 import { readDeals } from "../../lib/store";
 
 const allDeals = await readDeals();
@@ -9,6 +10,7 @@ const pageDescription = "View, edit, and delete course deals on CourseSpeak.";
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
+  <AdminAuthGate>
   <div style={{ background: "#0b0d12", minHeight: "100vh", color: "#e2e8f0" }}>
     <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "2rem 1rem" }}>
       <div style={{ marginBottom: "2rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -428,4 +430,5 @@ const pageDescription = "View, edit, and delete course deals on CourseSpeak.";
     window.testSearch = testSearch;
     console.log('Functions exposed');
   </script>
+  </AdminAuthGate>
 </Layout>

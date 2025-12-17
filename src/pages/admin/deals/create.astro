@@ -1,11 +1,13 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
+import AdminAuthGate from "../../../components/AdminAuthGate";
 
 const pageTitle = "Create New Deal - Admin Dashboard";
 const pageDescription = "Create a new course deal on CourseSpeak.";
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
+  <AdminAuthGate>
   <div style={{ background: "#0b0d12", minHeight: "100vh", color: "#e2e8f0" }}>
     <div style={{ maxWidth: "800px", margin: "0 auto", padding: "2rem 1rem" }}>
       <div style={{ marginBottom: "2rem" }}>
@@ -321,4 +323,5 @@ const pageDescription = "Create a new course deal on CourseSpeak.";
       </form>
     </div>
   </div>
+  </AdminAuthGate>
 </Layout>
