@@ -1,0 +1,76 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { readDeals } from "../../lib/store";
+import DealsList from "../../components/DealsList";
+
+export async function getStaticPaths() {
+  const allDeals = await readDeals();
+  
+  // Get unique categories
+  const categories = [...new Set(allDeals.map(deal => deal.category).filter(Boolean))];
+  
+  return categories.map(category => ({
+    params: { category },
+    props: { category }
+  }));
+}
+
+const { category } = Astro.params;
+
+// Get all deals and filter by category
+const allDeals = await readDeals();
+const categoryDeals = allDeals.filter(deal => 
+  deal.category?.toLowerCase() === category.toLowerCase() ||
+  deal.subcategory?.toLowerCase() === category.toLowerCase()
+);
+
+// Pagination
+const PAGE_SIZE = 12;
+const initialItems = categoryDeals.slice(0, PAGE_SIZE);
+const totalPages = Math.ceil(categoryDeals.length / PAGE_SIZE);
+
+// Format category name for display
+const displayName = category.charAt(0).toUpperCase() + category.slice(1);
+
+const pageTitle = `${displayName} Courses & Deals - CourseSpeak`;
+const pageDescription = `Find the best ${displayName.toLowerCase()} courses and deals. Daily updated discounts on ${displayName.toLowerCase()} courses from top providers like Udemy, Coursera, and more.`;
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <div style={{ background: "#0b0d12", minHeight: "100vh", color: "#e2e8f0" }}>
+    <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "2rem 1rem" }}>
+      <div style={{ marginBottom: "2rem" }}>
+        <h1 style={{ 
+          fontSize: "2.5rem", 
+          fontWeight: 700, 
+          color: "#fff", 
+          marginBottom: "0.5rem" 
+        }}>
+          {displayName} Courses
+        </h1>
+        <p style={{ 
+          fontSize: "1.125rem", 
+          color: "#a9b0c0", 
+          marginBottom: "1rem" 
+        }}>
+          {categoryDeals.length} courses available
+        </p>
+        <a href="/deals" style={{ 
+          color: "#3b82f6", 
+          textDecoration: "none" 
+        }}>
+          ← Back to all deals
+        </a>
+      </div>
+
+      <DealsList
+        client:load
+        initialItems={initialItems}
+        initialPage={1}
+        totalPages={totalPages}
+        baseParams={{ category }}
+        allDeals={categoryDeals}
+      />
+    </div>
+  </div>
+</Layout>

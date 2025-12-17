@@ -13,6 +13,7 @@ type Item = {
   price?: number;
   originalPrice?: number;
   updatedAt?: string;
+  url?: string;
 };
 
 export default function RelatedList({ items, initial = 4, step = 4 }: { items: Item[]; initial?: number; step?: number }) {
