@@ -149,8 +149,39 @@ function useProvideAdminAuth(): {
 }
 
 export default function AdminAuthGate({ children }: { children: ReactNode }) {
-  // SIMPLIFIED SOLUTION: Always render children
-  console.log('🚀 AdminAuthGate: Rendering children directly');
+  // SECURITY: Only allow admin access in local development
+  const isLocalDevelopment = typeof window !== "undefined" && (
+    window.location.hostname === "localhost" || 
+    window.location.hostname === "127.0.0.1" ||
+    window.location.hostname.includes('.local')
+  );
+
+  // BLOCK PRODUCTION ADMIN ACCESS - SECURITY REQUIREMENT
+  if (!isLocalDevelopment) {
+    return (
+      <div className="container" style={{ padding: "4rem 0", textAlign: "center" }}>
+        <div style={{ 
+          maxWidth: 500, 
+          margin: "0 auto", 
+          padding: "2rem", 
+          backgroundColor: "#ef4444", 
+          color: "white", 
+          borderRadius: "0.5rem" 
+        }}>
+          <h2 style={{ margin: "0 0 1rem 0" }}>� Access Denied</h2>
+          <p style={{ margin: "0 0 1rem 0" }}>
+            Admin access is only available in local development environment.
+          </p>
+          <p style={{ margin: "0", fontSize: "0.875rem", opacity: 0.9 }}>
+            For security reasons, admin panel is not accessible in production.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // LOCAL DEVELOPMENT: Allow admin access
+  console.log('🛠️ Local development - Admin access granted');
   return <>{children}</>;
 }
 
