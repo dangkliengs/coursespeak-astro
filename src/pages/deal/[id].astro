@@ -6,7 +6,7 @@ import DealPage from "../../components/DealPage";
 export async function getStaticPaths() {
   const allDeals = await readDeals();
   return allDeals.map((deal) => ({
-    params: { id: deal.id },
+    params: { id: deal.slug || deal.id },
     props: { deal },
   }));
 }
