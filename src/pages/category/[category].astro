@@ -21,17 +21,51 @@ export async function getStaticPaths() {
     return v;
   }
   
-  return categories.map(category => {
+  // Create paths for both new slugs and old URLs with %20 for redirects
+  const paths = [];
+  
+  // Add new slug paths
+  categories.forEach(category => {
     const slug = slugifyCategory(category);
-    return {
+    paths.push({
       params: { category: slug },
-      props: { category: category } // Pass original category name for filtering
-    };
+      props: { category: category, isRedirect: false }
+    });
   });
+  
+  // Add old URL paths for redirects
+  categories.forEach(category => {
+    const oldSlug = category.toLowerCase().replace(/\s+/g, '%20').replace(/&/g, '%26');
+    paths.push({
+      params: { category: oldSlug },
+      props: { category: category, isRedirect: true }
+    });
+  });
+  
+  return paths;
 }
 
 const { category: categorySlug } = Astro.params; // Get category slug from params
-const { category: originalCategory } = Astro.props; // Get original category name from props
+const { category: originalCategory, isRedirect } = Astro.props; // Get props
+
+// Handle redirect for old URLs
+if (isRedirect) {
+  // Convert to new slug format
+  function slugifyCategory(name: string) {
+    if (name === "Uncategorized") return "uncategorized";
+    let v = name.toLowerCase();
+    v = v.replace(/&amp;/gi, "&");
+    v = v.replace(/&/g, " and ");
+    v = v.replace(/[^\w\s-]/g, "");
+    v = v.trim();
+    v = v.replace(/\s+/g, "-");
+    v = v.replace(/-+/g, "-");
+    return v;
+  }
+  
+  const newSlug = slugifyCategory(originalCategory);
+  return Astro.redirect(`/category/${newSlug}`, 301);
+}
 
 // Get all deals and filter by category
 const allDeals = await readDeals();
