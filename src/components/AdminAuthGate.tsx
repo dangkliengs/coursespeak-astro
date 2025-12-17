@@ -34,35 +34,55 @@ function useProvideAdminAuth(): {
   const [tokenInput, setTokenInput] = useState("");
 
   const refresh = useCallback(async () => {
+    console.log('🔄 AdminAuthGate refresh called');
     try {
+      console.log('📡 Checking session via API...');
       const res = await fetch("/api/admin/session", {
         method: "GET",
         credentials: "include",
       });
+      console.log('📡 API response status:', res.status);
       if (res.ok) {
+        console.log('✅ Session authenticated via API');
         setStatus("authenticated");
         setError(null);
         return true;
       }
     } catch (err) {
-      console.error("Failed to refresh admin session", err);
+      console.error("❌ Failed to refresh admin session", err);
     }
     
     // Fallback: check localStorage for local development
+    console.log('💾 Checking localStorage fallback...');
     if (typeof window !== "undefined") {
       const token = localStorage.getItem("coursespeak:adminToken");
+      console.log('💾 Token in localStorage:', token);
       if (token === "admin-token") {
+        console.log('✅ Authenticated via localStorage fallback');
         setStatus("authenticated");
         setError(null);
         return true;
       }
     }
     
+    console.log('❌ No authentication found, setting unauthenticated');
     setStatus("unauthenticated");
     return false;
   }, []);
 
   useEffect(() => {
+    // Quick bypass for development - remove this in production
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("coursespeak:adminToken");
+      if (token === "admin-token") {
+        console.log('🚀 Quick bypass - authenticated via localStorage');
+        setStatus("authenticated");
+        setError(null);
+        return;
+      }
+    }
+    
+    // Normal authentication flow
     refresh();
   }, [refresh]);
 
