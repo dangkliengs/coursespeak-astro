@@ -201,7 +201,7 @@ const pageDescription = "View, edit, and delete course deals on CourseSpeak.";
                   </td>
                   <td style={{ padding: "1rem", color: "#e2e8f0" }}>
                     <div style={{ fontSize: "0.875rem" }}>
-                      {deal.createdAt ? new Date(deal.createdAt).toLocaleDateString() : 'Unknown'}
+                      {deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString() : (deal.createdAt ? new Date(deal.createdAt).toLocaleDateString() : 'Unknown')}
                     </div>
                   </td>
                   <td style={{ padding: "1rem", color: "#e2e8f0" }}>
@@ -357,7 +357,7 @@ const pageDescription = "View, edit, and delete course deals on CourseSpeak.";
           <td style="padding: 1rem; color: #e2e8f0;">$${deal.price || '0'}</td>
           <td style="padding: 1rem; color: #e2e8f0;">
             <div style="font-size: 0.875rem;">
-              ${deal.createdAt ? new Date(deal.createdAt).toLocaleDateString() : 'Unknown'}
+              ${deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString() : (deal.createdAt ? new Date(deal.createdAt).toLocaleDateString() : 'Unknown')}
             </div>
           </td>
           <td style="padding: 1rem; color: #e2e8f0;">
