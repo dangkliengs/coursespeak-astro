@@ -672,21 +672,22 @@ const pageDescription = `Edit course deal: ${deal.title} on CourseSpeak.`;
   <script>
     // Rich Text Editor Functions
     function formatText(command: string) {
-      document.execCommand(command, false, null);
+      document.execCommand(command, false, undefined);
       const contentEditor = document.getElementById('contentEditor') as HTMLTextAreaElement;
       if (contentEditor) contentEditor.focus();
     }
     
     function insertLink() {
-      const url = prompt('Enter the URL:');
+      const url = prompt('Enter URL:');
       if (url) {
         document.execCommand('createLink', false, url);
-        document.getElementById('contentEditor').focus();
+        const contentEditor = document.getElementById('contentEditor') as HTMLTextAreaElement;
+        if (contentEditor) contentEditor.focus();
       }
     }
     
     // Clean HTML on paste
-    function cleanHTML(html) {
+    function cleanHTML(html: string) {
       // Remove only problematic inline styles and attributes, keep formatting
       let clean = html
         // Remove problematic styles but keep basic formatting
