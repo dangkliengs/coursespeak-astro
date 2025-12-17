@@ -241,7 +241,7 @@ const pageDescription = `Edit course deal: ${deal.title} on CourseSpeak.`;
             </label>
             <textarea 
               name="description" 
-              rows="4"
+              rows="3"
               style={{
                 width: "100%",
                 padding: "0.75rem",
@@ -253,6 +253,236 @@ const pageDescription = `Edit course deal: ${deal.title} on CourseSpeak.`;
                 resize: "vertical"
               }}
             >{deal.description || ""}</textarea>
+          </div>
+
+          <div>
+            <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+              Content (Full Course Content)
+            </label>
+            <textarea 
+              name="content" 
+              rows="6"
+              style={{
+                width: "100%",
+                padding: "0.75rem",
+                backgroundColor: "rgba(31, 35, 48, 0.8)",
+                border: "1px solid rgba(91, 140, 255, 0.24)",
+                borderRadius: "0.5rem",
+                color: "#e2e8f0",
+                fontSize: "1rem",
+                resize: "vertical"
+              }}
+            >{deal.content || ""}</textarea>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+            <div>
+              <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+                Instructor
+              </label>
+              <input 
+                type="text" 
+                name="instructor"
+                value={deal.instructor || ""}
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  backgroundColor: "rgba(31, 35, 48, 0.8)",
+                  border: "1px solid rgba(91, 140, 255, 0.24)",
+                  borderRadius: "0.5rem",
+                  color: "#e2e8f0",
+                  fontSize: "1rem"
+                }}
+              />
+            </div>
+
+            <div>
+              <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+                Duration
+              </label>
+              <input 
+                type="text" 
+                name="duration"
+                value={deal.duration || ""}
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  backgroundColor: "rgba(31, 35, 48, 0.8)",
+                  border: "1px solid rgba(91, 140, 255, 0.24)",
+                  borderRadius: "0.5rem",
+                  color: "#e2e8f0",
+                  fontSize: "1rem"
+                }}
+                placeholder="e.g., 5h 30m"
+              />
+            </div>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "1rem" }}>
+            <div>
+              <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+                Language
+              </label>
+              <input 
+                type="text" 
+                name="language"
+                value={deal.language || ""}
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  backgroundColor: "rgba(31, 35, 48, 0.8)",
+                  border: "1px solid rgba(91, 140, 255, 0.24)",
+                  borderRadius: "0.5rem",
+                  color: "#e2e8f0",
+                  fontSize: "1rem"
+                }}
+                placeholder="English"
+              />
+            </div>
+
+            <div>
+              <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+                Coupon Code
+              </label>
+              <input 
+                type="text" 
+                name="coupon"
+                value={deal.coupon || ""}
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  backgroundColor: "rgba(31, 35, 48, 0.8)",
+                  border: "1px solid rgba(91, 140, 255, 0.24)",
+                  borderRadius: "0.5rem",
+                  color: "#e2e8f0",
+                  fontSize: "1rem"
+                }}
+              />
+            </div>
+
+            <div>
+              <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+                Expires At
+              </label>
+              <input 
+                type="datetime-local" 
+                name="expiresAt"
+                value={deal.expiresAt ? new Date(deal.expiresAt).toISOString().slice(0, 16) : ""}
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  backgroundColor: "rgba(31, 35, 48, 0.8)",
+                  border: "1px solid rgba(91, 140, 255, 0.24)",
+                  borderRadius: "0.5rem",
+                  color: "#e2e8f0",
+                  fontSize: "1rem"
+                }}
+              />
+            </div>
+          </div>
+
+          <div>
+            <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+              What You'll Learn (one per line)
+            </label>
+            <textarea 
+              name="learn"
+              rows="4"
+              style={{
+                width: "100%",
+                padding: "0.75rem",
+                backgroundColor: "rgba(31, 35, 48, 0.8)",
+                border: "1px solid rgba(91, 140, 255, 0.24)",
+                borderRadius: "0.5rem",
+                color: "#e2e8f0",
+                fontSize: "1rem",
+                resize: "vertical"
+              }}
+              placeholder="Strategy for increasing data quality&#10;Ways to assess data quality&#10;How to spot problems in data"
+            >{(deal.learn || []).join('\n')}</textarea>
+          </div>
+
+          <div>
+            <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+              Requirements (one per line)
+            </label>
+            <textarea 
+              name="requirements"
+              rows="3"
+              style={{
+                width: "100%",
+                padding: "0.75rem",
+                backgroundColor: "rgba(31, 35, 48, 0.8)",
+                border: "1px solid rgba(91, 140, 255, 0.24)",
+                borderRadius: "0.5rem",
+                color: "#e2e8f0",
+                fontSize: "1rem",
+                resize: "vertical"
+              }}
+              placeholder="Interest in working with data&#10;Some Python skills are useful"
+            >{(deal.requirements || []).join('\n')}</textarea>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+            <div>
+              <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+                SEO Title
+              </label>
+              <input 
+                type="text" 
+                name="seoTitle"
+                value={deal.seoTitle || ""}
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  backgroundColor: "rgba(31, 35, 48, 0.8)",
+                  border: "1px solid rgba(91, 140, 255, 0.24)",
+                  borderRadius: "0.5rem",
+                  color: "#e2e8f0",
+                  fontSize: "1rem"
+                }}
+              />
+            </div>
+
+            <div>
+              <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+                SEO Description
+              </label>
+              <input 
+                type="text" 
+                name="seoDescription"
+                value={deal.seoDescription || ""}
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  backgroundColor: "rgba(31, 35, 48, 0.8)",
+                  border: "1px solid rgba(91, 140, 255, 0.24)",
+                  borderRadius: "0.5rem",
+                  color: "#e2e8f0",
+                  fontSize: "1rem"
+                }}
+              />
+            </div>
+          </div>
+
+          <div>
+            <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+              SEO OG Image URL
+            </label>
+            <input 
+              type="url" 
+              name="seoOgImage"
+              value={deal.seoOgImage || ""}
+              style={{
+                width: "100%",
+                padding: "0.75rem",
+                backgroundColor: "rgba(31, 35, 48, 0.8)",
+                border: "1px solid rgba(91, 140, 255, 0.24)",
+                borderRadius: "0.5rem",
+                color: "#e2e8f0",
+                fontSize: "1rem"
+              }}
+            />
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
@@ -349,11 +579,35 @@ const pageDescription = `Edit course deal: ${deal.title} on CourseSpeak.`;
       if (dealData.rating) dealData.rating = parseFloat(dealData.rating);
       if (dealData.students) dealData.students = parseInt(dealData.students);
       
+      // Convert array fields from textarea (one per line)
+      if (dealData.learn) {
+        dealData.learn = dealData.learn.split('\n').filter(item => item.trim());
+      }
+      if (dealData.requirements) {
+        dealData.requirements = dealData.requirements.split('\n').filter(item => item.trim());
+      }
+      
+      // Convert datetime to ISO string
+      if (dealData.expiresAt) {
+        dealData.expiresAt = new Date(dealData.expiresAt).toISOString();
+      }
+      
+      // Set updated timestamp
+      dealData.updatedAt = new Date().toISOString();
+      
+      console.log('Updated deal data:', dealData);
+      
       try {
         // For local development, this would update the deals.json file
-        // For now, we'll show a success message and redirect
-        alert('Deal updated successfully! (Note: This requires server-side implementation for production)');
-        window.location.href = '/admin/deals';
+        // For now, we'll show the data and instructions
+        alert('Deal data prepared for update!\n\nIn production, this would:\n1. Update the deals.json file\n2. Rebuild the site\n3. Deploy changes\n\nCurrent data: ' + JSON.stringify(dealData, null, 2));
+        
+        // Optional: Copy to clipboard for manual update
+        navigator.clipboard.writeText(JSON.stringify(dealData, null, 2));
+        
+        if (confirm('Data copied to clipboard! Would you like to go back to deals list?')) {
+          window.location.href = '/admin/deals';
+        }
       } catch (error) {
         alert('Error updating deal: ' + error.message);
       }
