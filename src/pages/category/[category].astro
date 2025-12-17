@@ -91,11 +91,14 @@ let categoryDeals;
 let displayName;
 
 if (subcategoryParam) {
+  // Decode the subcategory parameter to handle spaces and special characters
+  const decodedSubcategory = decodeURIComponent(subcategoryParam);
+  
   // Filter by specific subcategory
   categoryDeals = allDeals.filter(deal => 
-    deal.subcategory === subcategoryParam
+    deal.subcategory === decodedSubcategory
   );
-  displayName = subcategoryParam.charAt(0).toUpperCase() + subcategoryParam.slice(1);
+  displayName = decodedSubcategory.charAt(0).toUpperCase() + decodedSubcategory.slice(1);
 } else {
   // Filter by category (main category or any subcategory)
   categoryDeals = allDeals.filter(deal => 
