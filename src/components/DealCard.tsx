@@ -69,6 +69,19 @@ export default function DealCard({ deal }: { deal: any }) {
           {deal.category && <span className="provider">{deal.category}</span>}
           {deal.subcategory && <span className="category">{deal.subcategory}</span>}
         </div>
+        {deal.description && (
+          <div className="description" style={{ marginTop: 8, marginBottom: 8, color: "#9ca3af", fontSize: 14, lineHeight: 1.4, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+            {(() => {
+              let desc = String(deal.description);
+              desc = desc.replace(/&amp;/g, "&");
+              desc = desc.replace(/&quot;/g, '"');
+              desc = desc.replace(/&apos;|&#8217;/g, "'");
+              desc = desc.replace(/&ndash;|&#8211;/g, " & ");
+              desc = desc.replace(/\s{2,}/g, " ").trim();
+              return desc;
+            })()}
+          </div>
+        )}
         <div className="prices" style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <span className="price">{p === 0 ? "Free" : `$${p.toFixed(2)}`}</span>
           {hasDiscount && (
