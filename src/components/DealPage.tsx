@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useRef, useMemo, useState } from 'react';
 import { renderMarkdownToHtml } from "../lib/markdown";
 import ActionsPanel from "./ActionsPanel";
 import RelatedList from "./RelatedList";
@@ -97,6 +97,16 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
 
     // FAQ accordion state
     const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
+    
+    // Ref for markdown content container
+    const markdownRef = useRef<HTMLDivElement>(null);
+    
+    // Set innerHTML only on client side to avoid hydration mismatch
+    useEffect(() => {
+        if (markdownRef.current && htmlContent) {
+            markdownRef.current.innerHTML = htmlContent;
+        }
+    }, [htmlContent]);
 
     // Calculate time remaining for coupon
     const timeRemaining = useMemo(() => {
@@ -209,12 +219,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                         <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1rem", color: "#fff" }}>Description</h2>
                         {/* Render Markdown Content */}
                         <div
-                            ref={(el) => {
-                                if (el && htmlContent) {
-                                    // Use innerHTML directly with sanitized content
-                                    el.innerHTML = htmlContent;
-                                }
-                            }}
+                            ref={markdownRef}
                             className="prose prose-invert max-w-none"
                             style={{ lineHeight: 1.7, color: "#cbd5e1" }}
                         />
