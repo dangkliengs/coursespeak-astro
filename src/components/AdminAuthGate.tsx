@@ -149,16 +149,39 @@ function useProvideAdminAuth(): {
 }
 
 export default function AdminAuthGate({ children }: { children: ReactNode }) {
-  // SIMPLE SECURITY: Check if we're in development
-  const hostname = typeof window !== "undefined" ? window.location.hostname : '';
-  
-  // Allow local development only
-  const isAllowed = hostname === 'localhost' || 
-                   hostname === '127.0.0.1' || 
-                   hostname.includes('.local') ||
-                   hostname.includes('localhost'); // fallback untuk port number
+  // CLIENT-SIDE ONLY: Check hostname after mount
+  const [hostname, setHostname] = useState('');
+  const [isAllowed, setIsAllowed] = useState(false);
 
-  console.log('🔍 AdminAuthGate Debug:', { hostname, isAllowed });
+  useEffect(() => {
+    // Only run on client-side
+    if (typeof window !== "undefined") {
+      const currentHostname = window.location.hostname || window.location.host || '';
+      setHostname(currentHostname);
+      
+      // Allow local development only
+      const allowed = currentHostname === 'localhost' || 
+                     currentHostname === '127.0.0.1' || 
+                     currentHostname.includes('.local') ||
+                     currentHostname.includes('localhost') ||
+                     currentHostname.includes('127.0.0.1') ||
+                     currentHostname.startsWith('localhost:') ||
+                     currentHostname.startsWith('127.0.0.1:');
+      
+      setIsAllowed(allowed);
+      console.log('🔍 AdminAuthGate Debug:', { hostname: currentHostname, allowed });
+    }
+  }, []);
+
+  // Show loading while checking
+  if (hostname === '') {
+    return (
+      <div className="container" style={{ padding: "2rem 0", textAlign: "center" }}>
+        <h2>Loading...</h2>
+        <p className="muted">Checking environment...</p>
+      </div>
+    );
+  }
 
   // BLOCK production access
   if (!isAllowed) {
