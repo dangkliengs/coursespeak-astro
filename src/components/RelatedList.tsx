@@ -30,7 +30,14 @@ export default function RelatedList({ items, initial = 4, step = 4 }: { items: I
               {r.image && (
                 <div style={{ position: "relative" }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={r.image} alt={r.title} style={{ width: "100%", borderRadius: 8, border: "1px solid #1f2330" }} />
+                  <img 
+                    src={r.image} 
+                    alt={r.title} 
+                    width="300"
+                    height="200"
+                    loading="lazy"
+                    style={{ width: "100%", borderRadius: 8, border: "1px solid #1f2330" }} 
+                  />
                   <div style={{ position: "absolute", top: 8, left: 8, display: "flex", gap: 6, flexWrap: "wrap" }}>
                     {isNew(r.updatedAt) && (
                       <span className="pill" style={{ background: "#3b82f6", color: "#0b0d12", fontWeight: 800 }}>New</span>

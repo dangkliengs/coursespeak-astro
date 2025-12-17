@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { renderMarkdownToHtml } from "../lib/markdown";
 import ActionsPanel from "./ActionsPanel";
 import RelatedList from "./RelatedList";
@@ -9,6 +9,7 @@ interface Deal {
     title: string;
     description: string;
     content?: string;
+    requirements?: string[];
     image?: string;
     price?: number;
     originalPrice?: number;
@@ -22,6 +23,7 @@ interface Deal {
     duration?: string;
     coupon?: string;
     language?: string;
+    expiresAt?: string;
     learn?: string[];
     faqs?: { q: string; a: string }[];
 }
@@ -29,7 +31,94 @@ interface Deal {
 export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, relatedDeals?: any[] }) {
     // Prefer content (detailed) over description (short)
     const bodyContent = deal.content || deal.description || "";
-    const htmlContent = useMemo(() => renderMarkdownToHtml(bodyContent), [bodyContent]);
+    
+    // Check if content is HTML or markdown
+    const isHtmlContent = bodyContent.includes('<') && bodyContent.includes('>');
+    const htmlContent = useMemo(() => {
+        if (isHtmlContent) {
+            // If content is HTML, use it directly (clean it first)
+            return bodyContent
+                .replace(/style="[^"]*"/gi, '')
+                .replace(/class="[^"]*"/gi, '')
+                .replace(/data-[^=]*="[^"]*"/gi, '')
+                .replace(/margin: [^;]*;?/gi, '')
+                .replace(/padding: [^;]*;?/gi, '')
+                .replace(/font-size: [^;]*;?/gi, '')
+                .replace(/font-family: [^;]*;?/gi, '')
+                .replace(/color: [^;]*;?/gi, '');
+        } else {
+            // If content is markdown, render it to HTML
+            return renderMarkdownToHtml(bodyContent);
+        }
+    }, [bodyContent, isHtmlContent]);
+
+    // Auto-generate FAQs if none exist
+    const autoFAQs = useMemo(() => {
+        if (deal.faqs && deal.faqs.length > 0) {
+            return deal.faqs;
+        }
+        
+        // Generate automatic FAQs based on deal data
+        const generated = [];
+        
+        if (deal.price !== undefined) {
+            const price = deal.price ?? 9.99;
+            const original = deal.originalPrice ?? 119.99;
+            const discount = original > price ? Math.round(100 - (price / original) * 100) : 0;
+            
+            generated.push({
+                q: `Is ${deal.title} Coupon Code Working?`,
+                a: `Absolutely, we manually verify the coupon for this ${deal.provider} course to ensure it works seamlessly. Current price: $${price.toFixed(2)}${discount > 0 ? ` (${discount}% OFF)` : ''}.`
+            });
+        }
+        
+        if (deal.duration) {
+            generated.push({
+                q: `How long is the ${deal.provider} course?`,
+                a: `The ${deal.title} course is approximately ${deal.duration} long with comprehensive content.`
+            });
+        }
+        
+        if (deal.learn && deal.learn.length > 0) {
+            const firstLearn = deal.learn[0];
+            generated.push({
+                q: `What will I learn in ${deal.title} classes?`,
+                a: `Learn ${firstLearn.toLowerCase()} and much more in this comprehensive ${deal.provider} course.`
+            });
+        }
+        
+        generated.push({
+            q: `How do I get this ${deal.provider} course?`,
+            a: `Click the "Enroll Now" button on this page to access the course with our exclusive coupon code applied automatically.`
+        });
+        
+        return generated;
+    }, [deal]);
+
+    // FAQ accordion state
+    const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
+
+    // Calculate time remaining for coupon
+    const timeRemaining = useMemo(() => {
+        if (!deal.expiresAt) return null;
+        
+        const now = new Date();
+        const expires = new Date(deal.expiresAt);
+        const diffMs = expires.getTime() - now.getTime();
+        
+        if (diffMs <= 0) return 'Expired';
+        
+        const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        const diffHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        
+        if (diffDays > 0) {
+            return `${diffDays} day${diffDays > 1 ? 's' : ''} left`;
+        } else if (diffHours > 0) {
+            return `${diffHours} hour${diffHours > 1 ? 's' : ''} left`;
+        } else {
+            return 'Less than 1 hour left';
+        }
+    }, [deal.expiresAt]);
 
     const price = deal.price ?? 9.99;
     const originalPrice = deal.originalPrice ?? 119.99;
@@ -101,6 +190,21 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                         </div>
                     )}
 
+                    {/* Requirements Section */}
+                    {deal.requirements && deal.requirements.length > 0 && (
+                        <div style={{ border: "1px solid #1f2330", padding: "1.5rem", borderRadius: "8px", background: "#0b0d12", marginBottom: "2rem" }}>
+                            <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1rem", color: "#fff" }}>Requirements</h2>
+                            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1rem", fontSize: "0.95rem", color: "#cbd5e1" }}>
+                                {deal.requirements.map((req, idx) => (
+                                    <div key={idx} style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                                        <span style={{ color: "#a9b0c0", marginTop: "2px" }}>•</span>
+                                        <span>{req}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
                     <div style={{ marginBottom: "2rem" }}>
                         <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1rem", color: "#fff" }}>Description</h2>
                         {/* Render Markdown Content */}
@@ -112,18 +216,39 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                     </div>
 
                     {/* FAQs Section */}
-                    {deal.faqs && deal.faqs.length > 0 && (
+                    {autoFAQs && autoFAQs.length > 0 && (
                         <div style={{ marginBottom: "2rem", borderTop: "1px solid #1f2330", paddingTop: "2rem" }}>
                             <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1.5rem", color: "#fff" }}>Frequently Asked Questions</h2>
-                            <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-                                {deal.faqs.map((faq, idx) => (
-                                    <div key={idx}>
-                                        <h3 style={{ fontSize: "1.1rem", fontWeight: 600, color: "#fff", marginBottom: "0.5rem" }}>
+                            <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                                {autoFAQs.map((faq, idx) => (
+                                    <div key={idx} style={{ border: "1px solid #2d3748", borderRadius: "8px", overflow: "hidden" }}>
+                                        <button
+                                            onClick={() => setExpandedFAQ(expandedFAQ === idx ? null : idx)}
+                                            style={{ 
+                                                width: "100%", 
+                                                padding: "1rem 1.5rem", 
+                                                background: expandedFAQ === idx ? "#2d3748" : "#1f2330",
+                                                border: "none", 
+                                                textAlign: "left", 
+                                                cursor: "pointer",
+                                                display: "flex",
+                                                justifyContent: "space-between",
+                                                alignItems: "center",
+                                                fontSize: "1rem",
+                                                fontWeight: 600,
+                                                color: "#fff"
+                                            }}
+                                        >
                                             {faq.q}
-                                        </h3>
-                                        <p style={{ color: "#cbd5e1", lineHeight: 1.6, fontSize: "0.95rem" }}>
-                                            {faq.a}
-                                        </p>
+                                            <span style={{ fontSize: "1.2rem", transition: "transform 0.2s", transform: expandedFAQ === idx ? "rotate(180deg)" : "rotate(0deg)" }}>▼</span>
+                                        </button>
+                                        {expandedFAQ === idx && (
+                                            <div style={{ padding: "1rem 1.5rem", background: "#0b0d12", borderTop: "1px solid #2d3748" }}>
+                                                <p style={{ color: "#cbd5e1", lineHeight: 1.6, fontSize: "0.95rem", margin: 0 }}>
+                                                    {faq.a}
+                                                </p>
+                                            </div>
+                                        )}
                                     </div>
                                 ))}
                             </div>
@@ -194,7 +319,14 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                     <div style={{ position: "sticky", top: "2rem", background: "#1f2330", border: "1px solid #2d3748", borderRadius: "8px", overflow: "hidden", boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.5)" }}>
                         {deal.image && (
                             <div style={{ position: "relative" }}>
-                                <img src={deal.image} alt={deal.title} style={{ width: "100%", height: "190px", objectFit: "cover" }} />
+                                <img 
+                                  src={deal.image} 
+                                  alt={deal.title} 
+                                  width="400"
+                                  height="190"
+                                  loading="lazy"
+                                  style={{ width: "100%", height: "190px", objectFit: "cover" }} 
+                                />
                                 <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.1)" }}></div>
                                 {/* Play icon overlay simulation */}
                                 <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", background: "white", borderRadius: "50%", width: "50px", height: "50px", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 10px rgba(0,0,0,0.3)" }}>
@@ -219,20 +351,20 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                     </span>
                                 )}
                             </div>
-                            {discountPct > 0 && (
+                            {timeRemaining && timeRemaining !== 'Expired' && (
                                 <div style={{ color: "#ef4444", fontSize: "0.9rem", marginBottom: "1.5rem" }}>
                                     <svg style={{ width: "16px", height: "16px", display: "inline", marginRight: "4px" }} fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" /></svg>
-                                    <b>1 day</b> left at this price!
+                                    <b>{timeRemaining}</b> at this price!
                                 </div>
                             )}
 
                             <a
-                                href={deal.url || '#'}
+                                href={deal.url || `/deal/${deal.id}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 style={{ display: "block", textAlign: "center", background: "#a855f7", color: "#fff", fontWeight: 700, padding: "12px", fontSize: "1rem", border: "1px solid #9333ea", marginBottom: "12px", textDecoration: "none" }}
                             >
-                                Get Deal
+                                Redeem Coupon
                             </a>
 
                             <div style={{ textAlign: "center", fontSize: "0.85rem", color: "#9ca3af", marginBottom: "1.5rem" }}>30-Day Money-Back Guarantee</div>
@@ -248,7 +380,12 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                             </div>
 
                             <div style={{ borderTop: "1px solid #2d3748", marginTop: "1rem", paddingTop: "1rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                <a href="#" style={{ color: "#fff", fontWeight: 600, textDecoration: "underline", fontSize: "0.9rem" }}>Share</a>
+                                <button 
+                                  onClick={() => navigator.share?.({ title: deal.title, url: window.location.href })}
+                                  style={{ color: "#fff", fontWeight: 600, textDecoration: "underline", fontSize: "0.9rem", background: "none", border: "none", cursor: "pointer" }}
+                                >
+                                  Share
+                                </button>
                                 <ActionsPanel deal={{ ...deal, url: deal.url || '' }} />
                             </div>
                         </div>

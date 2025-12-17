@@ -1,8 +1,6 @@
 ---
-import type { Deal } from '../types/deals';
-
 interface Props {
-  deal: Deal;
+  deal: any;
 }
 
 const { deal } = Astro.props;
@@ -15,7 +13,7 @@ if (!deal) {
 
 <div class="card">
   <div class="card-image">
-    <img src={deal.image || '/placeholder.jpg'} alt={deal.title || 'Course'} loading="lazy" />
+    <img src={deal.image || '/placeholder.jpg'} alt={deal.title || 'Course'} loading="lazy" width="400" height="225" />
     {deal.discount && (
       <span class="discount-badge">-{deal.discount}%</span>
     )}

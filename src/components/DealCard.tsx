@@ -40,11 +40,12 @@ export default function DealCard({ deal }: { deal: any }) {
       <div className="card-body">
         {deal.image && (
           <div style={{ marginBottom: 8, position: "relative" }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={String(deal.image)}
               alt={title}
               loading="lazy"
+              width="400"
+              height="225"
               style={{ width: "100%", borderRadius: 8, border: "1px solid #1f2330", display: "block" }}
               referrerPolicy="no-referrer"
             />
