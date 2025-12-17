@@ -21,18 +21,19 @@ export default function DealsList({
 
   const canShowMore = page < totalPages;
 
-  async function loadMore() {
+  function loadMore() {
     if (!canShowMore || loading) return;
     setLoading(true);
+    
     try {
-      // For static build, use client-side pagination instead of API
       const pageSize = parseInt(baseParams.pageSize || "12", 10);
       const nextPage = page + 1;
       const start = (nextPage - 1) * pageSize;
       
-      // Filter deals based on baseParams
+      // Use all deals passed from server
       let filteredDeals = allDeals || [];
       
+      // Apply filters if any
       if (baseParams.category) {
         filteredDeals = filteredDeals.filter(d =>
           d.category?.toLowerCase() === baseParams.category?.toLowerCase() ||
@@ -54,8 +55,11 @@ export default function DealsList({
         );
       }
 
+      // Get the next page of items
       const newItems = filteredDeals.slice(start, start + pageSize);
-      setItems((prev) => prev.concat(newItems));
+      
+      // Add new items to existing items
+      setItems((prev) => [...prev, ...newItems]);
       setPage(nextPage);
     } finally {
       setLoading(false);

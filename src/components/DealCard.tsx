@@ -17,7 +17,7 @@ export default function DealCard({ deal }: { deal: any }) {
   }, []);
 
   const brand = getBrand(deal.provider);
-  const key = String(deal.slug || deal.id || "");
+  const key = String(deal.id || "");
   const p = typeof deal.price === "number" && isFinite(deal.price) && deal.price > 0 ? deal.price : 9.99;
   const opRaw = typeof deal.originalPrice === "number" && isFinite(deal.originalPrice) ? deal.originalPrice : 119.99;
   const op = opRaw > p ? opRaw : 119.99;
@@ -32,7 +32,7 @@ export default function DealCard({ deal }: { deal: any }) {
     <article className="card">
       <header className="card-header">
         <h3 title={deal.title}>
-          <a href={`/deal/${deal.slug || deal.id}`} style={{ color: "inherit", textDecoration: "none" }}>
+          <a href={`/deal/${deal.id}`} style={{ color: "inherit", textDecoration: "none" }}>
             {title}
           </a>
         </h3>
