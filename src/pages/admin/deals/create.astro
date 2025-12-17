@@ -1,0 +1,324 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+
+const pageTitle = "Create New Deal - Admin Dashboard";
+const pageDescription = "Create a new course deal on CourseSpeak.";
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <div style={{ background: "#0b0d12", minHeight: "100vh", color: "#e2e8f0" }}>
+    <div style={{ maxWidth: "800px", margin: "0 auto", padding: "2rem 1rem" }}>
+      <div style={{ marginBottom: "2rem" }}>
+        <h1 style={{ 
+          fontSize: "2.5rem", 
+          fontWeight: 700, 
+          color: "#fff", 
+          marginBottom: "0.5rem" 
+        }}>
+          Create New Deal
+        </h1>
+        <p style={{ 
+          fontSize: "1.125rem", 
+          color: "#a9b0c0" 
+        }}>
+          Add a new course deal to the platform
+        </p>
+      </div>
+
+      <form 
+        action="/api/deals" 
+        method="POST"
+        style={{
+          borderRadius: "1rem",
+          border: "1px solid rgba(91, 140, 255, 0.24)",
+          background: "linear-gradient(140deg, rgba(11, 13, 18, 0.98) 0%, rgba(18, 24, 40, 0.98) 55%, rgba(42, 64, 110, 0.38) 100%)",
+          boxShadow: "0 18px 36px rgba(8, 12, 26, 0.45)",
+          padding: "2rem"
+        }}
+      >
+        <div style={{ display: "grid", gap: "1.5rem" }}>
+          <div>
+            <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+              Course Title *
+            </label>
+            <input 
+              type="text" 
+              name="title" 
+              required
+              style={{
+                width: "100%",
+                padding: "0.75rem",
+                backgroundColor: "rgba(31, 35, 48, 0.8)",
+                border: "1px solid rgba(91, 140, 255, 0.24)",
+                borderRadius: "0.5rem",
+                color: "#e2e8f0",
+                fontSize: "1rem"
+              }}
+              placeholder="Enter course title"
+            />
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+            <div>
+              <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+                Provider *
+              </label>
+              <select 
+                name="provider" 
+                required
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  backgroundColor: "rgba(31, 35, 48, 0.8)",
+                  border: "1px solid rgba(91, 140, 255, 0.24)",
+                  borderRadius: "0.5rem",
+                  color: "#e2e8f0",
+                  fontSize: "1rem"
+                }}
+              >
+                <option value="">Select provider</option>
+                <option value="Udemy">Udemy</option>
+                <option value="Coursera">Coursera</option>
+                <option value="edX">edX</option>
+                <option value="Skillshare">Skillshare</option>
+                <option value="Pluralsight">Pluralsight</option>
+              </select>
+            </div>
+
+            <div>
+              <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+                Course URL *
+              </label>
+              <input 
+                type="url" 
+                name="url" 
+                required
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  backgroundColor: "rgba(31, 35, 48, 0.8)",
+                  border: "1px solid rgba(91, 140, 255, 0.24)",
+                  borderRadius: "0.5rem",
+                  color: "#e2e8f0",
+                  fontSize: "1rem"
+                }}
+                placeholder="https://example.com/course"
+              />
+            </div>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+            <div>
+              <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+                Category *
+              </label>
+              <input 
+                type="text" 
+                name="category" 
+                required
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  backgroundColor: "rgba(31, 35, 48, 0.8)",
+                  border: "1px solid rgba(91, 140, 255, 0.24)",
+                  borderRadius: "0.5rem",
+                  color: "#e2e8f0",
+                  fontSize: "1rem"
+                }}
+                placeholder="e.g., Development, Business, Design"
+              />
+            </div>
+
+            <div>
+              <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+                Subcategory
+              </label>
+              <input 
+                type="text" 
+                name="subcategory"
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  backgroundColor: "rgba(31, 35, 48, 0.8)",
+                  border: "1px solid rgba(91, 140, 255, 0.24)",
+                  borderRadius: "0.5rem",
+                  color: "#e2e8f0",
+                  fontSize: "1rem"
+                }}
+                placeholder="e.g., Web Development, Marketing"
+              />
+            </div>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "1rem" }}>
+            <div>
+              <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+                Price ($) *
+              </label>
+              <input 
+                type="number" 
+                name="price" 
+                step="0.01"
+                min="0"
+                required
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  backgroundColor: "rgba(31, 35, 48, 0.8)",
+                  border: "1px solid rgba(91, 140, 255, 0.24)",
+                  borderRadius: "0.5rem",
+                  color: "#e2e8f0",
+                  fontSize: "1rem"
+                }}
+                placeholder="9.99"
+              />
+            </div>
+
+            <div>
+              <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+                Original Price ($)
+              </label>
+              <input 
+                type="number" 
+                name="originalPrice" 
+                step="0.01"
+                min="0"
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  backgroundColor: "rgba(31, 35, 48, 0.8)",
+                  border: "1px solid rgba(91, 140, 255, 0.24)",
+                  borderRadius: "0.5rem",
+                  color: "#e2e8f0",
+                  fontSize: "1rem"
+                }}
+                placeholder="99.99"
+              />
+            </div>
+
+            <div>
+              <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+                Rating
+              </label>
+              <input 
+                type="number" 
+                name="rating" 
+                step="0.1"
+                min="0"
+                max="5"
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  backgroundColor: "rgba(31, 35, 48, 0.8)",
+                  border: "1px solid rgba(91, 140, 255, 0.24)",
+                  borderRadius: "0.5rem",
+                  color: "#e2e8f0",
+                  fontSize: "1rem"
+                }}
+                placeholder="4.5"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+              Description
+            </label>
+            <textarea 
+              name="description" 
+              rows="4"
+              style={{
+                width: "100%",
+                padding: "0.75rem",
+                backgroundColor: "rgba(31, 35, 48, 0.8)",
+                border: "1px solid rgba(91, 140, 255, 0.24)",
+                borderRadius: "0.5rem",
+                color: "#e2e8f0",
+                fontSize: "1rem",
+                resize: "vertical"
+              }}
+              placeholder="Enter course description"
+            ></textarea>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+            <div>
+              <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+                Students
+              </label>
+              <input 
+                type="number" 
+                name="students" 
+                min="0"
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  backgroundColor: "rgba(31, 35, 48, 0.8)",
+                  border: "1px solid rgba(91, 140, 255, 0.24)",
+                  borderRadius: "0.5rem",
+                  color: "#e2e8f0",
+                  fontSize: "1rem"
+                }}
+                placeholder="10000"
+              />
+            </div>
+
+            <div>
+              <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+                Image URL
+              </label>
+              <input 
+                type="url" 
+                name="image"
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  backgroundColor: "rgba(31, 35, 48, 0.8)",
+                  border: "1px solid rgba(91, 140, 255, 0.24)",
+                  borderRadius: "0.5rem",
+                  color: "#e2e8f0",
+                  fontSize: "1rem"
+                }}
+                placeholder="https://example.com/image.jpg"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div style={{ display: "flex", gap: "1rem", marginTop: "2rem" }}>
+          <button 
+            type="submit"
+            style={{
+              padding: "0.75rem 2rem",
+              backgroundColor: "#3b82f6",
+              color: "#fff",
+              border: "none",
+              borderRadius: "0.5rem",
+              fontSize: "1rem",
+              fontWeight: 600,
+              cursor: "pointer"
+            }}
+          >
+            Create Deal
+          </button>
+          <a 
+            href="/admin/deals"
+            style={{
+              padding: "0.75rem 2rem",
+              backgroundColor: "transparent",
+              color: "#9ca3af",
+              border: "1px solid #4b5563",
+              textDecoration: "none",
+              borderRadius: "0.5rem",
+              fontSize: "1rem",
+              fontWeight: 600,
+              display: "inline-block"
+            }}
+          >
+            Cancel
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</Layout>

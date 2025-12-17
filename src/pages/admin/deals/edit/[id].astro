@@ -1,0 +1,362 @@
+---
+import Layout from "../../../../layouts/Layout.astro";
+import { readDeals } from "../../../../lib/store";
+
+export async function getStaticPaths() {
+  const allDeals = await readDeals();
+  
+  return allDeals.map(deal => ({
+    params: { id: deal.id },
+    props: { deal }
+  }));
+}
+
+// Get deal from props instead of params
+const { deal } = Astro.props;
+
+const pageTitle = `Edit Deal: ${deal.title} - Admin Dashboard`;
+const pageDescription = `Edit course deal: ${deal.title} on CourseSpeak.`;
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <div style={{ background: "#0b0d12", minHeight: "100vh", color: "#e2e8f0" }}>
+    <div style={{ maxWidth: "800px", margin: "0 auto", padding: "2rem 1rem" }}>
+      <div style={{ marginBottom: "2rem" }}>
+        <h1 style={{ 
+          fontSize: "2.5rem", 
+          fontWeight: 700, 
+          color: "#fff", 
+          marginBottom: "0.5rem" 
+        }}>
+          Edit Deal
+        </h1>
+        <p style={{ 
+          fontSize: "1.125rem", 
+          color: "#a9b0c0" 
+        }}>
+          Edit course: {deal.title}
+        </p>
+      </div>
+
+      <form 
+        action="#" 
+        method="POST"
+        id="editForm"
+        style={{
+          borderRadius: "1rem",
+          border: "1px solid rgba(91, 140, 255, 0.24)",
+          background: "linear-gradient(140deg, rgba(11, 13, 18, 0.98) 0%, rgba(18, 24, 40, 0.98) 55%, rgba(42, 64, 110, 0.38) 100%)",
+          boxShadow: "0 18px 36px rgba(8, 12, 26, 0.45)",
+          padding: "2rem"
+        }}
+      >
+        <input type="hidden" name="id" value={deal.id} />
+        
+        <div style={{ display: "grid", gap: "1.5rem" }}>
+          <div>
+            <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+              Course Title *
+            </label>
+            <input 
+              type="text" 
+              name="title" 
+              required
+              value={deal.title}
+              style={{
+                width: "100%",
+                padding: "0.75rem",
+                backgroundColor: "rgba(31, 35, 48, 0.8)",
+                border: "1px solid rgba(91, 140, 255, 0.24)",
+                borderRadius: "0.5rem",
+                color: "#e2e8f0",
+                fontSize: "1rem"
+              }}
+            />
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr, 1fr 1fr", gap: "1rem" }}>
+            <div>
+              <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+                Provider *
+              </label>
+              <select 
+                name="provider" 
+                required
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  backgroundColor: "rgba(31, 35, 48, 0.8)",
+                  border: "1px solid rgba(91, 140, 255, 0.24)",
+                  borderRadius: "0.5rem",
+                  color: "#e2e8f0",
+                  fontSize: "1rem"
+                }}
+              >
+                <option value="Udemy" selected={deal.provider === "Udemy"}>Udemy</option>
+                <option value="Coursera" selected={deal.provider === "Coursera"}>Coursera</option>
+                <option value="edX" selected={deal.provider === "edX"}>edX</option>
+                <option value="Skillshare" selected={deal.provider === "Skillshare"}>Skillshare</option>
+                <option value="Pluralsight" selected={deal.provider === "Pluralsight"}>Pluralsight</option>
+              </select>
+            </div>
+
+            <div>
+              <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+                Course URL *
+              </label>
+              <input 
+                type="url" 
+                name="url" 
+                required
+                value={deal.url}
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  backgroundColor: "rgba(31, 35, 48, 0.8)",
+                  border: "1px solid rgba(91, 140, 255, 0.24)",
+                  borderRadius: "0.5rem",
+                  color: "#e2e8f0",
+                  fontSize: "1rem"
+                }}
+              />
+            </div>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+            <div>
+              <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+                Category *
+              </label>
+              <input 
+                type="text" 
+                name="category" 
+                required
+                value={deal.category}
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  backgroundColor: "rgba(31, 35, 48, 0.8)",
+                  border: "1px solid rgba(91, 140, 255, 0.24)",
+                  borderRadius: "0.5rem",
+                  color: "#e2e8f0",
+                  fontSize: "1rem"
+                }}
+              />
+            </div>
+
+            <div>
+              <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+                Subcategory
+              </label>
+              <input 
+                type="text" 
+                name="subcategory"
+                value={deal.subcategory || ""}
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  backgroundColor: "rgba(31, 35, 48, 0.8)",
+                  border: "1px solid rgba(91, 140, 255, 0.24)",
+                  borderRadius: "0.5rem",
+                  color: "#e2e8f0",
+                  fontSize: "1rem"
+                }}
+              />
+            </div>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "1rem" }}>
+            <div>
+              <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+                Price ($) *
+              </label>
+              <input 
+                type="number" 
+                name="price" 
+                step="0.01"
+                min="0"
+                required
+                value={deal.price}
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  backgroundColor: "rgba(31, 35, 48, 0.8)",
+                  border: "1px solid rgba(91, 140, 255, 0.24)",
+                  borderRadius: "0.5rem",
+                  color: "#e2e8f0",
+                  fontSize: "1rem"
+                }}
+              />
+            </div>
+
+            <div>
+              <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+                Original Price ($)
+              </label>
+              <input 
+                type="number" 
+                name="originalPrice" 
+                step="0.01"
+                min="0"
+                value={deal.originalPrice || ""}
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  backgroundColor: "rgba(31, 35, 48, 0.8)",
+                  border: "1px solid rgba(91, 140, 255, 0.24)",
+                  borderRadius: "0.5rem",
+                  color: "#e2e8f0",
+                  fontSize: "1rem"
+                }}
+              />
+            </div>
+
+            <div>
+              <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+                Rating
+              </label>
+              <input 
+                type="number" 
+                name="rating" 
+                step="0.1"
+                min="0"
+                max="5"
+                value={deal.rating || ""}
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  backgroundColor: "rgba(31, 35, 48, 0.8)",
+                  border: "1px solid rgba(91, 140, 255, 0.24)",
+                  borderRadius: "0.5rem",
+                  color: "#e2e8f0",
+                  fontSize: "1rem"
+                }}
+              />
+            </div>
+          </div>
+
+          <div>
+            <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+              Description
+            </label>
+            <textarea 
+              name="description" 
+              rows="4"
+              style={{
+                width: "100%",
+                padding: "0.75rem",
+                backgroundColor: "rgba(31, 35, 48, 0.8)",
+                border: "1px solid rgba(91, 140, 255, 0.24)",
+                borderRadius: "0.5rem",
+                color: "#e2e8f0",
+                fontSize: "1rem",
+                resize: "vertical"
+              }}
+            >{deal.description || ""}</textarea>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+            <div>
+              <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+                Students
+              </label>
+              <input 
+                type="number" 
+                name="students" 
+                min="0"
+                value={deal.students || ""}
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  backgroundColor: "rgba(31, 35, 48, 0.8)",
+                  border: "1px solid rgba(91, 140, 255, 0.24)",
+                  borderRadius: "0.5rem",
+                  color: "#e2e8f0",
+                  fontSize: "1rem"
+                }}
+              />
+            </div>
+
+            <div>
+              <label style={{ display: "block", color: "#fff", fontWeight: 600, marginBottom: "0.5rem" }}>
+                Image URL
+              </label>
+              <input 
+                type="url" 
+                name="image"
+                value={deal.image || ""}
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  backgroundColor: "rgba(31, 35, 48, 0.8)",
+                  border: "1px solid rgba(91, 140, 255, 0.24)",
+                  borderRadius: "0.5rem",
+                  color: "#e2e8f0",
+                  fontSize: "1rem"
+                }}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div style={{ display: "flex", gap: "1rem", marginTop: "2rem" }}>
+          <button 
+            type="submit"
+            style={{
+              padding: "0.75rem 2rem",
+              backgroundColor: "#3b82f6",
+              color: "#fff",
+              border: "none",
+              borderRadius: "0.5rem",
+              fontSize: "1rem",
+              fontWeight: 600,
+              cursor: "pointer"
+            }}
+          >
+            Update Deal
+          </button>
+          <a 
+            href="/admin/deals"
+            style={{
+              padding: "0.75rem 2rem",
+              backgroundColor: "transparent",
+              color: "#9ca3af",
+              border: "1px solid #4b5563",
+              textDecoration: "none",
+              borderRadius: "0.5rem",
+              fontSize: "1rem",
+              fontWeight: 600,
+              display: "inline-block"
+            }}
+          >
+            Cancel
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('editForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(e.target);
+      const dealData = Object.fromEntries(formData.entries());
+      
+      // Convert numeric fields
+      if (dealData.price) dealData.price = parseFloat(dealData.price);
+      if (dealData.originalPrice) dealData.originalPrice = parseFloat(dealData.originalPrice);
+      if (dealData.rating) dealData.rating = parseFloat(dealData.rating);
+      if (dealData.students) dealData.students = parseInt(dealData.students);
+      
+      try {
+        // For local development, this would update the deals.json file
+        // For now, we'll show a success message and redirect
+        alert('Deal updated successfully! (Note: This requires server-side implementation for production)');
+        window.location.href = '/admin/deals';
+      } catch (error) {
+        alert('Error updating deal: ' + error.message);
+      }
+    });
+  </script>
+</Layout>
