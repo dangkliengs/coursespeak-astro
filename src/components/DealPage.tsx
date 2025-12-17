@@ -209,8 +209,13 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                         <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1rem", color: "#fff" }}>Description</h2>
                         {/* Render Markdown Content */}
                         <div
+                            ref={(el) => {
+                                if (el && htmlContent) {
+                                    // Use innerHTML directly with sanitized content
+                                    el.innerHTML = htmlContent;
+                                }
+                            }}
                             className="prose prose-invert max-w-none"
-                            dangerouslySetInnerHTML={{ __html: htmlContent }}
                             style={{ lineHeight: 1.7, color: "#cbd5e1" }}
                         />
                     </div>
