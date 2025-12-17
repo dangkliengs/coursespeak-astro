@@ -42,63 +42,6 @@ import DealCard from "../components/DealCard";
     description={pageDescription}
 >
   <div style={{ background: "#0b0d12", minHeight: "100vh", color: "#e2e8f0" }}>
-    {/* Header / Nav */}
-    <header
-      style={{
-        borderBottom: "1px solid #1f2330",
-        background: "rgba(11, 13, 18, 0.8)",
-        backdropFilter: "blur(12px)",
-        position: "sticky",
-        top: 0,
-        zIndex: 50,
-      }}
-    >
-      <div
-        class="container"
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "16px",
-        }}
-      >
-        <a
-          href="/"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
-            textDecoration: "none",
-          }}
-        >
-          <div
-            style={{
-              width: "32px",
-              height: "32px",
-              background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
-              borderRadius: "8px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "white",
-              fontWeight: "bold",
-            }}
-          >
-            C
-          </div>
-          <span
-            style={{
-              fontSize: "1.25rem",
-              fontWeight: 800,
-              color: "#fff",
-              letterSpacing: "-0.5px",
-            }}>CourseSpeak</span
-          >
-        </a>
-        <HeaderSearch client:load />
-      </div>
-    </header>
-
     <main>
       {/* Hero Section */}
       <section

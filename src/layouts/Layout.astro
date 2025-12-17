@@ -1,5 +1,6 @@
 ---
 import "../styles/globals.css";
+import HeaderSearch from "../components/HeaderSearch";
 
 interface Props {
   title?: string;
@@ -120,6 +121,7 @@ const canonicalURL = canonical || new URL(Astro.url.pathname, siteUrl).href;
               fontSize: "0.95rem",
             }}>Categories</a
           >
+          <HeaderSearch client:load />
         </div>
       </nav>
     </header>
