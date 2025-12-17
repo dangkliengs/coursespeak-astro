@@ -25,4 +25,9 @@ export interface Deal {
   requirements?: string[];
   curriculum?: string[];
   faqs?: { q: string; a: string }[];
+  createdAt?: string;
+  updatedAt?: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  seoOgImage?: string;
 }
