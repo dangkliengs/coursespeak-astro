@@ -4,8 +4,26 @@ import AdminAuthGate from "../components/AdminAuthGate";
 
 const pageTitle = "Admin Dashboard - CourseSpeak";
 const pageDescription = "Manage courses and deals on CourseSpeak admin dashboard.";
+
+// EMERGENCY: Block production at Astro level
+const isProduction = Astro.url.hostname?.includes('.com') && !Astro.url.hostname?.includes('localhost');
 ---
 
+{isProduction ? (
+  <Layout title={pageTitle} description={pageDescription}>
+    <div style={{ 
+      padding: "4rem", 
+      textAlign: "center", 
+      backgroundColor: "#dc2626", 
+      color: "white",
+      minHeight: "100vh"
+    }}>
+      <h2>🚫 Admin Access Blocked</h2>
+      <p>Production admin access is disabled</p>
+      <small>Hostname: {Astro.url.hostname || 'unknown'}</small>
+    </div>
+  </Layout>
+) : (
 <Layout title={pageTitle} description={pageDescription}>
   <AdminAuthGate>
   <div style={{ background: "#0b0d12", minHeight: "100vh", color: "#e2e8f0" }}>
@@ -117,3 +135,4 @@ const pageDescription = "Manage courses and deals on CourseSpeak admin dashboard
   </div>
   </AdminAuthGate>
 </Layout>
+)}
