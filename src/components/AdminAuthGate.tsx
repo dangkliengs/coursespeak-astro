@@ -149,57 +149,31 @@ function useProvideAdminAuth(): {
 }
 
 export default function AdminAuthGate({ children }: { children: ReactNode }) {
-  // EMERGENCY SECURITY: Multiple layers of protection
+  // SIMPLE AND RELIABLE: Block production, allow development
   const hostname = typeof window !== "undefined" ? window.location.hostname : '';
-  const isLocalhost = hostname === 'localhost' || 
-                     hostname === '127.0.0.1' ||
-                     hostname.includes('localhost') ||
-                     hostname.includes('127.0.0.1');
   
-  // Additional checks for production domains
-  const isProductionDomain = hostname.includes('coursespeak.com') ||
-                            hostname.includes('.com') && !isLocalhost;
+  // Simple check: block if it's a .com domain and not localhost
+  const isProduction = hostname.includes('.com') && !hostname.includes('localhost');
   
-  // Block if ANY production indicators
-  const shouldBlock = isProductionDomain || (!isLocalhost && hostname !== '');
+  console.log('🔧 SIMPLE AUTH CHECK:', { hostname, isProduction });
 
-  console.log('� EMERGENCY SECURITY CHECK:', { 
-    hostname,
-    isLocalhost,
-    isProductionDomain,
-    shouldBlock,
-    windowExists: typeof window !== "undefined"
-  });
-
-  // BLOCK ALL PRODUCTION ACCESS - EMERGENCY
-  if (shouldBlock) {
+  if (isProduction) {
     return (
-      <div className="container" style={{ padding: "4rem 0", textAlign: "center" }}>
-        <div style={{ 
-          maxWidth: 500, 
-          margin: "0 auto", 
-          padding: "2rem", 
-          backgroundColor: "#991b1b", 
-          color: "white", 
-          borderRadius: "0.5rem",
-          border: "2px solid #dc2626"
-        }}>
-          <h2 style={{ margin: "0 0 1rem 0" }}>� ACCESS DENIED</h2>
-          <p style={{ margin: "0 0 1rem 0" }}>
-            <strong>EMERGENCY SECURITY:</strong> Admin access is blocked.
-          </p>
-          <p style={{ margin: "0 0 1rem 0" }}>
-            This area is restricted to local development only.
-          </p>
-          <p style={{ margin: "0", fontSize: "0.75rem", opacity: 0.8 }}>
-            Hostname: {hostname} | Blocked: {shouldBlock.toString()}
-          </p>
-        </div>
+      <div style={{ 
+        padding: "4rem", 
+        textAlign: "center", 
+        backgroundColor: "#dc2626", 
+        color: "white",
+        minHeight: "100vh"
+      }}>
+        <h2>🚫 Admin Access Blocked</h2>
+        <p>Production admin access is disabled</p>
+        <small>Hostname: {hostname}</small>
       </div>
     );
   }
 
-  // Allow only localhost or SSR
+  // Allow everything else (localhost, SSR, etc.)
   return <>{children}</>;
 }
 
