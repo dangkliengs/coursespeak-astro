@@ -847,29 +847,18 @@ const pageDescription = `Edit course deal: ${deal.title} on CourseSpeak.`;
       try {
         console.log('Updating deal:', dealData);
         
-        const response = await fetch('/api/update', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(dealData)
-        });
+        // For GitHub Pages, save to localStorage and show instructions
+        localStorage.setItem('pendingDealUpdate', JSON.stringify(dealData));
         
-        console.log('Response status:', response.status);
-        console.log('Response headers:', response.headers);
+        alert('Deal data prepared for update!\n\nSince this is hosted on GitHub Pages, you need to:\n1. Copy the data from localStorage\n2. Update the deals.json file manually\n3. Commit and push changes to GitHub\n\nCheck browser console for the updated data.');
         
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error('Response not OK:', errorText);
-          throw new Error(`HTTP ${response.status}: ${errorText}`);
-        }
+        console.log('Pending update data:', dealData);
+        console.log('To apply this update, update deals.json with the above data and commit to GitHub.');
         
-        const result = await response.json();
-        console.log('Response result:', result);
-        
-        if (result.success) {
-          alert('Deal updated successfully!');
-          window.location.href = '/admin/deals';
-        } else {
-          alert('Update failed: ' + result.error);
+        // Optional: Copy to clipboard
+        if (navigator.clipboard) {
+          await navigator.clipboard.writeText(JSON.stringify(dealData, null, 2));
+          alert('Deal data copied to clipboard! Paste it into deals.json and commit to GitHub.');
         }
         
       } catch (error) {
