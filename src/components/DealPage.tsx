@@ -283,7 +283,9 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                         {/* Rating Summary */}
                         <div style={{ display: "flex", alignItems: "center", gap: "2rem", marginBottom: "2rem" }}>
                             <div style={{ textAlign: "center" }}>
-                                <div style={{ fontSize: "4rem", fontWeight: 800, color: "#f59e0b", lineHeight: 1 }}>{deal.rating?.toFixed(1) || "4.8"}</div>
+                                <div style={{ fontSize: "4rem", fontWeight: 800, color: "#f59e0b", lineHeight: 1 }}>
+                                    {typeof deal.rating === 'number' ? deal.rating.toFixed(1) : (parseFloat(deal.rating || '') || 4.8).toFixed(1)}
+                                </div>
                                 <div style={{ color: "#f59e0b", fontSize: "1.2rem", fontWeight: 700 }}>★★★★★</div>
                                 <div style={{ color: "#9ca3af", fontSize: "0.9rem" }}>Course Rating</div>
                             </div>
