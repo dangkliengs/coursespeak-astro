@@ -449,9 +449,12 @@ const pageDescription = "View, edit, and delete course deals on CourseSpeak.";
           }
           // Update the count
           const countElement = document.querySelector('p');
-          if (countElement && countElement.textContent.includes('total deals')) {
-            const currentCount = parseInt(countElement.textContent.match(/\d+/)[0]);
-            countElement.textContent = `${currentCount - 1} total deals`;
+          if (countElement && countElement.textContent?.includes('total deals')) {
+            const match = countElement.textContent.match(/\d+/);
+            if (match) {
+              const currentCount = parseInt(match[0]);
+              countElement.textContent = `${currentCount - 1} total deals`;
+            }
           }
         } else {
           console.error('Delete failed:', result.error);
