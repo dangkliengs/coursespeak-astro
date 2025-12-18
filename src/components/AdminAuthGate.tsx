@@ -155,7 +155,7 @@ export default function AdminAuthGate({ children }: { children: ReactNode }) {
   // Simple check: block if it's a .com domain and not localhost
   const isProduction = hostname.includes('.com') && !hostname.includes('localhost');
   
-  console.log('🔧 SIMPLE AUTH CHECK:', { hostname, isProduction });
+  console.log('🔧 SIMPLE AUTH CHECK v2:', { hostname, isProduction });
 
   if (isProduction) {
     return (
