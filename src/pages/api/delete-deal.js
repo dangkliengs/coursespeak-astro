@@ -54,8 +54,15 @@ export async function POST({ request }) {
     // Remove the deal
     const deletedDeal = dealsData.splice(dealIndex, 1)[0];
     
+    // Sort by recency (newest first) like store.ts does
+    const sortedDeals = dealsData.sort((a, b) => {
+      const timeA = new Date(a.updatedAt ?? a.createdAt ?? a.expiresAt ?? 0).getTime();
+      const timeB = new Date(b.updatedAt ?? b.createdAt ?? b.expiresAt ?? 0).getTime();
+      return timeB - timeA;  // Newest first
+    });
+    
     // Write back to file
-    writeFileSync(filePath, JSON.stringify(dealsData, null, 2));
+    writeFileSync(filePath, JSON.stringify(sortedDeals, null, 2));
     
     console.log('API: Deal deleted successfully:', deletedDeal.id);
     

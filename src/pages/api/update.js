@@ -52,10 +52,17 @@ export async function POST({ request }) {
     }
     
     // Update the deal
-    dealsData[dealIndex] = { ...dealsData[dealIndex], ...dealData };
+    dealsData[dealIndex] = { ...dealsData[dealIndex], ...dealData, updatedAt: new Date().toISOString() };
+    
+    // Sort by recency (newest first) like store.ts does
+    const sortedDeals = dealsData.sort((a, b) => {
+      const timeA = new Date(a.updatedAt ?? a.createdAt ?? a.expiresAt ?? 0).getTime();
+      const timeB = new Date(b.updatedAt ?? b.createdAt ?? b.expiresAt ?? 0).getTime();
+      return timeB - timeA;  // Newest first
+    });
     
     // Write back to file
-    writeFileSync(filePath, JSON.stringify(dealsData, null, 2));
+    writeFileSync(filePath, JSON.stringify(sortedDeals, null, 2));
     
     console.log('API: Deal updated successfully:', dealData.id);
     
