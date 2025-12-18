@@ -13,14 +13,14 @@ interface Props {
 const {
   title = "CourseSpeak - Best Online Course Deals & Coupons",
   description = "Find the best online course deals and coupons. Daily updated discounts for Udemy, Coursera, and more. Save up to 100% on your next learning journey.",
-  image = "/og-image.jpg", // Default OG image
+  image, // No default - let each page provide its own image
   type = "website",
   canonical,
 } = Astro.props;
 
 const siteUrl = import.meta.env.SITE || "https://coursespeak.com";
 const canonicalURL = canonical || new URL(Astro.url.pathname, siteUrl).href;
-const absoluteImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).href;
+const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(image, siteUrl).href) : null;
 ---
 
 <!doctype html>
@@ -44,19 +44,19 @@ const absoluteImageUrl = image.startsWith('http') ? image : new URL(image, siteU
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={absoluteImageUrl} />
-    <meta property="og:image:secure_url" content={absoluteImageUrl} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={title} />
+    {absoluteImageUrl && <meta property="og:image" content={absoluteImageUrl} />}
+    {absoluteImageUrl && <meta property="og:image:secure_url" content={absoluteImageUrl} />}
+    {absoluteImageUrl && <meta property="og:image:width" content="1200" />}
+    {absoluteImageUrl && <meta property="og:image:height" content="630" />}
+    {absoluteImageUrl && <meta property="og:image:alt" content={title} />}
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:card" content={absoluteImageUrl ? "summary_large_image" : "summary"} />
     <meta property="twitter:url" content={canonicalURL} />
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={absoluteImageUrl} />
-    <meta property="twitter:image:alt" content={title} />
+    {absoluteImageUrl && <meta property="twitter:image" content={absoluteImageUrl} />}
+    {absoluteImageUrl && <meta property="twitter:image:alt" content={title} />}
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

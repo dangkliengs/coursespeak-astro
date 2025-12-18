@@ -48,12 +48,16 @@ const featuredDeals = allDeals
   .sort((a, b) => (b.rating || 0) - (a.rating || 0))
   .slice(0, 3);
 
+// Use first featured deal image for OG
+const featuredImage = featuredDeals.length > 0 ? featuredDeals[0].image : "/og-image.jpg";
+
 import DealCard from "../components/DealCard";
 ---
 
 <Layout 
     title={pageTitle}
     description={pageDescription}
+    image={featuredImage}
 >
   <div style={{ background: "#0b0d12", minHeight: "100vh", color: "#e2e8f0" }}>
     <main>

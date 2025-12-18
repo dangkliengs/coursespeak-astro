@@ -24,7 +24,11 @@ const relatedDeals = allDeals
     .slice(0, 4);
 ---
 
-<Layout title={`${deal.title} | ${discountPercentage}% Off Udemy Coupon`} description={deal.description}>
+<Layout 
+    title={`${deal.title} | ${discountPercentage}% Off Udemy Coupon`} 
+    description={deal.description}
+    image={deal.image}
+>
     {
         /* We pass client:load to ensure interactivity (tabs, hydration) works immediately */
     }
