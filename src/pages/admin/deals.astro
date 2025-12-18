@@ -425,17 +425,58 @@ const pageDescription = "View, edit, and delete course deals on CourseSpeak.";
       performSearch();
     }
     
+    function deleteDeal(dealId: string) {
+      console.log('Deleting deal:', dealId);
+      
+      if (!confirm('Are you sure you want to delete this deal? This action cannot be undone.')) {
+        return;
+      }
+      
+      fetch('/api/delete-deal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: dealId })
+      })
+      .then(response => response.json())
+      .then(result => {
+        if (result.success) {
+          console.log('Deal deleted successfully:', result.deletedDeal);
+          alert('Deal deleted successfully!');
+          // Remove the row from the table
+          const row = document.querySelector(`[data-deal-id="${dealId}"]`);
+          if (row) {
+            row.remove();
+          }
+          // Update the count
+          const countElement = document.querySelector('p');
+          if (countElement && countElement.textContent.includes('total deals')) {
+            const currentCount = parseInt(countElement.textContent.match(/\d+/)[0]);
+            countElement.textContent = `${currentCount - 1} total deals`;
+          }
+        } else {
+          console.error('Delete failed:', result.error);
+          alert('Delete failed: ' + result.error);
+        }
+      })
+      .catch(error => {
+        console.error('Delete error:', error);
+        alert('Delete error: ' + error.message);
+      });
+    }
+    
     // Add type declarations for global window
     declare global {
       interface Window {
         performSearch: () => void;
         clearFilters: () => void;
         testSearch: () => void;
+        deleteDeal: (dealId: string) => void;
       }
     }
     window.performSearch = performSearch;
     window.clearFilters = clearFilters;
     window.testSearch = testSearch;
+    window.deleteDeal = deleteDeal;
     console.log('Functions exposed');
   </script>
   </AdminAuthGate>
