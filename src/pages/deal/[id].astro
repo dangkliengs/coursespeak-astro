@@ -13,13 +13,18 @@ export async function getStaticPaths() {
 
 const { deal } = Astro.props;
 
+// Calculate discount percentage
+const discountPercentage = deal.originalPrice && deal.price && deal.originalPrice > deal.price 
+  ? Math.round(((deal.originalPrice - deal.price) / deal.originalPrice) * 100)
+  : 0;
+
 const allDeals = await readDeals();
 const relatedDeals = allDeals
     .filter((d) => d.id !== deal.id && d.category === deal.category)
     .slice(0, 4);
 ---
 
-<Layout title={`${deal.title} | [diskon] Udemy Coupons`} description={deal.description}>
+<Layout title={`${deal.title} | [${discountPercentage}% diskon] Udemy Coupons`} description={deal.description}>
     {
         /* We pass client:load to ensure interactivity (tabs, hydration) works immediately */
     }
