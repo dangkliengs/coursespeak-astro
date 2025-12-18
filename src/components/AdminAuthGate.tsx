@@ -149,21 +149,26 @@ function useProvideAdminAuth(): {
 }
 
 export default function AdminAuthGate({ children }: { children: ReactNode }) {
-  // ULTRA SIMPLE: Always allow in development, block in production
-  const isDevelopment = typeof window !== "undefined" && (
-    window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1" ||
-    window.location.hostname.includes("localhost") ||
-    window.location.hostname.includes("127.0.0.1")
-  );
+  // ASTRO-SAFE: Check if we're in development using multiple methods
+  const isDevelopment = 
+    // Check if we're in browser and it's localhost
+    (typeof window !== "undefined" && (
+      window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1" ||
+      window.location.hostname.includes("localhost") ||
+      window.location.hostname.includes("127.0.0.1")
+    )) ||
+    // Fallback: assume development if window is undefined (SSR)
+    typeof window === "undefined";
 
   console.log('🔍 Debug:', { 
+    hasWindow: typeof window !== "undefined",
     hostname: typeof window !== "undefined" ? window.location.hostname : 'undefined',
     isDevelopment 
   });
 
-  // Block production
-  if (!isDevelopment) {
+  // Block production only if we're certain it's production
+  if (!isDevelopment && typeof window !== "undefined") {
     return (
       <div className="container" style={{ padding: "4rem 0", textAlign: "center" }}>
         <div style={{ 
@@ -186,7 +191,7 @@ export default function AdminAuthGate({ children }: { children: ReactNode }) {
     );
   }
 
-  // Allow development
+  // Allow development (including SSR fallback)
   return <>{children}</>;
 }
 
