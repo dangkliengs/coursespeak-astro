@@ -149,7 +149,7 @@ function useProvideAdminAuth(): {
 }
 
 export default function AdminAuthGate({ children }: { children: ReactNode }) {
-  // ASTRO-SAFE: Check if we're in development using multiple methods
+  // CRITICAL SECURITY FIX: Block ALL production access
   const isDevelopment = 
     // Check if we're in browser and it's localhost
     (typeof window !== "undefined" && (
@@ -161,27 +161,31 @@ export default function AdminAuthGate({ children }: { children: ReactNode }) {
     // Fallback: assume development if window is undefined (SSR)
     typeof window === "undefined";
 
-  console.log('🔍 Debug:', { 
+  console.log('🔍 SECURITY DEBUG:', { 
     hasWindow: typeof window !== "undefined",
     hostname: typeof window !== "undefined" ? window.location.hostname : 'undefined',
-    isDevelopment 
+    isDevelopment,
+    blocking: !isDevelopment
   });
 
-  // Block production only if we're certain it's production
-  if (!isDevelopment && typeof window !== "undefined") {
+  // BLOCK ALL NON-DEVELOPMENT ACCESS - CRITICAL SECURITY
+  if (!isDevelopment) {
     return (
       <div className="container" style={{ padding: "4rem 0", textAlign: "center" }}>
         <div style={{ 
           maxWidth: 500, 
           margin: "0 auto", 
           padding: "2rem", 
-          backgroundColor: "#ef4444", 
+          backgroundColor: "#dc2626", 
           color: "white", 
           borderRadius: "0.5rem" 
         }}>
-          <h2 style={{ margin: "0 0 1rem 0" }}>🚫 Access Denied</h2>
+          <h2 style={{ margin: "0 0 1rem 0" }}>🚫 ACCESS DENIED</h2>
           <p style={{ margin: "0 0 1rem 0" }}>
-            Admin access is only available in local development.
+            <strong>SECURITY:</strong> Admin access is restricted to local development only.
+          </p>
+          <p style={{ margin: "0 0 1rem 0" }}>
+            This area is not accessible in production.
           </p>
           <p style={{ margin: "0", fontSize: "0.875rem", opacity: 0.9 }}>
             Hostname: {typeof window !== "undefined" ? window.location.hostname : 'undefined'}
@@ -191,7 +195,7 @@ export default function AdminAuthGate({ children }: { children: ReactNode }) {
     );
   }
 
-  // Allow development (including SSR fallback)
+  // Allow development ONLY
   return <>{children}</>;
 }
 
