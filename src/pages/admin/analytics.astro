@@ -1,5 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import AdminProtection from "../../components/AdminProtection.astro";
 import AdminAuthGate from "../../components/AdminAuthGate";
 
 const pageTitle = "Analytics - Admin Dashboard";
@@ -7,7 +8,8 @@ const pageDescription = "View site statistics and performance metrics.";
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
-  <AdminAuthGate>
+  <AdminProtection>
+    <AdminAuthGate>
     <div style={{ background: "#0b0d12", minHeight: "100vh", color: "#e2e8f0" }}>
       <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "2rem 1rem" }}>
         <div style={{ marginBottom: "2rem" }}>
@@ -143,4 +145,5 @@ const pageDescription = "View site statistics and performance metrics.";
       </div>
     </div>
   </AdminAuthGate>
+  </AdminProtection>
 </Layout>
