@@ -149,42 +149,21 @@ function useProvideAdminAuth(): {
 }
 
 export default function AdminAuthGate({ children }: { children: ReactNode }) {
-  // CLIENT-SIDE ONLY: Check hostname after mount
-  const [hostname, setHostname] = useState('');
-  const [isAllowed, setIsAllowed] = useState(false);
+  // ULTRA SIMPLE: Always allow in development, block in production
+  const isDevelopment = typeof window !== "undefined" && (
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1" ||
+    window.location.hostname.includes("localhost") ||
+    window.location.hostname.includes("127.0.0.1")
+  );
 
-  useEffect(() => {
-    // Only run on client-side
-    if (typeof window !== "undefined") {
-      const currentHostname = window.location.hostname || window.location.host || '';
-      setHostname(currentHostname);
-      
-      // Allow local development only
-      const allowed = currentHostname === 'localhost' || 
-                     currentHostname === '127.0.0.1' || 
-                     currentHostname.includes('.local') ||
-                     currentHostname.includes('localhost') ||
-                     currentHostname.includes('127.0.0.1') ||
-                     currentHostname.startsWith('localhost:') ||
-                     currentHostname.startsWith('127.0.0.1:');
-      
-      setIsAllowed(allowed);
-      console.log('🔍 AdminAuthGate Debug:', { hostname: currentHostname, allowed });
-    }
-  }, []);
+  console.log('🔍 Debug:', { 
+    hostname: typeof window !== "undefined" ? window.location.hostname : 'undefined',
+    isDevelopment 
+  });
 
-  // Show loading while checking
-  if (hostname === '') {
-    return (
-      <div className="container" style={{ padding: "2rem 0", textAlign: "center" }}>
-        <h2>Loading...</h2>
-        <p className="muted">Checking environment...</p>
-      </div>
-    );
-  }
-
-  // BLOCK production access
-  if (!isAllowed) {
+  // Block production
+  if (!isDevelopment) {
     return (
       <div className="container" style={{ padding: "4rem 0", textAlign: "center" }}>
         <div style={{ 
@@ -197,18 +176,17 @@ export default function AdminAuthGate({ children }: { children: ReactNode }) {
         }}>
           <h2 style={{ margin: "0 0 1rem 0" }}>🚫 Access Denied</h2>
           <p style={{ margin: "0 0 1rem 0" }}>
-            Admin access is only available in local development environment.
+            Admin access is only available in local development.
           </p>
           <p style={{ margin: "0", fontSize: "0.875rem", opacity: 0.9 }}>
-            Current hostname: {hostname}
+            Hostname: {typeof window !== "undefined" ? window.location.hostname : 'undefined'}
           </p>
         </div>
       </div>
     );
   }
 
-  // ALLOW local development
-  console.log('✅ Local development detected - Admin access granted');
+  // Allow development
   return <>{children}</>;
 }
 
