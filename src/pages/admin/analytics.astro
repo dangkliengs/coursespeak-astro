@@ -1,0 +1,146 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import AdminAuthGate from "../../components/AdminAuthGate";
+
+const pageTitle = "Analytics - Admin Dashboard";
+const pageDescription = "View site statistics and performance metrics.";
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <AdminAuthGate>
+    <div style={{ background: "#0b0d12", minHeight: "100vh", color: "#e2e8f0" }}>
+      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "2rem 1rem" }}>
+        <div style={{ marginBottom: "2rem" }}>
+          <h1 style={{ 
+            fontSize: "2.5rem", 
+            fontWeight: 700, 
+            color: "#fff", 
+            marginBottom: "0.5rem" 
+          }}>
+            Analytics Dashboard
+          </h1>
+          <p style={{ 
+            fontSize: "1.125rem", 
+            color: "#a9b0c0", 
+            marginBottom: "2rem" 
+          }}>
+            View site statistics and performance metrics
+          </p>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.5rem" }}>
+          <div style={{
+            padding: "2rem",
+            borderRadius: "1rem",
+            border: "1px solid rgba(91, 140, 255, 0.24)",
+            background: "linear-gradient(140deg, rgba(11, 13, 18, 0.98) 0%, rgba(18, 24, 40, 0.98) 55%, rgba(42, 64, 110, 0.38) 100%)",
+            boxShadow: "0 18px 36px rgba(8, 12, 26, 0.45)"
+          }}>
+            <h3 style={{ color: "#fff", marginBottom: "1rem", fontSize: "1.5rem" }}>Traffic Overview</h3>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "1rem", marginBottom: "1.5rem" }}>
+              <div>
+                <div style={{ fontSize: "2rem", fontWeight: 700, color: "#3b82f6" }}>1,234</div>
+                <div style={{ color: "#a9b0c0" }}>Total Visits</div>
+              </div>
+              <div>
+                <div style={{ fontSize: "2rem", fontWeight: 700, color: "#10b981" }}>892</div>
+                <div style={{ color: "#a9b0c0" }}>Unique Visitors</div>
+              </div>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr))", gap: "1rem" }}>
+              <div>
+                <div style={{ fontSize: "1.5rem", fontWeight: 600, color: "#f59e0b" }}>+23%</div>
+                <div style={{ color: "#a9b0c0" }}>vs Last Month</div>
+              </div>
+              <div>
+                <div style={{ fontSize: "1.5rem", fontWeight: 600, color: "#8b5cf6" }}>4:32</div>
+                <div style={{ color: "#a9b0c0" }}>Avg. Session</div>
+              </div>
+            </div>
+          </div>
+
+          <div style={{
+            padding: "2rem",
+            borderRadius: "1rem",
+            border: "1px solid rgba(91, 140, 255, 0.24)",
+            background: "linear-gradient(140deg, rgba(11, 13, 18, 0.98) 0%, rgba(18, 24, 40, 0.98) 55%, rgba(42, 64, 110, 0.38) 100%)",
+            boxShadow: "0 18px 36px rgba(8, 12, 26, 0.45)"
+          }}>
+            <h3 style={{ color: "#fff", marginBottom: "1rem", fontSize: "1.5rem" }}>Popular Deals</h3>
+            <div style={{ color: "#a9b0c0", marginBottom: "1.5rem" }}>
+              Most viewed course deals this month
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+              <div style={{ padding: "1rem", backgroundColor: "rgba(59, 130, 246, 0.1)", borderRadius: "0.5rem" }}>
+                <div style={{ fontWeight: 600, color: "#fff", marginBottom: "0.5rem" }}>Udemy Web Development Bootcamp</div>
+                <div style={{ fontSize: "0.875rem", color: "#a9b0c0" }}>342 views • 89 clicks</div>
+              </div>
+              <div style={{ padding: "1rem", backgroundColor: "rgba(59, 130, 246, 0.1)", borderRadius: "0.5rem" }}>
+                <div style={{ fontWeight: 600, color: "#fff", marginBottom: "0.5rem" }}>Python for Data Science</div>
+                <div style={{ fontSize: "0.875rem", color: "#a9b0c0" }}>256 views • 67 clicks</div>
+              </div>
+              <div style={{ padding: "1rem", backgroundColor: "rgba(59, 130, 246, 0.1)", borderRadius: "0.5rem" }}>
+                <div style={{ fontWeight: 600, color: "#fff", marginBottom: "0.5rem" }}>JavaScript Complete Guide</div>
+                <div style={{ fontSize: "0.875rem", color: "#a9b0c0" }}>198 views • 45 clicks</div>
+              </div>
+            </div>
+          </div>
+
+          <div style={{
+            padding: "2rem",
+            borderRadius: "1rem",
+            border: "1px solid rgba(91, 140, 255, 0.24)",
+            background: "linear-gradient(140deg, rgba(11, 13, 18, 0.98) 0%, rgba(18, 24, 40, 0.98) 55%, rgba(42, 64, 110, 0.38) 100%)",
+            boxShadow: "0 18px 36px rgba(8, 12, 26, 0.45)"
+          }}>
+            <h3 style={{ color: "#fff", marginBottom: "1rem", fontSize: "1.5rem" }}>Conversion Metrics</h3>
+            <div style={{ color: "#a9b0c0", marginBottom: "1.5rem" }}>
+              Deal performance and user engagement
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr))", gap: "1rem" }}>
+              <div>
+                <div style={{ fontSize: "2rem", fontWeight: 700, color: "#10b981" }}>12.4%</div>
+                <div style={{ color: "#a9b0c0" }}>Click-through Rate</div>
+              </div>
+              <div>
+                <div style={{ fontSize: "2rem", fontWeight: 700, color: "#f59e0b" }}>3.2%</div>
+                <div style={{ color: "#a9b0c0" }}>Conversion Rate</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style={{ marginTop: "3rem", padding: "1.5rem", backgroundColor: "rgba(59, 130, 246, 0.1)", borderRadius: "0.5rem", border: "1px solid rgba(59, 130, 246, 0.3)" }}>
+          <h4 style={{ color: "#fff", marginBottom: "1rem" }}>Quick Actions</h4>
+          <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+            <a href="/admin/deals" style={{
+              display: "inline-block",
+              padding: "0.75rem 1.5rem",
+              backgroundColor: "#3b82f6",
+              color: "#fff",
+              textDecoration: "none",
+              borderRadius: "0.5rem",
+              fontWeight: 600,
+              textAlign: "center"
+            }}>
+              Manage Deals
+            </a>
+            <a href="/admin/" style={{
+              display: "inline-block",
+              padding: "0.75rem 1.5rem",
+              backgroundColor: "transparent",
+              color: "#3b82f6",
+              border: "1px solid #3b82f6",
+              textDecoration: "none",
+              borderRadius: "0.5rem",
+              fontWeight: 600,
+              textAlign: "center"
+            }}>
+              Dashboard
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </AdminAuthGate>
+</Layout>
