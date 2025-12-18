@@ -455,7 +455,7 @@ const pageDescription = "View, edit, and delete course deals on CourseSpeak.";
       }
       
       // Remove row from table for immediate visual feedback
-      const row = document.querySelector(`[data-deal-id="${dealId}"]`);
+      const row = document.querySelector(`[data-deal-id="${dealId}"]`) as HTMLElement;
       if (row) {
         row.style.opacity = '0.5';
         row.style.textDecoration = 'line-through';
