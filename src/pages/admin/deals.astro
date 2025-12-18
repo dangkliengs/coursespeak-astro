@@ -432,39 +432,44 @@ const pageDescription = "View, edit, and delete course deals on CourseSpeak.";
         return;
       }
       
-      fetch('/api/delete-deal', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: dealId })
-      })
-      .then(response => response.json())
-      .then(result => {
-        if (result.success) {
-          console.log('Deal deleted successfully:', result.deletedDeal);
-          alert('Deal deleted successfully!');
-          // Remove the row from the table
-          const row = document.querySelector(`[data-deal-id="${dealId}"]`);
-          if (row) {
-            row.remove();
-          }
-          // Update the count
-          const countElement = document.querySelector('p');
-          if (countElement && countElement.textContent?.includes('total deals')) {
-            const match = countElement.textContent.match(/\d+/);
-            if (match) {
-              const currentCount = parseInt(match[0]);
-              countElement.textContent = `${currentCount - 1} total deals`;
-            }
-          }
-        } else {
-          console.error('Delete failed:', result.error);
-          alert('Delete failed: ' + result.error);
+      // For GitHub Pages, prepare delete data and show instructions
+      const deleteInfo = {
+        action: 'DELETE',
+        dealId: dealId,
+        timestamp: new Date().toISOString()
+      };
+      
+      localStorage.setItem('pendingDealDelete', JSON.stringify(deleteInfo));
+      
+      alert('Delete action prepared!\n\nSince this is hosted on GitHub Pages, you need to:\n1. Copy the delete information below\n2. Manually remove the deal from deals.json\n3. Commit and push changes to GitHub\n\nCheck browser console for the delete information.');
+      
+      console.log('Pending delete info:', deleteInfo);
+      console.log('To apply this delete, remove the deal with ID:', dealId, 'from deals.json and commit to GitHub.');
+      
+      // Copy delete info to clipboard
+      if (navigator.clipboard) {
+        const deleteText = `DELETE DEAL: ${dealId}\nTimestamp: ${new Date().toISOString()}\n\nRemove this deal from src/data/deals.json and commit to GitHub.`;
+        navigator.clipboard.writeText(deleteText).then(() => {
+          alert('Delete information copied to clipboard! Remove the deal from deals.json and commit to GitHub.');
+        });
+      }
+      
+      // Remove row from table for immediate visual feedback
+      const row = document.querySelector(`[data-deal-id="${dealId}"]`);
+      if (row) {
+        row.style.opacity = '0.5';
+        row.style.textDecoration = 'line-through';
+      }
+      
+      // Update count
+      const countElement = document.querySelector('p');
+      if (countElement && countElement.textContent?.includes('total deals')) {
+        const match = countElement.textContent.match(/\d+/);
+        if (match) {
+          const currentCount = parseInt(match[0]);
+          countElement.textContent = `${currentCount - 1} total deals`;
         }
-      })
-      .catch(error => {
-        console.error('Delete error:', error);
-        alert('Delete error: ' + error.message);
-      });
+      }
     }
     
     // Add type declarations for global window
