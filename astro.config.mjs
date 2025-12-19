@@ -7,4 +7,12 @@ export default defineConfig({
   integrations: [react()],
   site: 'https://coursespeak.com',
   base: '/',
+  vite: {
+    server: {
+      fs: {
+        // Allow reading files from src/data directory
+        allow: ['..']
+      }
+    }
+  }
 });

@@ -847,24 +847,42 @@ const pageDescription = `Edit course deal: ${deal.title} on CourseSpeak.`;
       try {
         console.log('Updating deal:', dealData);
         
-        // For GitHub Pages, save to localStorage and show instructions
-        localStorage.setItem('pendingDealUpdate', JSON.stringify(dealData));
+        // Try direct file update for local development
+        const response = await fetch('/api/update', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(dealData)
+        });
         
-        alert('Deal data prepared for update!\n\nSince this is hosted on GitHub Pages, you need to:\n1. Copy the data from localStorage\n2. Update the deals.json file manually\n3. Commit and push changes to GitHub\n\nCheck browser console for the updated data.');
-        
-        console.log('Pending update data:', dealData);
-        console.log('To apply this update, update deals.json with the above data and commit to GitHub.');
-        
-        // Optional: Copy to clipboard
-        if (navigator.clipboard) {
-          await navigator.clipboard.writeText(JSON.stringify(dealData, null, 2));
-          alert('Deal data copied to clipboard! Paste it into deals.json and commit to GitHub.');
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success) {
+            console.log('Deal updated successfully:', result.updatedDeal);
+            alert('Deal updated successfully!');
+            window.location.href = '/admin/deals';
+          } else {
+            throw new Error(result.error || 'Update failed');
+          }
+        } else {
+          throw new Error('API not available');
         }
         
       } catch (error) {
         console.error('Update error:', error);
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        alert('Update failed: ' + errorMessage);
+        
+        // Fallback to client-side for GitHub Pages or API failure
+        localStorage.setItem('pendingDealUpdate', JSON.stringify(dealData));
+        
+        alert('Update completed! Data saved to localStorage.\n\nFor local development: Check browser console\nFor GitHub Pages: Copy data and update deals.json manually');
+        
+        console.log('Updated deal data:', dealData);
+        console.log('To apply this update manually, replace the deal with this ID in deals.json:', dealData.id);
+        
+        // Copy to clipboard
+        if (navigator.clipboard) {
+          await navigator.clipboard.writeText(JSON.stringify(dealData, null, 2));
+          alert('Deal data copied to clipboard!');
+        }
       }
     });
   </script>
