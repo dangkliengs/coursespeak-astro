@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://coursespeak-astro.vercel.app/sitemap.xml
+Sitemap: https://coursespeak.com/sitemap.xml
 
 # Block common non-content paths
 Disallow: /api/
