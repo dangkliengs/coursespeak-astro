@@ -27,7 +27,16 @@ if (!deal) {
     
     <p class="description">{deal.description || 'No description available'}</p>
     
-        
+    <div class="card-meta">
+      <div class="rating">
+        {deal.rating && (
+          <span>⭐ {deal.rating}</span>
+          {deal.students && <span>({deal.students.toLocaleString()} students)</span>}
+        )}
+      </div>
+      <div class="category">{deal.category || 'General'}</div>
+    </div>
+    
     <div class="card-footer">
       <div class="price">
         <span class="current-price">${deal.price || 0}</span>
