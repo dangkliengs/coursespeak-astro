@@ -1,6 +1,5 @@
 ---
 import "../styles/globals.css";
-import SearchForm from "../components/SearchForm.astro";
 
 interface Props {
   title?: string;
@@ -127,7 +126,6 @@ const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(ima
               fontSize: "0.95rem",
             }}>Categories</a
           >
-          <SearchForm />
         </div>
       </nav>
     </header>
