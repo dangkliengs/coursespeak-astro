@@ -126,6 +126,35 @@ const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(ima
               fontSize: "0.95rem",
             }}>Categories</a
           >
+          <form action="/search" method="get" style="display: flex; gap: 8px;">
+            <input 
+              type="text" 
+              name="q" 
+              placeholder="Search courses..." 
+              style={{
+                background: '#374151',
+                color: '#9ca3af',
+                border: '1px solid #4b5563',
+                padding: '6px 12px',
+                borderRadius: '6px',
+                fontSize: '0.9rem'
+              }}
+            />
+            <button 
+              type="submit" 
+              style={{
+                background: '#3b82f6',
+                color: 'white',
+                border: 'none',
+                padding: '6px 12px',
+                borderRadius: '6px',
+                fontSize: '0.9rem',
+                cursor: 'pointer'
+              }}
+            >
+              Search
+            </button>
+          </form>
         </div>
       </nav>
     </header>
