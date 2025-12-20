@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://coursespeak-astro.vercel.app/sitemap.xml
+
+# Block common non-content paths
+Disallow: /api/
+Disallow: /_astro/
+Disallow: /_image/
+Disallow: /admin/
+Disallow: /*.json$
