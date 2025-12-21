@@ -8,9 +8,55 @@ const allDeals = await readDeals();
 const PAGE_SIZE = 24;
 const initialItems = allDeals.slice(0, PAGE_SIZE);
 const totalPages = Math.ceil(allDeals.length / PAGE_SIZE);
+
+// SEO Meta Tags with Auto Date
+const currentDate = new Date();
+const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const currentMonth = monthNames[currentDate.getMonth()];
+const currentYear = currentDate.getFullYear();
+
+const pageTitle = `All Udemy Deals & Discounts ${currentMonth} ${currentYear} | CourseSpeak`;
+const pageDescription = `Find ${allDeals.length}+ verified Udemy deals with up to 100% off. Latest coupons and discounts updated daily.`;
+
+// JSON-LD Structured Data for SEO
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": pageTitle,
+  "description": pageDescription,
+  "url": "https://coursespeak.com/deals",
+  "mainEntity": {
+    "@type": "ItemList",
+    "numberOfItems": allDeals.length,
+    "itemListElement": initialItems.slice(0, 10).map((deal, index) => ({
+      "@type": "Course",
+      "position": index + 1,
+      "name": deal.title,
+      "description": deal.description || `Get ${deal.title} with ${deal.discountPercentage || '90%'} off`,
+      "provider": {
+        "@type": "Organization",
+        "name": "Udemy"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": deal.discountPrice || "0",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock",
+        "validThrough": deal.validUntil || "2025-12-31"
+      },
+      "aggregateRating": deal.rating ? {
+        "@type": "AggregateRating",
+        "ratingValue": deal.rating,
+        "bestRating": "5",
+        "worstRating": "1"
+      } : undefined
+    }))
+  }
+};
 ---
 
-<Layout title="All Deals - CourseSpeak">
+<Layout title={pageTitle} description={pageDescription}>
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
     <div
         style={{
             background: "#0b0d12",
