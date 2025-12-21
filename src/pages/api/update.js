@@ -1,8 +1,6 @@
 import { writeFileSync, readFileSync } from 'fs';
 import { join } from 'path';
 
-export const prerender = false;
-
 export async function POST({ request }) {
   try {
     console.log('API: Update request received');
