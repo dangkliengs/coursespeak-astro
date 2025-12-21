@@ -14,5 +14,9 @@ export default defineConfig({
         allow: ['..']
       }
     }
+  },
+  // Handle API routes for static build
+  build: {
+    format: 'file'
   }
 });
