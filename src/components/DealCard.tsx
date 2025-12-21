@@ -66,7 +66,7 @@ export default function DealCard({ deal }: { deal: any }) {
           </div>
         )}
         <div className="meta" style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-          {deal.category && <span className="provider">{deal.category}</span>}
+          {deal.category && <span className="provider" data-category={deal.category}>{deal.category}</span>}
           {deal.subcategory && <span className="category">{deal.subcategory}</span>}
         </div>
         <div className="prices" style={{ display: "flex", alignItems: "center", gap: 8 }}>

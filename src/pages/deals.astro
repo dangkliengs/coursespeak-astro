@@ -4,6 +4,7 @@ import DealsList from "../components/DealsList";
 import { readDeals } from "../lib/store";
 
 const allDeals = await readDeals();
+
 const PAGE_SIZE = 24;
 const initialItems = allDeals.slice(0, PAGE_SIZE);
 const totalPages = Math.ceil(allDeals.length / PAGE_SIZE);
@@ -23,11 +24,24 @@ const totalPages = Math.ceil(allDeals.length / PAGE_SIZE);
                     fontSize: "2rem",
                     fontWeight: "bold",
                     color: "#fff",
-                    marginBottom: "2rem",
+                    marginBottom: "1rem",
                 }}
             >
                 All Deals
             </h1>
+            <h2
+                style={{
+                    fontSize: "1.2rem",
+                    color: "#9ca3af",
+                    marginBottom: "2rem",
+                    fontWeight: "400",
+                    lineHeight: "1.6"
+                }}
+            >
+                Latest Udemy & Coursera Deals Updated Daily - Save up to 100% on premium online courses
+            </h2>
+            
+                        
             <DealsList
                 client:load
                 initialItems={initialItems}
@@ -36,6 +50,321 @@ const totalPages = Math.ceil(allDeals.length / PAGE_SIZE);
                 baseParams={{ pageSize: String(PAGE_SIZE) }}
                 allDeals={allDeals}
             />
+            
+            <!-- FAQ Section for SEO -->
+            <div style={{
+                marginTop: "4rem",
+                padding: "2rem",
+                background: "linear-gradient(135deg, #1a1d29 0%, #2d3748 100%)",
+                borderRadius: "16px",
+                border: "1px solid #3b82f6",
+                boxShadow: "0 10px 30px rgba(59, 130, 246, 0.1)"
+            }}>
+                <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+                    <h2 style={{
+                        color: "#fff",
+                        fontSize: "2rem",
+                        marginBottom: "0.5rem",
+                        fontWeight: "700",
+                        background: "linear-gradient(135deg, #3b82f6, #10b981)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        backgroundClip: "text"
+                    }}>Frequently Asked Questions</h2>
+                    <p style={{
+                        color: "#9ca3af",
+                        fontSize: "1.1rem",
+                        maxWidth: "600px",
+                        margin: "0 auto",
+                        lineHeight: "1.6"
+                    }}>Everything you need to know about online course deals and discounts</p>
+                </div>
+                
+                <div style={{
+                    maxWidth: "900px",
+                    margin: "0 auto"
+                }}>
+                    <div class="faq-item" data-faq="1" style={{
+                        marginBottom: "1rem",
+                        background: "rgba(15, 17, 23, 0.6)",
+                        borderRadius: "12px",
+                        border: "1px solid rgba(59, 130, 246, 0.2)",
+                        overflow: "hidden",
+                        transition: "all 0.3s ease"
+                    }}>
+                        <button class="faq-question" style={{
+                            width: "100%",
+                            padding: "1.5rem",
+                            background: "transparent",
+                            border: "none",
+                            color: "#fff",
+                            fontSize: "1.1rem",
+                            fontWeight: "600",
+                            textAlign: "left",
+                            cursor: "pointer",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <span style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                                <span style={{
+                                    width: "32px",
+                                    height: "32px",
+                                    background: "linear-gradient(135deg, #3b82f6, #10b981)",
+                                    borderRadius: "50%",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    fontSize: "1rem",
+                                    fontWeight: "bold"
+                                }}>1</span>
+                                What are Udemy deals and discounts?
+                            </span>
+                            <span class="faq-icon" style={{
+                                fontSize: "1.5rem",
+                                transition: "transform 0.3s ease"
+                            }}>+</span>
+                        </button>
+                        <div class="faq-answer" style={{
+                            padding: "0 1.5rem",
+                            maxHeight: "0",
+                            overflow: "hidden",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <p style={{
+                                color: "#9ca3af",
+                                lineHeight: "1.7",
+                                margin: "0 0 1.5rem 0",
+                                fontSize: "1rem"
+                            }}>
+                                Udemy deals are special promotions and discounts offered on online courses. These can range from 50% to 100% off on premium courses in <a href="/category/development" style={{color: "#3b82f6", textDecoration: "underline"}}>development</a>, <a href="/category/business" style={{color: "#3b82f6", textDecoration: "underline"}}>business</a>, <a href="/category/design" style={{color: "#3b82f6", textDecoration: "underline"}}>design</a>, marketing, and more. CourseSpeak aggregates the best daily deals to help you save money on online learning.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item" data-faq="2" style={{
+                        marginBottom: "1rem",
+                        background: "rgba(15, 17, 23, 0.6)",
+                        borderRadius: "12px",
+                        border: "1px solid rgba(59, 130, 246, 0.2)",
+                        overflow: "hidden",
+                        transition: "all 0.3s ease"
+                    }}>
+                        <button class="faq-question" style={{
+                            width: "100%",
+                            padding: "1.5rem",
+                            background: "transparent",
+                            border: "none",
+                            color: "#fff",
+                            fontSize: "1.1rem",
+                            fontWeight: "600",
+                            textAlign: "left",
+                            cursor: "pointer",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <span style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                                <span style={{
+                                    width: "32px",
+                                    height: "32px",
+                                    background: "linear-gradient(135deg, #3b82f6, #10b981)",
+                                    borderRadius: "50%",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    fontSize: "1rem",
+                                    fontWeight: "bold"
+                                }}>2</span>
+                                How often are new course deals added?
+                            </span>
+                            <span class="faq-icon" style={{
+                                fontSize: "1.5rem",
+                                transition: "transform 0.3s ease"
+                            }}>+</span>
+                        </button>
+                        <div class="faq-answer" style={{
+                            padding: "0 1.5rem",
+                            maxHeight: "0",
+                            overflow: "hidden",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <p style={{
+                                color: "#9ca3af",
+                                lineHeight: "1.7",
+                                margin: "0 0 1.5rem 0",
+                                fontSize: "1rem"
+                            }}>
+                                We update our course deals daily. New <a href="/category/development" style={{color: "#3b82f6", textDecoration: "underline"}}>development</a>, <a href="/category/business" style={{color: "#3b82f6", textDecoration: "underline"}}>business</a>, and <a href="/category/design" style={{color: "#3b82f6", textDecoration: "underline"}}>design</a> course deals are added every 24 hours, ensuring you always have access to fresh discounts and promotions on trending online courses.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item" data-faq="3" style={{
+                        marginBottom: "1rem",
+                        background: "rgba(15, 17, 23, 0.6)",
+                        borderRadius: "12px",
+                        border: "1px solid rgba(59, 130, 246, 0.2)",
+                        overflow: "hidden",
+                        transition: "all 0.3s ease"
+                    }}>
+                        <button class="faq-question" style={{
+                            width: "100%",
+                            padding: "1.5rem",
+                            background: "transparent",
+                            border: "none",
+                            color: "#fff",
+                            fontSize: "1.1rem",
+                            fontWeight: "600",
+                            textAlign: "left",
+                            cursor: "pointer",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <span style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                                <span style={{
+                                    width: "32px",
+                                    height: "32px",
+                                    background: "linear-gradient(135deg, #3b82f6, #10b981)",
+                                    borderRadius: "50%",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    fontSize: "1rem",
+                                    fontWeight: "bold"
+                                }}>3</span>
+                                Are these online courses legitimate?
+                            </span>
+                            <span class="faq-icon" style={{
+                                fontSize: "1.5rem",
+                                transition: "transform 0.3s ease"
+                            }}>+</span>
+                        </button>
+                        <div class="faq-answer" style={{
+                            padding: "0 1.5rem",
+                            maxHeight: "0",
+                            overflow: "hidden",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <p style={{
+                                color: "#9ca3af",
+                                lineHeight: "1.7",
+                                margin: "0 0 1.5rem 0",
+                                fontSize: "1rem"
+                            }}>
+                                Yes! All courses listed on CourseSpeak are from reputable platforms like Udemy, Coursera, edX, and Skillshare. These platforms offer certificates upon completion and are taught by industry professionals and university instructors.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item" data-faq="4" style={{
+                        marginBottom: "0",
+                        background: "rgba(15, 17, 23, 0.6)",
+                        borderRadius: "12px",
+                        border: "1px solid rgba(59, 130, 246, 0.2)",
+                        overflow: "hidden",
+                        transition: "all 0.3s ease"
+                    }}>
+                        <button class="faq-question" style={{
+                            width: "100%",
+                            padding: "1.5rem",
+                            background: "transparent",
+                            border: "none",
+                            color: "#fff",
+                            fontSize: "1.1rem",
+                            fontWeight: "600",
+                            textAlign: "left",
+                            cursor: "pointer",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <span style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                                <span style={{
+                                    width: "32px",
+                                    height: "32px",
+                                    background: "linear-gradient(135deg, #3b82f6, #10b981)",
+                                    borderRadius: "50%",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    fontSize: "1rem",
+                                    fontWeight: "bold"
+                                }}>4</span>
+                                Can I get a refund if not satisfied?
+                            </span>
+                            <span class="faq-icon" style={{
+                                fontSize: "1.5rem",
+                                transition: "transform 0.3s ease"
+                            }}>+</span>
+                        </button>
+                        <div class="faq-answer" style={{
+                            padding: "0 1.5rem",
+                            maxHeight: "0",
+                            overflow: "hidden",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <p style={{
+                                color: "#9ca3af",
+                                lineHeight: "1.7",
+                                margin: "0 0 1.5rem 0",
+                                fontSize: "1rem"
+                            }}>
+                                Most platforms offer 30-day money-back guarantees. Udemy provides a 30-day refund policy on all courses, while Coursera and edX have their own refund policies. Always check the specific platform's terms before purchasing.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+</div>
+    
+    <!-- FAQ and Filter JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // FAQ Accordion Functionality
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(function(item) {
+                const question = item.querySelector('.faq-question');
+                const answer = item.querySelector('.faq-answer');
+                const icon = item.querySelector('.faq-icon');
+                
+                question.addEventListener('click', function() {
+                    const isOpen = answer.style.maxHeight && answer.style.maxHeight !== '0px';
+                    
+                    // Close all other FAQs
+                    faqItems.forEach(function(otherItem) {
+                        if (otherItem !== item) {
+                            const otherAnswer = otherItem.querySelector('.faq-answer');
+                            const otherIcon = otherItem.querySelector('.faq-icon');
+                            otherAnswer.style.maxHeight = '0';
+                            otherAnswer.style.padding = '0 1.5rem';
+                            otherIcon.textContent = '+';
+                            otherIcon.style.transform = 'rotate(0deg)';
+                        }
+                    });
+                    
+                    // Toggle current FAQ
+                    if (isOpen) {
+                        answer.style.maxHeight = '0';
+                        answer.style.padding = '0 1.5rem';
+                        icon.textContent = '+';
+                        icon.style.transform = 'rotate(0deg)';
+                    } else {
+                        answer.style.maxHeight = answer.scrollHeight + 'px';
+                        answer.style.padding = '1.5rem';
+                        icon.textContent = '−';
+                        icon.style.transform = 'rotate(180deg)';
+                    }
+                });
+            });
+        });
+    </script>
 </Layout>

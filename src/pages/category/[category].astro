@@ -2,73 +2,49 @@
 import Layout from "../../layouts/Layout.astro";
 import { readDeals } from "../../lib/store";
 import DealsList from "../../components/DealsList";
+import { normName, slugifyCategory } from "../../lib/utils";
 
 export async function getStaticPaths() {
-  const allDeals = await readDeals();
-  
-  // Get unique categories and slugify them
-  const categories = [...new Set(allDeals.map(deal => deal.category).filter(Boolean))];
-  
-  function slugifyCategory(name: string) {
-    if (name === "Uncategorized") return "uncategorized";
-    let v = name.toLowerCase();
-    v = v.replace(/&amp;/gi, "&");
-    v = v.replace(/&/g, " and ");
-    v = v.replace(/[^\w\s-]/g, "");
-    v = v.trim();
-    v = v.replace(/\s+/g, "-");
-    v = v.replace(/-+/g, "-");
-    return v;
+  const deals = await readDeals();
+  const cats = new Map();
+
+  for (const d of deals) {
+    const cName = normName(d.category) ?? "Uncategorized";
+    const cKey = cName.toLowerCase();
+    if (!cats.has(cKey)) cats.set(cKey, { name: cName, count: 0 });
+    const bucket = cats.get(cKey);
+    bucket.count += 1;
   }
-  
-  // Only create paths for proper slugs - no redirects needed
-  const paths = categories.map(category => {
-    const slug = slugifyCategory(category);
+
+  return Array.from(cats.values()).map((c) => {
+    const cSlug = slugifyCategory(c.name);
     return {
-      params: { category: slug },
-      props: { category: category }
+      params: { category: cSlug },
+      props: { 
+        categoryName: c.name,
+        categorySlug: cSlug
+      }
     };
   });
-  
-  return paths;
 }
 
-const { category: categorySlug } = Astro.params; // Get category slug from params
-const { category: originalCategory } = Astro.props; // Get props
+const { categoryName, categorySlug } = Astro.props;
 
-// Get all deals and filter by category
 const allDeals = await readDeals();
-const url = new URL(Astro.request.url);
-const subcategoryParam = url.searchParams.get('subcategory');
+const categoryDeals = allDeals.filter(deal => 
+  normName(deal.category) === categoryName || 
+  (categoryName === "Uncategorized" && !normName(deal.category))
+);
 
-let categoryDeals;
-let displayName;
-
-if (subcategoryParam) {
-  // Decode the subcategory parameter to handle spaces and special characters
-  const decodedSubcategory = decodeURIComponent(subcategoryParam);
-  
-  // Filter by specific subcategory
-  categoryDeals = allDeals.filter(deal => 
-    deal.subcategory === decodedSubcategory
-  );
-  displayName = decodedSubcategory.charAt(0).toUpperCase() + decodedSubcategory.slice(1);
-} else {
-  // Filter by category (main category or any subcategory)
-  categoryDeals = allDeals.filter(deal => 
-    deal.category === originalCategory ||
-    deal.subcategory === originalCategory
-  );
-  displayName = originalCategory.charAt(0).toUpperCase() + originalCategory.slice(1).replace(/&amp;/g, '&');
-}
+const displayName = categoryName;
 
 // Pagination
 const PAGE_SIZE = 12;
 const initialItems = categoryDeals.slice(0, PAGE_SIZE);
 const totalPages = Math.ceil(categoryDeals.length / PAGE_SIZE);
 
-const pageTitle = `${displayName} Courses & Deals - CourseSpeak`;
-const pageDescription = `Find the best ${displayName.toLowerCase()} courses and deals. Daily updated discounts on ${displayName.toLowerCase()} courses from top providers like Udemy, Coursera, and more.`;
+const pageTitle = `${displayName} Udemy Courses - Best Deals & Discounts | CourseSpeak`;
+const pageDescription = `Find ${categoryDeals.length}+ ${displayName.toLowerCase()} Udemy courses with up to 100% off. Latest verified Udemy deals, coupons & discounts. Updated daily.`;
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
