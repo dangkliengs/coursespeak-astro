@@ -9,6 +9,7 @@ interface Props {
   canonical?: string;
 }
 
+
 const {
   title = "CourseSpeak - Best Online Course Deals & Coupons",
   description = "Find the best online course deals and coupons. Daily updated discounts for Udemy, Coursera, and more. Save up to 100% on your next learning journey.",
@@ -19,6 +20,9 @@ const {
 
 const siteUrl = import.meta.env.SITE || "https://coursespeak.com";
 const canonicalURL = canonical || new URL(Astro.url.pathname, siteUrl).href;
+
+// Dynamic copyright year
+const currentYear = new Date().getFullYear();
 const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(image, siteUrl).href) : null;
 ---
 
@@ -79,23 +83,69 @@ const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(ima
         }}
       >
         <a href="/" class="logo">
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <svg
-              width="32"
-              height="32"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-              <line x1="8" y1="21" x2="16" y2="21"></line>
-              <line x1="12" y1="17" x2="12" y2="21"></line>
-            </svg>
-            <span
-              style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#fff" }}
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <div style={{ 
+              width: "36px", 
+              height: "36px", 
+              background: "linear-gradient(135deg, #f59e0b 0%, #ef4444 100%)",
+              borderRadius: "8px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              position: "relative"
+            }}>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="white"
+                style={{ position: "relative", zIndex: 1 }}
+              >
+                <path d="M20 6h-2.18c.11-.31.18-.65.18-1a2.996 2.996 0 0 0-5.5-1.65l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1z"/>
+                <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4z"/>
+                <text x="12" y="14" text-anchor="middle" fill="white" font-size="8" font-weight="bold">%</text>
+              </svg>
+              <div style={{
+                position: "absolute",
+                bottom: "-2px",
+                right: "-2px",
+                width: "12px",
+                height: "12px",
+                background: "#10b981",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+              }}>
+                <svg width="8" height="8" viewBox="0 0 24 24" fill="white">
+                  <path d="M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z"/>
+                </svg>
+              </div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <span
+                style={{ 
+                  fontSize: "1.4rem", 
+                  fontWeight: "800", 
+                  color: "#fff",
+                  lineHeight: "1.2",
+                  background: "linear-gradient(135deg, #fff 0%, #e2e8f0 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text"
+                }}
               >CourseSpeak</span
-            >
+              >
+              <span
+                style={{ 
+                  fontSize: "0.7rem", 
+                  color: "#9ca3af",
+                  fontWeight: "500",
+                  letterSpacing: "0.05em"
+                }}
+              >LEARN • SAVE • GROW</span
+              >
+            </div>
           </div>
         </a>
         <div style={{ display: "flex", gap: "24px", alignItems: "center" }}>
@@ -165,13 +215,81 @@ const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(ima
 
     <footer
       style={{
-        background: "#0b0d12",
-        borderTop: "1px solid #1f2330",
-        padding: "48px 0",
-        color: "#9ca3af",
+        background: "linear-gradient(135deg, #0b0d12 0%, #1a1d29 100%)",
+        color: "#94a3b8",
+        padding: "48px 0 24px",
+        marginTop: "auto",
+        position: "relative",
+        overflow: "hidden"
       }}
     >
       <div class="container">
+        {/* Newsletter Section */}
+        <div style={{
+          background: "linear-gradient(135deg, #1f2330 0%, #2d3348 100%)",
+          padding: "2rem",
+          borderRadius: "16px",
+          marginBottom: "48px",
+          border: "1px solid #3b4252",
+          textAlign: "center"
+        }}>
+          <h3 style={{
+            color: "#fff",
+            fontSize: "1.5rem",
+            fontWeight: 700,
+            marginBottom: "1rem"
+          }}>
+            Get Exclusive Udemy Coupons
+          </h3>
+          <p style={{
+            color: "#94a3b8",
+            marginBottom: "1.5rem",
+            maxWidth: "600px",
+            margin: "0 auto 1.5rem"
+          }}>
+            Subscribe to our newsletter and never miss a deal. Get the latest Udemy coupons delivered to your inbox daily.
+          </p>
+          <div style={{
+            display: "flex",
+            gap: "1rem",
+            maxWidth: "500px",
+            margin: "0 auto",
+            flexWrap: "wrap"
+          }}>
+            <input
+              id="newsletterEmail"
+              type="email"
+              placeholder="Enter your email"
+              style={{
+                flex: 1,
+                minWidth: "200px",
+                padding: "0.75rem 1rem",
+                borderRadius: "8px",
+                border: "1px solid #3b4252",
+                background: "#0b0d12",
+                color: "#fff",
+                fontSize: "1rem"
+              }}
+            />
+            <button
+              id="newsletterSubscribe"
+              style={{
+                padding: "0.75rem 2rem",
+                borderRadius: "8px",
+                background: "linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)",
+                color: "#fff",
+                border: "none",
+                fontSize: "1rem",
+                fontWeight: 600,
+                cursor: "pointer",
+                transition: "all 0.2s"
+              }}
+            >
+              Subscribe
+            </button>
+          </div>
+        </div>
+
         <div
           style={{
             display: "grid",
@@ -194,6 +312,88 @@ const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(ima
               Find the best online course deals and coupons. Daily updated
               discounts for Udemy, Coursera, and more.
             </p>
+            <!-- Social Media Icons -->
+            <div style={{ 
+              display: "flex", 
+              gap: "12px", 
+              marginTop: "16px"
+            }}>
+              <a href="https://x.com/courses_peak" target="_blank" rel="noopener noreferrer"
+                 style={{
+                   display: "flex",
+                   alignItems: "center",
+                   justifyContent: "center",
+                   width: "36px",
+                   height: "36px",
+                   borderRadius: "8px",
+                   background: "#000000",
+                   color: "#ffffff",
+                   textDecoration: "none",
+                   transition: "all 0.2s"
+                 }}
+                 class="social-icon-x">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+              </a>
+              
+              <a href="https://www.facebook.com/giftcourse.online" target="_blank" rel="noopener noreferrer"
+                 style={{
+                   display: "flex",
+                   alignItems: "center",
+                   justifyContent: "center",
+                   width: "36px",
+                   height: "36px",
+                   borderRadius: "8px",
+                   background: "#1877f2",
+                   color: "#ffffff",
+                   textDecoration: "none",
+                   transition: "all 0.2s"
+                 }}
+                 class="social-icon-facebook">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+              </a>
+              
+              <a href="https://www.linkedin.com/company/couponos-me/" target="_blank" rel="noopener noreferrer"
+                 style={{
+                   display: "flex",
+                   alignItems: "center",
+                   justifyContent: "center",
+                   width: "36px",
+                   height: "36px",
+                   borderRadius: "8px",
+                   background: "#0077b5",
+                   color: "#ffffff",
+                   textDecoration: "none",
+                   transition: "all 0.2s"
+                 }}
+                 class="social-icon-linkedin">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+              </a>
+              
+              <a href="https://t.me/coursespeak" target="_blank" rel="noopener noreferrer"
+                 style={{
+                   display: "flex",
+                   alignItems: "center",
+                   justifyContent: "center",
+                   width: "36px",
+                   height: "36px",
+                   borderRadius: "8px",
+                   background: "#0088cc",
+                   color: "#ffffff",
+                   textDecoration: "none",
+                   transition: "all 0.2s"
+                 }}
+                 class="social-icon-telegram">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.56c-.21 2.23-1.13 7.61-1.6 10.09-.2 1.06-.59 1.41-.97 1.44-.82.07-1.45-.54-2.23-1.06-1.24-.81-1.94-1.32-3.14-2.1-1.39-.89-.49-1.38.3-2.18.21-.21 3.69-3.38 3.76-3.67.01-.04.01-.18-.07-.26s-.17-.04-.24-.02c-.1.04-1.71 1.09-4.83 3.2-.46.31-.87.47-1.24.46-.41-.01-1.19-.23-1.77-.42-.71-.23-1.28-.35-1.23-.75.03-.2.62-.41 1.77-.62 3.4-.74 5.67-1.23 6.8-1.48 3.25-.68 3.92-.8 4.35-.79.09 0 .29.02.42.12.11.08.14.19.16.27-.01.06.01.24 0 .37z"/>
+                </svg>
+              </a>
+            </div>
           </div>
           <div>
             <h4 style={{ color: "#fff", marginBottom: "16px" }}>Links</h4>
@@ -255,19 +455,269 @@ const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(ima
             </ul>
           </div>
         </div>
+        {/* Trust Badges Section */}
+        <div style={{
+          borderTop: "1px solid #1f2330",
+          borderBottom: "1px solid #1f2330",
+          padding: "32px 0",
+          marginBottom: "32px",
+          textAlign: "center"
+        }}>
+          <h4 style={{
+            color: "#fff",
+            fontSize: "1rem",
+            marginBottom: "1.5rem",
+            fontWeight: 600
+          }}>
+            Trusted by 100,000+ Learners Worldwide
+          </h4>
+          <div style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "3rem",
+            flexWrap: "wrap",
+            opacity: 0.8
+          }}>
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              color: "#94a3b8"
+            }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#10b981">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+              </svg>
+              <span>Verified Coupons</span>
+            </div>
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              color: "#94a3b8"
+            }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#3b82f6">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+              <span>Secure Payments</span>
+            </div>
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              color: "#94a3b8"
+            }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#f59e0b">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              <span>4.8★ Rating</span>
+            </div>
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              color: "#94a3b8"
+            }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#ef4444">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+              </svg>
+              <span>24/7 Support</span>
+            </div>
+          </div>
+        </div>
         <div
           style={{
-            borderTop: "1px solid #1f2330",
             paddingTop: "24px",
             textAlign: "center",
             fontSize: "0.9rem",
           }}
         >
-          <p>
+          <p style={{ margin: 0, marginBottom: "0.5rem" }}>
             &copy; {new Date().getFullYear()} CourseSpeak. All rights reserved.
+          </p>
+          <p style={{ margin: 0, fontSize: "0.8rem", opacity: 0.7 }}>
+            Helping learners save money on online courses since 2023
           </p>
         </div>
       </div>
     </footer>
+
+    {/* Back to Top Button */}
+    <button
+      id="backToTop"
+      style={{
+        position: "fixed",
+        bottom: "20px",
+        right: "20px",
+        width: "50px",
+        height: "50px",
+        borderRadius: "50%",
+        background: "linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)",
+        color: "#fff",
+        border: "none",
+        cursor: "pointer",
+        display: "none",
+        alignItems: "center",
+        justifyContent: "center",
+        boxShadow: "0 4px 12px rgba(59, 130, 246, 0.3)",
+        transition: "all 0.3s ease",
+        zIndex: 1000
+      }}
+      aria-label="Back to top"
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/>
+      </svg>
+    </button>
+
+    <script>
+      // Back to top functionality
+      const backToTopButton = document.getElementById('backToTop') as HTMLButtonElement;
+      
+      window.addEventListener('scroll', () => {
+        if (backToTopButton) {
+          if (window.pageYOffset > 300) {
+            backToTopButton.style.display = 'flex';
+          } else {
+            backToTopButton.style.display = 'none';
+          }
+        }
+      });
+      
+      if (backToTopButton) {
+        backToTopButton.addEventListener('click', () => {
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+        });
+      }
+
+      // Newsletter form handler
+      const newsletterForm = document.getElementById('newsletterEmail') as HTMLInputElement;
+      const subscribeButton = document.getElementById('newsletterSubscribe') as HTMLButtonElement;
+      
+      if (subscribeButton && newsletterForm) {
+        subscribeButton.addEventListener('click', async () => {
+          if (newsletterForm) {
+            const email = newsletterForm.value.trim();
+            
+            if (!email) {
+              showMessage('Please enter your email address.', 'error');
+              return;
+            }
+            
+            if (!email.includes('@') || !email.includes('.')) {
+              showMessage('Please enter a valid email address.', 'error');
+              return;
+            }
+
+            // Disable button and show loading
+            subscribeButton.disabled = true;
+            subscribeButton.textContent = 'Subscribing...';
+            
+            try {
+              const response = await fetch('/api/newsletter', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email }),
+              });
+
+              const data = await response.json();
+              
+              if (data.success) {
+                // Save to localStorage
+                saveToLocalStorage(data.email, data.subscribedAt);
+                
+                showMessage(data.message, 'success');
+                newsletterForm.value = '';
+              } else {
+                showMessage(data.message, 'error');
+              }
+            } catch (error) {
+              showMessage('Something went wrong. Please try again.', 'error');
+            } finally {
+              // Reset button
+              subscribeButton.disabled = false;
+              subscribeButton.textContent = 'Subscribe';
+            }
+          }
+        });
+
+        // Allow Enter key to submit
+        newsletterForm.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') {
+            subscribeButton.click();
+          }
+        });
+      }
+
+      // localStorage functions
+      function saveToLocalStorage(email: string, subscribedAt: string) {
+        try {
+          const subscribers = JSON.parse(localStorage.getItem('newsletterSubscribers') || '[]');
+          
+          // Check for duplicates
+          if (!subscribers.find((sub: any) => sub.email.toLowerCase() === email.toLowerCase())) {
+            subscribers.push({
+              email: email.toLowerCase(),
+              subscribedAt: subscribedAt,
+              status: 'active'
+            });
+            
+            localStorage.setItem('newsletterSubscribers', JSON.stringify(subscribers));
+            console.log('Saved to localStorage:', email);
+          }
+        } catch (error) {
+          console.error('localStorage error:', error);
+        }
+      }
+
+      // Message display function
+      function showMessage(message: string, type: 'success' | 'error') {
+        // Create message element
+        const messageEl = document.createElement('div');
+        messageEl.style.cssText = `
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          padding: 1rem 1.5rem;
+          border-radius: 8px;
+          color: white;
+          font-weight: 500;
+          z-index: 10000;
+          max-width: 300px;
+          transform: translateX(100%);
+          transition: transform 0.3s ease;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        `;
+        
+        if (type === 'success') {
+          messageEl.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+        } else {
+          messageEl.style.background = 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
+        }
+        
+        messageEl.textContent = message;
+        document.body.appendChild(messageEl);
+        
+        // Animate in
+        setTimeout(() => {
+          messageEl.style.transform = 'translateX(0)';
+        }, 100);
+        
+        // Remove after 4 seconds
+        setTimeout(() => {
+          messageEl.style.transform = 'translateX(100%)';
+          setTimeout(() => {
+            if (messageEl.parentNode) {
+              messageEl.parentNode.removeChild(messageEl);
+            }
+          }, 300);
+        }, 4000);
+      }
+    </script>
   </body>
 </html>
