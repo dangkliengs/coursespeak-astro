@@ -186,7 +186,7 @@ import DealCard from "../components/DealCard";
             <a href="/" class="pill active">All Deals</a>
             {
               categories.map((cat: any) => (
-                <a href={`/categories/${slugifyCategory(cat)}`} class="pill">
+                <a href={`/category/${slugifyCategory(cat)}`} class="pill">
                   {cat.replace(/&amp;/g, '&')}
                 </a>
               ))
@@ -540,7 +540,7 @@ import DealCard from "../components/DealCard";
           }}>
             {categories.map((category) => (
               <a
-                href={`/categories/${slugifyCategory(category)}`}
+                href={`/category/${slugifyCategory(category)}`}
                 style={{
                   background: "linear-gradient(135deg, #0b0d12 0%, #1a1d29 100%)",
                   padding: "1.5rem",
