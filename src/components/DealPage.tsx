@@ -382,13 +382,56 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 </div>
                             )}
 
+                            {deal.coupon && (
+                                <div style={{ 
+                                    background: "#1e40af", 
+                                    color: "#fff", 
+                                    padding: "10px", 
+                                    borderRadius: "6px", 
+                                    marginBottom: "1rem", 
+                                    textAlign: "center",
+                                    border: "1px solid #3b82f6",
+                                    fontWeight: 600
+                                }}>
+                                    <div style={{ fontSize: "0.85rem", marginBottom: "4px", opacity: 0.9 }}>Coupon Code:</div>
+                                    <div style={{ 
+                                        fontSize: "0.9rem", 
+                                        fontWeight: 600, 
+                                        letterSpacing: "0.3px",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        gap: "8px"
+                                    }}>
+                                        {deal.coupon}
+                                        <button
+                                            onClick={() => {
+                                                navigator.clipboard.writeText(deal.coupon);
+                                                alert('Coupon code copied!');
+                                            }}
+                                            style={{ 
+                                                background: "rgba(255,255,255,0.2)", 
+                                                border: "1px solid #fff", 
+                                                borderRadius: "4px", 
+                                                padding: "4px 8px", 
+                                                fontSize: "0.75rem",
+                                                cursor: "pointer",
+                                                color: "#fff"
+                                            }}
+                                        >
+                                            Copy
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
                             <a
                                 href={deal.url || `/deal/${deal.id}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 style={{ display: "block", textAlign: "center", background: "#a855f7", color: "#fff", fontWeight: 700, padding: "12px", fontSize: "1rem", border: "1px solid #9333ea", marginBottom: "12px", textDecoration: "none" }}
                             >
-                                Redeem Coupon
+                                REDEEM COUPON
                             </a>
 
                             <div style={{ textAlign: "center", fontSize: "0.85rem", color: "#9ca3af", marginBottom: "1.5rem" }}>30-Day Money-Back Guarantee</div>
