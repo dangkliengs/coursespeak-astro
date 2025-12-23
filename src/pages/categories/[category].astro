@@ -1,8 +1,18 @@
 ---
-export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { readDeals } from '../../lib/store';
 import DealCard from '../../components/DealCard.astro';
+
+export async function getStaticPaths() {
+  const allDeals = await readDeals();
+  
+  // Get unique categories
+  const categories = [...new Set(allDeals.map(deal => deal.category).filter(Boolean))];
+  
+  return categories.map(category => ({
+    params: { category: category.toLowerCase().replace(/\s+/g, '-') }
+  }));
+}
 
 const { category } = Astro.params;
 const urlParams = new URLSearchParams(Astro.url.search);

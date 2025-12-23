@@ -3,7 +3,16 @@ import Layout from "../../layouts/Layout.astro";
 import DealCard from "../../components/DealCard.astro";
 import { readDeals } from "../../lib/store";
 
-export const prerender = false;
+export async function getStaticPaths() {
+  const allDeals = await readDeals();
+  const PAGE_SIZE = 12;
+  const totalPages = Math.ceil(allDeals.length / PAGE_SIZE);
+  
+  // Generate paths for all pages
+  return Array.from({ length: totalPages }, (_, i) => ({
+    params: { page: String(i + 1) }
+  }));
+}
 
 const allDeals = await readDeals();
 const PAGE_SIZE = 12;
