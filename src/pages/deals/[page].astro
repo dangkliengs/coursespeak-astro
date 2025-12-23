@@ -1,0 +1,220 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import DealCard from "../../components/DealCard.astro";
+import { readDeals } from "../../lib/store";
+
+export const prerender = false;
+
+const allDeals = await readDeals();
+const PAGE_SIZE = 12;
+
+// Get current page from Astro.params
+const currentPage = parseInt(Astro.params.page || '1', 10);
+
+console.log('URL:', Astro.url.href);
+console.log('Astro.params:', Astro.params);
+console.log('Current page:', currentPage);
+
+// Simple pagination calculation
+const totalPages = Math.ceil(allDeals.length / PAGE_SIZE);
+const startIndex = (currentPage - 1) * PAGE_SIZE;
+const endIndex = startIndex + PAGE_SIZE;
+const currentItems = allDeals.slice(startIndex, endIndex);
+
+console.log('Total deals:', allDeals.length);
+console.log('Total pages:', totalPages);
+console.log('Start index:', startIndex);
+console.log('End index:', endIndex);
+console.log('Current items length:', currentItems.length);
+
+// SEO Meta Tags with Auto Date
+const currentDate = new Date();
+const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const currentMonth = monthNames[currentDate.getMonth()];
+const currentYear = currentDate.getFullYear();
+
+const pageTitle = `All Udemy Deals & Discounts ${currentMonth} ${currentYear} | CourseSpeak`;
+const pageDescription = `Find ${allDeals.length}+ verified Udemy deals with up to 100% off. Latest coupons and discounts updated daily.`;
+
+// JSON-LD Structured Data for SEO
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": pageTitle,
+  "description": pageDescription,
+  "url": "https://coursespeak.com/deals",
+  "mainEntity": {
+    "@type": "ItemList",
+    "numberOfItems": currentItems.length,
+    "itemListElement": currentItems.map((deal, index) => ({
+      "@type": "Course",
+      "position": startIndex + index + 1,
+      "name": deal.title,
+      "description": deal.description,
+      "provider": {
+        "@type": "Organization",
+        "name": deal.instructor
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": deal.price,
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock",
+        "validThrough": deal.expiresAt
+      }
+    }))
+  }
+};
+---
+<Layout title={pageTitle} description={pageDescription}>
+  <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  
+  <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "2rem 1rem" }}>
+    {/* Page Header */}
+    <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+      <h1 style={{ 
+        fontSize: "2.5rem", 
+        fontWeight: "800", 
+        marginBottom: "1rem",
+        background: "linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)",
+        WebkitBackgroundClip: "text",
+        WebkitTextFillColor: "transparent",
+        backgroundClip: "text"
+      }}>
+        {pageTitle}
+      </h1>
+      <p style={{ 
+        fontSize: "1.1rem", 
+        color: "var(--muted)", 
+        maxWidth: "600px", 
+        margin: "0 auto",
+        lineHeight: "1.6"
+      }}>
+        {pageDescription}
+      </p>
+    </div>
+
+    {/* Deals Grid */}
+    <div style={{ 
+      display: "grid",
+      gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+      gap: "2rem",
+      marginBottom: "3rem"
+    }}>
+      {currentItems.map((deal) => (
+        <DealCard deal={deal} />
+      ))}
+    </div>
+    
+    {/* Simple Pagination */}
+    <div style={{ textAlign: "center", marginTop: "3rem", padding: "2rem" }}>
+      <div style={{ display: "flex", justifyContent: "center", gap: "1rem", marginBottom: "1rem" }}>
+        {currentPage > 1 && (
+          <a href={`/deals/${currentPage - 1}`} style={{
+            padding: "8px 16px",
+            background: "var(--card)",
+            border: "1px solid var(--border)",
+            borderRadius: "6px",
+            color: "var(--text)",
+            textDecoration: "none",
+            fontSize: "14px",
+            fontWeight: "500"
+          }}>
+            ← Previous
+          </a>
+        )}
+        
+        <span style={{
+          padding: "8px 16px",
+          background: "var(--brand)",
+          border: "1px solid var(--brand)",
+          borderRadius: "6px",
+          color: "white",
+          fontSize: "14px",
+          fontWeight: "bold"
+        }}>
+          Page {currentPage} of {totalPages}
+        </span>
+        
+        {currentPage < totalPages && (
+          <a href={`/deals/${currentPage + 1}`} style={{
+            padding: "8px 16px",
+            background: "var(--card)",
+            border: "1px solid var(--border)",
+            borderRadius: "6px",
+            color: "var(--text)",
+            textDecoration: "none",
+            fontSize: "14px",
+            fontWeight: "500"
+          }}>
+            Next →
+          </a>
+        )}
+      </div>
+      
+      <div style={{ color: "var(--muted)", fontSize: "12px", marginTop: "10px" }}>
+        Showing {startIndex + 1}-{Math.min(endIndex, allDeals.length)} of {allDeals.length} deals
+      </div>
+    </div>
+    
+    <!-- FAQ Section for SEO -->
+    <div style={{
+      marginTop: "4rem",
+      padding: "2rem",
+      background: "linear-gradient(135deg, #1a1d29 0%, #2d3748 100%)",
+      borderRadius: "16px",
+      border: "1px solid #3b82f6",
+      boxShadow: "0 10px 30px rgba(59, 130, 246, 0.1)"
+    }}>
+      <h2 style={{ 
+        fontSize: "1.5rem", 
+        fontWeight: "700", 
+        marginBottom: "1.5rem",
+        color: "white"
+      }}>
+        Frequently Asked Questions
+      </h2>
+      <div style={{ display: "grid", gap: "1rem" }}>
+        <div style={{
+          background: "rgba(255, 255, 255, 0.1)",
+          padding: "1rem",
+          borderRadius: "8px",
+          border: "1px solid rgba(255, 255, 255, 0.2)"
+        }}>
+          <h3 style={{ color: "white", marginBottom: "0.5rem", fontSize: "1.1rem" }}>
+            Are these Udemy deals legitimate?
+          </h3>
+          <p style={{ color: "rgba(255, 255, 255, 0.8)", margin: 0, lineHeight: "1.6" }}>
+            Yes! All deals on CourseSpeak are verified and sourced directly from Udemy or authorized partners. We regularly check and update our deals to ensure they're active and legitimate.
+          </p>
+        </div>
+        <div style={{
+          background: "rgba(255, 255, 255, 0.1)",
+          padding: "1rem",
+          borderRadius: "8px",
+          border: "1px solid rgba(255, 255, 255, 0.2)"
+        }}>
+          <h3 style={{ color: "white", marginBottom: "0.5rem", fontSize: "1.1rem" }}>
+            How often are new deals added?
+          </h3>
+          <p style={{ color: "rgba(255, 255, 255, 0.8)", margin: 0, lineHeight: "1.6" }}>
+            We update our deals database daily with new Udemy courses and coupons. Check back regularly for the latest discounts and free courses.
+          </p>
+        </div>
+        <div style={{
+          background: "rgba(255, 255, 255, 0.1)",
+          padding: "1rem",
+          borderRadius: "8px",
+          border: "1px solid rgba(255, 255, 255, 0.2)"
+        }}>
+          <h3 style={{ color: "white", marginBottom: "0.5rem", fontSize: "1.1rem" }}>
+            Do I need to pay for CourseSpeak?
+          </h3>
+          <p style={{ color: "rgba(255, 255, 255, 0.8)", margin: 0, lineHeight: "1.6" }}>
+            No! CourseSpeak is completely free to use. We don't charge for accessing deals, coupons, or course information. Our mission is to help you find the best educational opportunities.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

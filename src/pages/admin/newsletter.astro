@@ -1,0 +1,153 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Newsletter Subscribers - Admin" description="Manage newsletter subscribers">
+  <div style={{ background: "#0b0d12", minHeight: "100vh", color: "#e2e8f0", padding: "2rem" }}>
+    <div class="container" style={{ maxWidth: "1200px", margin: "0 auto" }}>
+      <div style={{ marginBottom: "2rem" }}>
+        <h1 style={{ fontSize: "2rem", fontWeight: 700, color: "#fff", marginBottom: "0.5rem" }}>
+          Newsletter Subscribers
+        </h1>
+        <p style={{ color: "#94a3b8" }}>
+          Total subscribers: <span id="subscriberCount">0</span>
+        </p>
+      </div>
+
+      <div style={{
+        background: "linear-gradient(135deg, #1f2330 0%, #2d3348 100%)",
+        borderRadius: "12px",
+        border: "1px solid #3b4252",
+        overflow: "hidden"
+      }}>
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <thead>
+              <tr style={{ background: "#0b0d12" }}>
+                <th style={{ 
+                  padding: "1rem", 
+                  textAlign: "left", 
+                  color: "#fff", 
+                  fontWeight: 600,
+                  borderBottom: "1px solid #3b4252"
+                }}>
+                  Email
+                </th>
+                <th style={{ 
+                  padding: "1rem", 
+                  textAlign: "left", 
+                  color: "#fff", 
+                  fontWeight: 600,
+                  borderBottom: "1px solid #3b4252"
+                }}>
+                  Subscribed At
+                </th>
+                <th style={{ 
+                  padding: "1rem", 
+                  textAlign: "left", 
+                  color: "#fff", 
+                  fontWeight: 600,
+                  borderBottom: "1px solid #3b4252"
+                }}>
+                  Status
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Content will be populated by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style={{ marginTop: "2rem", textAlign: "center" }}>
+        <a href="/admin" style={{
+          color: "#3b82f6",
+          textDecoration: "none",
+          fontWeight: 600
+        }}>
+          ← Back to Admin
+        </a>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  tr:hover {
+    background: rgba(59, 130, 246, 0.1) !important;
+  }
+</style>
+
+<script>
+  interface Subscriber {
+    email: string;
+    subscribedAt: string;
+    status: string;
+  }
+
+  // Load subscribers from localStorage
+  function loadSubscribers(): void {
+    try {
+      const subscribers: Subscriber[] = JSON.parse(localStorage.getItem('newsletterSubscribers') || '[]');
+      
+      // Sort by newest first
+      const sortedSubscribers = subscribers.sort((a: Subscriber, b: Subscriber) => 
+        new Date(b.subscribedAt).getTime() - new Date(a.subscribedAt).getTime()
+      );
+
+      // Update total count
+      const subscriberCount = document.getElementById('subscriberCount');
+      if (subscriberCount) {
+        subscriberCount.textContent = subscribers.length.toString();
+      }
+
+      // Update table body
+      const tbody = document.querySelector('tbody');
+      if (tbody) {
+        if (subscribers.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="3" style="padding: 3rem; text-align: center; color: #94a3b8;">
+                <p>No subscribers yet. Start promoting your newsletter!</p>
+              </td>
+            </tr>
+          `;
+        } else {
+          tbody.innerHTML = subscribers.map((subscriber: Subscriber, index: number) => `
+            <tr style="border-bottom: 1px solid #3b4252; transition: background 0.2s;">
+              <td style="padding: 1rem; color: #cbd5e1; font-family: monospace;">
+                ${subscriber.email}
+              </td>
+              <td style="padding: 1rem; color: #94a3b8; font-size: 0.9rem;">
+                ${new Date(subscriber.subscribedAt).toLocaleString()}
+              </td>
+              <td style="padding: 1rem;">
+                <span style="
+                  padding: 0.25rem 0.75rem;
+                  border-radius: 9999px;
+                  font-size: 0.8rem;
+                  font-weight: 600;
+                  background: ${subscriber.status === 'active' 
+                    ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)'
+                    : 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)'};
+                  color: #fff;
+                ">
+                  ${subscriber.status}
+                </span>
+              </td>
+            </tr>
+          `).join('');
+        }
+      }
+    } catch (error) {
+      console.error('Error loading subscribers:', error);
+    }
+  }
+
+  // Load on page load
+  document.addEventListener('DOMContentLoaded', loadSubscribers);
+
+  // Refresh data every 5 seconds
+  setInterval(loadSubscribers, 5000);
+</script>

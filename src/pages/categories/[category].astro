@@ -1,0 +1,193 @@
+---
+export const prerender = false;
+import Layout from '../../layouts/Layout.astro';
+import { readDeals } from '../../lib/store';
+import DealCard from '../../components/DealCard.astro';
+
+const { category } = Astro.params;
+const urlParams = new URLSearchParams(Astro.url.search);
+const page = urlParams.get('page');
+
+// Read all deals
+const allDeals = await readDeals();
+
+// Filter deals for this category
+const categoryDeals = allDeals.filter(deal => {
+  if (!deal.category || !category) return false;
+  
+  const dealCat = deal.category.toLowerCase().trim();
+  const targetCat = category.toLowerCase().replace(/-/g, ' ').trim();
+  
+  return dealCat === targetCat || 
+         dealCat.includes(targetCat) || 
+         targetCat.includes(dealCat);
+});
+
+// Pagination
+const PAGE_SIZE = 12;
+const currentPage = parseInt(page || '1') || 1;
+const startIndex = (currentPage - 1) * PAGE_SIZE;
+const endIndex = startIndex + PAGE_SIZE;
+const currentItems = categoryDeals.slice(startIndex, endIndex);
+const totalPages = Math.ceil(categoryDeals.length / PAGE_SIZE);
+
+const displayName = (category || '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Courses';
+const categoryName = displayName;
+---
+
+<Layout title={`${categoryName} Courses | Udemy Deals`} description={`Browse ${categoryDeals.length} ${categoryName.toLowerCase()} courses with exclusive deals and discounts.`}>
+  <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "2rem 1rem" }}>
+    {/* Page Header - Same as deals page */}
+    <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+      <h1 style={{ 
+        fontSize: "2.5rem", 
+        fontWeight: "800", 
+        marginBottom: "1rem",
+        background: "linear-gradient(135deg, #FFC107 0%, #FFD54F 100%)",
+        WebkitBackgroundClip: "text",
+        WebkitTextFillColor: "transparent",
+        backgroundClip: "text"
+      }}>
+        {categoryName} Courses
+      </h1>
+      <p style={{ 
+        fontSize: "1.1rem", 
+        color: "var(--muted)", 
+        maxWidth: "600px", 
+        margin: "0 auto",
+        lineHeight: "1.6"
+      }}>
+        Discover {categoryDeals.length}+ verified {categoryName.toLowerCase()} courses with massive discounts. Learn from industry experts and advance your career today.
+      </p>
+      <a href="/deals" style={{ 
+        color: "#FFC107", 
+        textDecoration: "none",
+        fontWeight: "600",
+        display: "inline-block",
+        marginTop: "1rem"
+      }}>
+        ← Back to all deals
+      </a>
+    </div>
+
+    {/* Deals Grid - Same as deals page */}
+    <div style={{ 
+      display: "grid",
+      gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+      gap: "2rem",
+      marginBottom: "3rem"
+    }}>
+      {currentItems.length > 0 ? (
+        currentItems.map((deal) => (
+          <DealCard deal={deal} />
+        ))
+      ) : (
+        <div style={{ 
+          gridColumn: "1 / -1",
+          textAlign: "center", 
+          padding: "3rem", 
+          background: "var(--card)", 
+          borderRadius: "20px",
+          border: "1px solid var(--border)"
+        }}>
+          <h3 style={{ color: "var(--text)", marginBottom: "1rem", fontSize: "1.5rem" }}>
+            No courses found in {categoryName}
+          </h3>
+          <p style={{ color: "var(--muted)", marginBottom: "1.5rem", lineHeight: "1.6" }}>
+            We couldn't find any courses in this category. Try browsing our other categories or check back later for new courses.
+          </p>
+          <a href="/deals" style={{ 
+            padding: "12px 24px",
+            background: "linear-gradient(135deg, #FFC107 0%, #FFD54F 100%)",
+            border: "2px solid #FFC107",
+            borderRadius: "8px",
+            color: "white",
+            textDecoration: "none",
+            fontWeight: "600",
+            display: "inline-block"
+          }}>
+            Browse All Courses
+          </a>
+        </div>
+      )}
+    </div>
+
+    {/* Pagination */}
+    {totalPages > 1 && (
+      <div style={{ textAlign: "center", marginTop: "3rem", padding: "2rem" }}>
+        <div style={{ display: "flex", justifyContent: "center", gap: "0.5rem", marginBottom: "1rem" }}>
+          {/* Previous Button */}
+          {currentPage > 1 && (
+            <a 
+              href={`/categories/${category}?page=${currentPage - 1}`}
+              style={{
+                padding: "8px 12px",
+                background: "var(--card)",
+                border: "1px solid var(--border)",
+                borderRadius: "6px",
+                color: "var(--text)",
+                textDecoration: "none",
+                fontSize: "14px",
+                fontWeight: "600"
+              }}
+            >
+              ←
+            </a>
+          )}
+          
+          {/* Page Numbers */}
+          {Array.from({ length: totalPages }, (_, i) => i + 1)
+            .filter(pageNum => 
+              pageNum === 1 || 
+              pageNum === totalPages || 
+              (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
+            )
+            .map((pageNum) => (
+              <a
+                href={`/categories/${category}?page=${pageNum}`}
+                style={{
+                  padding: "8px 12px",
+                  background: pageNum === currentPage 
+                    ? "linear-gradient(135deg, #FFC107 0%, #FFD54F 100%)"
+                    : "var(--card)",
+                  border: pageNum === currentPage 
+                    ? "2px solid #FFC107"
+                    : "1px solid var(--border)",
+                  borderRadius: "6px",
+                  color: pageNum === currentPage ? "white" : "var(--text)",
+                  textDecoration: "none",
+                  fontSize: "14px",
+                  fontWeight: pageNum === currentPage ? "bold" : "600"
+                }}
+              >
+                {pageNum}
+              </a>
+            ))}
+          
+          {/* Next Button */}
+          {currentPage < totalPages && (
+            <a 
+              href={`/categories/${category}?page=${currentPage + 1}`}
+              style={{
+                padding: "8px 12px",
+                background: "var(--card)",
+                border: "1px solid var(--border)",
+                borderRadius: "6px",
+                color: "var(--text)",
+                textDecoration: "none",
+                fontSize: "14px",
+                fontWeight: "600"
+              }}
+            >
+              →
+            </a>
+          )}
+        </div>
+        
+        <div style={{ color: "var(--muted)", fontSize: "14px", marginTop: "10px" }}>
+          Showing {startIndex + 1}-{Math.min(endIndex, categoryDeals.length)} of {categoryDeals.length} courses
+        </div>
+      </div>
+    )}
+  </div>
+</Layout>
