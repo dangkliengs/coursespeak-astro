@@ -1,14 +1,19 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
-import vercel from '@astrojs/vercel';
+import node from '@astrojs/node';
 
 export default defineConfig({
   output: 'static',
   integrations: [react()],
-  adapter: vercel(),
+  adapter: node({
+    mode: 'standalone'
+  }),
   site: 'https://coursespeak.com',
   base: '/',
+  build: {
+    format: 'file'
+  },
   vite: {
     server: {
       fs: {
