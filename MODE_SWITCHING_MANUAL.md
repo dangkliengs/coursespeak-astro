@@ -1,10 +1,11 @@
 # CourseSpeak Mode Switching Manual
 
-## CURRENT STATUS: DEVELOPMENT MODE
-- API routes active (save, update, delete)
+## CURRENT STATUS: DEVELOPMENT MODE 
+- API routes active (save, update, delete) 
 - Node adapter installed
 - Admin panel working
 - Development server running
+- Update functionality confirmed working
 
 ---
 
@@ -58,46 +59,74 @@ import react from '@astrojs/react';
 import node from '@astrojs/node';
 
 export default defineConfig({
-  output: 'static',
+  output: 'server',
+  adapter: node({ mode: 'standalone' }),
   integrations: [react()],
-  adapter: node({
-    mode: 'standalone'
-  }),
   site: 'https://coursespeak.com',
   base: '/'
 });
 ```
 
-### Step 2: Create API Routes
+### Step 2: Restore API Routes
 ```bash
-mkdir src/pages/api
-# Create these files with prerender = false:
-# - src/pages/api/deals.js
-# - src/pages/api/save-deal.js  
-# - src/pages/api/update.js
-# - src/pages/api/delete-deal.js
+# Restore API folder from git
+git checkout HEAD -- src/pages/api/
 ```
 
-### Step 3: Start Development
+### Step 3: Add prerender = false
+Add this line to ALL API files:
+```javascript
+export const prerender = false;
+```
+
+Files to edit:
+- `src/pages/api/update.js`
+- `src/pages/api/save-deal.js`  
+- `src/pages/api/delete-deal.js`
+- `src/pages/api/deals.js`
+
+### Step 4: Start Development Server
 ```bash
 npm run dev
 ```
 
 ---
 
-## QUICK REFERENCE
+## TROUBLESHOOTING
 
-**Development Commands:**
-- `npm run dev` - Start dev server
-- Admin: `http://localhost:4323/admin`
+**Common Issues:**
+1. **API routes not working**: Check `export const prerender = false;` is present
+2. **Build fails**: Remove API routes folder before production build
+3. **404 errors**: Ensure all dynamic routes have `getStaticPaths()` for production
+4. **Admin panel not accessible**: Check adapter is installed for development mode
 
-**Production Commands:**
-- `npm run build` - Build static site
-- `git push` - Deploy to GitHub Pages
+**Quick Test:**
+- Development: Visit `http://localhost:4323/admin`
+- Production: Visit `https://coursespeak.com` after deployment
 
-**Key Differences:**
-- Development: API routes + adapter + admin panel
-- Production: Static only + no API routes + GitHub Pages
+---
+
+## FUNCTIONALITY STATUS
+
+### Update Functionality: WORKING
+- Form submission sends JSON correctly
+- API endpoint processes updates
+- Data syncs to deals.json
+- No authentication issues (simple auth check)
+
+### Common Problems & Solutions:
+1. **Form not submitting**: Check browser console for JavaScript errors
+2. **Data not saving**: Verify API endpoint is accessible
+3. **Empty request body**: Check form data serialization
+
+---
+
+## NOTES
+
+- **No API KEY required**: System uses file-based storage
+- **Development mode**: Full functionality with API routes
+- **Production mode**: Static build only (no API routes)
+- **GitHub Pages**: Cannot run server-side functions
 
 **Card Links (Always Same):**
 - Title → `/deal/[id]` (internal post)

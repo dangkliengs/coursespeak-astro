@@ -1,7 +1,6 @@
 import { promises as fs } from "fs";
 import path from "path";
 import type { Deal } from "@/types/deal";
-import { deals as mockDeals } from "@/lib/mockData";
 
 const DEFAULT_DATA_DIR = path.join(process.cwd(), "src", "data");
 
@@ -28,12 +27,9 @@ export async function readDealsFromFile(): Promise<Deal[]> {
       return data;
     }
   } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === "ENOENT") {
-      await writeDealsToFile(mockDeals);
-    }
-    return mockDeals;
+    console.error('Error reading deals file:', error);
+    return [];
   }
-  return mockDeals;
 }
 
 async function writeDealsToFile(all: Deal[]): Promise<void> {
