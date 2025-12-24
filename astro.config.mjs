@@ -6,5 +6,5 @@ export default defineConfig({
   output: 'static',
   integrations: [react()],
   site: 'https://coursespeak.com',
-  base: '/'
+  base: '/coursespeak-astro/'
 });
