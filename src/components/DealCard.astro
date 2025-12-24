@@ -146,7 +146,7 @@ const title = String(deal.title || "").replace(/&amp;/g, "&").replace(/&quot;/g,
       WebkitBoxOrient: "vertical",
       overflow: "hidden"
     }}>
-      <a href={deal.url || `/deal/${deal.id}`} style={{
+      <a href={`/deal/${deal.id}`} style={{
         color: "inherit",
         textDecoration: "none"
       }}>
@@ -272,6 +272,8 @@ const title = String(deal.title || "").replace(/&amp;/g, "&").replace(/&quot;/g,
 
     <a
       href={deal.url || `/deal/${deal.id}`}
+      target="_blank"
+      rel="noopener noreferrer"
       style={{
         display: "block",
         width: "100%",

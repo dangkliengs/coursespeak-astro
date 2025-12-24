@@ -6,16 +6,5 @@ export default defineConfig({
   output: 'static',
   integrations: [react()],
   site: 'https://coursespeak.com',
-  base: '/',
-  build: {
-    format: 'file'
-  },
-  vite: {
-    server: {
-      fs: {
-        // Allow reading files from src/data directory
-        allow: ['..']
-      }
-    }
-  }
+  base: '/'
 });

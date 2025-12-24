@@ -361,16 +361,16 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
 
                         <div style={{ padding: "1.5rem" }}>
                             <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "4px" }}>
-                                <span style={{ fontSize: "2rem", fontWeight: 800, color: "#fff" }}>
+                                <span style={{ fontSize: "1.2rem", fontWeight: 800, color: "#fff" }}>
                                     {price === 0 ? "Free" : `$${price}`}
                                 </span>
                                 {discountPct > 0 && (
-                                    <span style={{ fontSize: "1.1rem", color: "#9ca3af", textDecoration: "line-through" }}>
+                                    <span style={{ fontSize: "0.9rem", color: "#9ca3af", textDecoration: "line-through" }}>
                                         ${originalPrice}
                                     </span>
                                 )}
                                 {discountPct > 0 && (
-                                    <span style={{ fontSize: "1rem", color: "#fff", padding: "4px 8px", background: "#ef4444", fontWeight: 600 }}>
+                                    <span style={{ fontSize: "0.8rem", color: "#fff", padding: "3px 6px", background: "#ef4444", fontWeight: 600 }}>
                                         {discountPct}% Off
                                     </span>
                                 )}
@@ -384,49 +384,69 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
 
                             {deal.coupon && (
                                 <div style={{ 
-                                    background: "#1e40af", 
+                                    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
                                     color: "#fff", 
-                                    padding: "10px", 
-                                    borderRadius: "6px", 
-                                    marginBottom: "1rem", 
-                                    textAlign: "center",
-                                    border: "1px solid #3b82f6",
-                                    fontWeight: 600
+                                    padding: "6px", 
+                                    borderRadius: "4px", 
+                                    marginBottom: "0.8rem"
                                 }}>
-                                    <div style={{ fontSize: "0.85rem", marginBottom: "4px", opacity: 0.9 }}>Coupon Code:</div>
                                     <div style={{ 
-                                        fontSize: "0.9rem", 
-                                        fontWeight: 600, 
-                                        letterSpacing: "0.3px",
+                                        fontSize: "0.65rem", 
+                                        fontWeight: 500, 
+                                        marginBottom: "3px", 
+                                        opacity: 0.9,
+                                        textTransform: "uppercase",
+                                        letterSpacing: "0.3px"
+                                    }}>
+                                        🎫 Coupon
+                                    </div>
+                                    <div style={{ 
                                         display: "flex",
                                         alignItems: "center",
-                                        justifyContent: "center",
-                                        gap: "8px"
+                                        justifyContent: "space-between",
+                                        gap: "6px"
                                     }}>
-                                        {deal.coupon}
+                                        <div style={{
+                                            fontSize: "0.8rem",
+                                            fontWeight: 700,
+                                            letterSpacing: "0.3px",
+                                            fontFamily: "monospace",
+                                            background: "rgba(255,255,255,0.15)",
+                                            padding: "4px 6px",
+                                            borderRadius: "3px",
+                                            border: "1px dashed rgba(255,255,255,0.3)",
+                                            flex: 1,
+                                            textAlign: "center"
+                                        }}>
+                                            {deal.coupon}
+                                        </div>
                                         <button
                                             onClick={() => {
-                                                navigator.clipboard.writeText(deal.coupon);
-                                                alert('Coupon code copied!');
+                                                if (deal.coupon) {
+                                                    navigator.clipboard.writeText(deal.coupon);
+                                                    alert('Coupon code copied!');
+                                                }
                                             }}
                                             style={{ 
-                                                background: "rgba(255,255,255,0.2)", 
-                                                border: "1px solid #fff", 
-                                                borderRadius: "4px", 
-                                                padding: "4px 8px", 
-                                                fontSize: "0.75rem",
+                                                background: "rgba(255,255,255,0.25)", 
+                                                border: "1px solid rgba(255,255,255,0.4)", 
+                                                borderRadius: "3px", 
+                                                padding: "4px 6px", 
+                                                fontSize: "0.65rem",
+                                                fontWeight: 600,
                                                 cursor: "pointer",
-                                                color: "#fff"
+                                                color: "#fff",
+                                                whiteSpace: "nowrap"
                                             }}
                                         >
-                                            Copy
+                                            📋 Copy
                                         </button>
                                     </div>
                                 </div>
                             )}
 
                             <a
-                                href={deal.url || `/deal/${deal.id}`}
+                                href={deal.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 style={{ display: "block", textAlign: "center", background: "#a855f7", color: "#fff", fontWeight: 700, padding: "12px", fontSize: "1rem", border: "1px solid #9333ea", marginBottom: "12px", textDecoration: "none" }}
