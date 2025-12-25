@@ -37,6 +37,14 @@ const { onAuth } = Astro.props;
     const tokenInput = document.getElementById('github-token') as HTMLInputElement;
     const authBtn = document.getElementById('github-auth-btn');
     
+    // Debug: Check sessionStorage
+    console.log('=== GitHub Auth Debug ===');
+    console.log('SessionStorage available:', typeof sessionStorage !== 'undefined');
+    console.log('Existing token check...');
+    const existingToken = sessionStorage.getItem('github_token');
+    console.log('Existing token:', existingToken ? 'FOUND' : 'NOT FOUND');
+    console.log('Token length:', existingToken ? existingToken.length : 0);
+    
     // Check if elements exist
     if (!authDiv || !tokenInput || !authBtn) {
       console.error('GitHub auth elements not found');
@@ -44,22 +52,27 @@ const { onAuth } = Astro.props;
     }
     
     // Check if token already exists
-    const existingToken = sessionStorage.getItem('github_token');
     if (existingToken) {
       // Show the form anyway for testing
       authDiv.style.display = 'block';
       tokenInput.value = existingToken;
+      console.log('Token loaded into input field');
     } else {
       authDiv.style.display = 'block';
+      console.log('Form displayed, no existing token');
     }
     
     authBtn.addEventListener('click', function() {
       const token = tokenInput.value.trim();
+      console.log('Save button clicked, token length:', token.length);
       if (token) {
         sessionStorage.setItem('github_token', token);
+        console.log('Token saved to sessionStorage');
         authDiv.style.display = 'none';
         // Trigger custom event for authentication success
         window.dispatchEvent(new CustomEvent('github-authenticated', { detail: { token } }));
+      } else {
+        console.log('No token entered');
       }
     });
   });
