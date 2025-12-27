@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Restore Deal Data</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2rem; background: #0b0d12; color: #e2e8f0; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .section { margin: 2rem 0; padding: 1rem; background: rgba(31, 35, 48, 0.8); border-radius: 0.5rem; }
+        button { background: #3b82f6; color: white; border: none; padding: 0.75rem 1rem; border-radius: 0.25rem; cursor: pointer; margin: 0.5rem; }
+        button:hover { background: #2563eb; }
+        textarea { width: 100%; height: 200px; padding: 0.75rem; background: rgba(31, 35, 48, 0.8); border: 1px solid rgba(91, 140, 255, 0.24); border-radius: 0.5rem; color: #e2e8f0; font-size: 1rem; }
+        .deal-item { padding: 0.5rem; margin: 0.5rem 0; background: rgba(91, 140, 255, 0.1); border-radius: 0.25rem; }
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔄 Restore Deal Data from LocalStorage</h1>
+        
+        <div class="section">
+            <h3>Step 1: Check LocalStorage Data</h3>
+            <button onclick="checkLocalStorage()">📋 Check LocalStorage Data</button>
+            <div id="localStorageData"></div>
+        </div>
+        
+        <div class="section">
+            <h3>Step 2: Restore to deals.json</h3>
+            <button onclick="restoreToDealsJson()">💾 Restore to deals.json</button>
+            <div id="restoreResult"></div>
+        </div>
+        
+        <div class="section">
+            <h3>Step 3: Manual Restore (if needed)</h3>
+            <p>If the above doesn't work, copy the data below and manually update your deals.json file:</p>
+            <textarea id="manualData" placeholder="LocalStorage data will appear here..."></textarea>
+            <button onclick="copyToClipboard()">📋 Copy to Clipboard</button>
+            <div id="copyResult"></div>
+        </div>
+    </div>
+
+    <script>
+        function checkLocalStorage() {
+            const pendingData = localStorage.getItem('pendingDealUpdate');
+            const dataDiv = document.getElementById('localStorageData');
+            
+            if (pendingData) {
+                try {
+                    const dealData = JSON.parse(pendingData);
+                    dataDiv.innerHTML = `
+                        <div class="deal-item">
+                            <strong>Found Data:</strong><br>
+                            ID: ${dealData.id || 'N/A'}<br>
+                            Title: ${dealData.title || 'N/A'}<br>
+                            Provider: ${dealData.provider || 'N/A'}<br>
+                            Price: $${dealData.price || 'N/A'}<br>
+                            Updated: ${dealData.updatedAt || 'N/A'}<br>
+                            <span class="success">✅ Data found in localStorage!</span>
+                        </div>
+                    `;
+                } catch (error) {
+                    dataDiv.innerHTML = `<span class="error">❌ Error parsing localStorage: ${error.message}</span>`;
+                }
+            } else {
+                dataDiv.innerHTML = '<span class="error">❌ No data found in localStorage</span>';
+            }
+        }
+        
+        async function restoreToDealsJson() {
+            const pendingData = localStorage.getItem('pendingDealUpdate');
+            const resultDiv = document.getElementById('restoreResult');
+            
+            if (!pendingData) {
+                resultDiv.innerHTML = '<span class="error">❌ No data to restore</span>';
+                return;
+            }
+            
+            try {
+                const dealData = JSON.parse(pendingData);
+                
+                resultDiv.innerHTML = '🔄 Restoring to deals.json...';
+                
+                const response = await fetch('/api/update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dealData)
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success) {
+                        resultDiv.innerHTML = `<span class="success">✅ Success: ${result.message}</span>`;
+                        localStorage.removeItem('pendingDealUpdate');
+                        setTimeout(() => {
+                            window.location.href = '/admin/deals';
+                        }, 2000);
+                    } else {
+                        resultDiv.innerHTML = `<span class="error">❌ Failed: ${result.message || result.error}</span>`;
+                    }
+                } else {
+                    resultDiv.innerHTML = `<span class="error">❌ HTTP Error: ${response.status} ${response.statusText}</span>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="error">❌ Restore Error: ${error.message}</span>`;
+            }
+        }
+        
+        function copyToClipboard() {
+            const pendingData = localStorage.getItem('pendingDealUpdate');
+            const manualData = document.getElementById('manualData');
+            const resultDiv = document.getElementById('copyResult');
+            
+            if (pendingData) {
+                manualData.value = JSON.stringify(JSON.parse(pendingData), null, 2);
+                
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(manualData.value).then(() => {
+                        resultDiv.innerHTML = '<span class="success">✅ Data copied to clipboard!</span>';
+                    }).catch(err => {
+                        resultDiv.innerHTML = `<span class="error">❌ Copy failed: ${err}</span>`;
+                    });
+                } else {
+                    resultDiv.innerHTML = '<span class="error">❌ Clipboard not available</span>';
+                }
+            } else {
+                resultDiv.innerHTML = '<span class="error">❌ No data to copy</span>';
+            }
+        }
+        
+        // Auto-check on load
+        window.onload = function() {
+            checkLocalStorage();
+        };
+    </script>
+</body>
+</html>

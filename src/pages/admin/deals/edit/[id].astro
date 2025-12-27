@@ -854,94 +854,36 @@ const pageDescription = `Edit course deal: ${deal.title} on CourseSpeak.`;
       try {
         console.log('Updating deal:', dealData);
         
-        // Try GitHub API first
-        const token = sessionStorage.getItem('github_token');
-        if (token) {
-          try {
-            const response = await fetch(`https://api.github.com/repos/dangkliengs/coursespeak-astro/contents/src/data/deals.json`, {
-              method: 'GET',
-              headers: {
-                'Authorization': `token ${token}`,
-                'Accept': 'application/vnd.github.v3+json'
-              }
-            });
-            
-            if (response.ok) {
-              const fileData = await response.json();
-              const currentDeals = JSON.parse(atob(fileData.content));
-              
-              const dealIndex = currentDeals.findIndex((deal: any) => deal.id === dealData.id);
-              if (dealIndex !== -1) {
-                currentDeals[dealIndex] = {
-                  ...currentDeals[dealIndex],
-                  ...dealData,
-                  updatedAt: new Date().toISOString()
-                };
-                
-                // Update file
-                const updateResponse = await fetch(`https://api.github.com/repos/dangkliengs/coursespeak-astro/contents/src/data/deals.json`, {
-                  method: 'PUT',
-                  headers: {
-                    'Authorization': `token ${token}`,
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/vnd.github.v3+json'
-                  },
-                  body: JSON.stringify({
-                    message: `Update deal: ${dealData.title || dealData.id}`,
-                    content: btoa(JSON.stringify(currentDeals, null, 2)),
-                    sha: fileData.sha
-                  })
-                });
-                
-                if (updateResponse.ok) {
-                  console.log('Deal updated successfully via GitHub API');
-                  alert('Deal updated successfully via GitHub API!');
-                  window.location.href = '/admin/deals';
-                  return;
-                }
-              }
-            }
-          } catch (githubError) {
-            console.log('GitHub API failed, trying local API:', githubError);
-          }
-        }
-        
-        // Fallback to local API
+        // Use local API for data sync
         const response = await fetch('/api/update', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(dealData)
         });
         
+        console.log('Local API response status:', response.status);
+        
         if (response.ok) {
           const result = await response.json();
+          console.log('Local API result:', result);
+          
           if (result.success) {
             console.log('Deal updated successfully via local API:', result.updatedDeal);
-            alert('Deal updated successfully via local API!');
+            alert('Deal updated successfully!');
             window.location.href = '/admin/deals';
+            return;
           } else {
-            throw new Error(result.error || 'Update failed');
+            console.error('Local API error:', result);
+            alert(`Update failed: ${result.message || result.error}`);
           }
         } else {
-          throw new Error('API not available');
+          console.error('Local API HTTP error:', response.status, response.statusText);
+          alert(`Local API Error: ${response.status} ${response.statusText}`);
         }
         
-      } catch (error) {
+      } catch (error: any) {
         console.error('Update error:', error);
-        
-        // Fallback to client-side for GitHub Pages or API failure
-        localStorage.setItem('pendingDealUpdate', JSON.stringify(dealData));
-        
-        alert('Update completed! Data saved to localStorage.\n\nFor local development: Check browser console\nFor GitHub Pages: Copy data and update deals.json manually');
-        
-        console.log('Updated deal data:', dealData);
-        console.log('To apply this update manually, replace the deal with this ID in deals.json:', dealData.id);
-        
-        // Copy to clipboard
-        if (navigator.clipboard) {
-          await navigator.clipboard.writeText(JSON.stringify(dealData, null, 2));
-          alert('Deal data copied to clipboard!');
-        }
+        alert('Error updating deal: ' + error.message);
       }
     });
   </script>
