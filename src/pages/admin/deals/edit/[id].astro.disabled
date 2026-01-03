@@ -3,19 +3,29 @@ import Layout from "../../../../layouts/Layout.astro";
 import AdminProtection from "../../../../components/AdminProtection.astro";
 import AdminAuthGate from "../../../../components/AdminAuthGate";
 import GitHubAuth from "../../../../components/GitHubAuth.astro";
-import { readDeals } from "../../../../lib/store";
+import { getDealById } from "../../../../lib/store";
+import type { Deal } from "../../../../types/deal";
 
-export async function getStaticPaths() {
-  const allDeals = await readDeals();
-  
-  return allDeals.map(deal => ({
-    params: { id: deal.id },
-    props: { deal }
-  }));
+export const prerender = false;
+
+export async function GET({ params }: { params: { id: string } }) {
+  console.log('[EDIT PAGE] GET request for ID:', params.id);
+  const deal = await getDealById(params.id);
+
+  if (deal) {
+    console.log('[EDIT PAGE] Deal found:', deal.title);
+    return { deal };
+  } else {
+    console.log('[EDIT PAGE] Deal NOT found for ID:', params.id);
+    return new Response('Deal not found', { status: 404 });
+  }
 }
 
-// Get deal from props instead of params
 const { deal } = Astro.props;
+
+if (!deal) {
+  return new Response('Deal not found', { status: 404 });
+}
 
 const pageTitle = `Edit Deal: ${deal.title} - Admin Dashboard`;
 const pageDescription = `Edit course deal: ${deal.title} on CourseSpeak.`;

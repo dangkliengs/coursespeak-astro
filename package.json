@@ -6,9 +6,16 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "mode:dev": "node scripts/auto-switch.js dev",
+    "mode:prod": "node scripts/auto-switch.js prod",
+    "mode:status": "node scripts/auto-switch.js status",
+    "mode:auto": "node scripts/auto-switch.js auto",
+    "mode:backup": "node scripts/auto-switch.js backup",
+    "mode:restore": "node scripts/auto-switch.js restore"
   },
   "dependencies": {
+    "@astrojs/node": "^9.5.1",
     "@astrojs/react": "^4.4.2",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
