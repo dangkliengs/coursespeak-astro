@@ -1,0 +1,65 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getDealById, readDeals } from "../../lib/store";
+import DealPage from "../../components/DealPage";
+import type { Deal } from "../../types/deal";
+
+// Generate static paths for all deals (works in both dev and prod)
+// In static mode, these will be pre-built
+// In server mode, they provide fallback routing
+export async function getStaticPaths() {
+  const allDeals = await readDeals();
+  return allDeals.map((deal) => ({
+    params: { id: deal.id },
+    props: { deal, allDeals }
+  }));
+}
+
+// Get deal data - works for both static generation and dynamic routing
+const { deal: propDeal, allDeals: propAllDeals } = Astro.props as {
+  deal?: Deal;
+  allDeals?: Deal[];
+};
+
+let deal: Deal;
+let allDeals: Deal[];
+
+// Use props if available (from static generation), otherwise load dynamically
+if (propDeal && propAllDeals) {
+  deal = propDeal;
+  allDeals = propAllDeals;
+} else {
+  // Dynamic loading for server mode or unmatched routes
+  const url = new URL(Astro.request.url);
+  const slug = url.pathname.split('/').pop() || '';
+  allDeals = await readDeals();
+  const foundDeal = allDeals.find((d) => d.id === slug || d.slug === slug);
+
+  if (!foundDeal) {
+    return new Response('Deal not found', { status: 404 });
+  }
+
+  deal = foundDeal;
+}
+
+// Get related deals
+const relatedDeals = allDeals
+  .filter((d) => d.id !== deal.id && d.category === deal.category)
+  .slice(0, 4);
+
+// Calculate discount percentage
+const discountPercentage = deal.originalPrice && deal.price && deal.originalPrice > deal.price
+  ? Math.round(((deal.originalPrice - deal.price) / deal.originalPrice) * 100)
+  : 0;
+---
+
+<Layout 
+    title={`${deal.title} | ${discountPercentage}% Off Udemy Coupon`} 
+    description={deal.description}
+    image={deal.image}
+>
+    {
+        /* We pass client:load to ensure interactivity (tabs, hydration) works immediately */
+    }
+    <DealPage client:load deal={deal} relatedDeals={relatedDeals} />
+</Layout>

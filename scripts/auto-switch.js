@@ -18,14 +18,14 @@ const CONFIG_MAIN = path.join(__dirname, '..', 'astro.config.mjs');
 const CONFIG_BACKUP = path.join(__dirname, '..', 'astro.config.backup.mjs');
 
 // Server routes that need to be disabled in production
+// Note: deal/[id].astro should be available in production as public pages
 const SERVER_ROUTES = [
   'src/pages/api/update.js',
   'src/pages/admin/deals/edit/[id].astro',
   'src/pages/admin/deals/create.astro',
   'src/pages/admin.astro',
   'src/pages/admin/deals.astro',
-  'src/pages/test/[slug].astro',
-  'src/pages/deal/[id].astro'
+  'src/pages/test/[slug].astro'
 ];
 
 function getCurrentMode() {
