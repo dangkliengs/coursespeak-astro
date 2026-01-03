@@ -1,4 +1,4 @@
-import { updateDeal } from '../../lib/store.js';
+import { updateDeal } from '../../lib/store';
 
 export const prerender = false;
 

@@ -6,26 +6,32 @@ import GitHubAuth from "../../../../components/GitHubAuth.astro";
 import { getDealById } from "../../../../lib/store";
 import type { Deal } from "../../../../types/deal";
 
-export const prerender = false;
+// Dynamic rendering in dev mode, static in production
+export const prerender = import.meta.env.PROD;
 
-export async function GET({ params }: { params: { id: string } }) {
-  console.log('[EDIT PAGE] GET request for ID:', params.id);
-  const deal = await getDealById(params.id);
-
-  if (deal) {
-    console.log('[EDIT PAGE] Deal found:', deal.title);
-    return { deal };
-  } else {
-    console.log('[EDIT PAGE] Deal NOT found for ID:', params.id);
-    return new Response('Deal not found', { status: 404 });
+// In production, pre-generate static paths (though admin routes shouldn't be pre-generated)
+export async function getStaticPaths() {
+  if (import.meta.env.PROD) {
+    // Don't pre-generate admin edit routes in production
+    return [];
   }
+  return [];
 }
 
-const { deal } = Astro.props;
+// Get deal data - load dynamically in development
+const url = new URL(Astro.request.url);
+const id = url.pathname.split('/').pop() || '';
+
+console.log('[EDIT PAGE] Loading deal with ID:', id);
+
+const deal = await getDealById(id);
 
 if (!deal) {
+  console.log('[EDIT PAGE] Deal NOT found for ID:', id);
   return new Response('Deal not found', { status: 404 });
 }
+
+console.log('[EDIT PAGE] Deal found:', deal.title);
 
 const pageTitle = `Edit Deal: ${deal.title} - Admin Dashboard`;
 const pageDescription = `Edit course deal: ${deal.title} on CourseSpeak.`;

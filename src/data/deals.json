@@ -1,5 +1,70 @@
 [
   {
+    "id": "32",
+    "slug": "react-the-complete-guide-incl-redux",
+    "title": "React - The Complete Guide 2026 (incl. Next.js, Redux)",
+    "provider": "Udemy",
+    "url": "https://trk.udemy.com/mOdoK7",
+    "category": "Development",
+    "subcategory": "Programming Languages",
+    "image": "https://img-c.udemycdn.com/course/480x270/1362070_b9a1_2.jpg",
+    "description": "Dive in and learn React.js from scratch! Learn React, Hooks, Redux, React Router, Next.js, Best Practices and way more!",
+    "content": "This bestselling course by the author of \"React Key Concepts\" has turned more students into ReactJS developers than any other courses - more than 1000,000 and counting!\nWelcome to \"**React - The Complete Guide**\"!\nThis *React - The Complete Guide 2026 (incl. Next.js, Redux) course* will teach you React.js in a practice-oriented way, using all the latest patterns and best practices you need. You will learn all the key fundamentals as well as advanced concepts and related topics to turn you into a React.js developer.\nThis is a huge course because it really covers EVERYTHING you need to know and learn to become a React.js developer!\nNo matter if you know nothing about React or if you already got some basic React knowledge (not required but also not a problem), you will get tons of useful information and knowledge out of this course!\nMy goal with this course is to ensure that you feel confident working with React, so that you can apply for React jobs, use it in your own projects or simply enhance your portfolio as a developer - whatever your goal is: This course gets you there!\nI kept this course updated since its initial launch to ensure that you always learn React in the best possible and up-do-date way!\nThis *React - The Complete Guide 2026 (incl. Next.js, Redux) course* starts with zero knowledge assumed! All you need is basic web development and JavaScript knowledge (though the course even includes a brief JavaScript refresher to ensure that we're all on the same page!).\nCheck out the full curriculum, the free preview videos and join the course risk-free thanks to the 30-day money-back guarantee!",
+    "createdAt": "2025-09-04T04:28:07.000Z",
+    "updatedAt": "2026-01-03T03:41:38.452Z",
+    "seoTitle": "React - The Complete Guide 2026 (incl. Next.js, Redux)",
+    "seoDescription": "Dive in and learn React.js from scratch! Learn React, Hooks, Redux, React Router, Next.js, Best Practices and way more!",
+    "seoOgImage": "https://img-c.udemycdn.com/course/480x270/1362070_b9a1_2.jpg",
+    "learn": [
+      "Learn React from the ground up and finish the course as an advanced React developer",
+      "Build multiple high-quality demo apps, including a fullstack app built with NextJS",
+      "Join more than 900,000 students in this course & more than 3,000,000 students I taught across all my courses",
+      "Build fullstack React apps with NextJS 14+",
+      "Follow along locally or in a cloud development environment",
+      "Learn all about React Hooks and React Components",
+      "Manage complex state efficiently with React's Context API & React Redux",
+      "Build standalone React apps & applications connected to a backend via HTTP",
+      "Learn about routing & route-related data fetching with React Router",
+      "Implement user authentication in React apps",
+      "Get started with React Unit Testing"
+    ],
+    "requirements": [
+      "JavaScript + HTML + CSS fundamentals are absolutely required",
+      "You DON'T need to be a JavaScript expert to succeed in this course!",
+      "ES6+ JavaScript knowledge is beneficial but not a must-have",
+      "NO prior React or any other JS framework experience is required!"
+    ],
+    "faqs": [
+      {
+        "q": "Is React - The Complete Guide 2026 (incl. Next.js, Redux) Coupon Code Working?",
+        "a": "Absolutely, we manually verify the coupon for this React - The Complete Guide 2026 (incl. Next.js, Redux) course to ensure it works seamlessly."
+      },
+      {
+        "q": "How long is the React - The Complete Guide 2026 (incl. Next.js, Redux) course?",
+        "a": "The React - The Complete Guide 2026 (incl. Next.js, Redux) course is approximately 71 hours long with comprehensive content."
+      },
+      {
+        "q": "What will I learn in React - The Complete Guide 2026 (incl. Next.js, Redux) classes?",
+        "a": "Dive in and learn React.js from scratch! Learn React, Hooks, Redux, React Router, Next.js, Best Practices and way more!"
+      },
+      {
+        "q": "How do I get this course?",
+        "a": "Click the “Enroll Now” button on this page to access the course with our exclusive coupon code applied automatically."
+      }
+    ],
+    "curriculum": [],
+    "instructor": "Maximilian Schwarzmüller, Academind by Maximilian Schwarzmüller",
+    "duration": "71h",
+    "language": "English",
+    "subtitle": "Dive in and learn React.js from scratch! Learn React, Hooks, Redux, React Router, Next.js, Best Practices and way more!",
+    "expiresAt": "2026-01-31T10:53:00.000Z",
+    "price": 9.99,
+    "originalPrice": 119.99,
+    "rating": 4.7,
+    "students": 1001236,
+    "coupon": "D_0126"
+  },
+  {
     "id": "1896",
     "slug": "flutter-dart-the-complete-guide",
     "title": "Flutter & Dart - The Complete Guide [2026 Edition]",
@@ -30539,71 +30604,6 @@
     "language": "English",
     "expiresAt": "2025-10-30T18:21:00.000Z",
     "subtitle": "Master Node JS & Deno.js, build REST APIs with Node.js, GraphQL APIs, add Authentication, use MongoDB, SQL & much more!"
-  },
-  {
-    "id": "32",
-    "slug": "react-the-complete-guide-incl-redux",
-    "title": "React - The Complete Guide 2025 (incl. Next.js, Redux)",
-    "provider": "Udemy",
-    "url": "https://trk.udemy.com/mOdoK7",
-    "category": "Development",
-    "subcategory": "Programming Languages",
-    "image": "https://img-c.udemycdn.com/course/480x270/1362070_b9a1_2.jpg",
-    "description": "Dive in and learn React.js from scratch! Learn React, Hooks, Redux, React Router, Next.js, Best Practices and way more!",
-    "content": "This bestselling course by the author of \"React Key Concepts\" has turned more students into ReactJS developers than any other courses - more than 900,000 and counting!\nWelcome to \"**React - The Complete Guide**\"!\nThis *React - The Complete Guide 2025 (incl. Next.js, Redux) course* will teach you React.js in a practice-oriented way, using all the latest patterns and best practices you need. You will learn all the key fundamentals as well as advanced concepts and related topics to turn you into a React.js developer.\nThis is a huge course because it really covers EVERYTHING you need to know and learn to become a React.js developer!\nNo matter if you know nothing about React or if you already got some basic React knowledge (not required but also not a problem), you will get tons of useful information and knowledge out of this course!\nMy goal with this course is to ensure that you feel confident working with React, so that you can apply for React jobs, use it in your own projects or simply enhance your portfolio as a developer - whatever your goal is: This course gets you there!\nI kept this course updated since its initial launch to ensure that you always learn React in the best possible and up-do-date way!\nThis *React - The Complete Guide 2025 (incl. Next.js, Redux) course* starts with zero knowledge assumed! All you need is basic web development and JavaScript knowledge (though the course even includes a brief JavaScript refresher to ensure that we're all on the same page!).\nCheck out the full curriculum, the free preview videos and join the course risk-free thanks to the 30-day money-back guarantee!",
-    "createdAt": "2025-09-04T04:28:07.000Z",
-    "updatedAt": "2025-10-04T02:17:02.750Z",
-    "seoTitle": "React - The Complete Guide 2025 (incl. Next.js, Redux)",
-    "seoDescription": "Get React - The Complete Guide 2025 (incl. Next.js, Redux) Udemy Coupon Code. Dive in and learn React.js from scratch! Learn React, Hooks, Redux, React Router, Next.js, Best Practices and way more!",
-    "seoOgImage": "https://img-c.udemycdn.com/course/480x270/1362070_b9a1_2.jpg",
-    "learn": [
-      "Learn React from the ground up and finish the course as an advanced React developer",
-      "Build multiple high-quality demo apps, including a fullstack app built with NextJS",
-      "Join more than 900,000 students in this course & more than 3,000,000 students I taught across all my courses",
-      "Build fullstack React apps with NextJS 14+",
-      "Follow along locally or in a cloud development environment",
-      "Learn all about React Hooks and React Components",
-      "Manage complex state efficiently with React's Context API & React Redux",
-      "Build standalone React apps & applications connected to a backend via HTTP",
-      "Learn about routing & route-related data fetching with React Router",
-      "Implement user authentication in React apps",
-      "Get started with React Unit Testing"
-    ],
-    "requirements": [
-      "JavaScript + HTML + CSS fundamentals are absolutely required",
-      "You DON'T need to be a JavaScript expert to succeed in this course!",
-      "ES6+ JavaScript knowledge is beneficial but not a must-have",
-      "NO prior React or any other JS framework experience is required!"
-    ],
-    "faqs": [
-      {
-        "q": "Is React - The Complete Guide 2025 (incl. Next.js, Redux) Coupon Code Working?",
-        "a": "Absolutely, we manually verify the coupon for this React - The Complete Guide 2025 (incl. Next.js, Redux) course to ensure it works seamlessly."
-      },
-      {
-        "q": "How long is the React - The Complete Guide 2025 (incl. Next.js, Redux) course?",
-        "a": "The React - The Complete Guide 2025 (incl. Next.js, Redux) course is approximately 71 hours long with comprehensive content."
-      },
-      {
-        "q": "What will I learn in React - The Complete Guide 2025 (incl. Next.js, Redux) classes?",
-        "a": "Dive in and learn React.js from scratch! Learn React, Hooks, Redux, React Router, Next.js, Best Practices and way more!"
-      },
-      {
-        "q": "How do I get this course?",
-        "a": "Click the “Enroll Now” button on this page to access the course with our exclusive coupon code applied automatically."
-      }
-    ],
-    "curriculum": [],
-    "instructor": "Maximilian Schwarzmüller, Academind by Maximilian Schwarzmüller",
-    "duration": "71h",
-    "language": "English",
-    "subtitle": "Dive in and learn React.js from scratch! Learn React, Hooks, Redux, React Router, Next.js, Best Practices and way more!",
-    "expiresAt": "2025-10-30T17:53:00.000Z",
-    "price": 9.99,
-    "originalPrice": 119.99,
-    "rating": 4.7,
-    "students": 986876,
-    "coupon": "D_1025"
   },
   {
     "id": "44",

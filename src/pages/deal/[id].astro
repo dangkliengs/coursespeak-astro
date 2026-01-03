@@ -4,18 +4,22 @@ import { getDealById, readDeals } from "../../lib/store";
 import DealPage from "../../components/DealPage";
 import type { Deal } from "../../types/deal";
 
-// Generate static paths for all deals (works in both dev and prod)
-// In static mode, these will be pre-built
-// In server mode, they provide fallback routing
+// Dynamic rendering in dev mode, static in production
+export const prerender = import.meta.env.PROD;
+
+// In production, pre-generate static paths
 export async function getStaticPaths() {
-  const allDeals = await readDeals();
-  return allDeals.map((deal) => ({
-    params: { id: deal.id },
-    props: { deal, allDeals }
-  }));
+  if (import.meta.env.PROD) {
+    const allDeals = await readDeals();
+    return allDeals.map((deal) => ({
+      params: { id: deal.id },
+      props: { deal, allDeals }
+    }));
+  }
+  return [];
 }
 
-// Get deal data - works for both static generation and dynamic routing
+// Get deal data - different logic for static vs server mode
 const { deal: propDeal, allDeals: propAllDeals } = Astro.props as {
   deal?: Deal;
   allDeals?: Deal[];
@@ -24,12 +28,15 @@ const { deal: propDeal, allDeals: propAllDeals } = Astro.props as {
 let deal: Deal;
 let allDeals: Deal[];
 
-// Use props if available (from static generation), otherwise load dynamically
-if (propDeal && propAllDeals) {
+if (import.meta.env.PROD) {
+  // Production: Use props from static generation
+  if (!propDeal || !propAllDeals) {
+    throw new Error('Missing props in production mode');
+  }
   deal = propDeal;
   allDeals = propAllDeals;
 } else {
-  // Dynamic loading for server mode or unmatched routes
+  // Development: Dynamic loading
   const url = new URL(Astro.request.url);
   const slug = url.pathname.split('/').pop() || '';
   allDeals = await readDeals();
