@@ -18,7 +18,6 @@ const CONFIG_MAIN = path.join(__dirname, '..', 'astro.config.mjs');
 const CONFIG_BACKUP = path.join(__dirname, '..', 'astro.config.backup.mjs');
 
 // Server routes that need to be disabled in production
-// Note: deal/[id].astro should be available in production as public pages
 const SERVER_ROUTES = [
   'src/pages/api/update.js',
   'src/pages/admin/deals/edit/[id].astro',
@@ -125,136 +124,72 @@ function switchToProd() {
 }
 
 function showStatus() {
-  const currentMode = getCurrentMode();
+  const mode = getCurrentMode();
+  
   console.log('📊 Current Astro Mode Status:');
-  console.log(`   Mode: ${currentMode.toUpperCase()}`);
-
-  if (currentMode === 'development') {
+  
+  if (mode === 'development') {
+    console.log('   Mode: DEVELOPMENT');
     console.log('   Output: Server');
     console.log('   Adapter: @astrojs/node');
     console.log('   Use case: Development with full features');
-  } else if (currentMode === 'production') {
+  } else if (mode === 'production') {
+    console.log('   Mode: PRODUCTION');
     console.log('   Output: Static');
     console.log('   Adapter: None');
     console.log('   Use case: Production deployment');
   } else {
-    console.log('   Status: Unknown configuration');
-  }
-}
-
-function autoSwitch() {
-  try {
-    console.log('🔍 Auto-detecting appropriate mode...');
-
-    // Check if API routes exist (indicates need for server mode)
-    const apiDir = path.join(__dirname, '..', 'src', 'pages', 'api');
-    const hasApiRoutes = fs.existsSync(apiDir);
-
-    // Check if admin edit functionality exists
-    const editPage = path.join(__dirname, '..', 'src', 'pages', 'admin', 'deals', 'edit', '[id].astro');
-    const hasAdminEdit = fs.existsSync(editPage);
-
-    if (hasApiRoutes || hasAdminEdit) {
-      console.log('📋 Detected admin/API functionality - switching to development mode');
-      switchToDev();
-    } else {
-      console.log('📋 No server-side functionality detected - switching to production mode');
-      switchToProd();
-    }
-  } catch (error) {
-    console.error('❌ Error in auto-switch:', error.message);
-    process.exit(1);
+    console.log('   Mode: UNKNOWN');
+    console.log('   Status: Cannot determine current mode');
   }
 }
 
 function createBackup() {
   try {
-    console.log('💾 Creating backup of current config...');
-
-    if (!fs.existsSync(CONFIG_MAIN)) {
-      console.error('❌ Main config file does not exist');
-      process.exit(1);
+    if (fs.existsSync(CONFIG_MAIN)) {
+      fs.copyFileSync(CONFIG_MAIN, CONFIG_BACKUP);
+      console.log('✅ Backup created: astro.config.backup.mjs');
+    } else {
+      console.log('❌ Main config file not found');
     }
-
-    const configContent = fs.readFileSync(CONFIG_MAIN, 'utf8');
-    fs.writeFileSync(CONFIG_BACKUP, configContent);
-
-    console.log('✅ Backup created successfully');
-    console.log(`   Backup location: ${CONFIG_BACKUP}`);
-
   } catch (error) {
     console.error('❌ Error creating backup:', error.message);
-    process.exit(1);
   }
 }
 
 function restoreBackup() {
   try {
-    console.log('🔄 Restoring from backup...');
-
-    if (!fs.existsSync(CONFIG_BACKUP)) {
-      console.error('❌ Backup file does not exist');
-      process.exit(1);
+    if (fs.existsSync(CONFIG_BACKUP)) {
+      fs.copyFileSync(CONFIG_BACKUP, CONFIG_MAIN);
+      console.log('✅ Backup restored: astro.config.mjs');
+    } else {
+      console.log('❌ Backup file not found');
     }
-
-    const backupContent = fs.readFileSync(CONFIG_BACKUP, 'utf8');
-    fs.writeFileSync(CONFIG_MAIN, backupContent);
-
-    // Re-enable server routes if restoring to dev mode
-    if (backupContent.includes("output: 'server'")) {
-      enableServerRoutes();
-    }
-
-    console.log('✅ Config restored from backup successfully');
-
   } catch (error) {
     console.error('❌ Error restoring backup:', error.message);
-    process.exit(1);
   }
 }
 
 function showHelp() {
-  console.log(`
-🚀 CourseSpeak Astro Mode Switcher
-
-USAGE:
-  node scripts/auto-switch.js [command]
-
-COMMANDS:
-  dev       Switch to development mode (server + admin features)
-  prod      Switch to production mode (static - admin disabled)
-  status    Show current mode status
-  auto      Auto-detect and switch to appropriate mode
-  backup    Create backup of current config
-  restore   Restore from backup
-  help      Show this help message
-
-EXAMPLES:
-  node scripts/auto-switch.js dev     # Development with admin editing
-  node scripts/auto-switch.js prod    # Production for GitHub Pages
-  node scripts/auto-switch.js status  # Check current mode
-  node scripts/auto-switch.js auto    # Auto-switch based on environment
-
-DEVELOPMENT MODE:
-- Server output with @astrojs/node
-- Admin routes ENABLED (API, edit pages)
-- Supports full admin functionality
-- Run: npm run dev
-
-PRODUCTION MODE:
-- Static output for GitHub Pages
-- Admin routes DISABLED (renamed to .disabled)
-- Public pages only
-- Run: npm run build && npm run preview
-
-AUTO MODE:
-- Detects if admin editing is needed
-- Switches to dev mode if API routes exist
-- Switches to prod mode for static deployment
-  `);
+  console.log('🔧 CourseSpeak Astro Mode Switcher');
+  console.log('');
+  console.log('Usage: node scripts/auto-switch.js <command>');
+  console.log('');
+  console.log('Commands:');
+  console.log('  dev      - Switch to development mode (server)');
+  console.log('  prod     - Switch to production mode (static)');
+  console.log('  status   - Show current mode status');
+  console.log('  backup   - Create backup of current config');
+  console.log('  restore  - Restore from backup');
+  console.log('  help     - Show this help message');
+  console.log('');
+  console.log('Examples:');
+  console.log('  node scripts/auto-switch.js dev');
+  console.log('  node scripts/auto-switch.js prod');
+  console.log('  node scripts/auto-switch.js status');
 }
 
-// Main logic
+// Main execution
 const command = process.argv[2];
 
 switch (command) {
@@ -267,9 +202,6 @@ switch (command) {
   case 'status':
     showStatus();
     break;
-  case 'auto':
-    autoSwitch();
-    break;
   case 'backup':
     createBackup();
     break;
@@ -277,11 +209,16 @@ switch (command) {
     restoreBackup();
     break;
   case 'help':
-  case undefined:
+  case '--help':
+  case '-h':
     showHelp();
     break;
   default:
-    console.error(`❌ Unknown command: ${command}`);
-    console.log('Run "node scripts/auto-switch.js help" for usage');
-    process.exit(1);
+    if (!command) {
+      showHelp();
+    } else {
+      console.error(`❌ Unknown command: ${command}`);
+      console.log('Run "node scripts/auto-switch.js help" for available commands');
+      process.exit(1);
+    }
 }
