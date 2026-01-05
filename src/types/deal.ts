@@ -25,6 +25,10 @@ export interface Deal {
   requirements?: string[];
   curriculum?: string[];
   faqs?: { q: string; a: string }[];
+  certificate?: string;
+  skills?: string[];
+  prerequisites?: string[];
+  careerBenefits?: string[];
   createdAt?: string;
   updatedAt?: string;
   seoTitle?: string;

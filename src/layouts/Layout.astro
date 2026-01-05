@@ -76,6 +76,50 @@ const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(ima
 
     <title>{title}</title>
 
+    <!-- Additional SEO Meta Tags -->
+    <meta name="author" content="CourseSpeak" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow" />
+    <link rel="author" href="https://coursespeak.com" />
+
+    <!-- Organization Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "CourseSpeak",
+      "url": "https://coursespeak.com",
+      "logo": "https://coursespeak.com/logo.svg",
+      "description": "Find verified Udemy courses with 100% off coupons. Updated daily with free courses and discounts.",
+      "foundingDate": "2023",
+      "sameAs": [
+        "https://www.facebook.com/coursespeak",
+        "https://x.com/courses_peak"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "url": "https://coursespeak.com/contact"
+      }
+    }
+    </script>
+
+    <!-- WebSite Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "CourseSpeak",
+      "url": "https://coursespeak.com",
+      "description": "Find verified Udemy courses with 100% off coupons",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://coursespeak.com/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content={type} />
     <meta property="og:url" content={canonicalURL} />

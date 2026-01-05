@@ -60,11 +60,124 @@ const discountPercentage = deal.originalPrice && deal.price && deal.originalPric
   : 0;
 ---
 
-<Layout 
-    title={`${deal.title} | ${discountPercentage}% Off Udemy Coupon`} 
-    description={deal.description}
-    image={deal.image}
+<Layout
+    title={`${deal.title} | ${discountPercentage}% Off Udemy Coupon`}
+    description={deal.seoDescription || deal.description}
+    image={deal.seoOgImage || deal.image}
 >
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json" set:html={
+        JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Course",
+            "name": deal.title,
+            "description": deal.seoDescription || deal.description,
+            "image": deal.seoOgImage || deal.image,
+            "provider": {
+                "@type": "Organization",
+                "name": deal.provider
+            },
+            "offers": {
+                "@type": "Offer",
+                "price": deal.price.toString(),
+                "priceCurrency": "USD",
+                "availability": "https://schema.org/InStock",
+                "url": deal.url,
+                "priceValidUntil": deal.expiresAt ? new Date(deal.expiresAt).toISOString().split('T')[0] : undefined
+            },
+            "aggregateRating": deal.rating ? {
+                "@type": "AggregateRating",
+                "ratingValue": deal.rating.toString(),
+                "reviewCount": deal.students?.toString() || "0",
+                "bestRating": "5",
+                "worstRating": "1"
+            } : undefined,
+            "creator": deal.instructor ? {
+                "@type": "Person",
+                "name": deal.instructor
+            } : undefined,
+            "educationalLevel": deal.level || "All Levels",
+            "teaches": (() => {
+                if (deal.skills && deal.skills.length > 0) return deal.skills.join(", ");
+                const extractedSkills = new Set<string>();
+                if (deal.category) extractedSkills.add(deal.category);
+                if (deal.learn && deal.learn.length > 0) {
+                    deal.learn.slice(0, 5).forEach(item => {
+                        const words = item.toLowerCase().split(' ');
+                        if (words.includes('python')) extractedSkills.add('Python');
+                        if (words.includes('javascript') || words.includes('js')) extractedSkills.add('JavaScript');
+                        if (words.includes('react')) extractedSkills.add('React');
+                        if (words.includes('html')) extractedSkills.add('HTML');
+                        if (words.includes('css')) extractedSkills.add('CSS');
+                        if (words.includes('data') && words.includes('analysis')) extractedSkills.add('Data Analysis');
+                        if (words.includes('machine') && words.includes('learning')) extractedSkills.add('Machine Learning');
+                    });
+                }
+                return Array.from(extractedSkills).slice(0, 8).join(", ") || deal.learn?.join(", ") || "";
+            })(),
+            "inLanguage": deal.language || "English",
+            "url": `https://coursespeak.com/deal/${deal.id}`,
+            "datePublished": deal.createdAt ? new Date(deal.createdAt).toISOString().split('T')[0] : undefined,
+            "dateModified": deal.updatedAt ? new Date(deal.updatedAt).toISOString().split('T')[0] : undefined,
+            "about": deal.category ? [{
+                "@type": "Thing",
+                "name": deal.category
+            }] : undefined
+        })
+    } />
+
+    <!-- Breadcrumb Structured Data -->
+    <script type="application/ld+json" set:html={
+        JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://coursespeak.com"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Deals",
+                    "item": "https://coursespeak.com/deals"
+                },
+                deal.category ? {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": deal.category,
+                    "item": `https://coursespeak.com/categories/${deal.category.toLowerCase().replace(/\s+/g, '-')}`
+                } : null,
+                {
+                    "@type": "ListItem",
+                    "position": deal.category ? 4 : 3,
+                    "name": deal.title,
+                    "item": `https://coursespeak.com/deal/${deal.id}`
+                }
+            ].filter(Boolean)
+        })
+    } />
+
+    <!-- FAQ Structured Data -->
+    {deal.faqs && deal.faqs.length > 0 && (
+        <script type="application/ld+json" set:html={
+            JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                "mainEntity": deal.faqs.map(faq => ({
+                    "@type": "Question",
+                    "name": faq.q,
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": faq.a
+                    }
+                }))
+            })
+        } />
+    )}
+
     {
         /* We pass client:load to ensure interactivity (tabs, hydration) works immediately */
     }
