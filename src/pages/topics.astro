@@ -4,6 +4,16 @@ import { readDeals } from '../lib/store';
 
 const allDeals = await readDeals();
 
+// Function to decode HTML entities
+const decodeHtml = (str: string) => str.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+
+// Decode subcategories in deals
+allDeals.forEach(deal => {
+  if (deal.subcategory) {
+    deal.subcategory = decodeHtml(deal.subcategory);
+  }
+});
+
 // Get unique subcategories with course counts, sorted by count descending
 const topicCounts: Record<string, number> = {};
 allDeals.forEach(deal => {

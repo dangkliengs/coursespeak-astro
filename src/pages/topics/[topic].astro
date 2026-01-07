@@ -3,8 +3,18 @@ import Layout from '../../layouts/Layout.astro';
 import { readDeals } from '../../lib/store';
 import DealCard from '../../components/DealCard.astro';
 
+// Function to decode HTML entities
+const decodeHtml = (str: string) => str.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+
 export async function getStaticPaths() {
   const allDeals = await readDeals();
+
+  // Decode subcategories
+  allDeals.forEach(deal => {
+    if (deal.subcategory) {
+      deal.subcategory = decodeHtml(deal.subcategory);
+    }
+  });
 
   // Get unique subcategories
   const subcategories = [...new Set(allDeals.map(deal => deal.subcategory).filter(sub => sub != null))];
@@ -23,6 +33,13 @@ const page = urlParams.get('page');
 
 // Read all deals
 const allDeals = await readDeals();
+
+// Decode subcategories in deals
+allDeals.forEach(deal => {
+  if (deal.subcategory) {
+    deal.subcategory = decodeHtml(deal.subcategory);
+  }
+});
 
 // Find the original topic name from slug
 const allTopics = [...new Set(allDeals.map(deal => deal.subcategory).filter(sub => sub != null))];
