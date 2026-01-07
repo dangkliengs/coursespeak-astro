@@ -7,6 +7,9 @@ import DealCard from '../../components/DealCard.astro';
 const decodeHtml = (str: string) => str.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'");
 
 export async function getStaticPaths() {
+  // Function to decode HTML entities
+  const decodeHtml = (str: string) => str.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+
   const allDeals = await readDeals();
 
   // Decode subcategories
@@ -17,14 +20,18 @@ export async function getStaticPaths() {
   });
 
   // Get unique subcategories
-  const subcategories = [...new Set(allDeals.map(deal => deal.subcategory).filter(sub => sub != null))];
+  const subcategories = [...new Set(allDeals.map(deal => deal.subcategory).filter(sub => sub != null && typeof sub === 'string'))];
 
   return subcategories.map(subcategory => {
-    const slug = subcategory.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
-    return {
-      params: { topic: slug }
-    };
-  });
+    try {
+      const slug = subcategory.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
+      return {
+        params: { topic: slug }
+      };
+    } catch (e) {
+      return null;
+    }
+  }).filter(p => p != null);
 }
 
 const { topic: topicSlug } = Astro.params;
@@ -36,21 +43,39 @@ const allDeals = await readDeals();
 
 // Decode subcategories in deals
 allDeals.forEach(deal => {
-  if (deal.subcategory) {
+  if (deal.subcategory && typeof deal.subcategory === 'string') {
     deal.subcategory = decodeHtml(deal.subcategory);
   }
 });
 
 // Find the original topic name from slug
-const allTopics = [...new Set(allDeals.map(deal => deal.subcategory).filter(sub => sub != null))];
-const topicData = allTopics.map(sub => ({
-  name: sub,
-  slug: sub.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-')
-})).find(t => t.slug === topicSlug);
-const topic = topicData ? topicData.name : topicSlug.replace(/-/g, ' ');
+const allTopics = [...new Set(allDeals.map(deal => deal.subcategory).filter(sub => sub != null && typeof sub === 'string'))];
+const topicData = allTopics.map(sub => {
+  try {
+    const slug = sub.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
+    return { name: sub, slug };
+  } catch (e) {
+    return null;
+  }
+}).filter(t => t != null).find(t => t.slug === topicSlug);
+const topic = topicData ? topicData.name : ((topicSlug && typeof topicSlug === 'string') ? (function() {
+  try {
+    return topicSlug.replace(/-/g, ' ');
+  } catch (e) {
+    return 'Unknown Topic';
+  }
+})() : 'Unknown Topic');
 
 // Filter deals for this topic (subcategory)
-const topicDeals = allDeals.filter(deal => deal.subcategory != null && typeof deal.subcategory === 'string' && deal.subcategory.toLowerCase() === topic.toLowerCase());
+const topicDeals = allDeals.filter(deal => {
+  try {
+    if (!deal.subcategory || typeof deal.subcategory !== 'string') return false;
+    if (!topic || typeof topic !== 'string') return false;
+    return deal.subcategory.toLowerCase() === topic.toLowerCase();
+  } catch (e) {
+    return false;
+  }
+});
 
 // Pagination
 const PAGE_SIZE = 12;
@@ -64,7 +89,7 @@ const displayName = topic.replace(/\b\w/g, l => l.toUpperCase());
 const topicName = displayName;
 
 // Get category for this topic (assuming all deals in topic have same category)
-const category = topicDeals.length > 0 ? topicDeals[0].category : 'Development';
+const category = topicDeals.length > 0 && topicDeals[0].category ? topicDeals[0].category : 'Development';
 const categoryImage = `/categories/${category.toLowerCase().replace(/\s+/g, '-')}.svg`;
 
 // Generate related searches
