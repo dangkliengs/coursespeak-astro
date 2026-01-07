@@ -35,11 +35,7 @@ jobs:
         run: npm ci
 
       - name: Build with Astro
-        run: |
-          npm run build
-          npm run preview &
-          sleep 10
-          kill $(lsof -t -i:4322) || true
+        run: npm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
