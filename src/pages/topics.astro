@@ -11,9 +11,14 @@ allDeals.forEach(deal => {
     topicCounts[deal.subcategory] = (topicCounts[deal.subcategory] || 0) + 1;
   }
 });
-const topics = (Object.entries(topicCounts) as [string, number][])
+const topicsData = (Object.entries(topicCounts) as [string, number][])
   .sort((a, b) => b[1] - a[1])
-  .map(([topic]) => topic);
+  .map(([topic]) => {
+    const slug = topic.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
+    return { name: topic, slug };
+  });
+
+const topics = topicsData.map(t => t.name);
 
 const title = "Udemy Course Topics 2026 | Find Your Perfect Course by Topic";
 const description = "Browse Udemy course topics in 2026. Discover specialized courses in Python, Web Development, Data Science, AI, Machine Learning, Cybersecurity, and more with exclusive deals and expert instructors.";
@@ -64,11 +69,11 @@ const structuredData = {
       "name": "Udemy Course Topics",
       "description": "Complete list of Udemy course topics with deals",
       "numberOfItems": topics.length,
-      "itemListElement": topics.map((topic, index) => ({
+      "itemListElement": topicsData.map((topicData, index) => ({
         "@type": "ListItem",
         "position": index + 1,
-        "name": topic,
-        "url": `https://coursespeak.com/topics/${topic.toLowerCase().replace(/\s+/g, '-')}`
+        "name": topicData.name,
+        "url": `https://coursespeak.com/topics/${topicData.slug}`
       }))
     },
     {
@@ -223,8 +228,8 @@ function getTopicDescription(topic: string): string {
       gap: "1.5rem",
       marginBottom: "3rem"
     }}>
-      {topics.map((topic, index) => {
-        const topicSlug = topic.toLowerCase().replace(/\s+/g, '-');
+      {topicsData.map((topicData, index) => {
+        const { name: topic, slug: topicSlug } = topicData;
         const dealCount = allDeals.filter(deal => deal.subcategory === topic).length;
         const category = allDeals.find(deal => deal.subcategory === topic)?.category || 'Development';
         const categoryImage = `/categories/${category.toLowerCase().replace(/\s+/g, '-')}.svg`;

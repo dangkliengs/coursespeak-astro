@@ -9,29 +9,31 @@ export async function getStaticPaths() {
   // Get unique subcategories
   const subcategories = [...new Set(allDeals.map(deal => deal.subcategory).filter(sub => sub != null))];
 
-  return subcategories.map(subcategory => ({
-    params: { topic: subcategory.toLowerCase().replace(/\s+/g, '-') }
-  }));
+  return subcategories.map(subcategory => {
+    const slug = subcategory.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
+    return {
+      params: { topic: slug }
+    };
+  });
 }
 
-const { topic } = Astro.params;
+const { topic: topicSlug } = Astro.params;
 const urlParams = new URLSearchParams(Astro.url.search);
 const page = urlParams.get('page');
 
 // Read all deals
 const allDeals = await readDeals();
 
+// Find the original topic name from slug
+const allTopics = [...new Set(allDeals.map(deal => deal.subcategory).filter(sub => sub != null))];
+const topicData = allTopics.map(sub => ({
+  name: sub,
+  slug: sub.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-')
+})).find(t => t.slug === topicSlug);
+const topic = topicData ? topicData.name : topicSlug.replace(/-/g, ' ');
+
 // Filter deals for this topic (subcategory)
-const topicDeals = allDeals.filter(deal => {
-  if (!deal.subcategory || !topic) return false;
-
-  const dealSub = deal.subcategory.toLowerCase().trim();
-  const targetSub = topic.toLowerCase().replace(/-/g, ' ').trim();
-
-  return dealSub === targetSub ||
-         dealSub.includes(targetSub) ||
-         targetSub.includes(dealSub);
-});
+const topicDeals = allDeals.filter(deal => deal.subcategory && deal.subcategory.toLowerCase() === topic.toLowerCase());
 
 // Pagination
 const PAGE_SIZE = 12;
@@ -41,7 +43,7 @@ const endIndex = startIndex + PAGE_SIZE;
 const currentItems = topicDeals.slice(startIndex, endIndex);
 const totalPages = Math.ceil(topicDeals.length / PAGE_SIZE);
 
-const displayName = (topic || '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Courses';
+const displayName = topic.replace(/\b\w/g, l => l.toUpperCase());
 const topicName = displayName;
 
 // Get category for this topic (assuming all deals in topic have same category)
@@ -199,7 +201,7 @@ const topics = [...new Set(allDeals.map(deal => deal.subcategory).filter(sub => 
           {/* Previous Button */}
           {currentPage > 1 && (
             <a
-              href={`/topics/${topic}?page=${currentPage - 1}`}
+              href={`/topics/${topicSlug}?page=${currentPage - 1}`}
               style={{
                 padding: "8px 12px",
                 background: "var(--card)",
@@ -224,7 +226,7 @@ const topics = [...new Set(allDeals.map(deal => deal.subcategory).filter(sub => 
             )
             .map((pageNum) => (
               <a
-                href={`/topics/${topic}?page=${pageNum}`}
+                href={`/topics/${topicSlug}?page=${pageNum}`}
                 style={{
                   padding: "8px 12px",
                   background: pageNum === currentPage
@@ -247,7 +249,7 @@ const topics = [...new Set(allDeals.map(deal => deal.subcategory).filter(sub => 
           {/* Next Button */}
           {currentPage < totalPages && (
             <a
-              href={`/topics/${topic}?page=${currentPage + 1}`}
+              href={`/topics/${topicSlug}?page=${currentPage + 1}`}
               style={{
                 padding: "8px 12px",
                 background: "var(--card)",
