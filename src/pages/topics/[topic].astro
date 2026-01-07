@@ -33,7 +33,7 @@ const topicData = allTopics.map(sub => ({
 const topic = topicData ? topicData.name : topicSlug.replace(/-/g, ' ');
 
 // Filter deals for this topic (subcategory)
-const topicDeals = allDeals.filter(deal => deal.subcategory && deal.subcategory.toLowerCase() === topic.toLowerCase());
+const topicDeals = allDeals.filter(deal => deal.subcategory != null && typeof deal.subcategory === 'string' && deal.subcategory.toLowerCase() === topic.toLowerCase());
 
 // Pagination
 const PAGE_SIZE = 12;
