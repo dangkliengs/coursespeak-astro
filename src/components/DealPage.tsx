@@ -92,7 +92,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
 
         generated.push({
             q: `How do I get this ${deal.provider} course?`,
-            a: `Click the "Enroll Now" button on this page to access the course with our exclusive coupon code applied automatically.`
+            a: `Click the "Redeem Coupon" button on this page to access the course with our exclusive coupon code applied automatically.`
         });
 
         return generated;
