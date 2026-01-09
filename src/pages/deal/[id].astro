@@ -11,10 +11,22 @@ export const prerender = import.meta.env.PROD;
 export async function getStaticPaths() {
   if (import.meta.env.PROD) {
     const allDeals = await readDeals();
-    return allDeals.map((deal) => ({
-      params: { id: deal.id },
-      props: { deal, allDeals }
-    }));
+    const paths = [];
+    for (const deal of allDeals) {
+      // Generate path for ID
+      paths.push({
+        params: { id: deal.id },
+        props: { deal, allDeals }
+      });
+      // Generate path for slug if different from ID
+      if (deal.slug && deal.slug !== deal.id) {
+        paths.push({
+          params: { id: deal.slug },
+          props: { deal, allDeals }
+        });
+      }
+    }
+    return paths;
   }
   return [];
 }
@@ -43,7 +55,10 @@ if (import.meta.env.PROD) {
   const foundDeal = allDeals.find((d) => d.id === slug || d.slug === slug);
 
   if (!foundDeal) {
-    return new Response('Deal not found', { status: 404 });
+    return new Response(null, {
+      status: 302,
+      headers: { 'Location': '/' }
+    });
   }
 
   deal = foundDeal;
@@ -65,7 +80,7 @@ const discountPercentage = deal.originalPrice && deal.price && deal.originalPric
     description={deal.seoDescription || deal.description}
     image={deal.seoOgImage || deal.image}
 >
-    <!-- Structured Data for SEO -->
+    <!-- Enhanced Structured Data for SEO -->
     <script type="application/ld+json" set:html={
         JSON.stringify({
             "@context": "https://schema.org",
@@ -73,9 +88,11 @@ const discountPercentage = deal.originalPrice && deal.price && deal.originalPric
             "name": deal.title,
             "description": deal.seoDescription || deal.description,
             "image": deal.seoOgImage || deal.image,
+            "thumbnailUrl": deal.seoOgImage || deal.image,
             "provider": {
                 "@type": "Organization",
-                "name": deal.provider
+                "name": deal.provider,
+                "url": deal.provider === "Udemy" ? "https://www.udemy.com" : deal.provider === "Coursera" ? "https://www.coursera.org" : undefined
             },
             "offers": {
                 "@type": "Offer",
@@ -83,7 +100,11 @@ const discountPercentage = deal.originalPrice && deal.price && deal.originalPric
                 "priceCurrency": "USD",
                 "availability": "https://schema.org/InStock",
                 "url": deal.url,
-                "priceValidUntil": deal.expiresAt ? new Date(deal.expiresAt).toISOString().split('T')[0] : undefined
+                "priceValidUntil": deal.expiresAt ? new Date(deal.expiresAt).toISOString().split('T')[0] : undefined,
+                "seller": {
+                    "@type": "Organization",
+                    "name": deal.provider
+                }
             },
             "aggregateRating": deal.rating ? {
                 "@type": "AggregateRating",
@@ -101,6 +122,7 @@ const discountPercentage = deal.originalPrice && deal.price && deal.originalPric
                 if (deal.skills && deal.skills.length > 0) return deal.skills.join(", ");
                 const extractedSkills = new Set<string>();
                 if (deal.category) extractedSkills.add(deal.category);
+                if (deal.subcategory) extractedSkills.add(deal.subcategory);
                 if (deal.learn && deal.learn.length > 0) {
                     deal.learn.slice(0, 5).forEach(item => {
                         const words = item.toLowerCase().split(' ');
@@ -111,18 +133,41 @@ const discountPercentage = deal.originalPrice && deal.price && deal.originalPric
                         if (words.includes('css')) extractedSkills.add('CSS');
                         if (words.includes('data') && words.includes('analysis')) extractedSkills.add('Data Analysis');
                         if (words.includes('machine') && words.includes('learning')) extractedSkills.add('Machine Learning');
+                        if (words.includes('web') && words.includes('development')) extractedSkills.add('Web Development');
+                        if (words.includes('mobile') && words.includes('development')) extractedSkills.add('Mobile Development');
                     });
                 }
-                return Array.from(extractedSkills).slice(0, 8).join(", ") || deal.learn?.join(", ") || "";
+                return Array.from(extractedSkills).slice(0, 10).join(", ") || deal.learn?.join(", ") || "";
             })(),
             "inLanguage": deal.language || "English",
             "url": `https://coursespeak.com/deal/${deal.id}`,
             "datePublished": deal.createdAt ? new Date(deal.createdAt).toISOString().split('T')[0] : undefined,
             "dateModified": deal.updatedAt ? new Date(deal.updatedAt).toISOString().split('T')[0] : undefined,
-            "about": deal.category ? [{
-                "@type": "Thing",
-                "name": deal.category
-            }] : undefined
+            "timeRequired": deal.duration ? `PT${deal.duration.replace(/[^\d]/g, '')}H` : undefined,
+            "hasCourseInstance": {
+                "@type": "CourseInstance",
+                "courseMode": "online",
+                "instructor": deal.instructor ? {
+                    "@type": "Person",
+                    "name": deal.instructor
+                } : undefined
+            },
+            "about": [
+                deal.category ? {
+                    "@type": "Thing",
+                    "name": deal.category
+                } : null,
+                deal.subcategory ? {
+                    "@type": "Thing",
+                    "name": deal.subcategory
+                } : null
+            ].filter(Boolean),
+            "educationalCredentialAwarded": deal.category ? `${deal.category} Certificate` : undefined,
+            "occupationalCredentialAwarded": deal.category ? {
+                "@type": "EducationalOccupationalCredential",
+                "name": `${deal.category} Certification`,
+                "educationalLevel": "Professional Certificate"
+            } : undefined
         })
     } />
 
@@ -160,20 +205,30 @@ const discountPercentage = deal.originalPrice && deal.price && deal.originalPric
         })
     } />
 
-    <!-- FAQ Structured Data -->
-    {deal.faqs && deal.faqs.length > 0 && (
+    <!-- Enhanced FAQ Structured Data for Featured Snippets -->
+    {(deal.faqs && deal.faqs.length > 0) && (
         <script type="application/ld+json" set:html={
             JSON.stringify({
                 "@context": "https://schema.org",
                 "@type": "FAQPage",
-                "mainEntity": deal.faqs.map(faq => ({
+                "mainEntity": deal.faqs.slice(0, 8).map((faq: any) => ({
                     "@type": "Question",
                     "name": faq.q,
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": faq.a
+                        "text": faq.a.replace(/<[^>]*>/g, '').trim()
                     }
-                }))
+                })),
+                "publisher": {
+                    "@type": "Organization",
+                    "name": "CourseSpeak",
+                    "url": "https://coursespeak.com"
+                },
+                "about": {
+                    "@type": "Course",
+                    "name": deal.title,
+                    "url": `https://coursespeak.com/deal/${deal.id}`
+                }
             })
         } />
     )}

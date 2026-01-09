@@ -73,14 +73,36 @@ const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(ima
     <meta name="generator" content={Astro.generator} />
     <meta name="google-site-verification" content="HISPISPt9Gk-zER-OUkGcPtm6cyiQ7snnKwzn7aDgTY" />
     <link rel="canonical" href={canonicalURL} />
+    {canonicalURL.includes('/deal/') && !canonicalURL.includes('.amp') && (
+      <link rel="amphtml" href={canonicalURL.replace('/deal/', '/deal/') + '.amp'} />
+    )}
 
     <title>{title}</title>
 
-    <!-- Additional SEO Meta Tags -->
+    <!-- Comprehensive SEO Meta Tags -->
     <meta name="author" content="CourseSpeak" />
+    <meta name="publisher" content="CourseSpeak" />
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <meta name="googlebot" content="index, follow" />
+    <meta name="bingbot" content="index, follow" />
+    <meta name="revisit-after" content="1 days" />
+    <meta name="language" content="English" />
+    <meta name="distribution" content="global" />
+    <meta name="rating" content="general" />
+    <meta name="keywords" content="udemy courses, online learning, course deals, udemy coupons, free courses, discounted courses, online education, skill development" />
+    <meta name="classification" content="Education, Online Learning, Course Deals" />
+    <meta name="category" content="Education" />
     <link rel="author" href="https://coursespeak.com" />
+    <link rel="publisher" href="https://coursespeak.com" />
+
+    <!-- Additional Technical Meta Tags -->
+    <meta name="theme-color" content="#1a1a2e" />
+    <meta name="msapplication-TileColor" content="#1a1a2e" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <!-- Search Engine Specific -->
+    <meta name="yandex-verification" content="verification-code" />
+    <meta name="baidu-site-verification" content="verification-code" />
 
     <!-- Organization Structured Data -->
     <script type="application/ld+json">
@@ -120,31 +142,65 @@ const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(ima
     }
     </script>
 
-    <!-- Open Graph / Facebook -->
+    <!-- Enhanced Open Graph / Facebook -->
     <meta property="og:type" content={type} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+    <meta property="og:site_name" content="CourseSpeak" />
+    <meta property="og:locale" content="en_US" />
     {absoluteImageUrl && <meta property="og:image" content={absoluteImageUrl} />}
     {absoluteImageUrl && <meta property="og:image:secure_url" content={absoluteImageUrl} />}
     {absoluteImageUrl && <meta property="og:image:width" content="1200" />}
     {absoluteImageUrl && <meta property="og:image:height" content="630" />}
     {absoluteImageUrl && <meta property="og:image:alt" content={title} />}
+    {absoluteImageUrl && <meta property="og:image:type" content="image/jpeg" />}
 
-    <!-- Twitter -->
+    <!-- Enhanced Twitter Cards -->
     <meta property="twitter:card" content={absoluteImageUrl ? "summary_large_image" : "summary"} />
     <meta property="twitter:url" content={canonicalURL} />
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
+    <meta property="twitter:site" content="@courses_peak" />
+    <meta property="twitter:creator" content="@courses_peak" />
     {absoluteImageUrl && <meta property="twitter:image" content={absoluteImageUrl} />}
     {absoluteImageUrl && <meta property="twitter:image:alt" content={title} />}
 
-    <!-- Fonts -->
+    <!-- Additional Social Sharing Meta Tags -->
+    <meta property="article:author" content="CourseSpeak" />
+    <meta property="article:publisher" content="https://coursespeak.com" />
+
+    <!-- LinkedIn specific -->
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="627" />
+
+    <!-- WhatsApp sharing -->
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="1200" />
+
+    <!-- Optimized Font Loading for Core Web Vitals -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=cal:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap&text=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
+
+    <!-- Preload critical fonts -->
+    <link
+      rel="preload"
+      href="https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
     />
 
     <style>

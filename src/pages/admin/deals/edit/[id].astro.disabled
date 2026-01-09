@@ -18,7 +18,68 @@ if (!deal) {
   // Let's also log all available deal IDs to debug
   const allDeals = await import('../../../../lib/store').then(m => m.readDealsFromFile());
   console.log('[EDIT PAGE] Available deal IDs:', allDeals.slice(0, 10).map(d => d.id));
-  return new Response('Deal not found', { status: 404 });
+  return new Response(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deal Not Found - CourseSpeak</title>
+  <style>
+    body {
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, Apple Color Emoji, Segoe UI Emoji;
+      background: #0b0d12;
+      color: #e2e8f0;
+      text-align: center;
+      padding: 50px;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    h1 {
+      color: #ef4444;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      max-width: 600px;
+      line-height: 1.6;
+    }
+    .buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    a {
+      color: #3b82f6;
+      text-decoration: none;
+      padding: 12px 24px;
+      border: 1px solid #3b82f6;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    a:hover {
+      background: #3b82f6;
+      color: #0b0d12;
+    }
+  </style>
+</head>
+<body>
+  <h1>Deal Not Found</h1>
+  <p>The deal with ID "${id}" does not exist in the database. Please check the ID and try again.</p>
+  <div class="buttons">
+    <a href="/admin/deals">Back to Deals List</a>
+    <a href="/admin">Admin Dashboard</a>
+  </div>
+</body>
+</html>`, { status: 404, headers: { 'Content-Type': 'text/html' } });
 }
 
 console.log('[EDIT PAGE] Deal found:', deal.title, 'ID:', deal.id);

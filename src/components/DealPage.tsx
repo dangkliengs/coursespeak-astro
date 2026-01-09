@@ -129,6 +129,9 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
 
     // FAQ accordion state
     const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
+
+    // Modal state for coupon reveal
+    const [isModalOpen, setIsModalOpen] = useState(false);
     
     // Ref for markdown content container
     const markdownRef = useRef<HTMLDivElement>(null);
@@ -178,22 +181,59 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
             {/* Breadcrumb / Intro Section (Not a full header) */}
             <div style={{ background: "#1f2330", padding: "2rem 0", color: "#fff", borderBottom: "1px solid #2d3748" }}>
                 <div className="container" style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 1rem", position: "relative" }}>
-                    <div style={{ maxWidth: "700px" }}>
-                        <div style={{ display: "flex", gap: "12px", marginBottom: "1rem", fontSize: "14px", color: "#3b82f6", fontWeight: 600 }}>
-                            <a href="/" style={{ color: "#a9b0c0", textDecoration: "none" }} title="Go to CourseSpeak homepage">Home</a>
-                            <span style={{ color: "#64748b" }}>/</span>
-                            <a href="/deals" style={{ color: "#a9b0c0", textDecoration: "none" }} title="Browse all course deals">Deals</a>
-                            <span style={{ color: "#64748b" }}>/</span>
-                            {deal.category && (
-                                <>
-                                    <a href={`/categories/${deal.category.toLowerCase().replace(/\s+/g, '-')}`} style={{ color: "#a9b0c0", textDecoration: "none" }} title={`Browse ${deal.category} courses`}>
-                                        {deal.category}
-                                    </a>
-                                    <span style={{ color: "#64748b" }}>/</span>
-                                </>
-                            )}
-                            <span style={{ color: "#3b82f6" }}>{deal.provider || "Course"}</span>
-                        </div>
+                    <div style={{ maxWidth: "900px" }}>
+                        <nav aria-label="Breadcrumb" style={{ marginBottom: "1rem" }}>
+                            <ol style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "8px",
+                                fontSize: "14px",
+                                color: "#3b82f6",
+                                fontWeight: 600,
+                                flexWrap: "wrap",
+                                listStyle: "none",
+                                margin: 0,
+                                padding: 0
+                            }}>
+                                <li>
+                                    <a href="/" style={{ color: "#a9b0c0", textDecoration: "none" }} title="Go to CourseSpeak homepage">Home</a>
+                                </li>
+                                <li aria-hidden="true" style={{ color: "#64748b" }}>›</li>
+                                <li>
+                                    <a href="/deals" style={{ color: "#a9b0c0", textDecoration: "none" }} title="Browse all course deals">All Deals</a>
+                                </li>
+                                {deal.category && (
+                                    <>
+                                        <li aria-hidden="true" style={{ color: "#64748b" }}>›</li>
+                                        <li>
+                                            <a href={`/categories/${deal.category.toLowerCase().replace(/\s+/g, '-')}`} style={{ color: "#a9b0c0", textDecoration: "none" }} title={`Browse ${deal.category} courses`}>
+                                                {deal.category}
+                                            </a>
+                                        </li>
+                                    </>
+                                )}
+                                {deal.subcategory && deal.subcategory !== deal.category && (
+                                    <>
+                                        <li aria-hidden="true" style={{ color: "#64748b" }}>›</li>
+                                        <li>
+                                            <a href={`/categories/${deal.category?.toLowerCase().replace(/\s+/g, '-')}`} style={{ color: "#a9b0c0", textDecoration: "none" }} title={`Browse ${deal.subcategory} courses`}>
+                                                {deal.subcategory}
+                                            </a>
+                                        </li>
+                                    </>
+                                )}
+                                <li aria-hidden="true" style={{ color: "#64748b" }}>›</li>
+                                <li aria-current="page" style={{ color: "#3b82f6", fontWeight: 700 }}>
+                                    <span style={{
+                                        wordBreak: "break-word",
+                                        hyphens: "auto",
+                                        maxWidth: "100%"
+                                    }}>
+                                        {deal.title}
+                                    </span>
+                                </li>
+                            </ol>
+                        </nav>
 
                         <h1 style={{ fontSize: "2rem", fontWeight: 800, lineHeight: 1.2, marginBottom: "1rem" }}>
                             {deal.title}
@@ -203,7 +243,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                             {deal.description}
                         </div>
 
-                        <div style={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap", fontSize: "14px" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap", fontSize: "14px", width: "100%" }}>
                             {deal.rating && (
                                 <span style={{ color: "#f59e0b", fontWeight: 700 }}>
                                     {deal.rating.toFixed(1)} <span style={{ color: "#f59e0b" }}>★★★★★</span>
@@ -427,13 +467,15 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                     <div style={{ position: "sticky", top: "2rem", background: "#1f2330", border: "1px solid #2d3748", borderRadius: "8px", overflow: "hidden", boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.5)" }}>
                         {deal.image && (
                             <div style={{ position: "relative" }}>
-                                <img 
-                                  src={deal.image} 
-                                  alt={deal.title} 
+                                <img
+                                  src={deal.image}
+                                  alt={deal.title}
                                   width="400"
                                   height="190"
                                   loading="lazy"
-                                  style={{ width: "100%", height: "190px", objectFit: "cover" }} 
+                                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 340px, 400px"
+                                  srcSet={`${deal.image}?w=400 400w, ${deal.image}?w=800 800w, ${deal.image}?w=1200 1200w`}
+                                  style={{ width: "100%", height: "190px", objectFit: "cover" }}
                                 />
                                 <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.1)" }}></div>
                                 {/* Play icon overlay simulation */}
@@ -467,24 +509,24 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                             )}
 
                             {deal.coupon && (
-                                <div style={{ 
+                                <div style={{
                                     background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                                    color: "#fff", 
-                                    padding: "6px", 
-                                    borderRadius: "4px", 
+                                    color: "#fff",
+                                    padding: "6px",
+                                    borderRadius: "4px",
                                     marginBottom: "0.8rem"
                                 }}>
-                                    <div style={{ 
-                                        fontSize: "0.65rem", 
-                                        fontWeight: 500, 
-                                        marginBottom: "3px", 
+                                    <div style={{
+                                        fontSize: "0.65rem",
+                                        fontWeight: 500,
+                                        marginBottom: "3px",
                                         opacity: 0.9,
                                         textTransform: "uppercase",
                                         letterSpacing: "0.3px"
                                     }}>
                                         🎫 Coupon
                                     </div>
-                                    <div style={{ 
+                                    <div style={{
                                         display: "flex",
                                         alignItems: "center",
                                         justifyContent: "space-between",
@@ -502,20 +544,15 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                             flex: 1,
                                             textAlign: "center"
                                         }}>
-                                            {deal.coupon}
+                                            {deal.coupon.length > 4 ? `${deal.coupon.substring(0, 4)}***` : deal.coupon}
                                         </div>
                                         <button
-                                            onClick={() => {
-                                                if (deal.coupon) {
-                                                    navigator.clipboard.writeText(deal.coupon);
-                                                    alert('Coupon code copied!');
-                                                }
-                                            }}
-                                            style={{ 
-                                                background: "rgba(255,255,255,0.25)", 
-                                                border: "1px solid rgba(255,255,255,0.4)", 
-                                                borderRadius: "3px", 
-                                                padding: "4px 6px", 
+                                            onClick={() => setIsModalOpen(true)}
+                                            style={{
+                                                background: "rgba(255,255,255,0.25)",
+                                                border: "1px solid rgba(255,255,255,0.4)",
+                                                borderRadius: "3px",
+                                                padding: "4px 6px",
                                                 fontSize: "0.65rem",
                                                 fontWeight: 600,
                                                 cursor: "pointer",
@@ -523,7 +560,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                                 whiteSpace: "nowrap"
                                             }}
                                         >
-                                            📋 Copy
+                                            Get Code
                                         </button>
                                     </div>
                                 </div>
@@ -564,6 +601,156 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                 </div>
             </div>
 
+            {/* Coupon Reveal Modal */}
+            {isModalOpen && (
+                <div
+                    style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        background: 'rgba(0, 0, 0, 0.8)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        zIndex: 9999,
+                        padding: '1rem'
+                    }}
+                    onClick={() => setIsModalOpen(false)}
+                >
+                    <div
+                        style={{
+                            background: '#1f2330',
+                            borderRadius: '12px',
+                            padding: '2rem',
+                            maxWidth: '500px',
+                            width: '100%',
+                            border: '1px solid #2d3748',
+                            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5)'
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+                            <h3 style={{ color: '#fff', fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem' }}>
+                                Get Your Coupon Code
+                            </h3>
+                            <p style={{ color: '#cbd5e1', fontSize: '1rem' }}>
+                                Use this exclusive coupon to get the best price!
+                            </p>
+                        </div>
+
+                        <div style={{
+                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                            padding: '1.5rem',
+                            borderRadius: '8px',
+                            marginBottom: '1.5rem'
+                        }}>
+                            <div style={{
+                                fontSize: '0.8rem',
+                                fontWeight: 500,
+                                color: 'rgba(255,255,255,0.9)',
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.3px',
+                                marginBottom: '0.5rem'
+                            }}>
+                                🎫 Coupon Code
+                            </div>
+                            <div style={{
+                                fontSize: '1rem',
+                                color: 'rgba(255,255,255,0.8)',
+                                textAlign: 'center',
+                                marginBottom: '1rem'
+                            }}>
+                                Click "Copy Code" to get your coupon, then use "Redeem Now" to apply it.
+                            </div>
+                        </div>
+
+                        <div className="modal-buttons" style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
+                            <button
+                                onClick={() => {
+                                    if (deal.coupon) {
+                                        navigator.clipboard.writeText(deal.coupon);
+                                        alert('Coupon code copied!');
+                                    }
+                                }}
+                                style={{
+                                    flex: 1,
+                                    background: 'rgba(255,255,255,0.2)',
+                                    border: '1px solid rgba(255,255,255,0.4)',
+                                    color: '#fff',
+                                    padding: '0.75rem 1rem',
+                                    borderRadius: '6px',
+                                    fontWeight: 600,
+                                    cursor: 'pointer',
+                                    fontSize: '1rem',
+                                    transition: 'all 0.2s'
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.background = 'rgba(255,255,255,0.3)';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
+                                }}
+                            >
+                                📋 Copy Code
+                            </button>
+
+                            <a
+                                href={deal.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                    flex: 1,
+                                    background: '#a855f7',
+                                    border: '1px solid #9333ea',
+                                    color: '#fff',
+                                    padding: '0.75rem 1rem',
+                                    borderRadius: '6px',
+                                    fontWeight: 600,
+                                    textDecoration: 'none',
+                                    textAlign: 'center',
+                                    fontSize: '1rem',
+                                    transition: 'all 0.2s'
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.background = '#9333ea';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.background = '#a855f7';
+                                }}
+                            >
+                                Redeem Now
+                            </a>
+                        </div>
+
+                        <button
+                            onClick={() => setIsModalOpen(false)}
+                            style={{
+                                position: 'absolute',
+                                top: '1rem',
+                                right: '1rem',
+                                background: 'none',
+                                border: 'none',
+                                color: '#9ca3af',
+                                fontSize: '1.5rem',
+                                cursor: 'pointer',
+                                padding: '0.5rem',
+                                borderRadius: '4px'
+                            }}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.background = '#2d3748';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.background = 'none';
+                            }}
+                        >
+                            ✕
+                        </button>
+                    </div>
+                </div>
+            )}
+
             <style>
                 {`
             .prose h1, .prose h2, .prose h3 { color: #fff; margin-top: 1.5em; margin-bottom: 0.5em; }
@@ -571,8 +758,51 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
             .prose ul, .prose ol { margin-bottom: 1em; padding-left: 1.5em; list-style: disc; }
             .prose li { margin-bottom: 0.5em; }
             .prose a { color: #3b82f6; text-decoration: underline; }
+
+            /* Comprehensive Responsive Design */
+            @media (max-width: 1200px) {
+                .container { max-width: 100% !important; padding: 0 1rem !important; }
+            }
+
             @media (max-width: 900px) {
-                .container { grid-template-columns: 1fr !important; }
+                .container { grid-template-columns: 1fr !important; gap: 2rem !important; }
+            }
+
+            @media (max-width: 768px) {
+                h1 { font-size: 1.75rem !important; }
+                .price-section { padding: 1rem !important; }
+                .price { font-size: 1.75rem !important; }
+                .modal { max-width: 95vw !important; }
+                nav ol { font-size: 13px !important; }
+            }
+
+            @media (max-width: 640px) {
+                .modal-buttons { flex-direction: column !important; }
+                h1 { font-size: 1.5rem !important; line-height: 1.3 !important; }
+                .header { padding: 1.5rem 0 !important; }
+                .container { padding: 0 0.75rem !important; }
+                .price { font-size: 1.5rem !important; }
+                .cta-button { width: 100% !important; }
+                nav ol { flex-wrap: wrap !important; gap: 6px !important; }
+                nav li { margin-bottom: 2px !important; }
+            }
+
+            @media (max-width: 480px) {
+                h1 { font-size: 1.375rem !important; }
+                .price { font-size: 1.375rem !important; }
+                nav ol { font-size: 12px !important; gap: 4px !important; }
+                .info-section { flex-direction: column !important; align-items: flex-start !important; gap: 8px !important; }
+                .rating-stars { font-size: 12px !important; }
+            }
+
+            @media (min-width: 640px) {
+                .modal-buttons { flex-direction: row !important; }
+            }
+
+            /* Print styles */
+            @media print {
+                body { background: white !important; color: black !important; }
+                .modal, .cta-button { display: none !important; }
             }
           `}
             </style>

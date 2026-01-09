@@ -43,9 +43,75 @@ const totalPages = Math.ceil(categoryDeals.length / PAGE_SIZE);
 
 const displayName = (category || '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Courses';
 const categoryName = displayName;
+
+// Get related categories for internal linking
+const allCategories = [...new Set(allDeals.map(deal => deal.category).filter(Boolean))].filter(cat => cat !== categoryName);
+
+// Create dynamic meta description with keywords
+const categoryKeywords = `${categoryName.toLowerCase()}, ${categoryName.toLowerCase()} courses, ${categoryName.toLowerCase()} certification, learn ${categoryName.toLowerCase()}, ${categoryName.toLowerCase()} tutorial`;
+const metaDescription = `Browse ${categoryDeals.length}+ verified ${categoryName.toLowerCase()} courses with massive discounts up to 90% off. Learn ${categoryKeywords} from industry experts. Udemy coupons updated daily.`;
 ---
 
-<Layout title={`${categoryName} Courses | Udemy Deals`} description={`Browse ${categoryDeals.length} ${categoryName.toLowerCase()} courses with exclusive deals and discounts.`}>
+<Layout title={`${categoryName} Courses - Free Udemy Coupons 2024 | CourseSpeak`} description={metaDescription}>
+
+  <!-- Category Collection Schema -->
+  <script type="application/ld+json" set:html={
+    JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": `${categoryName} Courses`,
+      "description": metaDescription,
+      "url": `https://coursespeak.com/categories/${category}`,
+      "mainEntity": {
+        "@type": "ItemList",
+        "name": `${categoryName} Course Collection`,
+        "numberOfItems": categoryDeals.length,
+        "itemListElement": categoryDeals.slice(0, 10).map((deal, index) => ({
+          "@type": "ListItem",
+          "position": index + 1,
+          "item": {
+            "@type": "Course",
+            "name": deal.title,
+            "url": `https://coursespeak.com/deal/${deal.id}`,
+            "image": deal.image,
+            "provider": {
+              "@type": "Organization",
+              "name": deal.provider
+            },
+            "offers": {
+              "@type": "Offer",
+              "price": deal.price.toString(),
+              "priceCurrency": "USD",
+              "availability": "https://schema.org/InStock"
+            }
+          }
+        }))
+      },
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://coursespeak.com"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Categories",
+            "item": "https://coursespeak.com/categories"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": categoryName,
+            "item": `https://coursespeak.com/categories/${category}`
+          }
+        ]
+      }
+    })
+  } />
   <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "2rem 1rem" }}>
     {/* Page Header - Same as deals page */}
     <div style={{ textAlign: "center", marginBottom: "3rem" }}>
@@ -196,6 +262,63 @@ const categoryName = displayName;
         
         <div style={{ color: "var(--muted)", fontSize: "14px", marginTop: "10px" }}>
           Showing {startIndex + 1}-{Math.min(endIndex, categoryDeals.length)} of {categoryDeals.length} courses
+        </div>
+      </div>
+    )}
+
+    {/* Related Categories */}
+    {allCategories.length > 0 && (
+      <div style={{
+        marginTop: "4rem",
+        padding: "2rem",
+        background: "var(--card)",
+        borderRadius: "1rem",
+        border: "1px solid var(--border)"
+      }}>
+        <h2 style={{
+          fontSize: "1.5rem",
+          fontWeight: "700",
+          color: "var(--text)",
+          marginBottom: "1.5rem",
+          textAlign: "center"
+        }}>
+          Explore Other Categories
+        </h2>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+          gap: "1rem"
+        }}>
+          {allCategories.slice(0, 8).map(cat => (
+            <a
+              href={`/categories/${cat.toLowerCase().replace(/\s+/g, '-')}`}
+              style={{
+                padding: "1rem",
+                background: "var(--bg)",
+                border: "1px solid var(--border)",
+                borderRadius: "0.5rem",
+                textDecoration: "none",
+                color: "var(--text)",
+                fontWeight: "600",
+                textAlign: "center",
+                transition: "all 0.2s ease",
+                display: "block"
+              }}
+              onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'"
+              onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
+            >
+              {cat}
+            </a>
+          ))}
+        </div>
+        <div style={{ textAlign: "center", marginTop: "1.5rem" }}>
+          <a href="/categories" style={{
+            color: "#FFC107",
+            textDecoration: "none",
+            fontWeight: "600"
+          }}>
+            View All Categories →
+          </a>
         </div>
       </div>
     )}
