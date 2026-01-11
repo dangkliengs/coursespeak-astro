@@ -223,7 +223,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                     </>
                                 )}
                                 <li aria-hidden="true" style={{ color: "#64748b" }}>›</li>
-                                <li aria-current="page" style={{ color: "#3b82f6", fontWeight: 700 }}>
+                                <li aria-current="page" style={{ color: "#FBBF24", fontWeight: 700 }}>
                                     <span style={{
                                         wordBreak: "break-word",
                                         hyphens: "auto",
@@ -253,7 +253,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 <span>{deal.students.toLocaleString()} students</span>
                             )}
                             <span style={{ display: "flex", gap: "4px" }}>
-                                Created by <span style={{ color: "#3b82f6", textDecoration: "underline" }}>{deal.instructor || deal.provider || "Instructor"}</span>
+                                Created by <span style={{ color: "#FBBF24", textDecoration: "underline" }}>{deal.instructor || deal.provider || "Instructor"}</span>
                             </span>
                             {deal.updatedAt && (
                                 <span style={{ color: "#9ca3af" }}>Last updated {new Date(deal.updatedAt).toLocaleDateString('en-US', { 
