@@ -331,11 +331,13 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 Created by <span style={{ color: "#FBBF24", textDecoration: "underline" }}>{deal.instructor || deal.provider || "Instructor"}</span>
                             </span>
                             {deal.updatedAt && (
-                                <span style={{ color: "#9ca3af" }}>Last updated {new Date(deal.updatedAt).toLocaleDateString('en-US', {
-                                    year: 'numeric',
-                                    month: 'short',
-                                    day: 'numeric'
-                                })}</span>
+                                <span style={{ color: "#9ca3af" }}>Published/Updated on: <time dateTime={new Date(deal.updatedAt).toISOString()}>
+                                        {new Date(deal.updatedAt).toLocaleDateString('en-US', {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric'
+                                        })}
+                                    </time></span>
                             )}
                             {deal.language && (
                                 <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
@@ -373,7 +375,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                         </div>
 
                         <p style={{ fontSize: "0.95rem", color: "#cbd5e1", lineHeight: "1.6", marginBottom: "1.5rem" }}>
-                            This section provides a comprehensive overview of the course's key features, pricing, difficulty level, and essential information to help you quickly understand what to expect from this learning opportunity.
+                            Course overview with structured fields: Title, Provider, Instructor, Updated Date, Difficulty, Focus, Audience, Outcomes.
                         </p>
 
                         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "0.875rem" }}>
@@ -381,7 +383,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 { icon: "📚", label: "Course Title", value: deal.title, color: "#3b82f6" },
                                 { icon: "🏢", label: "Provider", value: `${deal.provider} (via CourseSpeak listing)`, color: "#8b5cf6" },
                                 { icon: "👨‍🏫", label: "Instructor", value: deal.instructor, color: "#06b6d4" },
-                                { icon: "📅", label: "Last Updated", value: deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A', color: "#10b981" },
+                                { icon: "📅", label: "Last Updated", value: deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'N/A', color: "#10b981" },
                                 { icon: "📊", label: "Difficulty Level", value: extractDifficultyLevel(deal.title, deal.description), color: "#6366f1" },
                                 { icon: "🎯", label: "Course Focus", value: `${deal.category?.toLowerCase() || 'Programming'} fundamentals to advanced concepts`, color: "#f59e0b" },
                                 { icon: "👥", label: "Target Audience", value: "Beginners to advanced programmers", color: "#ef4444" },
@@ -470,13 +472,13 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                         <div style={{ border: "1px solid #1f2330", padding: "1.5rem", borderRadius: "8px", background: "#0b0d12", marginBottom: "2rem" }}>
                             <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1rem", color: "#fff" }}>What you'll learn</h2>
                             <p style={{ fontSize: "0.95rem", color: "#cbd5e1", lineHeight: "1.6", marginBottom: "1rem" }}>
-                                This section outlines the specific skills, concepts, and competencies you will acquire through completing this course, helping you understand the learning objectives and expected outcomes.
+                                The following outcomes clarify what skills and competencies learners will successfully achieve by completing this course:
                             </p>
                             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1rem", fontSize: "0.95rem", color: "#cbd5e1" }}>
                                 {deal.learn.map((point, idx) => (
                                     <div key={idx} style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
                                         <span style={{ color: "#a9b0c0", marginTop: "2px" }}>✓</span>
-                                        <span>{point}</span>
+                                        <span>{point.endsWith('.') ? point : point + '.'}</span>
                                     </div>
                                 ))}
                             </div>
@@ -569,6 +571,11 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                         <div style={{ fontSize: "0.85rem", color: "#06b6d4", fontWeight: "500" }}>
                                             {deal.instructor.includes(' and ') || deal.instructor.includes(', ') && deal.instructor.split(',').length > 2 ? 'Expert Instructors' : 'Senior Instructor'}
                                         </div>
+                                        <div style={{ fontSize: "0.75rem", color: "#3b82f6", marginTop: "0.25rem" }}>
+                                            <a href={`/instructors/${deal.instructor.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}`} style={{ color: "#3b82f6", textDecoration: "underline" }}>
+                                                View Instructor Profile
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -639,10 +646,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 Our Recommendation
                             </div>
                             <p style={{ margin: 0, color: "#cbd5e1", fontSize: "0.95rem" }}>
-                                Based on our analysis of student feedback, curriculum quality, and learning outcomes,
-                                we highly recommend <strong style={{ color: "#fff" }}>{deal.title}</strong> for anyone serious about
-                                mastering {deal.category?.toLowerCase() || 'professional skills'}.
-                                This course delivers exceptional value and practical knowledge that translates directly to real-world success.
+                                Course recommendation: <strong style={{ color: "#fff" }}>{deal.title}</strong> excels in {deal.category?.toLowerCase() || 'professional skills'} development based on verified student reviews and curriculum analysis.
                             </p>
                         </div>
                     </div>
@@ -661,7 +665,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 </div>
                                 <div style={{ color: "#f59e0b", fontSize: "1.2rem", fontWeight: 700 }}>★★★★★</div>
                                 <div style={{ color: "#9ca3af", fontSize: "0.9rem" }}>Course Rating
-                                 <div style={{ color: "#cbd5e1", fontSize: "0.8rem", marginTop: "4px" }}>Out of {deal.students?.toLocaleString() || '3,426'} students</div></div>
+                                 <div style={{ color: "#cbd5e1", fontSize: "0.8rem", marginTop: "4px" }}>Based on {deal.students?.toLocaleString() || '3,426'} student reviews{deal.updatedAt ? ` as of ${new Date(deal.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}` : ''}</div></div>
                             </div>
                             <div style={{ flex: 1 }}>
                                 <div style={{ fontWeight: 600, color: "#fff", marginBottom: "8px" }}>Rating Breakdown:</div>
