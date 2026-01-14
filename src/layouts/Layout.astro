@@ -95,11 +95,6 @@ const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(ima
     <link rel="author" href="https://coursespeak.com" />
     <link rel="publisher" href="https://coursespeak.com" />
 
-    <!-- Additional Technical Meta Tags -->
-    <meta name="theme-color" content="#1a1a2e" />
-    <meta name="msapplication-TileColor" content="#1a1a2e" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-
     <!-- Search Engine Specific -->
     <meta name="yandex-verification" content="verification-code" />
     <meta name="baidu-site-verification" content="verification-code" />
@@ -213,44 +208,19 @@ const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(ima
         font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, Apple Color Emoji, Segoe UI Emoji;
       }
       
-      /* Social media hover effects */
-      .facebook-hover:hover {
-        transform: translateY(-1px) scale(1.02) !important;
-        box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2) !important;
-        border-color: var(--brand) !important;
-      }
-      
-      .facebook-hover:hover div {
-        background: "linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 193, 7, 0.05) 100%)" !important;
-        border-color: var(--brand) !important;
-      }
-      
-      .x-hover:hover {
-        transform: translateY(-1px) scale(1.02) !important;
-        box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2) !important;
-        border-color: var(--brand) !important;
-      }
-      
-      .x-hover:hover div {
-        background: "linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 193, 7, 0.05) 100%)" !important;
-        border-color: var(--brand) !important;
-      }
-      
+      /* Optimized social media hover effects */
+      .facebook-hover:hover,
+      .x-hover:hover,
       .linkedin-hover:hover {
-        transform: translateY(-1px) scale(1.02) !important;
-        box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2) !important;
-        border-color: var(--brand) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(255, 193, 7, 0.15);
+        border-color: var(--brand);
       }
-      
-      .linkedin-hover:hover div {
-        background: "linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 193, 7, 0.05) 100%)" !important;
-        border-color: var(--brand) !important;
-      }
-      
+
       .facebook-hover:hover span,
       .x-hover:hover span,
       .linkedin-hover:hover span {
-        color: var(--brand) !important;
+        color: var(--brand);
       }
     </style>
   </head>

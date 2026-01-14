@@ -28,7 +28,7 @@ const totalPages = Math.ceil(allDeals.length / PAGE_SIZE);
 // Extract top categories for filter links
 const categories = [
   ...new Set(allDeals.map((d) => d.category).filter(Boolean)),
-].slice(0, 9);
+].slice(0, 8);
 
 // Slugify function for category URLs
 function slugifyCategory(name: string) {
@@ -477,33 +477,21 @@ const jsonLd = {
                 marginBottom: "1.5rem",
               }}
             >
-              <div>
-                <h2
-                  style={{ fontSize: "1.75rem", fontWeight: 700 }}
-                >
-                  <span style={{ color: "var(--brand)" }}>Featured</span> Udemy Courses
-                </h2>
-                <p
-                  style={{
-                    color: "var(--muted)",
-                    fontSize: "1.1rem",
-                    marginBottom: "1rem",
-                    lineHeight: 1.6
-                  }}
-                >
-                  Handpicked premium Udemy courses with the highest ratings, featuring expert instructors and comprehensive content for skill development.
-                </p>
-                <a
-                  href="/deals"
-                  style={{
-                    color: "#3b82f6",
-                    textDecoration: "none",
-                    fontWeight: 600,
-                  }}
-                >
-                  View all &rarr;
-                </a>
-              </div>
+              <h2
+                style={{ fontSize: "1.75rem", fontWeight: 700 }}
+              >
+                <span style={{ color: "var(--brand)" }}>Featured</span> Udemy Courses
+              </h2>
+              <a
+                href="/deals"
+                style={{
+                  color: "#3b82f6",
+                  textDecoration: "none",
+                  fontWeight: 600,
+                }}
+              >
+                View all &rarr;
+              </a>
             </div>
             <div
               style={{
@@ -679,16 +667,6 @@ const jsonLd = {
         >
           <span style={{ color: "var(--brand)" }}>Latest</span> Udemy Coupons
         </h2>
-        <p
-          style={{
-            color: "var(--muted)",
-            fontSize: "1.1rem",
-            marginBottom: "1.5rem",
-            lineHeight: 1.6
-          }}
-        >
-          Discover the newest free Udemy course coupons added to our collection, featuring fresh deals and latest premium content.
-        </p>
         <div
           style={{
             display: "grid",

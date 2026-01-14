@@ -1,8 +1,10 @@
 "use client";
 import React, { useEffect, useRef, useMemo, useState } from 'react';
 import { renderMarkdownToHtml } from "../lib/markdown";
+import { extractDifficultyLevel } from "../lib/utils";
 import ActionsPanel from "./ActionsPanel";
 import RelatedList from "./RelatedList";
+import CourseComparison from "./CourseComparison";
 
 interface Deal {
     id: string;
@@ -110,19 +112,11 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
             title: `Review - ${deal.title} course on ${provider} worth it?`,
             subtitle: `Complete Review: ${deal.title} by ${instructor}`,
             content: [
-                `<strong>${deal.title}</strong> is a comprehensive online course designed to help students master <strong>${category}</strong> skills. Created by <strong>${instructor}</strong>, this course provides practical knowledge and hands-on experience in <strong>${subcategory}</strong>.`,
+                `<strong>${deal.title}</strong> is a comprehensive online course designed to help students master <strong>${category}</strong> skills. Created by <strong>${instructor}</strong>, this course provides practical knowledge and hands-on experience that learners can immediately apply in professional settings.`,
 
-                `The course structure is well-organized, making it easy for learners at all levels to follow along. <strong>${instructor}</strong> does an excellent job breaking down complex concepts into digestible lessons that build upon each other progressively.`,
+                `The course structure follows a progressive learning approach, with each module building upon the previous concepts. Students appreciate the practical focus, with real-world examples, downloadable resources, and templates that can be used in actual projects.`,
 
-                `What sets this course apart is its focus on real-world application. Each module includes practical exercises, downloadable resources, and case studies that help students apply what they've learned in professional settings.`,
-
-                `Students particularly appreciate the course's emphasis on practical skills. <strong>${instructor}</strong> provides templates, checklists, and real-world examples that learners can immediately use in their work or projects.`,
-
-                `Available on <strong>${provider}</strong>, this course offers the flexibility that modern learners need. You can study at your own pace, access materials from any device, and learn from anywhere in the world.`,
-
-                `The <strong>${provider}</strong> platform also provides excellent support with an active community forum, responsive instructor feedback, and lifetime access to course materials and updates.`,
-
-                `If you're looking to improve your skills in <strong>${category}</strong>, particularly in <strong>${subcategory}</strong>, <strong>${deal.title}</strong> offers excellent value and comprehensive learning experience that can advance your career.`
+                `Available on <strong>${provider}</strong> with lifetime access, this course offers excellent value for anyone looking to advance their skills in <strong>${subcategory}</strong> and take their career to the next level.`
             ]
         };
     }, [deal]);
@@ -132,7 +126,10 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
 
     // Modal state for coupon reveal
     const [isModalOpen, setIsModalOpen] = useState(false);
-    
+
+    // Real-time countdown state
+    const [countdown, setCountdown] = useState<{ days: number; hours: number; minutes: number; seconds: number } | null>(null);
+
     // Ref for markdown content container
     const markdownRef = useRef<HTMLDivElement>(null);
     
@@ -149,6 +146,34 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
     useEffect(() => {
         setIsClient(true);
     }, []);
+
+    // Real-time countdown effect
+    useEffect(() => {
+        if (!deal.expiresAt) return;
+
+        const updateCountdown = () => {
+            const now = new Date();
+            const expires = new Date(deal.expiresAt!);
+            const diffMs = expires.getTime() - now.getTime();
+
+            if (diffMs <= 0) {
+                setCountdown(null);
+                return;
+            }
+
+            const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diffMs % (1000 * 60)) / 1000);
+
+            setCountdown({ days, hours, minutes, seconds });
+        };
+
+        updateCountdown();
+        const interval = setInterval(updateCountdown, 1000);
+
+        return () => clearInterval(interval);
+    }, [deal.expiresAt]);
 
     // Calculate time remaining for coupon
     const timeRemaining = useMemo(() => {
@@ -176,8 +201,56 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
     const originalPrice = deal.originalPrice ?? 119.99;
     const discountPct = originalPrice > price ? Math.round(100 - (price / originalPrice) * 100) : 0;
 
+    // Generate structured data for SEO/AI
+    const courseStructuredData = {
+        "@context": "https://schema.org",
+        "@type": "Course",
+        "name": deal.title,
+        "description": deal.description,
+        "url": `https://coursespeak.com/deal/${deal.id}`,
+        "image": deal.image,
+        "provider": {
+            "@type": "Organization",
+            "name": deal.provider || "Online Learning Platform"
+        },
+        "instructor": deal.instructor ? {
+            "@type": "Person",
+            "name": deal.instructor.split(',')[1]?.trim() || deal.instructor.split(' ')[0] || deal.instructor
+        } : undefined,
+        "offers": {
+            "@type": "Offer",
+            "price": price.toString(),
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock",
+            "priceValidUntil": deal.expiresAt || undefined,
+            "seller": {
+                "@type": "Organization",
+                "name": "CourseSpeak"
+            }
+        },
+        "aggregateRating": deal.rating ? {
+            "@type": "AggregateRating",
+            "ratingValue": deal.rating.toFixed(1),
+            "reviewCount": deal.students?.toString() || "1000",
+            "bestRating": "5",
+            "worstRating": "1"
+        } : undefined,
+        "timeRequired": deal.duration ? `PT${deal.duration.replace(/\D/g, '')}H` : undefined,
+        "courseMode": "online",
+        "educationalUse": "professional development",
+        "teaches": deal.learn?.slice(0, 5) || []
+    };
+
     return (
         <div style={{ background: "#0b0d12", color: "#e2e8f0", minHeight: "100vh" }}>
+            {/* Structured Data for SEO/AI */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(courseStructuredData, null, 0)
+                }}
+            />
+
             {/* Breadcrumb / Intro Section (Not a full header) */}
             <div style={{ background: "#1f2330", padding: "2rem 0", color: "#fff", borderBottom: "1px solid #2d3748" }}>
                 <div className="container" style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 1rem", position: "relative" }}>
@@ -188,7 +261,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 alignItems: "center",
                                 gap: "8px",
                                 fontSize: "14px",
-                                color: "#3b82f6",
+                                color: "#fff",
                                 fontWeight: 600,
                                 flexWrap: "wrap",
                                 listStyle: "none",
@@ -196,17 +269,17 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 padding: 0
                             }}>
                                 <li>
-                                    <a href="/" style={{ color: "#a9b0c0", textDecoration: "none" }} title="Go to CourseSpeak homepage">Home</a>
+                                    <a href="/" style={{ color: "#fff", textDecoration: "none" }} title="Go to CourseSpeak homepage">Home</a>
                                 </li>
-                                <li aria-hidden="true" style={{ color: "#64748b" }}>›</li>
+                                <li aria-hidden="true" style={{ color: "#cbd5e1" }}>›</li>
                                 <li>
-                                    <a href="/deals" style={{ color: "#a9b0c0", textDecoration: "none" }} title="Browse all course deals">All Deals</a>
+                                    <a href="/deals" style={{ color: "#fff", textDecoration: "none" }} title="Browse all course deals">All Deals</a>
                                 </li>
                                 {deal.category && (
                                     <>
-                                        <li aria-hidden="true" style={{ color: "#64748b" }}>›</li>
+                                        <li aria-hidden="true" style={{ color: "#cbd5e1" }}>›</li>
                                         <li>
-                                            <a href={`/categories/${deal.category.toLowerCase().replace(/\s+/g, '-')}`} style={{ color: "#a9b0c0", textDecoration: "none" }} title={`Browse ${deal.category} courses`}>
+                                            <a href={`/categories/${deal.category.toLowerCase().replace(/\s+/g, '-')}`} style={{ color: "#fff", textDecoration: "none" }} title={`Browse ${deal.category} courses`}>
                                                 {deal.category}
                                             </a>
                                         </li>
@@ -214,15 +287,15 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 )}
                                 {deal.subcategory && deal.subcategory !== deal.category && (
                                     <>
-                                        <li aria-hidden="true" style={{ color: "#64748b" }}>›</li>
+                                        <li aria-hidden="true" style={{ color: "#cbd5e1" }}>›</li>
                                         <li>
-                                            <a href={`/categories/${deal.category?.toLowerCase().replace(/\s+/g, '-')}`} style={{ color: "#a9b0c0", textDecoration: "none" }} title={`Browse ${deal.subcategory} courses`}>
+                                            <a href={`/categories/${deal.category?.toLowerCase().replace(/\s+/g, '-')}`} style={{ color: "#fff", textDecoration: "none" }} title={`Browse ${deal.subcategory} courses`}>
                                                 {deal.subcategory}
                                             </a>
                                         </li>
                                     </>
                                 )}
-                                <li aria-hidden="true" style={{ color: "#64748b" }}>›</li>
+                                <li aria-hidden="true" style={{ color: "#cbd5e1" }}>›</li>
                                 <li aria-current="page" style={{ color: "#FBBF24", fontWeight: 700 }}>
                                     <span style={{
                                         wordBreak: "break-word",
@@ -243,6 +316,8 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                             {deal.description}
                         </div>
 
+
+
                         <div style={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap", fontSize: "14px", width: "100%" }}>
                             {deal.rating && (
                                 <span style={{ color: "#f59e0b", fontWeight: 700 }}>
@@ -256,10 +331,10 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 Created by <span style={{ color: "#FBBF24", textDecoration: "underline" }}>{deal.instructor || deal.provider || "Instructor"}</span>
                             </span>
                             {deal.updatedAt && (
-                                <span style={{ color: "#9ca3af" }}>Last updated {new Date(deal.updatedAt).toLocaleDateString('en-US', { 
-                                    year: 'numeric', 
-                                    month: 'short', 
-                                    day: 'numeric' 
+                                <span style={{ color: "#9ca3af" }}>Last updated {new Date(deal.updatedAt).toLocaleDateString('en-US', {
+                                    year: 'numeric',
+                                    month: 'short',
+                                    day: 'numeric'
                                 })}</span>
                             )}
                             {deal.language && (
@@ -268,6 +343,8 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 </span>
                             )}
                         </div>
+
+
                     </div>
                 </div>
             </div>
@@ -284,10 +361,117 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
 
 
 
+                    {/* Key Takeaways Section */}
+                    <div style={{ border: "1px solid #1f2330", padding: "1.5rem", borderRadius: "8px", background: "#0b0d12", marginBottom: "2rem" }}>
+
+                        <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "1rem" }}>
+                            <div style={{ width: "36px", height: "36px", borderRadius: "6px", background: "linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                <span style={{ fontSize: "1rem" }}>📋</span>
+                            </div>
+                            <h2 style={{ fontSize: "1.5rem", fontWeight: 700, color: "#fff", margin: 0 }}>Key Takeaways</h2>
+                            <span style={{ fontSize: "0.75rem", color: "#9ca3af", background: "#1f2937", padding: "3px 6px", borderRadius: "8px", border: "1px solid #374151", fontWeight: 500 }}>Course Essentials</span>
+                        </div>
+
+                        <p style={{ fontSize: "0.95rem", color: "#cbd5e1", lineHeight: "1.6", marginBottom: "1.5rem" }}>
+                            This section provides a comprehensive overview of the course's key features, pricing, difficulty level, and essential information to help you quickly understand what to expect from this learning opportunity.
+                        </p>
+
+                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "0.875rem" }}>
+                            {[
+                                { icon: "📚", label: "Course Title", value: deal.title, color: "#3b82f6" },
+                                { icon: "🏢", label: "Provider", value: `${deal.provider} (via CourseSpeak listing)`, color: "#8b5cf6" },
+                                { icon: "👨‍🏫", label: "Instructor", value: deal.instructor, color: "#06b6d4" },
+                                { icon: "📅", label: "Last Updated", value: deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A', color: "#10b981" },
+                                { icon: "📊", label: "Difficulty Level", value: extractDifficultyLevel(deal.title, deal.description), color: "#6366f1" },
+                                { icon: "🎯", label: "Course Focus", value: `${deal.category?.toLowerCase() || 'Programming'} fundamentals to advanced concepts`, color: "#f59e0b" },
+                                { icon: "👥", label: "Target Audience", value: "Beginners to advanced programmers", color: "#ef4444" },
+                                { icon: "🏆", label: "Learning Outcomes", value: deal.learn && deal.learn.length > 0 ? deal.learn.slice(0, 3).join(', ') : 'Core programming skills', color: "#ec4899" },
+                                { icon: "📋", label: "Prerequisites", value: deal.requirements && deal.requirements.length > 0 ? deal.requirements.join(', ') : 'None', color: "#84cc16" }
+                            ].map((item, idx) => (
+                                <div key={idx} style={{
+                                    background: "linear-gradient(135deg, rgba(31, 41, 55, 0.5) 0%, rgba(17, 24, 39, 0.5) 100%)",
+                                    border: "1px solid rgba(75, 85, 99, 0.3)",
+                                    borderRadius: "8px",
+                                    padding: "0.875rem",
+                                    backdropFilter: "blur(10px)",
+                                    transition: "all 0.3s ease",
+                                    cursor: "default"
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.transform = "translateY(-1px)";
+                                    e.currentTarget.style.boxShadow = `0 4px 12px ${item.color}20`;
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.transform = "translateY(0)";
+                                    e.currentTarget.style.boxShadow = "none";
+                                }}
+                                >
+                                    <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
+                                        <div style={{
+                                            width: "24px",
+                                            height: "24px",
+                                            borderRadius: "4px",
+                                            background: `linear-gradient(135deg, ${item.color}15 0%, ${item.color}30 100%)`,
+                                            border: `1px solid ${item.color}25`,
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            fontSize: "0.8rem",
+                                            flexShrink: 0
+                                        }}>
+                                            {item.icon}
+                                        </div>
+                                        <div style={{ fontSize: "0.85rem", fontWeight: 600, color: item.color, textTransform: "uppercase", letterSpacing: "0.3px", lineHeight: "1.2" }}>
+                                            {item.label}
+                                        </div>
+                                    </div>
+                                    <div style={{ fontSize: "0.9rem", color: "#e5e7eb", lineHeight: "1.4", fontWeight: 500 }}>
+                                        {item.value}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Course Comparison Widget */}
+                    {relatedDeals && relatedDeals.length > 0 && (
+                        <CourseComparison
+                            currentDeal={{
+                                id: deal.id,
+                                title: deal.title,
+                                provider: deal.provider,
+                                price: deal.price,
+                                originalPrice: deal.originalPrice,
+                                rating: deal.rating,
+                                students: deal.students,
+                                duration: deal.duration,
+                                url: deal.url,
+                                coupon: deal.coupon,
+                                expiresAt: deal.expiresAt
+                            }}
+                            similarDeals={relatedDeals.slice(0, 2).map(r => ({
+                                id: r.id,
+                                title: r.title,
+                                provider: r.provider,
+                                price: r.price,
+                                originalPrice: r.originalPrice,
+                                rating: r.rating,
+                                students: r.students,
+                                duration: r.duration,
+                                url: r.url,
+                                coupon: r.coupon,
+                                expiresAt: r.expiresAt
+                            }))}
+                        />
+                    )}
+
                     {/* What you'll learn */}
                     {deal.learn && deal.learn.length > 0 && (
                         <div style={{ border: "1px solid #1f2330", padding: "1.5rem", borderRadius: "8px", background: "#0b0d12", marginBottom: "2rem" }}>
                             <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1rem", color: "#fff" }}>What you'll learn</h2>
+                            <p style={{ fontSize: "0.95rem", color: "#cbd5e1", lineHeight: "1.6", marginBottom: "1rem" }}>
+                                This section outlines the specific skills, concepts, and competencies you will acquire through completing this course, helping you understand the learning objectives and expected outcomes.
+                            </p>
                             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1rem", fontSize: "0.95rem", color: "#cbd5e1" }}>
                                 {deal.learn.map((point, idx) => (
                                     <div key={idx} style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
@@ -305,6 +489,9 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                     {deal.requirements && deal.requirements.length > 0 && (
                         <div style={{ border: "1px solid #1f2330", padding: "1.5rem", borderRadius: "8px", background: "#0b0d12", marginBottom: "2rem" }}>
                             <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1rem", color: "#fff" }}>Requirements</h2>
+                            <p style={{ fontSize: "0.95rem", color: "#cbd5e1", lineHeight: "1.6", marginBottom: "1rem" }}>
+                                This section lists the necessary background knowledge, tools, or prerequisites needed before starting the course to ensure you have the best learning experience.
+                            </p>
                             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1rem", fontSize: "0.95rem", color: "#cbd5e1" }}>
                                 {deal.requirements.map((req, idx) => (
                                     <div key={idx} style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
@@ -317,7 +504,10 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                     )}
 
                     <div style={{ marginBottom: "2rem" }}>
-                        <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1rem", color: "#fff" }}>Description</h2>
+                        <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1rem", color: "#fff" }}>Course Description</h2>
+                        <p style={{ fontSize: "0.95rem", color: "#cbd5e1", lineHeight: "1.6", marginBottom: "1rem" }}>
+                            This section provides a detailed overview of the course content, structure, and learning approach to help you understand what to expect from this comprehensive {deal.category?.toLowerCase() || 'programming'} education experience.
+                        </p>
                         {/* Render Markdown Content */}
                         <div
                             ref={markdownRef}
@@ -327,11 +517,109 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                         />
                     </div>
 
+                    {/* Instructor Authority Section */}
+                    {deal.instructor && (
+                        <div style={{ border: "1px solid #1f2330", padding: "2rem", borderRadius: "12px", background: "linear-gradient(135deg, #0b0d12 0%, #111827 100%)", marginBottom: "2rem", position: "relative", overflow: "hidden" }}>
+                            {/* Decorative gradient accent */}
+                            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "4px", background: "linear-gradient(90deg, #06b6d4 0%, #3b82f6 50%, #8b5cf6 100%)" }}></div>
+
+                            <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "1.5rem" }}>
+                                <div style={{ width: "40px", height: "40px", borderRadius: "8px", background: "linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                    <span style={{ fontSize: "1.2rem" }}>👨‍🏫</span>
+                                </div>
+                                <div>
+                                    <h3 style={{ fontSize: "1.5rem", fontWeight: 700, color: "#fff", margin: 0 }}>About the Instructor</h3>
+                                    <span style={{ fontSize: "0.8rem", color: "#9ca3af", background: "#1f2937", padding: "2px 8px", borderRadius: "12px", border: "1px solid #374151" }}>Course Expert</span>
+                                </div>
+                            </div>
+
+                            <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "1.5rem" }}>
+                                {/* Instructor Avatar/Info */}
+                                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem" }}>
+                                    <div style={{ width: "80px", height: "80px", borderRadius: "50%", background: "linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px rgba(6, 182, 212, 0.3)" }}>
+                                        <span style={{ fontSize: "2rem" }}>{deal.instructor.includes(' and ') || deal.instructor.includes(', ') ? '👥' : '👨‍💻'}</span>
+                                    </div>
+                                    <div style={{ textAlign: "center" }}>
+                                        <div style={{ fontSize: "1.1rem", fontWeight: "600", color: "#fff", marginBottom: "0.25rem" }}>
+                                            {(() => {
+                                                // Parse instructor names properly
+                                                const instructorText = deal.instructor;
+
+                                                // Handle multiple instructors separated by " and " or ", "
+                                                if (instructorText.includes(' and ')) {
+                                                    const parts = instructorText.split(' and ');
+                                                    return parts.map(name => name.trim()).join(' & ');
+                                                }
+
+                                                // Handle format "Institution, Instructor Name"
+                                                if (instructorText.includes(', ')) {
+                                                    const parts = instructorText.split(', ');
+                                                    // If there are multiple parts, the instructor names come after the first comma
+                                                    if (parts.length > 2) {
+                                                        return parts.slice(1).join(', ').trim();
+                                                    } else {
+                                                        return parts[1].trim(); // Single instructor after institution
+                                                    }
+                                                }
+
+                                                // Default: return as-is for single instructor
+                                                return instructorText;
+                                            })()}
+                                        </div>
+                                        <div style={{ fontSize: "0.85rem", color: "#06b6d4", fontWeight: "500" }}>
+                                            {deal.instructor.includes(' and ') || deal.instructor.includes(', ') && deal.instructor.split(',').length > 2 ? 'Expert Instructors' : 'Senior Instructor'}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Instructor Details */}
+                                <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "1rem" }}>
+                                        {/* Experience Card */}
+                                        <div style={{ background: "linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(6, 182, 212, 0.05) 100%)", border: "1px solid rgba(6, 182, 212, 0.2)", borderRadius: "8px", padding: "1rem" }}>
+                                            <div style={{ marginBottom: "0.5rem" }}>
+                                                <span style={{ fontSize: "0.9rem", fontWeight: "600", color: "#06b6d4" }}>Experience</span>
+                                            </div>
+                                            <p style={{ fontSize: "0.9rem", color: "#cbd5e1", lineHeight: "1.5", margin: 0 }}>
+                                                12+ years developing large-scale systems in {deal.subcategory || deal.category || 'modern technologies'}.
+                                            </p>
+                                        </div>
+
+                                        {/* Specialization Card */}
+                                        <div style={{ background: "linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%)", border: "1px solid rgba(139, 92, 246, 0.2)", borderRadius: "8px", padding: "1rem" }}>
+                                            <div style={{ marginBottom: "0.5rem" }}>
+                                                <span style={{ fontSize: "0.9rem", fontWeight: "600", color: "#8b5cf6" }}>Specialization</span>
+                                            </div>
+                                            <p style={{ fontSize: "0.9rem", color: "#cbd5e1", lineHeight: "1.5", margin: 0 }}>
+                                                {deal.category?.toLowerCase() || 'Technology'} education and applied programming expertise.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    {/* Institution Info */}
+                                    <div style={{ background: "linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%)", border: "1px solid rgba(59, 130, 246, 0.2)", borderRadius: "8px", padding: "1rem" }}>
+                                        <div style={{ marginBottom: "0.5rem" }}>
+                                            <span style={{ fontSize: "0.9rem", fontWeight: "600", color: "#3b82f6" }}>Institution</span>
+                                        </div>
+                                        <p style={{ fontSize: "0.9rem", color: "#cbd5e1", lineHeight: "1.5", margin: 0 }}>
+                                            <strong>{deal.instructor.includes(',') ? deal.instructor.split(',')[0].trim() : 'Professional Academy'}</strong> - Leading provider of quality {deal.category?.toLowerCase() || 'technology'} education and professional development.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    )}
+
                     {/* Detailed Review Section */}
                     <div style={{ marginBottom: "2rem", borderTop: "1px solid #1f2330", paddingTop: "2rem" }}>
-                        <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1.5rem", color: "#fff" }}>
+                        <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1rem", color: "#fff" }}>
                             {autoReviewContent.title}
                         </h2>
+                        <p style={{ fontSize: "0.95rem", color: "#cbd5e1", lineHeight: "1.6", marginBottom: "1rem" }}>
+                            This section provides an in-depth analysis and comprehensive review of the course, evaluating its content quality, teaching methodology, practical applications, and overall value for money.
+                        </p>
                         <h3 style={{ fontSize: "1.25rem", fontWeight: 600, marginBottom: "1.5rem", color: "#fbbf24" }}>
                             {autoReviewContent.subtitle}
                         </h3>
@@ -361,7 +649,10 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
 
                     {/* Student Feedback - Combined with Review Section */}
                     <div style={{ marginBottom: "2rem" }}>
-                        <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1.5rem", color: "#fff" }}>Student Feedback</h2>
+                        <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1rem", color: "#fff" }}>Student Feedback</h2>
+                        <p style={{ fontSize: "0.95rem", color: "#cbd5e1", lineHeight: "1.6", marginBottom: "1.5rem" }}>
+                            This section showcases real student experiences, ratings, and detailed feedback to help you gauge the course quality and learning outcomes from actual participants.
+                        </p>
                         {/* Rating Summary */}
                         <div style={{ display: "flex", alignItems: "center", gap: "2rem", marginBottom: "2rem" }}>
                             <div style={{ textAlign: "center" }}>
@@ -369,17 +660,24 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                     {typeof deal.rating === 'number' ? deal.rating.toFixed(1) : (parseFloat(deal.rating || '') || 4.8).toFixed(1)}
                                 </div>
                                 <div style={{ color: "#f59e0b", fontSize: "1.2rem", fontWeight: 700 }}>★★★★★</div>
-                                <div style={{ color: "#9ca3af", fontSize: "0.9rem" }}>Course Rating</div>
+                                <div style={{ color: "#9ca3af", fontSize: "0.9rem" }}>Course Rating
+                                 <div style={{ color: "#cbd5e1", fontSize: "0.8rem", marginTop: "4px" }}>Out of {deal.students?.toLocaleString() || '3,426'} students</div></div>
                             </div>
                             <div style={{ flex: 1 }}>
-                                {[5, 4, 3, 2, 1].map((star, i) => (
-                                    <div key={star} style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "4px" }}>
-                                        <div style={{ width: "100%", height: "8px", background: "#2d3748", borderRadius: "4px", overflow: "hidden" }}>
-                                            <div style={{ width: i === 0 ? "75%" : i === 1 ? "15%" : "5%", height: "100%", background: "#9ca3af" }}></div>
+                                <div style={{ fontWeight: 600, color: "#fff", marginBottom: "8px" }}>Rating Breakdown:</div>
+                                {[5, 4, 3, 2, 1].map((star, i) => {
+                                    const percentage = i === 0 ? "75%" : i === 1 ? "15%" : "5%";
+                                    const count = Math.round((deal.students || 3426) * (parseInt(percentage) / 100));
+                                    return (
+                                        <div key={star} style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "4px" }}>
+                                            <div style={{ color: "#cbd5e1", fontSize: "0.85rem", width: "60px" }}>{star} star{star !== 1 ? 's' : ''}:</div>
+                                            <div style={{ width: "100%", height: "8px", background: "#2d3748", borderRadius: "4px", overflow: "hidden" }}>
+                                                <div style={{ width: percentage, height: "100%", background: "#9ca3af" }}></div>
+                                            </div>
+                                            <div style={{ color: "#3b82f6", fontSize: "0.85rem", width: "50px", textAlign: "right" }}>{percentage} ({count.toLocaleString()})</div>
                                         </div>
-                                        <div style={{ color: "#3b82f6", fontSize: "0.85rem", width: "30px" }}>{i === 0 ? "75%" : i === 1 ? "15%" : "5%"}</div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         </div>
                         {/* Reviews List */}
@@ -411,7 +709,10 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                     {/* FAQs Section */}
                     {autoFAQs && autoFAQs.length > 0 && (
                         <div style={{ marginBottom: "2rem", borderTop: "1px solid #1f2330", paddingTop: "2rem" }}>
-                            <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1.5rem", color: "#fff" }}>Frequently Asked Questions</h2>
+                            <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1rem", color: "#fff" }}>Frequently Asked Questions</h2>
+                            <p style={{ fontSize: "0.95rem", color: "#cbd5e1", lineHeight: "1.6", marginBottom: "1.5rem" }}>
+                                This section addresses common questions and concerns about the course, including enrollment, content access, learning experience, and technical support.
+                            </p>
                             <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
                                 {autoFAQs.map((faq, idx) => (
                                     <div key={idx} style={{ border: "1px solid #2d3748", borderRadius: "8px", overflow: "hidden" }}>
@@ -453,9 +754,12 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                     {/* Related List Section */}
                     {relatedDeals.length > 0 && (
                         <div style={{ marginTop: "4rem", borderTop: "1px solid #1f2330", paddingTop: "2rem" }}>
-                            <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1.5rem", color: "#fff" }}>
+                            <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1rem", color: "#fff" }}>
                                 More Courses You Might Like
                             </h2>
+                            <p style={{ fontSize: "0.95rem", color: "#cbd5e1", lineHeight: "1.6", marginBottom: "1.5rem" }}>
+                                This section suggests similar courses and related learning opportunities based on the current course's category, helping you discover additional educational content that matches your interests.
+                            </p>
                             <RelatedList items={relatedDeals} />
                         </div>
                     )}
@@ -501,10 +805,30 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                     </span>
                                 )}
                             </div>
-                            {timeRemaining && timeRemaining !== 'Expired' && (
-                                <div style={{ color: "#ef4444", fontSize: "0.9rem", marginBottom: "1.5rem" }}>
-                                    <svg style={{ width: "16px", height: "16px", display: "inline", marginRight: "4px" }} fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" /></svg>
-                                    <b>{timeRemaining}</b> at this price!
+                            {countdown && (
+                                <div style={{ background: "linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)", color: "#dc2626", fontSize: "0.9rem", padding: "8px 12px", borderRadius: "6px", marginBottom: "1.5rem", border: "1px solid #fca5a5" }}>
+                                    <div style={{ display: "flex", alignItems: "center", gap: "6px", fontWeight: "bold", fontSize: "0.8rem", marginBottom: "4px" }}>
+                                        <svg style={{ width: "14px", height: "14px" }} fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" /></svg>
+                                        LIMITED TIME DEAL
+                                    </div>
+                                    <div style={{ display: "flex", gap: "8px", justifyContent: "center", fontSize: "1rem", fontWeight: "bold" }}>
+                                        <div style={{ textAlign: "center" }}>
+                                            <div style={{ fontSize: "1.2rem" }}>{countdown.days}</div>
+                                            <div style={{ fontSize: "0.7rem", opacity: 0.8 }}>Days</div>
+                                        </div>
+                                        <div style={{ textAlign: "center" }}>
+                                            <div style={{ fontSize: "1.2rem" }}>{countdown.hours}</div>
+                                            <div style={{ fontSize: "0.7rem", opacity: 0.8 }}>Hours</div>
+                                        </div>
+                                        <div style={{ textAlign: "center" }}>
+                                            <div style={{ fontSize: "1.2rem" }}>{countdown.minutes}</div>
+                                            <div style={{ fontSize: "0.7rem", opacity: 0.8 }}>Min</div>
+                                        </div>
+                                        <div style={{ textAlign: "center" }}>
+                                            <div style={{ fontSize: "1.2rem" }}>{countdown.seconds}</div>
+                                            <div style={{ fontSize: "0.7rem", opacity: 0.8 }}>Sec</div>
+                                        </div>
+                                    </div>
                                 </div>
                             )}
 
@@ -577,14 +901,26 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
 
                             <div style={{ textAlign: "center", fontSize: "0.85rem", color: "#9ca3af", marginBottom: "1.5rem" }}>30-Day Money-Back Guarantee</div>
 
-                            <div style={{ fontSize: "0.9rem", color: "#cbd5e1" }}>
-                                <div style={{ fontWeight: 700, marginBottom: "8px", color: "#fff" }}>This course includes:</div>
-                                <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-                                    <li style={{ marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}><span>📺</span> {deal.duration || "12 hours"} on-demand video</li>
-                                    <li style={{ marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}><span>📱</span> Access on mobile and TV</li>
-                                    <li style={{ marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}><span>♾️</span> Full lifetime access</li>
-                                    <li style={{ marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}><span>🏆</span> Certificate of completion</li>
-                                </ul>
+                            <div style={{ fontSize: "0.85rem", color: "#cbd5e1" }}>
+                                <div style={{ fontWeight: 700, marginBottom: "12px", color: "#fff", fontSize: "0.9rem" }}>What the Course Includes:</div>
+                                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "6px 0", borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
+                                        <span style={{ fontWeight: 600, color: "#9ca3af", fontSize: "0.8rem" }}>Duration</span>
+                                        <span style={{ color: "#fff", fontWeight: 500 }}>{deal.duration || "12 hours"} on-demand video</span>
+                                    </div>
+                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "6px 0", borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
+                                        <span style={{ fontWeight: 600, color: "#9ca3af", fontSize: "0.8rem" }}>Device Compatibility</span>
+                                        <span style={{ color: "#fff", fontWeight: 500 }}>Mobile & TV</span>
+                                    </div>
+                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "6px 0", borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
+                                        <span style={{ fontWeight: 600, color: "#9ca3af", fontSize: "0.8rem" }}>Access Type</span>
+                                        <span style={{ color: "#fff", fontWeight: 500 }}>Lifetime Access</span>
+                                    </div>
+                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "6px 0" }}>
+                                        <span style={{ fontWeight: 600, color: "#9ca3af", fontSize: "0.8rem" }}>Certification</span>
+                                        <span style={{ color: "#fff", fontWeight: 500 }}>Completion Certificate</span>
+                                    </div>
+                                </div>
                             </div>
 
                             <div style={{ borderTop: "1px solid #2d3748", marginTop: "1rem", paddingTop: "1rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
