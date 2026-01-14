@@ -72,8 +72,8 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
             const discount = original > price ? Math.round(100 - (price / original) * 100) : 0;
 
             generated.push({
-                q: `Is ${deal.title} Coupon Code Working?`,
-                a: `Absolutely, we manually verify the coupon for this ${deal.provider} course to ensure it works seamlessly. Current price: ${price.toFixed(2)}${discount > 0 ? ` (${discount}% OFF)` : ''}.`
+                q: `Is ${deal.title} Coupon Code Valid?`,
+                a: `Yes — the coupon code is confirmed active and applies a ${discount > 0 ? ` (${discount}% OFF)` : ''} discount.`
             });
         }
 
@@ -385,10 +385,10 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 { icon: "👨‍🏫", label: "Instructor", value: deal.instructor, color: "#06b6d4" },
                                 { icon: "📅", label: "Last Updated", value: deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'N/A', color: "#10b981" },
                                 { icon: "📊", label: "Difficulty Level", value: extractDifficultyLevel(deal.title, deal.description), color: "#6366f1" },
-                                { icon: "🎯", label: "Course Focus", value: `${deal.category?.toLowerCase() || 'Programming'} fundamentals to advanced concepts`, color: "#f59e0b" },
-                                { icon: "👥", label: "Target Audience", value: "Beginners to advanced programmers", color: "#ef4444" },
+                                { icon: "🎯", label: "Course Focus", value: `${deal.category?.toLowerCase() || 'Programming'} fundamentals to advanced concepts`, color: "#f59e0b" },                            
                                 { icon: "🏆", label: "Learning Outcomes", value: deal.learn && deal.learn.length > 0 ? deal.learn.slice(0, 3).join(', ') : 'Core programming skills', color: "#ec4899" },
-                                { icon: "📋", label: "Prerequisites", value: deal.requirements && deal.requirements.length > 0 ? deal.requirements.join(', ') : 'None', color: "#84cc16" }
+                                { icon: "📋", label: "Prerequisites", value: deal.requirements && deal.requirements.length > 0 ? deal.requirements.join(', ') : 'None', color: "#84cc16" },
+                                { icon: "👥", label: "Target Audience", value: "Beginners to advanced programmers", color: "#ef4444" }
                             ].map((item, idx) => (
                                 <div key={idx} style={{
                                     background: "linear-gradient(135deg, rgba(31, 41, 55, 0.5) 0%, rgba(17, 24, 39, 0.5) 100%)",
@@ -472,7 +472,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                         <div style={{ border: "1px solid #1f2330", padding: "1.5rem", borderRadius: "8px", background: "#0b0d12", marginBottom: "2rem" }}>
                             <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1rem", color: "#fff" }}>What you'll learn</h2>
                             <p style={{ fontSize: "0.95rem", color: "#cbd5e1", lineHeight: "1.6", marginBottom: "1rem" }}>
-                                The following outcomes clarify what skills and competencies learners will successfully achieve by completing this course:
+                                The following outcomes clarify specific competencies mastered by learners through practical projects:
                             </p>
                             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1rem", fontSize: "0.95rem", color: "#cbd5e1" }}>
                                 {deal.learn.map((point, idx) => (
@@ -508,7 +508,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                     <div style={{ marginBottom: "2rem" }}>
                         <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1rem", color: "#fff" }}>Course Description</h2>
                         <p style={{ fontSize: "0.95rem", color: "#cbd5e1", lineHeight: "1.6", marginBottom: "1rem" }}>
-                            This section provides a detailed overview of the course content, structure, and learning approach to help you understand what to expect from this comprehensive {deal.category?.toLowerCase() || 'programming'} education experience.
+                            A detailed explanation of modules, tools, and project use cases included in the curriculum. from this comprehensive {deal.category?.toLowerCase() || 'programming'} courses.
                         </p>
                         {/* Render Markdown Content */}
                         <div
