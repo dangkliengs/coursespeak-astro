@@ -27,35 +27,76 @@ console.log('Start index:', startIndex);
 console.log('End index:', endIndex);
 console.log('Current items length:', currentItems.length);
 
-// SEO Meta Tags with Auto Date
+// SEO Meta Tags with Auto Date and Statistics
 const currentDate = new Date();
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const currentMonth = monthNames[currentDate.getMonth()];
 const currentYear = currentDate.getFullYear();
 
-const pageTitle = `Udemy Deals ${currentMonth} ${currentYear} | 100% Free Coupons`;
-const pageDescription = `Get ${allDeals.length}+ verified Udemy deals with 100% off coupons. Updated daily with free courses and discounts.`;
+// Calculate statistics for better SEO
+const totalDeals = allDeals.length;
+const freeDeals = allDeals.filter(deal => deal.price === 0 || deal.price === null).length;
+const avgSavings = Math.round(allDeals.reduce((sum, deal) => {
+  if (deal.originalPrice && deal.price) {
+    return sum + ((deal.originalPrice - deal.price) / deal.originalPrice) * 100;
+  }
+  return sum;
+}, 0) / allDeals.length);
 
-// JSON-LD Structured Data for SEO
+const pageTitle = `Udemy Deals | ${totalDeals}+ Free Courses, 100% Off Coupons`;
+const pageDescription = `${totalDeals}+ verified Udemy deals with ${freeDeals}+ free courses. Save up to ${avgSavings}% on premium courses. Updated daily.`;
+
+// Enhanced JSON-LD Structured Data for SEO
 const structuredData = {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "CollectionPage",
+      "@id": "https://coursespeak.com/deals",
+      "url": "https://coursespeak.com/deals",
       "name": pageTitle,
       "description": pageDescription,
-      "url": "https://coursespeak.com/deals",
+      "isPartOf": {
+        "@id": "https://coursespeak.com"
+      },
+      "primaryImageOfPage": {
+        "@type": "ImageObject",
+        "url": "https://coursespeak.com/logo.svg"
+      },
+      "datePublished": "2023-01-01",
+      "dateModified": new Date().toISOString().split('T')[0],
+      "inLanguage": "en-US",
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://coursespeak.com"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Udemy Deals",
+            "item": "https://coursespeak.com/deals"
+          }
+        ]
+      },
       "mainEntity": {
         "@type": "ItemList",
+        "name": "Udemy Course Deals",
+        "description": "Comprehensive collection of discounted and free Udemy courses",
         "numberOfItems": allDeals.length,
-        "itemListElement": currentItems.slice(0, 10).map((deal, index) => ({
+        "itemListElement": currentItems.slice(0, 12).map((deal, index) => ({
           "@type": "Course",
           "position": index + 1,
           "name": deal.title,
-          "description": deal.description || `Get ${deal.title} with ${(deal.originalPrice && deal.price) ? Math.round(((deal.originalPrice - deal.price) / deal.originalPrice) * 100) : '90'}% off`,
+          "description": deal.description || `Learn ${deal.title} with expert instruction and save ${(deal.originalPrice && deal.price) ? Math.round(((deal.originalPrice - deal.price) / deal.originalPrice) * 100) : '90'}%`,
+          "url": `https://coursespeak.com/deal/${deal.id}`,
           "provider": {
             "@type": "Organization",
-            "name": "Udemy",
+            "name": deal.provider || "Udemy",
             "url": "https://www.udemy.com"
           },
           "offers": {
@@ -63,7 +104,7 @@ const structuredData = {
             "price": String(deal.price || "0"),
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
-            "validThrough": deal.updatedAt || new Date().toISOString(),
+            "validThrough": deal.updatedAt || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
             "seller": {
               "@type": "Organization",
               "name": "CourseSpeak",
@@ -77,12 +118,41 @@ const structuredData = {
             "worstRating": "1",
             "ratingCount": "1000"
           } : undefined,
-          "educationalLevel": "Beginner",
+          "educationalLevel": "Beginner to Advanced",
           "inLanguage": "en",
-          "coursePrerequisites": "None",
-          "learningOutcome": "Master new skills with expert instruction"
+          "coursePrerequisites": "None required",
+          "learningOutcome": deal.description || "Gain valuable skills and knowledge"
         }))
       }
+    },
+    {
+      "@type": "Dataset",
+      "name": "CourseSpeak Udemy Deals Dataset",
+      "description": "Comprehensive dataset of verified Udemy course deals and discount coupons",
+      "url": "https://coursespeak.com/deals",
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "provider": {
+        "@id": "https://coursespeak.com/#organization"
+      },
+      "datePublished": "2023-01-01",
+      "dateModified": new Date().toISOString().split('T')[0],
+      "variableMeasured": [
+        {
+          "@type": "PropertyValue",
+          "name": "Total Deals",
+          "value": totalDeals
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "Free Courses",
+          "value": freeDeals
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "Average Savings",
+          "value": `${avgSavings}%`
+        }
+      ]
     },
     {
       "@type": "Organization",
@@ -180,33 +250,352 @@ const structuredData = {
 
 <Layout title={pageTitle} description={pageDescription}>
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
-    
-    <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "2rem 1rem" }}>
-        {/* Page Header */}
-        <div style={{ textAlign: "center", marginBottom: "3rem" }}>
-            <h1 style={{ 
-                fontSize: "2.5rem", 
-                fontWeight: "800", 
-                marginBottom: "1rem",
-                background: "linear-gradient(135deg, #FFC107 0%, #FFD54F 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text"
-            }}>
-                {pageTitle}
-            </h1>
-            <p style={{ 
-                fontSize: "1.1rem", 
-                color: "#666666", 
-                maxWidth: "600px", 
-                margin: "0 auto",
-                lineHeight: "1.6"
-            }}>
-                Discover {allDeals.length}+ verified Udemy courses with massive discounts. Learn from industry experts and advance your career today.
-            </p>
-        </div>
 
-        {/* Deals Grid */}
+    <div class="hero-gradient" style={{ minHeight: "100vh", color: "var(--text)" }}>
+        <main>
+            {/* Hero Section */}
+            <section
+                class="hero-gradient"
+                style={{
+                    position: "relative",
+                    padding: "8rem 1rem 4rem",
+                    textAlign: "center",
+                    overflow: "hidden",
+                }}
+            >
+                <div class="container" style={{ position: "relative", zIndex: 10 }}>
+                    <div style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        background: "var(--brand-soft)",
+                        padding: "0.5rem 1rem",
+                        borderRadius: "9999px",
+                        marginBottom: "2rem",
+                        fontSize: "0.9rem",
+                        color: "var(--brand)",
+                        fontWeight: 600
+                    }}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        Udemy Deals {currentMonth} {currentYear}
+                    </div>
+
+                    <h1
+                        style={{
+                            fontSize: "clamp(2.5rem, 5vw, 4rem)",
+                            fontWeight: 800,
+                            lineHeight: 1.1,
+                            marginBottom: "1.5rem",
+                            maxWidth: "1200px",
+                            margin: "0 auto 1.5rem"
+                        }}
+                    >
+                        <span style={{
+                            background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)",
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent",
+                            backgroundClip: "text"
+                        }}>
+                            Premium Courses,
+                        </span>
+                        <br/>
+                        <span style={{
+                            background: "linear-gradient(135deg, var(--text) 0%, var(--muted) 100%)",
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent",
+                            backgroundClip: "text"
+                        }}>
+                            Unbeatable Prices
+                        </span>
+                    </h1>
+                    <p
+                        style={{
+                            fontSize: "clamp(1.1rem, 2.5vw, 1.4rem)",
+                            color: "var(--muted)",
+                            maxWidth: "700px",
+                            margin: "0 auto 3rem",
+                            lineHeight: 1.6,
+                            fontWeight: 400
+                        }}
+                    >
+                        Access {totalDeals}+ verified Udemy courses with {freeDeals}+ completely free options. Save up to {avgSavings}% on premium education from industry experts.
+                    </p>
+
+                    {/* Statistics Badges */}
+                    <div style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        gap: "1rem",
+                        flexWrap: "wrap",
+                        marginBottom: "3rem"
+                    }}>
+                        <div style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "0.5rem",
+                            background: "var(--card)",
+                            padding: "0.75rem 1.5rem",
+                            borderRadius: "12px",
+                            border: "1px solid var(--border)"
+                        }}>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style={{ color: "var(--brand)" }}>
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <span style={{ fontWeight: 600, color: "var(--text)" }}>{totalDeals}+ Courses</span>
+                        </div>
+                        <div style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "0.5rem",
+                            background: "var(--card)",
+                            padding: "0.75rem 1.5rem",
+                            borderRadius: "12px",
+                            border: "1px solid var(--border)"
+                        }}>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style={{ color: "hsl(35, 90%, 68%)" }}>
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <span style={{ fontWeight: 600, color: "var(--text)" }}>{freeDeals}+ Free</span>
+                        </div>
+                        <div style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "0.5rem",
+                            background: "var(--card)",
+                            padding: "0.75rem 1.5rem",
+                            borderRadius: "12px",
+                            border: "1px solid var(--border)"
+                        }}>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style={{ color: "hsl(180, 50%, 40%)" }}>
+                                <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10z"/>
+                            </svg>
+                            <span style={{ fontWeight: 600, color: "var(--text)" }}>Save {avgSavings}%</span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Decorative elements */}
+                <div style={{
+                    position: "absolute",
+                    top: "20%",
+                    left: "10%",
+                    width: "300px",
+                    height: "300px",
+                    background: "var(--brand)",
+                    filter: "blur(120px)",
+                    opacity: 0.1,
+                    borderRadius: "50%",
+                }}></div>
+                <div style={{
+                    position: "absolute",
+                    bottom: "10%",
+                    right: "10%",
+                    width: "250px",
+                    height: "250px",
+                    background: "hsl(0, 84%, 60%)",
+                    filter: "blur(100px)",
+                    opacity: 0.1,
+                    borderRadius: "50%",
+                }}></div>
+            </section>
+
+            {/* Deals Overview */}
+            <section class="card-gradient" style={{ padding: "4rem 1rem" }}>
+                <div class="container">
+                    <div style={{
+                        textAlign: "center",
+                        marginBottom: "3rem"
+                    }}>
+                        <h2 style={{
+                            fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
+                            fontWeight: 800,
+                            color: "var(--text)",
+                            marginBottom: "1rem"
+                        }}>
+                            Massive Savings on Premium Education
+                        </h2>
+                        <p style={{
+                            color: "var(--muted)",
+                            fontSize: "1.1rem",
+                            maxWidth: "600px",
+                            margin: "0 auto",
+                            lineHeight: 1.6
+                        }}>
+                            Access world-class courses from top instructors at unbeatable prices. Transform your career with expert knowledge.
+                        </p>
+                    </div>
+
+                    <div style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+                        gap: "2rem",
+                        marginBottom: "4rem"
+                    }}>
+                        <div style={{
+                            background: "var(--card)",
+                            padding: "2rem",
+                            borderRadius: "20px",
+                            border: "1px solid var(--border)",
+                            textAlign: "center",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <div style={{
+                                width: "60px",
+                                height: "60px",
+                                background: "var(--brand)",
+                                borderRadius: "16px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                margin: "0 auto 1.5rem"
+                            }}>
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                            </div>
+                            <h3 style={{ color: "var(--brand)", fontSize: "1.8rem", marginBottom: "0.5rem", fontWeight: 800 }}>
+                                {totalDeals}+
+                            </h3>
+                            <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "1rem", marginBottom: "0.5rem", fontWeight: 600 }}>
+                                Active Deals
+                            </p>
+                            <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "0.9rem" }}>
+                                Updated daily
+                            </p>
+                        </div>
+
+                        <div style={{
+                            background: "var(--card)",
+                            padding: "2rem",
+                            borderRadius: "20px",
+                            border: "1px solid var(--border)",
+                            textAlign: "center",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <div style={{
+                                width: "60px",
+                                height: "60px",
+                                background: "hsl(35, 90%, 68%)",
+                                borderRadius: "16px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                margin: "0 auto 1.5rem"
+                            }}>
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+                                    <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.1 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+                                </svg>
+                            </div>
+                            <h3 style={{ color: "hsl(35, 90%, 68%)", fontSize: "1.8rem", marginBottom: "0.5rem", fontWeight: 800 }}>
+                                {freeDeals}+
+                            </h3>
+                            <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "1rem", marginBottom: "0.5rem", fontWeight: 600 }}>
+                                100% Free
+                            </p>
+                            <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "0.9rem" }}>
+                                No payment required
+                            </p>
+                        </div>
+
+                        <div style={{
+                            background: "var(--card)",
+                            padding: "2rem",
+                            borderRadius: "20px",
+                            border: "1px solid var(--border)",
+                            textAlign: "center",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <div style={{
+                                width: "60px",
+                                height: "60px",
+                                background: "hsl(180, 50%, 40%)",
+                                borderRadius: "16px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                margin: "0 auto 1.5rem"
+                            }}>
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+                                    <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10z"/>
+                                </svg>
+                            </div>
+                            <h3 style={{ color: "hsl(180, 50%, 40%)", fontSize: "1.8rem", marginBottom: "0.5rem", fontWeight: 800 }}>
+                                {avgSavings}%
+                            </h3>
+                            <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "1rem", marginBottom: "0.5rem", fontWeight: 600 }}>
+                                Avg Savings
+                            </p>
+                            <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "0.9rem" }}>
+                                On premium courses
+                            </p>
+                        </div>
+
+                        <div style={{
+                            background: "var(--card)",
+                            padding: "2rem",
+                            borderRadius: "20px",
+                            border: "1px solid var(--border)",
+                            textAlign: "center",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <div style={{
+                                width: "60px",
+                                height: "60px",
+                                background: "hsl(0, 84%, 60%)",
+                                borderRadius: "16px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                margin: "0 auto 1.5rem"
+                            }}>
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                            </div>
+                            <h3 style={{ color: "hsl(0, 84%, 60%)", fontSize: "1.8rem", marginBottom: "0.5rem", fontWeight: 800 }}>
+                                24/7
+                            </h3>
+                            <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "1rem", marginBottom: "0.5rem", fontWeight: 600 }}>
+                                Access Anytime
+                            </p>
+                            <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "0.9rem" }}>
+                                Learn at your pace
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Deals Grid Section */}
+            <section class="hero-gradient" style={{ padding: "4rem 1rem" }}>
+                <div class="container" style={{ maxWidth: "1400px" }}>
+                    {/* Deals Header */}
+                    <div style={{
+                        textAlign: "center",
+                        marginBottom: "3rem"
+                    }}>
+                        <h2 style={{
+                            fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
+                            fontWeight: 800,
+                            color: "var(--text)",
+                            marginBottom: "1rem"
+                        }}>
+                            Latest Udemy Deals & Coupons
+                        </h2>
+                        <p style={{
+                            color: "var(--muted)",
+                            fontSize: "1.1rem",
+                            maxWidth: "600px",
+                            margin: "0 auto",
+                            lineHeight: 1.6
+                        }}>
+                            Browse our curated selection of premium courses. Click any deal to get instant access with automatic discount application.
+                        </p>
+                    </div>
+
+                    {/* Deals Grid */}
         <div style={{ 
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))",
@@ -218,190 +607,340 @@ const structuredData = {
             ))}
         </div>
             
-            {/* Simple Pagination */}
-            <div style={{ textAlign: "center", marginTop: "3rem", padding: "2rem" }}>
-                <div style={{ display: "flex", justifyContent: "center", gap: "1rem", marginBottom: "1rem" }}>
-                    {currentPage > 1 && (
-                        <a href={`/deals/${currentPage - 1}`} style={{
-                            padding: "8px 16px",
-                            background: "#FFFFFF",
-                            border: "2px solid #FFC107",
-                            borderRadius: "6px",
-                            color: "#FFC107",
-                            textDecoration: "none",
-                            fontSize: "14px",
-                            fontWeight: "600",
-                            transition: "all 0.3s ease"
-                        }}>
-                            ← Previous
-                        </a>
-                    )}
-                    
-                    <span style={{
-                        padding: "8px 16px",
-                        background: "linear-gradient(135deg, #FFC107 0%, #FFD54F 100%)",
-                        border: "2px solid #FFC107",
-                        borderRadius: "6px",
-                        color: "white",
-                        fontSize: "14px",
-                        fontWeight: "bold"
+                    {/* Modern Pagination */}
+                    <div style={{
+                        textAlign: "center",
+                        marginTop: "4rem",
+                        padding: "3rem",
+                        background: "var(--card)",
+                        borderRadius: "24px",
+                        border: "1px solid var(--border)",
+                        position: "relative",
+                        overflow: "hidden"
                     }}>
-                        Page {currentPage} of {totalPages}
-                    </span>
-                    
-                    {currentPage < totalPages && (
-                        <a href={`/deals/${currentPage + 1}`} style={{
-                            padding: "8px 16px",
-                            background: "#FFFFFF",
-                            border: "2px solid #FFC107",
-                            borderRadius: "6px",
-                            color: "#FFC107",
-                            textDecoration: "none",
-                            fontSize: "14px",
-                            fontWeight: "600",
-                            transition: "all 0.3s ease"
+                        <div style={{
+                            position: "absolute",
+                            top: "-50px",
+                            right: "-50px",
+                            width: "150px",
+                            height: "150px",
+                            background: "var(--brand)",
+                            borderRadius: "50%",
+                            opacity: 0.1
+                        }}></div>
+                        <div style={{
+                            position: "absolute",
+                            bottom: "-50px",
+                            left: "-50px",
+                            width: "120px",
+                            height: "120px",
+                            background: "hsl(35, 90%, 68%)",
+                            borderRadius: "50%",
+                            opacity: 0.1
+                        }}></div>
+
+                        <div style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            gap: "1rem",
+                            marginBottom: "1.5rem",
+                            position: "relative",
+                            zIndex: 1
                         }}>
-                            Next →
-                        </a>
-                    )}
-                </div>
-                
-                <div style={{ color: "#666666", fontSize: "12px", marginTop: "10px" }}>
-                    Showing {startIndex + 1}-{Math.min(endIndex, allDeals.length)} of {allDeals.length} deals
-                </div>
-            </div>
+                            {currentPage > 1 && (
+                                <a href={`/deals/${currentPage - 1}`} style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "0.5rem",
+                                    padding: "1rem 2rem",
+                                    background: "var(--card)",
+                                    border: "2px solid var(--brand)",
+                                    borderRadius: "12px",
+                                    color: "var(--brand)",
+                                    textDecoration: "none",
+                                    fontSize: "1rem",
+                                    fontWeight: "600",
+                                    transition: "all 0.3s ease",
+                                    boxShadow: "0 4px 12px rgba(0,0,0,0.1)"
+                                }}>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                                    </svg>
+                                    Previous
+                                </a>
+                            )}
+
+                            <div style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                padding: "1rem 2rem",
+                                background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)",
+                                borderRadius: "12px",
+                                color: "white",
+                                fontSize: "1rem",
+                                fontWeight: "700",
+                                boxShadow: "0 4px 12px rgba(0,0,0,0.15)"
+                            }}>
+                                Page {currentPage} of {totalPages}
+                            </div>
+
+                            {currentPage < totalPages && (
+                                <a href={`/deals/${currentPage + 1}`} style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "0.5rem",
+                                    padding: "1rem 2rem",
+                                    background: "var(--card)",
+                                    border: "2px solid var(--brand)",
+                                    borderRadius: "12px",
+                                    color: "var(--brand)",
+                                    textDecoration: "none",
+                                    fontSize: "1rem",
+                                    fontWeight: "600",
+                                    transition: "all 0.3s ease",
+                                    boxShadow: "0 4px 12px rgba(0,0,0,0.1)"
+                                }}>
+                                    Next
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
+                                    </svg>
+                                </a>
+                            )}
+                        </div>
+
+                        <div style={{
+                            color: "var(--muted)",
+                            fontSize: "0.95rem",
+                            marginTop: "1rem",
+                            position: "relative",
+                            zIndex: 1
+                        }}>
+                            Showing {startIndex + 1}-{Math.min(endIndex, allDeals.length)} of {allDeals.length} premium courses
+                        </div>
+                    </div>
             
-            <!-- FAQ Section for SEO -->
-            <div style={{
-                marginTop: "4rem",
-                padding: "3rem",
-                background: "var(--card)",
-                borderRadius: "20px",
-                border: "1px solid var(--border)",
-                boxShadow: "0 10px 30px rgba(0, 0, 0, 0.3)",
-                position: "relative",
-                overflow: "hidden"
-            }}>
-                <div style={{
-                    position: "absolute",
-                    top: "-30px",
-                    right: "-30px",
-                    width: "100px",
-                    height: "100px",
-                    background: "rgba(255, 193, 7, 0.1)",
-                    borderRadius: "50%"
-                }}></div>
-                <h2 style={{ 
-                    fontSize: "2rem", 
-                    fontWeight: "800", 
-                    marginBottom: "2rem",
-                    background: "linear-gradient(135deg, #FFC107 0%, #FFD54F 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                    textAlign: "center",
-                    textShadow: "none"
-                }}>
-                    Frequently Asked Questions
-                </h2>
-                <div style={{ display: "grid", gap: "1.5rem" }}>
+                </div>
+            </section>
+
+            {/* FAQ Section */}
+            <section class="card-gradient" style={{ padding: "4rem 1rem" }}>
+                <div class="container" style={{ maxWidth: "1000px" }}>
                     <div style={{
-                        background: "var(--input)",
-                        padding: "1.5rem",
-                        borderRadius: "12px",
-                        border: "1px solid var(--border)",
-                        boxShadow: "0 4px 15px rgba(0,0,0,0.2)",
-                        transition: "all 0.3s ease"
+                        textAlign: "center",
+                        marginBottom: "3rem"
                     }}>
-                        <h3 style={{ 
-                            color: "#FFC107", 
-                            marginBottom: "0.75rem", 
-                            fontSize: "1.2rem",
-                            fontWeight: "700",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "0.5rem"
+                        <h2 style={{
+                            fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
+                            fontWeight: 800,
+                            color: "var(--text)",
+                            marginBottom: "1rem"
                         }}>
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="#FFC107">
-                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                            </svg>
-                            Are these Udemy deals legitimate?
-                        </h3>
-                        <p style={{ 
-                            color: "hsl(215, 20%, 65%)", 
-                            margin: 0, 
-                            lineHeight: "1.7",
-                            fontSize: "1rem"
+                            Frequently Asked Questions
+                        </h2>
+                        <p style={{
+                            color: "var(--muted)",
+                            fontSize: "1.1rem",
+                            maxWidth: "600px",
+                            margin: "0 auto",
+                            lineHeight: 1.6
                         }}>
-                            Yes! All deals on CourseSpeak are verified and sourced directly from Udemy or authorized partners. We regularly check and update our deals to ensure they're active and legitimate.
+                            Get answers to common questions about our Udemy deals and course platform
                         </p>
                     </div>
-                    <div style={{
-                        background: "var(--input)",
-                        padding: "1.5rem",
-                        borderRadius: "12px",
-                        border: "1px solid var(--border)",
-                        boxShadow: "0 4px 15px rgba(0,0,0,0.2)",
-                        transition: "all 0.3s ease"
-                    }}>
-                        <h3 style={{ 
-                            color: "#FFC107", 
-                            marginBottom: "0.75rem", 
-                            fontSize: "1.2rem",
-                            fontWeight: "700",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "0.5rem"
+
+                    <div style={{ display: "grid", gap: "2rem" }}>
+                        <div style={{
+                            background: "var(--card)",
+                            padding: "2rem",
+                            borderRadius: "20px",
+                            border: "1px solid var(--border)",
+                            transition: "all 0.3s ease"
                         }}>
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="#FFC107">
-                                <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
-                            </svg>
-                            How often are new deals added?
-                        </h3>
-                        <p style={{ 
-                            color: "hsl(215, 20%, 65%)", 
-                            margin: 0, 
-                            lineHeight: "1.7",
-                            fontSize: "1rem"
+                            <h3 style={{
+                                color: "var(--brand)",
+                                marginBottom: "1rem",
+                                fontSize: "1.3rem",
+                                fontWeight: "700",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "0.75rem"
+                            }}>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                                </svg>
+                                Are these Udemy deals legitimate?
+                            </h3>
+                            <p style={{
+                                color: "var(--muted)",
+                                margin: 0,
+                                lineHeight: "1.7",
+                                fontSize: "1rem"
+                            }}>
+                                Yes! All deals on CourseSpeak are verified and sourced directly from Udemy or authorized partners. We regularly check and update our deals to ensure they're active and legitimate.
+                            </p>
+                        </div>
+
+                        <div style={{
+                            background: "var(--card)",
+                            padding: "2rem",
+                            borderRadius: "20px",
+                            border: "1px solid var(--border)",
+                            transition: "all 0.3s ease"
                         }}>
-                            We update our deals database daily with new Udemy courses and coupons. Check back regularly for the latest discounts and free courses.
-                        </p>
-                    </div>
-                    <div style={{
-                        background: "var(--input)",
-                        padding: "1.5rem",
-                        borderRadius: "12px",
-                        border: "1px solid var(--border)",
-                        boxShadow: "0 4px 15px rgba(0,0,0,0.2)",
-                        transition: "all 0.3s ease"
-                    }}>
-                        <h3 style={{ 
-                            color: "#FFC107", 
-                            marginBottom: "0.75rem", 
-                            fontSize: "1.2rem",
-                            fontWeight: "700",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "0.5rem"
+                            <h3 style={{
+                                color: "hsl(35, 90%, 68%)",
+                                marginBottom: "1rem",
+                                fontSize: "1.3rem",
+                                fontWeight: "700",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "0.75rem"
+                            }}>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                                </svg>
+                                How often are new deals added?
+                            </h3>
+                            <p style={{
+                                color: "var(--muted)",
+                                margin: 0,
+                                lineHeight: "1.7",
+                                fontSize: "1rem"
+                            }}>
+                                We update our deals database daily with new Udemy courses and coupons. Check back regularly for the latest discounts and free courses from top instructors.
+                            </p>
+                        </div>
+
+                        <div style={{
+                            background: "var(--card)",
+                            padding: "2rem",
+                            borderRadius: "20px",
+                            border: "1px solid var(--border)",
+                            transition: "all 0.3s ease"
                         }}>
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="#FFC107">
-                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                            </svg>
-                            Do I need to pay for CourseSpeak?
-                        </h3>
-                        <p style={{ 
-                            color: "hsl(215, 20%, 65%)", 
-                            margin: 0, 
-                            lineHeight: "1.7",
-                            fontSize: "1rem"
-                        }}>
-                            No! CourseSpeak is completely free to use. We don't charge for accessing deals, coupons, or course information. Our mission is to help you find the best educational opportunities.
-                        </p>
+                            <h3 style={{
+                                color: "hsl(180, 50%, 40%)",
+                                marginBottom: "1rem",
+                                fontSize: "1.3rem",
+                                fontWeight: "700",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "0.75rem"
+                            }}>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                                </svg>
+                                Do I need to pay for CourseSpeak?
+                            </h3>
+                            <p style={{
+                                color: "var(--muted)",
+                                margin: 0,
+                                lineHeight: "1.7",
+                                fontSize: "1rem"
+                            }}>
+                                No! CourseSpeak is completely free to use. We don't charge for accessing deals, coupons, or course information. Our mission is to help you find the best educational opportunities.
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </section>
+
+            {/* Call to Action */}
+            <section class="hero-gradient" style={{ padding: "4rem 1rem" }}>
+                <div class="container" style={{ maxWidth: "800px", textAlign: "center" }}>
+                    <h2 style={{
+                        fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
+                        fontWeight: 800,
+                        color: "var(--text)",
+                        marginBottom: "1rem"
+                    }}>
+                        Ready to Start Learning?
+                    </h2>
+                    <p style={{
+                        color: "var(--muted)",
+                        fontSize: "1.1rem",
+                        maxWidth: "600px",
+                        margin: "0 auto 3rem",
+                        lineHeight: 1.6
+                    }}>
+                        Join thousands of learners who have transformed their careers with our premium Udemy course deals. Start your learning journey today!
+                    </p>
+
+                    <div style={{
+                        background: "var(--card)",
+                        padding: "3rem",
+                        borderRadius: "24px",
+                        border: "1px solid var(--border)",
+                        textAlign: "center",
+                        position: "relative",
+                        overflow: "hidden"
+                    }}>
+                        <div style={{
+                            position: "absolute",
+                            top: "-50px",
+                            right: "-50px",
+                            width: "150px",
+                            height: "150px",
+                            background: "hsl(0, 84%, 60%)",
+                            borderRadius: "50%",
+                            opacity: 0.1
+                        }}></div>
+                        <h3 style={{
+                            color: "var(--text)",
+                            fontSize: "1.5rem",
+                            fontWeight: 700,
+                            marginBottom: "1.5rem",
+                            position: "relative",
+                            zIndex: 1
+                        }}>
+                            Explore by Category
+                        </h3>
+                        <p style={{ color: "var(--muted)", marginBottom: "2rem", position: "relative", zIndex: 1 }}>
+                            Find courses in your area of interest with our organized category system
+                        </p>
+                        <a
+                            href="/categories"
+                            style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "0.5rem",
+                                padding: "1rem 2rem",
+                                background: "var(--brand)",
+                                color: "var(--bg)",
+                                textDecoration: "none",
+                                borderRadius: "12px",
+                                fontSize: "1.1rem",
+                                fontWeight: 600,
+                                transition: "all 0.3s ease",
+                                position: "relative",
+                                zIndex: 1
+                            }}
+                        >
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            Browse Categories
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </main>
     </div>
+
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, hsl(222, 47%, 7%) 0%, hsl(222, 43%, 10%) 100%);
+        }
+
+        .card-gradient {
+            background: var(--bg);
+        }
+    </style>
 </Layout>
 
 <!-- FAQ and Filter JavaScript -->

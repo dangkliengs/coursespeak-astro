@@ -48,152 +48,724 @@ const list = listRaw.map((c) => {
   return { ...c, icon, slug: cSlug };
 });
 
-const pageTitle = `All Categories & Subcategories | CourseSpeak`;
-const pageDescription = "Browse all primary categories and subcategories of Udemy deals and free coupons on CourseSpeak.";
+// Calculate statistics for structured data
+const totalCategories = list.length;
+const totalCourses = deals.length;
+const averageCourses = Math.round(totalCourses / totalCategories);
+
+const pageTitle = `Course Categories | ${totalCategories}+ Topics, ${totalCourses}+ Udemy Courses`;
+const pageDescription = `Browse ${totalCategories}+ course categories with ${totalCourses}+ Udemy deals. Find Python, web dev, data science, AI & more with free coupons.`;
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
-  <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "2rem 1rem" }}>
-    {/* Page Header - Same as deals page */}
-    <div style={{ textAlign: "center", marginBottom: "3rem" }}>
-      <h1 style={{ 
-        fontSize: "2.5rem", 
-        fontWeight: "800", 
-        marginBottom: "1rem",
-        background: "linear-gradient(135deg, #FFC107 0%, #FFD54F 100%)",
-        WebkitBackgroundClip: "text",
-        WebkitTextFillColor: "transparent",
-        backgroundClip: "text"
-      }}>
-        All Categories & Subcategories
-      </h1>
-      <p style={{ 
-        fontSize: "1.1rem", 
-        color: "var(--muted)", 
-        maxWidth: "600px", 
-        margin: "0 auto",
-        lineHeight: "1.6"
-      }}>
-        Explore every primary category and subcategory available on CourseSpeak. Select a topic to dive straight into updated Udemy coupons and 100% off courses curated for that niche.
-      </p>
+    <!-- Enhanced Categories Page Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebPage",
+          "@id": "https://coursespeak.com/categories",
+          "url": "https://coursespeak.com/categories",
+          "name": "Browse All Course Categories | {totalCategories}+ Categories, {totalCourses}+ Udemy Courses | CourseSpeak",
+          "description": "Explore {totalCategories} course categories with {totalCourses}+ Udemy deals and 100% off coupons. Find your perfect learning path in development, design, business, marketing & more.",
+          "isPartOf": {
+            "@id": "https://coursespeak.com"
+          },
+          "primaryImageOfPage": {
+            "@type": "ImageObject",
+            "url": "https://coursespeak.com/logo.svg"
+          },
+          "datePublished": "2023-01-01",
+          "dateModified": "2026-01-15",
+          "inLanguage": "en-US",
+          "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://coursespeak.com"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Categories",
+                "item": "https://coursespeak.com/categories"
+              }
+            ]
+          },
+          "mainEntity": {
+            "@type": "ItemList",
+            "name": "Course Categories",
+            "description": "Comprehensive list of all course categories available on CourseSpeak",
+            "numberOfItems": "{totalCategories}",
+            "itemListElement": [
+              {list.map((c, index) => ({
+                "@type": "ListItem",
+                "position": index + 1,
+                "item": {
+                  "@type": "Thing",
+                  "name": c.name,
+                  "description": "{c.count} courses in {c.name} category",
+                  "url": "https://coursespeak.com/categories/{c.slug}"
+                }
+              }))}
+            ]
+          }
+        },
+        {
+          "@type": "Dataset",
+          "name": "CourseSpeak Categories Dataset",
+          "description": "Comprehensive dataset of Udemy course categories and subcategories with deal counts",
+          "url": "https://coursespeak.com/categories",
+          "license": "https://creativecommons.org/licenses/by/4.0/",
+          "provider": {
+            "@type": "Organization",
+            "@id": "https://coursespeak.com/#organization"
+          },
+          "datePublished": "2023-01-01",
+          "dateModified": "2026-01-15"
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://coursespeak.com/#organization",
+          "name": "CourseSpeak",
+          "url": "https://coursespeak.com",
+          "logo": "https://coursespeak.com/logo.svg",
+          "description": "Free Udemy coupons platform with {totalCategories} categories and {totalCourses}+ courses",
+          "foundingDate": "2023",
+          "sameAs": [
+            "https://x.com/courses_peak",
+            "https://www.facebook.com/CourseSpeakOfficial/"
+          ]
+        }
+      ]
+    }
+    </script>
+    <div class="hero-gradient" style={{ minHeight: "100vh", color: "var(--text)" }}>
+        <main>
+            {/* Hero Section */}
+            <section
+                class="hero-gradient"
+                style={{
+                    position: "relative",
+                    padding: "8rem 1rem 4rem",
+                    textAlign: "center",
+                    overflow: "hidden",
+                }}
+            >
+                <div class="container" style={{ position: "relative", zIndex: 10 }}>
+                    <div style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        background: "var(--brand-soft)",
+                        padding: "0.5rem 1rem",
+                        borderRadius: "9999px",
+                        marginBottom: "2rem",
+                        fontSize: "0.9rem",
+                        color: "var(--brand)",
+                        fontWeight: 600
+                    }}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        Browse Categories
+                    </div>
+
+                    <h1
+                        style={{
+                            fontSize: "clamp(2.5rem, 5vw, 4rem)",
+                            fontWeight: 800,
+                            lineHeight: 1.1,
+                            marginBottom: "1.5rem",
+                            maxWidth: "1200px",
+                            margin: "0 auto 1.5rem"
+                        }}
+                    >
+                        <span style={{
+                            background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)",
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent",
+                            backgroundClip: "text"
+                        }}>
+                            Explore All Course
+                        </span>
+                        <br/>
+                        <span style={{
+                            background: "linear-gradient(135deg, var(--text) 0%, var(--muted) 100%)",
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent",
+                            backgroundClip: "text"
+                        }}>
+                            Categories & Topics
+                        </span>
+                    </h1>
+                    <p
+                        style={{
+                            fontSize: "clamp(1.1rem, 2.5vw, 1.4rem)",
+                            color: "var(--muted)",
+                            maxWidth: "700px",
+                            margin: "0 auto 3rem",
+                            lineHeight: 1.6,
+                            fontWeight: 400
+                        }}
+                    >
+                        Discover {totalCategories}+ categories with {totalCourses}+ Udemy courses. Find your perfect learning path in development, design, business, marketing, and more with our curated coupons and deals.
+                    </p>
+
+                    {/* Statistics Badges */}
+                    <div style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        gap: "1rem",
+                        flexWrap: "wrap",
+                        marginBottom: "3rem"
+                    }}>
+                        <div style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "0.5rem",
+                            background: "var(--card)",
+                            padding: "0.75rem 1.5rem",
+                            borderRadius: "12px",
+                            border: "1px solid var(--border)"
+                        }}>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style={{ color: "var(--brand)" }}>
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <span style={{ fontWeight: 600, color: "var(--text)" }}>{totalCategories}+ Categories</span>
+                        </div>
+                        <div style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "0.5rem",
+                            background: "var(--card)",
+                            padding: "0.75rem 1.5rem",
+                            borderRadius: "12px",
+                            border: "1px solid var(--border)"
+                        }}>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style={{ color: "hsl(35, 90%, 68%)" }}>
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <span style={{ fontWeight: 600, color: "var(--text)" }}>{totalCourses}+ Courses</span>
+                        </div>
+                        <div style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "0.5rem",
+                            background: "var(--card)",
+                            padding: "0.75rem 1.5rem",
+                            borderRadius: "12px",
+                            border: "1px solid var(--border)"
+                        }}>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style={{ color: "hsl(180, 50%, 40%)" }}>
+                                <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10z"/>
+                            </svg>
+                            <span style={{ fontWeight: 600, color: "var(--text)" }}>100% Free</span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Decorative elements */}
+                <div style={{
+                    position: "absolute",
+                    top: "20%",
+                    left: "10%",
+                    width: "300px",
+                    height: "300px",
+                    background: "var(--brand)",
+                    filter: "blur(120px)",
+                    opacity: 0.1,
+                    borderRadius: "50%",
+                }}></div>
+                <div style={{
+                    position: "absolute",
+                    bottom: "10%",
+                    right: "10%",
+                    width: "250px",
+                    height: "250px",
+                    background: "hsl(0, 84%, 60%)",
+                    filter: "blur(100px)",
+                    opacity: 0.1,
+                    borderRadius: "50%",
+                }}></div>
+            </section>
+
+            {/* Categories Overview */}
+            <section class="card-gradient" style={{ padding: "4rem 1rem" }}>
+                <div class="container">
+                    <div style={{
+                        textAlign: "center",
+                        marginBottom: "3rem"
+                    }}>
+                        <h2 style={{
+                            fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
+                            fontWeight: 800,
+                            color: "var(--text)",
+                            marginBottom: "1rem"
+                        }}>
+                            Learning Categories Overview
+                        </h2>
+                        <p style={{
+                            color: "var(--muted)",
+                            fontSize: "1.1rem",
+                            maxWidth: "600px",
+                            margin: "0 auto",
+                            lineHeight: 1.6
+                        }}>
+                            From programming to photography, explore diverse learning paths with thousands of discounted courses
+                        </p>
+                    </div>
+
+                    <div style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+                        gap: "2rem",
+                        marginBottom: "4rem"
+                    }}>
+                        <div style={{
+                            background: "var(--card)",
+                            padding: "2rem",
+                            borderRadius: "20px",
+                            border: "1px solid var(--border)",
+                            textAlign: "center",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <div style={{
+                                width: "60px",
+                                height: "60px",
+                                background: "var(--brand)",
+                                borderRadius: "16px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                margin: "0 auto 1.5rem"
+                            }}>
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                            </div>
+                            <h3 style={{ color: "var(--brand)", fontSize: "1.8rem", marginBottom: "0.5rem", fontWeight: 800 }}>
+                                {totalCategories}+
+                            </h3>
+                            <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "1rem", marginBottom: "0.5rem", fontWeight: 600 }}>
+                                Categories
+                            </p>
+                            <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "0.9rem" }}>
+                                Diverse learning topics
+                            </p>
+                        </div>
+
+                        <div style={{
+                            background: "var(--card)",
+                            padding: "2rem",
+                            borderRadius: "20px",
+                            border: "1px solid var(--border)",
+                            textAlign: "center",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <div style={{
+                                width: "60px",
+                                height: "60px",
+                                background: "hsl(35, 90%, 68%)",
+                                borderRadius: "16px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                margin: "0 auto 1.5rem"
+                            }}>
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+                                    <path d="M12 2L3.09 6.26L3 9.18l9 4.82 9-4.82V6.26L12 2zM3 11.77l-.78-.42L3.5 11 3 11.77z"/>
+                                </svg>
+                            </div>
+                            <h3 style={{ color: "hsl(35, 90%, 68%)", fontSize: "1.8rem", marginBottom: "0.5rem", fontWeight: 800 }}>
+                                {totalCourses}+
+                            </h3>
+                            <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "1rem", marginBottom: "0.5rem", fontWeight: 600 }}>
+                                Udemy Courses
+                            </p>
+                            <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "0.9rem" }}>
+                                Professional training content
+                            </p>
+                        </div>
+
+                        <div style={{
+                            background: "var(--card)",
+                            padding: "2rem",
+                            borderRadius: "20px",
+                            border: "1px solid var(--border)",
+                            textAlign: "center",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <div style={{
+                                width: "60px",
+                                height: "60px",
+                                background: "hsl(180, 50%, 40%)",
+                                borderRadius: "16px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                margin: "0 auto 1.5rem"
+                            }}>
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+                                    <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10z"/>
+                                </svg>
+                            </div>
+                            <h3 style={{ color: "hsl(180, 50%, 40%)", fontSize: "1.8rem", marginBottom: "0.5rem", fontWeight: 800 }}>
+                                100%
+                            </h3>
+                            <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "1rem", marginBottom: "0.5rem", fontWeight: 600 }}>
+                                Free Access
+                            </p>
+                            <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "0.9rem" }}>
+                                No registration required
+                            </p>
+                        </div>
+
+                        <div style={{
+                            background: "var(--card)",
+                            padding: "2rem",
+                            borderRadius: "20px",
+                            border: "1px solid var(--border)",
+                            textAlign: "center",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <div style={{
+                                width: "60px",
+                                height: "60px",
+                                background: "hsl(0, 84%, 60%)",
+                                borderRadius: "16px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                margin: "0 auto 1.5rem"
+                            }}>
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                            </div>
+                            <h3 style={{ color: "hsl(0, 84%, 60%)", fontSize: "1.8rem", marginBottom: "0.5rem", fontWeight: 800 }}>
+                                {Math.round(totalCourses/totalCategories)}
+                            </h3>
+                            <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "1rem", marginBottom: "0.5rem", fontWeight: 600 }}>
+                                Avg per Category
+                            </p>
+                            <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "0.9rem" }}>
+                                Rich learning options
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Categories Grid */}
+            <section class="hero-gradient" style={{ padding: "4rem 1rem" }}>
+                <div class="container" style={{ maxWidth: "1400px" }}>
+                    {/* Categories Header */}
+                    <div style={{
+                        textAlign: "center",
+                        marginBottom: "3rem"
+                    }}>
+                        <h2 style={{
+                            fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
+                            fontWeight: 800,
+                            color: "var(--text)",
+                            marginBottom: "1rem"
+                        }}>
+                            Browse All Categories
+                        </h2>
+                        <p style={{
+                            color: "var(--muted)",
+                            fontSize: "1.1rem",
+                            maxWidth: "600px",
+                            margin: "0 auto",
+                            lineHeight: 1.6
+                        }}>
+                            Click on any category below to explore curated Udemy coupons and deals in that topic area
+                        </p>
+                    </div>
+
+                    {list.length === 0 ? (
+                        <div style={{
+                            background: "var(--card)",
+                            padding: "3rem",
+                            borderRadius: "24px",
+                            border: "1px solid var(--border)",
+                            textAlign: "center",
+                            position: "relative",
+                            overflow: "hidden"
+                        }}>
+                            <div style={{
+                                position: "absolute",
+                                top: "-50px",
+                                right: "-50px",
+                                width: "150px",
+                                height: "150px",
+                                background: "hsl(0, 84%, 60%)",
+                                borderRadius: "50%",
+                                opacity: 0.1
+                            }}></div>
+                            <h3 style={{ color: "var(--text)", marginBottom: "1rem", fontSize: "1.5rem", fontWeight: 700 }}>
+                                No Categories Found
+                            </h3>
+                            <p style={{ color: "var(--muted)", marginBottom: "2rem", lineHeight: "1.6" }}>
+                                We loaded {deals.length} deals but couldn't organize them into categories. Please try refreshing or check back later.
+                            </p>
+                            <a href="/deals" style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "0.5rem",
+                                padding: "1rem 2rem",
+                                background: "var(--brand)",
+                                color: "var(--bg)",
+                                textDecoration: "none",
+                                borderRadius: "12px",
+                                fontSize: "1.1rem",
+                                fontWeight: 600,
+                                transition: "all 0.3s ease"
+                            }}>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                                Browse All Deals
+                            </a>
+                        </div>
+                    ) : (
+                        <div style={{
+                            display: "grid",
+                            gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+                            gap: "2rem"
+                        }}>
+                            {list.map((c) => (
+                                <div style={{
+                                    background: "var(--card)",
+                                    border: "1px solid var(--border)",
+                                    borderRadius: "20px",
+                                    padding: "2rem",
+                                    transition: "all 0.3s ease",
+                                    cursor: "pointer",
+                                    position: "relative",
+                                    overflow: "hidden"
+                                }}>
+                                    <div style={{
+                                        position: "absolute",
+                                        top: "0",
+                                        right: "0",
+                                        width: "100px",
+                                        height: "100px",
+                                        background: "var(--brand)",
+                                        borderRadius: "0 20px 0 50px",
+                                        opacity: 0.05
+                                    }}></div>
+                                    <a
+                                        href={`/categories/${c.slug}`}
+                                        style={{ textDecoration: "none", color: "inherit" }}
+                                    >
+                                        <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.5rem", position: "relative", zIndex: 1 }}>
+                                            <div style={{
+                                                width: "50px",
+                                                height: "50px",
+                                                borderRadius: "14px",
+                                                background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center",
+                                                color: "white",
+                                                fontWeight: "bold",
+                                                fontSize: "1.3rem",
+                                                boxShadow: "0 4px 12px rgba(0,0,0,0.1)"
+                                            }}>
+                                                {c.name.charAt(0)}
+                                            </div>
+                                            <div style={{ flex: 1 }}>
+                                                <h3 style={{
+                                                    margin: 0,
+                                                    color: "var(--text)",
+                                                    fontSize: "1.2rem",
+                                                    fontWeight: "700",
+                                                    marginBottom: "0.25rem"
+                                                }}>
+                                                    {c.name}
+                                                </h3>
+                                                <p style={{
+                                                    margin: 0,
+                                                    color: "var(--muted)",
+                                                    fontSize: "0.95rem"
+                                                }}>
+                                                    {c.count} courses available
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        {c.subs.size > 0 && (
+                                            <div style={{ position: "relative", zIndex: 1 }}>
+                                                <p style={{
+                                                    color: "var(--muted)",
+                                                    fontSize: "0.85rem",
+                                                    marginBottom: "0.75rem",
+                                                    fontWeight: 600
+                                                }}>
+                                                    Popular Topics:
+                                                </p>
+                                                <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+                                                    {Array.from(c.subs.entries())
+                                                        .sort((a, b) => b[1] - a[1])
+                                                        .slice(0, 3)
+                                                        .map(([sub, n]) => (
+                                                            <span
+                                                                style={{
+                                                                    padding: "0.4rem 0.8rem",
+                                                                    borderRadius: "20px",
+                                                                    fontSize: "0.8rem",
+                                                                    backgroundColor: "hsl(45, 100%, 96%)",
+                                                                    border: "1px solid hsl(45, 100%, 85%)",
+                                                                    color: "hsl(35, 90%, 30%)",
+                                                                    fontWeight: "500"
+                                                                }}
+                                                                title={`${sub} (${n} courses)`}
+                                                            >
+                                                                {sub}
+                                                            </span>
+                                                        ))}
+                                                    {c.subs.size > 3 && (
+                                                        <span style={{
+                                                            fontSize: "0.8rem",
+                                                            color: "var(--muted)",
+                                                            padding: "0.4rem 0.8rem",
+                                                            fontWeight: "500"
+                                                        }}>
+                                                            +{c.subs.size - 3} more
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </a>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {/* Call to Action */}
+                    <div style={{
+                        textAlign: "center",
+                        marginTop: "4rem",
+                        padding: "3rem",
+                        background: "var(--card)",
+                        borderRadius: "24px",
+                        border: "1px solid var(--border)",
+                        position: "relative",
+                        overflow: "hidden"
+                    }}>
+                        <div style={{
+                            position: "absolute",
+                            top: "-50px",
+                            left: "-50px",
+                            width: "200px",
+                            height: "200px",
+                            background: "var(--brand)",
+                            borderRadius: "50%",
+                            opacity: 0.1
+                        }}></div>
+                        <div style={{
+                            position: "absolute",
+                            bottom: "-50px",
+                            right: "-50px",
+                            width: "150px",
+                            height: "150px",
+                            background: "hsl(35, 90%, 68%)",
+                            borderRadius: "50%",
+                            opacity: 0.1
+                        }}></div>
+                        <h3 style={{
+                            color: "var(--text)",
+                            fontSize: "1.8rem",
+                            fontWeight: 700,
+                            marginBottom: "1rem",
+                            position: "relative",
+                            zIndex: 1
+                        }}>
+                            Can't Find What You're Looking For?
+                        </h3>
+                        <p style={{
+                            color: "var(--muted)",
+                            marginBottom: "2rem",
+                            maxWidth: "600px",
+                            margin: "0 auto 2rem",
+                            lineHeight: 1.6,
+                            position: "relative",
+                            zIndex: 1
+                        }}>
+                            Browse our complete collection of Udemy deals and find exactly what you need to advance your skills.
+                        </p>
+                        <div style={{
+                            display: "flex",
+                            gap: "1rem",
+                            justifyContent: "center",
+                            flexWrap: "wrap",
+                            position: "relative",
+                            zIndex: 1
+                        }}>
+                            <a href="/deals" style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "0.5rem",
+                                padding: "1rem 2rem",
+                                background: "var(--brand)",
+                                color: "var(--bg)",
+                                textDecoration: "none",
+                                borderRadius: "12px",
+                                fontSize: "1.1rem",
+                                fontWeight: 600,
+                                transition: "all 0.3s ease",
+                                boxShadow: "0 4px 12px rgba(0,0,0,0.15)"
+                            }}>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                                Browse All Deals
+                            </a>
+                            <a href="/contact" style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "0.5rem",
+                                padding: "1rem 2rem",
+                                background: "transparent",
+                                color: "var(--brand)",
+                                textDecoration: "none",
+                                borderRadius: "12px",
+                                fontSize: "1.1rem",
+                                fontWeight: 600,
+                                transition: "all 0.3s ease",
+                                border: "2px solid var(--brand)"
+                            }}>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                                </svg>
+                                Request Category
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
     </div>
 
-    {list.length === 0 ? (
-      <div style={{ 
-        textAlign: "center", 
-        padding: "3rem", 
-        background: "var(--card)", 
-        borderRadius: "20px",
-        border: "1px solid var(--border)"
-      }}>
-        <h3 style={{ color: "var(--text)", marginBottom: "1rem", fontSize: "1.5rem" }}>
-          No Categories Found
-        </h3>
-        <p style={{ color: "var(--muted)", marginBottom: "1.5rem", lineHeight: "1.6" }}>
-          We loaded {deals.length} deals but couldn't resolve any categories. Try refreshing the deals source or verify each deal includes a category value.
-        </p>
-        <a href="/deals" style={{ 
-          padding: "12px 24px",
-          background: "linear-gradient(135deg, #FFC107 0%, #FFD54F 100%)",
-          border: "2px solid #FFC107",
-          borderRadius: "8px",
-          color: "white",
-          textDecoration: "none",
-          fontWeight: "600",
-          display: "inline-block"
-        }}>
-          Browse All Deals
-        </a>
-      </div>
-    ) : (
-      <div style={{ 
-        display: "grid", 
-        gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", 
-        gap: "1.5rem"
-      }}>
-        {list.map((c) => (
-          <div style={{ 
-            background: "var(--card)", 
-            border: "1px solid var(--border)",
-            borderRadius: "16px",
-            padding: "1.5rem",
-            transition: "all 0.3s ease",
-            cursor: "pointer"
-          }}>
-            <a 
-              href={`/categories/${c.slug}`} 
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1rem" }}>
-                <div style={{
-                  width: "40px",
-                  height: "40px",
-                  borderRadius: "10px",
-                  background: "linear-gradient(135deg, #FFC107 0%, #FFD54F 100%)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "white",
-                  fontWeight: "bold",
-                  fontSize: "1.2rem"
-                }}>
-                  {c.name.charAt(0)}
-                </div>
-                <div style={{ flex: 1 }}>
-                  <h3 style={{ 
-                    margin: 0, 
-                    color: "var(--text)", 
-                    fontSize: "1.1rem",
-                    fontWeight: "700"
-                  }}>
-                    {c.name}
-                  </h3>
-                  <p style={{ 
-                    margin: 0, 
-                    color: "var(--muted)", 
-                    fontSize: "0.9rem" 
-                  }}>
-                    {c.count} courses available
-                  </p>
-                </div>
-              </div>
-              
-              {c.subs.size > 0 && (
-                <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-                  {Array.from(c.subs.entries())
-                    .sort((a, b) => b[1] - a[1])
-                    .slice(0, 3)
-                    .map(([sub, n]) => (
-                      <span
-                        style={{
-                          padding: "0.25rem 0.75rem",
-                          borderRadius: "20px",
-                          fontSize: "0.8rem",
-                          backgroundColor: "rgba(255, 193, 7, 0.1)",
-                          border: "1px solid rgba(255, 193, 7, 0.3)",
-                          color: "#FFC107",
-                          fontWeight: "500"
-                        }}
-                        title={`${sub} (${n})`}
-                      >
-                        {sub}
-                      </span>
-                    ))}
-                  {c.subs.size > 3 && (
-                    <span style={{ 
-                      fontSize: "0.8rem", 
-                      color: "var(--muted)",
-                      padding: "0.25rem 0.75rem"
-                    }}>
-                      +{c.subs.size - 3} more
-                    </span>
-                  )}
-                </div>
-              )}
-            </a>
-          </div>
-        ))}
-      </div>
-    )}
-  </div>
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, hsl(222, 47%, 7%) 0%, hsl(222, 43%, 10%) 100%);
+        }
+
+        .card-gradient {
+            background: var(--bg);
+        }
+    </style>
 </Layout>

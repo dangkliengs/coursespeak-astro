@@ -30,32 +30,98 @@ const topicsData = (Object.entries(topicCounts) as [string, number][])
 
 const topics = topicsData.map(t => t.name);
 
-const title = "Udemy Course Topics 2026 | Find Your Perfect Course by Topic";
-const description = "Browse Udemy course topics in 2026. Discover specialized courses in Python, Web Development, Data Science, AI, Machine Learning, Cybersecurity, and more with exclusive deals and expert instructors.";
+// Calculate statistics for better SEO
+const totalTopics = topics.length;
+const totalCourses = allDeals.length;
+const avgCoursesPerTopic = Math.round(totalCourses / totalTopics);
+
+const title = `Course Topics | ${totalTopics}+ Udemy Topics, ${totalCourses}+ Courses`;
+const description = `Browse ${totalTopics}+ specialized course topics with ${totalCourses}+ Udemy courses. Find Python, web dev, data science, AI & cybersecurity deals.`;
 
 const canonicalUrl = "https://coursespeak.com/topics";
 
+// Enhanced JSON-LD Structured Data for SEO
 const structuredData = {
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "WebPage",
+      "@type": "CollectionPage",
       "@id": canonicalUrl,
       "url": canonicalUrl,
       "name": title,
       "description": description,
       "isPartOf": {
-        "@type": "WebSite",
-        "@id": "https://coursespeak.com",
-        "name": "CourseSpeak",
-        "description": "Find the best Udemy course deals and discounts"
+        "@id": "https://coursespeak.com"
       },
       "primaryImageOfPage": {
         "@type": "ImageObject",
         "url": "https://coursespeak.com/logo.svg"
       },
       "datePublished": "2024-01-01",
-      "dateModified": new Date().toISOString().split('T')[0]
+      "dateModified": new Date().toISOString().split('T')[0],
+      "inLanguage": "en-US",
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://coursespeak.com"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Course Topics",
+            "item": canonicalUrl
+          }
+        ]
+      },
+      "mainEntity": {
+        "@type": "ItemList",
+        "name": "Udemy Course Topics",
+        "description": `Complete list of ${totalTopics} Udemy course topics with deals and courses`,
+        "numberOfItems": totalTopics,
+        "itemListElement": topicsData.slice(0, 20).map((topicData, index) => ({
+          "@type": "ListItem",
+          "position": index + 1,
+          "item": {
+            "@type": "Thing",
+            "name": `Best Udemy Courses for ${topicData.name}`,
+            "description": getTopicDescription(topicData.name),
+            "url": `https://coursespeak.com/topics/${topicData.slug}`
+          }
+        }))
+      }
+    },
+    {
+      "@type": "Dataset",
+      "name": "CourseSpeak Udemy Topics Dataset",
+      "description": "Comprehensive dataset of Udemy course topics and specialized learning areas",
+      "url": canonicalUrl,
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "provider": {
+        "@id": "https://coursespeak.com/#organization"
+      },
+      "datePublished": "2024-01-01",
+      "dateModified": new Date().toISOString().split('T')[0],
+      "variableMeasured": [
+        {
+          "@type": "PropertyValue",
+          "name": "Total Topics",
+          "value": totalTopics
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "Total Courses",
+          "value": totalCourses
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "Average Courses per Topic",
+          "value": avgCoursesPerTopic
+        }
+      ]
     },
     {
       "@type": "BreadcrumbList",
@@ -190,224 +256,691 @@ function getTopicDescription(topic: string): string {
   <meta name="keywords" content="Udemy courses, online learning, course deals, Python courses, web development, data science, AI courses, programming tutorials, Udemy discounts" />
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
   <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
-  <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "2rem 1rem" }}>
-    {/* Breadcrumbs */}
-    <nav style={{ marginBottom: "2rem", fontSize: "0.9rem", color: "var(--muted)" }} aria-label="Breadcrumb">
-      <a href="/" style={{ color: "var(--brand)", textDecoration: "none" }}>Home</a>
-      <span style={{ margin: "0 0.5rem" }}>›</span>
-      <span>Course Topics</span>
-    </nav>
 
-    {/* Page Header */}
-    <div style={{ textAlign: "center", marginBottom: "3rem" }}>
-      <h1 style={{
-        fontSize: "2.5rem",
-        fontWeight: "800",
-        marginBottom: "1rem",
-        background: "linear-gradient(135deg, #FFC107 0%, #FFD54F 100%)",
-        WebkitBackgroundClip: "text",
-        WebkitTextFillColor: "transparent",
-        backgroundClip: "text"
-      }}>
-        Course Topics
-      </h1>
-      <p style={{
-        fontSize: "1.1rem",
-        color: "var(--muted)",
-        maxWidth: "600px",
-        margin: "0 auto",
-        lineHeight: "1.6"
-      }}>
-        Browse our collection of specialized course topics. Each topic features curated Udemy courses with exclusive deals and discounts.
-      </p>
-      <a href="/deals" style={{
-        color: "#FFC107",
-        textDecoration: "none",
-        fontWeight: "600",
-        display: "inline-block",
-        marginTop: "1rem"
-      }}>
-        ← Back to all deals
-      </a>
-    </div>
-
-    {/* Topics Grid */}
-    <div style={{
-      display: "grid",
-      gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-      gap: "1.5rem",
-      marginBottom: "3rem"
-    }}>
-      {topicsData.map((topicData, index) => {
-        const { name: topic, slug: topicSlug } = topicData;
-        const dealCount = allDeals.filter(deal => deal.subcategory === topic).length;
-        const category = allDeals.find(deal => deal.subcategory === topic)?.category || 'Development';
-        const categoryImage = `/categories/${category.toLowerCase().replace(/\s+/g, '-')}.svg`;
-        const topicIcon = getTopicIcon(topic);
-        const topicDescription = getTopicDescription(topic);
-        const gradient = gradients[index % gradients.length];
-
-        return (
+  <div class="hero-gradient" style={{ minHeight: "100vh", color: "var(--text)" }}>
+    <main>
+      {/* Hero Section */}
+      <section
+        class="hero-gradient"
+        style={{
+          position: "relative",
+          padding: "8rem 1rem 4rem",
+          textAlign: "center",
+          overflow: "hidden",
+        }}
+      >
+        <div class="container" style={{ position: "relative", zIndex: 10 }}>
           <div style={{
-            background: "var(--card)",
-            borderRadius: "16px",
-            border: "1px solid var(--border)",
-            overflow: "hidden",
-            transition: "all 0.3s ease",
-            position: "relative",
-            boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-          }}
-          onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.15)'"
-          onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'"
-          >
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.5rem",
+            background: "var(--brand-soft)",
+            padding: "0.5rem 1rem",
+            borderRadius: "9999px",
+            marginBottom: "2rem",
+            fontSize: "0.9rem",
+            color: "var(--brand)",
+            fontWeight: 600
+          }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            Specialized Topics
+          </div>
 
-            {/* Header with image */}
+          <h1
+            style={{
+              fontSize: "clamp(2.5rem, 5vw, 4rem)",
+              fontWeight: 800,
+              lineHeight: 1.1,
+              marginBottom: "1.5rem",
+              maxWidth: "1200px",
+              margin: "0 auto 1.5rem"
+            }}
+          >
+            <span style={{
+              background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text"
+            }}>
+              Discover Your
+            </span>
+            <br/>
+            <span style={{
+              background: "linear-gradient(135deg, var(--text) 0%, var(--muted) 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text"
+            }}>
+              Perfect Learning Path
+            </span>
+          </h1>
+          <p
+            style={{
+              fontSize: "clamp(1.1rem, 2.5vw, 1.4rem)",
+              color: "var(--muted)",
+              maxWidth: "700px",
+              margin: "0 auto 3rem",
+              lineHeight: 1.6,
+              fontWeight: 400
+            }}
+          >
+            Explore {totalTopics}+ specialized course topics with {totalCourses}+ premium Udemy courses. From Python programming to AI, find expert-led courses with exclusive deals.
+          </p>
+
+          {/* Statistics Badges */}
+          <div style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "1rem",
+            flexWrap: "wrap",
+            marginBottom: "3rem"
+          }}>
             <div style={{
-              minHeight: "140px",
-              background: gradient,
               display: "flex",
               alignItems: "center",
-              justifyContent: "center",
-              position: "relative",
-              overflow: "hidden",
-              textAlign: "center",
-              padding: "1rem"
+              gap: "0.5rem",
+              background: "var(--card)",
+              padding: "0.75rem 1.5rem",
+              borderRadius: "12px",
+              border: "1px solid var(--border)"
             }}>
-              <div style={{
-                fontSize: "36px",
-                opacity: "0.9",
-                fontWeight: "bold",
-                color: "rgba(255,255,255,0.9)",
-                textShadow: "2px 2px 4px rgba(0,0,0,0.3)"
-              }}>
-                {topicIcon}
-              </div>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style={{ color: "var(--brand)" }}>
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              <span style={{ fontWeight: 600, color: "var(--text)" }}>{totalTopics}+ Topics</span>
             </div>
-
-            {/* Content */}
-            <div style={{ padding: "1.5rem" }}>
-              <h3 style={{
-                fontSize: "1.1rem",
-                fontWeight: 700,
-                color: "var(--text)",
-                marginBottom: "0.5rem",
-                lineHeight: 1.4,
-                display: "-webkit-box",
-                WebkitLineClamp: 3,
-                WebkitBoxOrient: "vertical",
-                overflow: "hidden"
-              }}>
-                Best Udemy Courses for {topic} in 2026
-              </h3>
-
-              <div style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                marginBottom: "1rem"
-              }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--brand)">
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                </svg>
-                <span style={{
-                  color: "var(--muted)",
-                  fontSize: "0.9rem",
-                  fontWeight: 600
-                }}>
-                  {dealCount} course{dealCount !== 1 ? 's' : ''} available
-                </span>
-              </div>
-
-              <p style={{
-                color: "var(--muted)",
-                fontSize: "0.85rem",
-                lineHeight: "1.5",
-                marginBottom: "1rem",
-                display: "-webkit-box",
-                WebkitLineClamp: 3,
-                WebkitBoxOrient: "vertical",
-                overflow: "hidden"
-              }}>
-                {topicDescription}
-              </p>
-
-              <a
-                href={`/topics/${topicSlug}`}
-                style={{
-                  display: "block",
-                  width: "100%",
-                  padding: "0.75rem",
-                  background: "linear-gradient(135deg, #FFC107 0%, #FFD54F 100%)",
-                  color: "var(--bg)",
-                  textDecoration: "none",
-                  borderRadius: "8px",
-                  textAlign: "center",
-                  fontWeight: 600,
-                  fontSize: "0.9rem",
-                  transition: "all 0.3s ease",
-                  border: "none",
-                  cursor: "pointer"
-                }}
-                onmouseover="this.style.transform='scale(1.02)'"
-                onmouseout="this.style.transform='scale(1)'"
-              >
-                Browse Courses
-              </a>
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              background: "var(--card)",
+              padding: "0.75rem 1.5rem",
+              borderRadius: "12px",
+              border: "1px solid var(--border)"
+            }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style={{ color: "hsl(35, 90%, 68%)" }}>
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              <span style={{ fontWeight: 600, color: "var(--text)" }}>{totalCourses}+ Courses</span>
+            </div>
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              background: "var(--card)",
+              padding: "0.75rem 1.5rem",
+              borderRadius: "12px",
+              border: "1px solid var(--border)"
+            }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style={{ color: "hsl(180, 50%, 40%)" }}>
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              <span style={{ fontWeight: 600, color: "var(--text)" }}>Expert Instructors</span>
             </div>
           </div>
-        );
-      })}
-    </div>
+        </div>
 
-    {/* Stats */}
-    <div style={{ textAlign: "center", padding: "2rem", background: "var(--card)", borderRadius: "12px", border: "1px solid var(--border)" }}>
-      <h3 style={{ color: "var(--text)", marginBottom: "0.5rem", fontSize: "1.5rem" }}>
-        Explore {topics.length} Topics
-      </h3>
-      <p style={{ color: "var(--muted)", margin: "0", fontSize: "1rem" }}>
-        From foundational programming to advanced data science, find courses that match your learning goals.
-      </p>
-    </div>
+        {/* Decorative elements */}
+        <div style={{
+          position: "absolute",
+          top: "20%",
+          left: "10%",
+          width: "300px",
+          height: "300px",
+          background: "var(--brand)",
+          filter: "blur(120px)",
+          opacity: 0.1,
+          borderRadius: "50%",
+        }}></div>
+        <div style={{
+          position: "absolute",
+          bottom: "10%",
+          right: "10%",
+          width: "250px",
+          height: "250px",
+          background: "hsl(0, 84%, 60%)",
+          filter: "blur(100px)",
+          opacity: 0.1,
+          borderRadius: "50%",
+        }}></div>
+      </section>
 
-    {/* FAQs */}
-    <div style={{ marginTop: "3rem", padding: "2rem", background: "var(--card)", borderRadius: "12px", border: "1px solid var(--border)" }}>
-      <h3 style={{ color: "var(--text)", marginBottom: "1.5rem", fontSize: "1.5rem", textAlign: "center" }}>
-        Frequently Asked Questions
-      </h3>
-      <div style={{ display: "grid", gap: "1.5rem" }}>
-        <div>
-          <h4 style={{ color: "var(--text)", marginBottom: "0.5rem", fontSize: "1.1rem" }}>
-            What are Udemy course topics?
-          </h4>
-          <p style={{ color: "var(--muted)", margin: "0", fontSize: "0.95rem", lineHeight: "1.6" }}>
-            Course topics categorize Udemy courses by subject areas like Python, Web Development, Data Science, AI, and more. Each topic page features curated deals on high-quality courses from expert instructors.
-          </p>
+      {/* Topics Overview */}
+      <section class="card-gradient" style={{ padding: "4rem 1rem" }}>
+        <div class="container">
+          <div style={{
+            textAlign: "center",
+            marginBottom: "3rem"
+          }}>
+            <h2 style={{
+              fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
+              fontWeight: 800,
+              color: "var(--text)",
+              marginBottom: "1rem"
+            }}>
+              Specialized Learning Areas
+            </h2>
+            <p style={{
+              color: "var(--muted)",
+              fontSize: "1.1rem",
+              maxWidth: "600px",
+              margin: "0 auto",
+              lineHeight: 1.6
+            }}>
+              Master new skills with comprehensive courses in high-demand fields. Each topic features expert instruction and exclusive Udemy deals.
+            </p>
+          </div>
+
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+            gap: "2rem",
+            marginBottom: "4rem"
+          }}>
+            <div style={{
+              background: "var(--card)",
+              padding: "2rem",
+              borderRadius: "20px",
+              border: "1px solid var(--border)",
+              textAlign: "center",
+              transition: "all 0.3s ease"
+            }}>
+              <div style={{
+                width: "60px",
+                height: "60px",
+                background: "var(--brand)",
+                borderRadius: "16px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                margin: "0 auto 1.5rem"
+              }}>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+              </div>
+              <h3 style={{ color: "var(--brand)", fontSize: "1.8rem", marginBottom: "0.5rem", fontWeight: 800 }}>
+                {totalTopics}+
+              </h3>
+              <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "1rem", marginBottom: "0.5rem", fontWeight: 600 }}>
+                Specialized Topics
+              </p>
+              <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "0.9rem" }}>
+                Programming to design
+              </p>
+            </div>
+
+            <div style={{
+              background: "var(--card)",
+              padding: "2rem",
+              borderRadius: "20px",
+              border: "1px solid var(--border)",
+              textAlign: "center",
+              transition: "all 0.3s ease"
+            }}>
+              <div style={{
+                width: "60px",
+                height: "60px",
+                background: "hsl(35, 90%, 68%)",
+                borderRadius: "16px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                margin: "0 auto 1.5rem"
+              }}>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+                  <path d="M12 2L3.09 6.26L3 9.18l9 4.82 9-4.82V6.26L12 2zM3 11.77l-.78-.42L3.5 11 3 11.77z"/>
+                </svg>
+              </div>
+              <h3 style={{ color: "hsl(35, 90%, 68%)", fontSize: "1.8rem", marginBottom: "0.5rem", fontWeight: 800 }}>
+                {totalCourses}+
+              </h3>
+              <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "1rem", marginBottom: "0.5rem", fontWeight: 600 }}>
+                Premium Courses
+              </p>
+              <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "0.9rem" }}>
+                Expert instruction
+              </p>
+            </div>
+
+            <div style={{
+              background: "var(--card)",
+              padding: "2rem",
+              borderRadius: "20px",
+              border: "1px solid var(--border)",
+              textAlign: "center",
+              transition: "all 0.3s ease"
+            }}>
+              <div style={{
+                width: "60px",
+                height: "60px",
+                background: "hsl(180, 50%, 40%)",
+                borderRadius: "16px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                margin: "0 auto 1.5rem"
+              }}>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+                  <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10z"/>
+                </svg>
+              </div>
+              <h3 style={{ color: "hsl(180, 50%, 40%)", fontSize: "1.8rem", marginBottom: "0.5rem", fontWeight: 800 }}>
+                24/7
+              </h3>
+              <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "1rem", marginBottom: "0.5rem", fontWeight: 600 }}>
+                Lifetime Access
+              </p>
+              <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "0.9rem" }}>
+                Learn at your pace
+              </p>
+            </div>
+
+            <div style={{
+              background: "var(--card)",
+              padding: "2rem",
+              borderRadius: "20px",
+              border: "1px solid var(--border)",
+              textAlign: "center",
+              transition: "all 0.3s ease"
+            }}>
+              <div style={{
+                width: "60px",
+                height: "60px",
+                background: "hsl(0, 84%, 60%)",
+                borderRadius: "16px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                margin: "0 auto 1.5rem"
+              }}>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+              </div>
+              <h3 style={{ color: "hsl(0, 84%, 60%)", fontSize: "1.8rem", marginBottom: "0.5rem", fontWeight: 800 }}>
+                {avgCoursesPerTopic}
+              </h3>
+              <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "1rem", marginBottom: "0.5rem", fontWeight: 600 }}>
+                Avg per Topic
+              </p>
+              <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "0.9rem" }}>
+                Rich course selection
+              </p>
+            </div>
+          </div>
         </div>
-        <div>
-          <h4 style={{ color: "var(--text)", marginBottom: "0.5rem", fontSize: "1.1rem" }}>
-            How do I find the best deals on Udemy courses?
-          </h4>
-          <p style={{ color: "var(--muted)", margin: "0", fontSize: "0.95rem", lineHeight: "1.6" }}>
-            Browse our topics page to discover courses by category, then check individual course pages for current deals, ratings, and student reviews. We regularly update with the latest Udemy discounts.
-          </p>
+      </section>
+
+      {/* Topics Grid Section */}
+      <section class="hero-gradient" style={{ padding: "4rem 1rem" }}>
+        <div class="container" style={{ maxWidth: "1400px" }}>
+          {/* Topics Header */}
+          <div style={{
+            textAlign: "center",
+            marginBottom: "3rem"
+          }}>
+            <h2 style={{
+              fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
+              fontWeight: 800,
+              color: "var(--text)",
+              marginBottom: "1rem"
+            }}>
+              Browse All Topics
+            </h2>
+            <p style={{
+              color: "var(--muted)",
+              fontSize: "1.1rem",
+              maxWidth: "600px",
+              margin: "0 auto",
+              lineHeight: 1.6
+            }}>
+              Click on any topic below to explore curated Udemy courses with expert instruction and exclusive deals in that specialized area.
+            </p>
+          </div>
+
+                <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+            gap: "2rem"
+          }}>
+            {topicsData.map((topicData, index) => {
+              const { name: topic, slug: topicSlug } = topicData;
+              const dealCount = allDeals.filter(deal => deal.subcategory === topic).length;
+              const topicIcon = getTopicIcon(topic);
+              const topicDescription = getTopicDescription(topic);
+              const gradient = gradients[index % gradients.length];
+
+              return (
+                <div style={{
+                  background: "var(--card)",
+                  border: "1px solid var(--border)",
+                  borderRadius: "20px",
+                  overflow: "hidden",
+                  transition: "all 0.3s ease",
+                  position: "relative",
+                  cursor: "pointer"
+                }}
+                onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 12px 24px rgba(0,0,0,0.15)'"
+                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'"
+                >
+
+                  {/* Header with gradient background */}
+                  <div style={{
+                    minHeight: "160px",
+                    background: gradient,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    position: "relative",
+                    overflow: "hidden",
+                    textAlign: "center",
+                    padding: "1.5rem"
+                  }}>
+                    <div style={{
+                      position: "absolute",
+                      top: "0",
+                      right: "0",
+                      width: "80px",
+                      height: "80px",
+                      background: "rgba(255,255,255,0.1)",
+                      borderRadius: "0 20px 0 50px"
+                    }}></div>
+                    <div style={{
+                      fontSize: "2.5rem",
+                      fontWeight: "800",
+                      color: "rgba(255,255,255,0.95)",
+                      textShadow: "2px 2px 8px rgba(0,0,0,0.3)",
+                      lineHeight: 1.2
+                    }}>
+                      {topic.charAt(0)}
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div style={{ padding: "2rem", position: "relative", zIndex: 1 }}>
+                    <h3 style={{
+                      fontSize: "1.2rem",
+                      fontWeight: 700,
+                      color: "var(--text)",
+                      marginBottom: "0.75rem",
+                      lineHeight: 1.4
+                    }}>
+                      {topic} Courses
+                    </h3>
+
+                    <div style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.5rem",
+                      marginBottom: "1rem"
+                    }}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style={{ color: "var(--brand)" }}>
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                      </svg>
+                      <span style={{
+                        color: "var(--muted)",
+                        fontSize: "0.9rem",
+                        fontWeight: 600
+                      }}>
+                        {dealCount} course{dealCount !== 1 ? 's' : ''} available
+                      </span>
+                    </div>
+
+                    <p style={{
+                      color: "var(--muted)",
+                      fontSize: "0.9rem",
+                      lineHeight: "1.5",
+                      marginBottom: "1.5rem",
+                      display: "-webkit-box",
+                      WebkitLineClamp: 3,
+                      WebkitBoxOrient: "vertical",
+                      overflow: "hidden"
+                    }}>
+                      {topicDescription}
+                    </p>
+
+                    <a
+                      href={`/topics/${topicSlug}`}
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        padding: "0.875rem 1.5rem",
+                        background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)",
+                        color: "white",
+                        textDecoration: "none",
+                        borderRadius: "12px",
+                        fontWeight: 600,
+                        fontSize: "0.95rem",
+                        transition: "all 0.3s ease",
+                        width: "100%",
+                        justifyContent: "center",
+                        boxShadow: "0 4px 12px rgba(0,0,0,0.15)"
+                      }}
+                    >
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                      </svg>
+                      Explore {topic}
+                    </a>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
         </div>
-        <div>
-          <h4 style={{ color: "var(--text)", marginBottom: "0.5rem", fontSize: "1.1rem" }}>
-            Are Udemy courses worth it?
-          </h4>
-          <p style={{ color: "var(--muted)", margin: "0", fontSize: "0.95rem", lineHeight: "1.6" }}>
-            Yes, Udemy offers thousands of courses taught by industry experts. Many courses include lifetime access, certificates of completion, and money-back guarantees. Our topic pages help you find highly-rated courses in your area of interest.
-          </p>
+      </section>
+
+      {/* FAQ Section */}
+      <section class="card-gradient" style={{ padding: "4rem 1rem" }}>
+        <div class="container" style={{ maxWidth: "1000px" }}>
+          <div style={{
+            textAlign: "center",
+            marginBottom: "3rem"
+          }}>
+            <h2 style={{
+              fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
+              fontWeight: 800,
+              color: "var(--text)",
+              marginBottom: "1rem"
+            }}>
+              Frequently Asked Questions
+            </h2>
+            <p style={{
+              color: "var(--muted)",
+              fontSize: "1.1rem",
+              maxWidth: "600px",
+              margin: "0 auto",
+              lineHeight: 1.6
+            }}>
+              Get answers to common questions about our specialized course topics and Udemy learning platform
+            </p>
+          </div>
+
+          <div style={{ display: "grid", gap: "2rem" }}>
+            <div style={{
+              background: "var(--card)",
+              padding: "2rem",
+              borderRadius: "20px",
+              border: "1px solid var(--border)",
+              transition: "all 0.3s ease"
+            }}>
+              <h3 style={{
+                color: "var(--brand)",
+                marginBottom: "1rem",
+                fontSize: "1.3rem",
+                fontWeight: "700",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.75rem"
+              }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                </svg>
+                What are Udemy course topics?
+              </h3>
+              <p style={{
+                color: "var(--muted)",
+                margin: 0,
+                lineHeight: "1.7",
+                fontSize: "1rem"
+              }}>
+                Course topics categorize Udemy courses by subject areas like Python, Web Development, Data Science, AI, and more. Each topic page features curated deals on high-quality courses from expert instructors.
+              </p>
+            </div>
+
+            <div style={{
+              background: "var(--card)",
+              padding: "2rem",
+              borderRadius: "20px",
+              border: "1px solid var(--border)",
+              transition: "all 0.3s ease"
+            }}>
+              <h3 style={{
+                color: "hsl(35, 90%, 68%)",
+                marginBottom: "1rem",
+                fontSize: "1.3rem",
+                fontWeight: "700",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.75rem"
+              }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+                How do I find the best deals?
+              </h3>
+              <p style={{
+                color: "var(--muted)",
+                margin: 0,
+                lineHeight: "1.7",
+                fontSize: "1rem"
+              }}>
+                Browse our topics page to discover courses by category, then check individual course pages for current deals, ratings, and student reviews. We regularly update with the latest Udemy discounts.
+              </p>
+            </div>
+
+            <div style={{
+              background: "var(--card)",
+              padding: "2rem",
+              borderRadius: "20px",
+              border: "1px solid var(--border)",
+              transition: "all 0.3s ease"
+            }}>
+              <h3 style={{
+                color: "hsl(180, 50%, 40%)",
+                marginBottom: "1rem",
+                fontSize: "1.3rem",
+                fontWeight: "700",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.75rem"
+              }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+                Are Udemy courses worth it?
+              </h3>
+              <p style={{
+                color: "var(--muted)",
+                margin: 0,
+                lineHeight: "1.7",
+                fontSize: "1rem"
+              }}>
+                Yes, Udemy offers thousands of courses taught by industry experts. Many courses include lifetime access, certificates of completion, and money-back guarantees. Our topic pages help you find highly-rated courses in your area of interest.
+              </p>
+            </div>
+          </div>
         </div>
-        <div>
-          <h4 style={{ color: "var(--text)", marginBottom: "0.5rem", fontSize: "1.1rem" }}>
-            How often are deals updated?
-          </h4>
-          <p style={{ color: "var(--muted)", margin: "0", fontSize: "0.95rem", lineHeight: "1.6" }}>
-            We monitor Udemy deals daily and update our listings with the latest discounts. Check back frequently or follow our newsletter for notifications about new deals across all course topics.
+      </section>
+
+      {/* Call to Action */}
+      <section class="hero-gradient" style={{ padding: "4rem 1rem" }}>
+        <div class="container" style={{ maxWidth: "800px", textAlign: "center" }}>
+          <h2 style={{
+            fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
+            fontWeight: 800,
+            color: "var(--text)",
+            marginBottom: "1rem"
+          }}>
+            Ready to Start Your Learning Journey?
+          </h2>
+          <p style={{
+            color: "var(--muted)",
+            fontSize: "1.1rem",
+            maxWidth: "600px",
+            margin: "0 auto 3rem",
+            lineHeight: 1.6
+          }}>
+            Choose from {totalTopics}+ specialized topics and access premium Udemy courses with exclusive deals. Transform your career with expert-led education.
           </p>
+
+          <div style={{
+            display: "flex",
+            gap: "1rem",
+            justifyContent: "center",
+            flexWrap: "wrap"
+          }}>
+            <a href="/categories" style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              padding: "1rem 2rem",
+              background: "var(--brand)",
+              color: "var(--bg)",
+              textDecoration: "none",
+              borderRadius: "12px",
+              fontSize: "1.1rem",
+              fontWeight: 600,
+              transition: "all 0.3s ease",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.15)"
+            }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              Browse Categories
+            </a>
+            <a href="/deals" style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              padding: "1rem 2rem",
+              background: "transparent",
+              color: "var(--brand)",
+              textDecoration: "none",
+              borderRadius: "12px",
+              fontSize: "1.1rem",
+              fontWeight: 600,
+              transition: "all 0.3s ease",
+              border: "2px solid var(--brand)"
+            }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              View All Deals
+            </a>
+          </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   </div>
+
+  <style>
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .hero-gradient {
+      background: linear-gradient(135deg, hsl(222, 47%, 7%) 0%, hsl(222, 43%, 10%) 100%);
+    }
+
+    .card-gradient {
+      background: var(--bg);
+    }
+  </style>
 </Layout>

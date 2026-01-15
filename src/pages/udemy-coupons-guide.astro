@@ -1,177 +1,878 @@
 ---
 import Layout from "../layouts/Layout.astro";
 
-const pageTitle = "Udemy Coupons Guide - How to Find and Use Free Udemy Coupons | CourseSpeak";
-const pageDescription = "Complete guide to finding and using Udemy coupons. Learn how to get 100% off Udemy courses, find valid coupon codes, and maximize your savings on online learning.";
+const pageTitle = "Udemy Coupons Guide | Find & Use Free Course Deals";
+const pageDescription = "Master Udemy coupons with our complete guide. Learn how to find valid coupon codes, get 100% off Udemy courses, and maximize savings on premium online education.";
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
-  <div style={{ background: "#0b0d12", minHeight: "100vh", color: "#e2e8f0" }}>
-    <div style={{ maxWidth: "800px", margin: "0 auto", padding: "2rem 1rem" }}>
-      <div style={{ marginBottom: "2rem" }}>
-        <h1 style={{ 
-          fontSize: "2.5rem", 
-          fontWeight: 700, 
-          color: "#fff", 
-          marginBottom: "1rem" 
-        }}>
-          Udemy Coupons Guide
-        </h1>
-        <p style={{ 
-          fontSize: "1.125rem", 
-          color: "#a9b0c0", 
-          marginBottom: "2rem" 
-        }}>
-          Learn how to find and use Udemy coupons to get courses for free or at huge discounts.
-        </p>
-      </div>
+    <!-- Udemy Coupons Guide Enhanced Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "GuidePage",
+          "@id": "https://coursespeak.com/udemy-coupons-guide",
+          "url": "https://coursespeak.com/udemy-coupons-guide",
+          "name": "Complete Udemy Coupons Guide - Find & Use Free Udemy Course Coupons",
+          "description": "Comprehensive guide to finding and using Udemy coupons. Learn how to get 100% off Udemy courses, find valid coupon codes, and maximize your savings on online learning.",
+          "isPartOf": {
+            "@id": "https://coursespeak.com"
+          },
+          "primaryImageOfPage": {
+            "@type": "ImageObject",
+            "url": "https://coursespeak.com/logo.svg"
+          },
+          "datePublished": "2023-01-01",
+          "dateModified": "2026-01-15",
+          "inLanguage": "en-US",
+          "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://coursespeak.com"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Udemy Coupons Guide",
+                "item": "https://coursespeak.com/udemy-coupons-guide"
+              }
+            ]
+          },
+          "mainEntity": {
+            "@type": "Guide",
+            "name": "How to Find and Use Udemy Coupons",
+            "description": "Step-by-step guide to discovering and applying Udemy coupon codes for free courses",
+            "about": {
+              "@type": "EducationalOrganization",
+              "name": "Udemy"
+            },
+            "hasPart": [
+              {
+                "@type": "HowToSection",
+                "name": "Finding Udemy Coupons",
+                "description": "Methods to discover valid coupon codes"
+              },
+              {
+                "@type": "HowToSection",
+                "name": "Using Udemy Coupons",
+                "description": "How to apply coupon codes for discounts"
+              },
+              {
+                "@type": "HowToSection",
+                "name": "Types of Udemy Coupons",
+                "description": "Different discount types available"
+              }
+            ]
+          }
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://coursespeak.com/#organization",
+          "name": "CourseSpeak",
+          "url": "https://coursespeak.com",
+          "logo": "https://coursespeak.com/logo.svg",
+          "description": "Free Udemy coupons platform providing verified discount codes",
+          "foundingDate": "2023",
+          "sameAs": [
+            "https://x.com/courses_peak",
+            "https://www.facebook.com/CourseSpeakOfficial/"
+          ]
+        }
+      ]
+    }
+    </script>
+    <div class="hero-gradient" style={{ minHeight: "100vh", color: "var(--text)" }}>
+        <main>
+            {/* Hero Section */}
+            <section
+                class="hero-gradient"
+                style={{
+                    position: "relative",
+                    padding: "8rem 1rem 4rem",
+                    textAlign: "center",
+                    overflow: "hidden",
+                }}
+            >
+                <div class="container" style={{ position: "relative", zIndex: 10 }}>
+                    <div style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        background: "var(--brand-soft)",
+                        padding: "0.5rem 1rem",
+                        borderRadius: "9999px",
+                        marginBottom: "2rem",
+                        fontSize: "0.9rem",
+                        color: "var(--brand)",
+                        fontWeight: 600
+                    }}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.41l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.41zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/>
+                        </svg>
+                        Complete Udemy Coupons Guide
+                    </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
-        <section>
-          <h2 style={{ fontSize: "1.875rem", fontWeight: 600, color: "#fff", marginBottom: "1rem" }}>
-            What Are Udemy Coupons?
-          </h2>
-          <p style={{ color: "#a9b0c0", lineHeight: 1.6 }}>
-            Udemy coupons are promotional codes that give you discounts on courses, ranging from 10% off to 100% off (free courses). 
-            These coupons are offered by instructors and Udemy itself to attract more students to their courses.
-          </p>
-        </section>
+                    <h1
+                        style={{
+                            fontSize: "clamp(2.5rem, 5vw, 4rem)",
+                            fontWeight: 800,
+                            lineHeight: 1.1,
+                            marginBottom: "1.5rem",
+                            maxWidth: "1200px",
+                            margin: "0 auto 1.5rem"
+                        }}
+                    >
+                        <span style={{
+                            background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)",
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent",
+                            backgroundClip: "text"
+                        }}>
+                            Udemy Coupons Guide
+                        </span>
+                        <br/>
+                        <span style={{
+                            background: "linear-gradient(135deg, var(--text) 0%, var(--muted) 100%)",
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent",
+                            backgroundClip: "text"
+                        }}>
+                            Master Free Course Deals
+                        </span>
+                    </h1>
+                    <p
+                        style={{
+                            fontSize: "clamp(1.1rem, 2.5vw, 1.4rem)",
+                            color: "var(--muted)",
+                            maxWidth: "700px",
+                            margin: "0 auto 3rem",
+                            lineHeight: 1.6,
+                            fontWeight: 400
+                        }}
+                    >
+                        Everything you need to know about finding and using Udemy coupon codes. Get premium courses for free with our expert guide.
+                    </p>
+                </div>
 
-        <section>
-          <h2 style={{ fontSize: "1.875rem", fontWeight: 600, color: "#fff", marginBottom: "1rem" }}>
-            How to Find Valid Udemy Coupons
-          </h2>
-          <div style={{ color: "#a9b0c0", lineHeight: 1.6 }}>
-            <ol style={{ paddingLeft: "1.5rem" }}>
-              <li style={{ marginBottom: "1rem" }}>
-                <strong>CourseSpeak Website</strong> - We update Udemy coupons daily and verify they work
-              </li>
-              <li style={{ marginBottom: "1rem" }}>
-                <strong>Udemy Website</strong> - Check the course page for promotional banners
-              </li>
-              <li style={{ marginBottom: "1rem" }}>
-                <strong>Instructor Websites</strong> - Many instructors offer coupons on their personal sites
-              </li>
-              <li style={{ marginBottom: "1rem" }}>
-                <strong>Social Media</strong> - Follow instructors and educational platforms
-              </li>
-              <li style={{ marginBottom: "1rem" }}>
-                <strong>Email Newsletters</strong> - Subscribe to Udemy and instructor newsletters
-              </li>
-            </ol>
-          </div>
-        </section>
+                {/* Decorative elements */}
+                <div style={{
+                    position: "absolute",
+                    top: "20%",
+                    left: "10%",
+                    width: "300px",
+                    height: "300px",
+                    background: "var(--brand)",
+                    filter: "blur(120px)",
+                    opacity: 0.1,
+                    borderRadius: "50%",
+                }}></div>
+                <div style={{
+                    position: "absolute",
+                    bottom: "10%",
+                    right: "10%",
+                    width: "250px",
+                    height: "250px",
+                    background: "var(--accent)",
+                    filter: "blur(100px)",
+                    opacity: 0.1,
+                    borderRadius: "50%",
+                }}></div>
+            </section>
 
-        <section>
-          <h2 style={{ fontSize: "1.875rem", fontWeight: 600, color: "#fff", marginBottom: "1rem" }}>
-            Types of Udemy Coupons
-          </h2>
-          <div style={{ color: "#a9b0c0", lineHeight: 1.6 }}>
-            <ul style={{ paddingLeft: "1.5rem" }}>
-              <li style={{ marginBottom: "1rem" }}>
-                <strong>100% Off Coupons</strong> - Get courses completely free
-              </li>
-              <li style={{ marginBottom: "1rem" }}>
-                <strong>95% Off Coupons</strong> - Massive discounts on premium courses
-              </li>
-              <li style={{ marginBottom: "1rem" }}>
-                <strong>Site-wide Sales</strong> - Udemy's regular promotional events
-              </li>
-              <li style={{ marginBottom: "1rem" }}>
-                <strong>Instructor-specific Coupons</strong> - Discounts on particular instructor's courses
-              </li>
-            </ul>
-          </div>
-        </section>
+            {/* Savings Statistics */}
+            <section class="card-gradient" style={{ padding: "4rem 1rem" }}>
+                <div class="container">
+                    <div style={{
+                        textAlign: "center",
+                        marginBottom: "3rem"
+                    }}>
+                        <h2 style={{
+                            fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
+                            fontWeight: 800,
+                            color: "var(--text)",
+                            marginBottom: "1rem"
+                        }}>
+                            Coupon Savings Impact
+                        </h2>
+                        <p style={{
+                            color: "var(--muted)",
+                            fontSize: "1.1rem",
+                            maxWidth: "600px",
+                            margin: "0 auto",
+                            lineHeight: 1.6
+                        }}>
+                            Real savings from Udemy coupons and free courses discovered through CourseSpeak
+                        </p>
+                    </div>
 
-        <section>
-          <h2 style={{ fontSize: "1.875rem", fontWeight: 600, color: "#fff", marginBottom: "1rem" }}>
-            Tips for Using Udemy Coupons
-          </h2>
-          <div style={{ color: "#a9b0c0", lineHeight: 1.6 }}>
-            <ul style={{ paddingLeft: "1.5rem" }}>
-              <li style={{ marginBottom: "1rem" }}>
-                <strong>Act Fast</strong> - Good coupons have limited quantities and expire quickly
-              </li>
-              <li style={{ marginBottom: "1rem" }}>
-                <strong>Check Expiry Dates</strong> - Always verify when the coupon expires
-              </li>
-              <li style={{ marginBottom: "1rem" }}>
-                <strong>Compare Prices</strong> - Some courses are already heavily discounted
-              </li>
-              <li style={{ marginBottom: "1rem" }}>
-                <strong>Read Reviews</strong> - Make sure the course is worth your time even if free
-              </li>
-              <li style={{ marginBottom: "1rem" }}>
-                <strong>Bookmark CourseSpeak</strong> - We update coupons daily
-              </li>
-            </ul>
-          </div>
-        </section>
+                    <div style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+                        gap: "2rem",
+                        textAlign: "center"
+                    }}>
+                        <div style={{
+                            background: "var(--card)",
+                            padding: "2.5rem 2rem",
+                            borderRadius: "20px",
+                            border: "1px solid var(--border)",
+                            transition: "all 0.3s ease",
+                            position: "relative",
+                            overflow: "hidden"
+                        }}>
+                            <div style={{
+                                position: "absolute",
+                                top: "0",
+                                left: "0",
+                                right: "0",
+                                height: "4px",
+                                background: "var(--brand)"
+                            }}></div>
+                            <div style={{ fontSize: "3.5rem", fontWeight: 800, color: "var(--brand)", marginBottom: "1rem" }}>
+                                $2M+
+                            </div>
+                            <div style={{ color: "var(--text)", fontSize: "1.1rem", fontWeight: 600, marginBottom: "0.5rem" }}>
+                                Total Savings
+                            </div>
+                            <div style={{ color: "var(--muted)", fontSize: "0.9rem" }}>
+                                Money saved by our learners
+                            </div>
+                        </div>
 
-        <section>
-          <h2 style={{ fontSize: "1.875rem", fontWeight: 600, color: "#fff", marginBottom: "1rem" }}>
-            Why Use CourseSpeak for Udemy Coupons?
-          </h2>
-          <div style={{ color: "#a9b0c0", lineHeight: 1.6 }}>
-            <ul style={{ paddingLeft: "1.5rem" }}>
-              <li style={{ marginBottom: "1rem" }}>
-                <strong>Daily Updates</strong> - We add new coupons every day
-              </li>
-              <li style={{ marginBottom: "1rem" }}>
-                <strong>Verified Coupons</strong> - We test coupons to ensure they work
-              </li>
-              <li style={{ marginBottom: "1rem" }}>
-                <strong>Wide Selection</strong> - Courses from all categories and providers
-              </li>
-              <li style={{ marginBottom: "1rem" }}>
-                <strong>Free to Use</strong> - No registration or payment required
-              </li>
-              <li style={{ marginBottom: "1rem" }}>
-                <strong>Easy Search</strong> - Filter by category, provider, or keywords
-              </li>
-            </ul>
-          </div>
-        </section>
+                        <div style={{
+                            background: "var(--card)",
+                            padding: "2.5rem 2rem",
+                            borderRadius: "20px",
+                            border: "1px solid var(--border)",
+                            transition: "all 0.3s ease",
+                            position: "relative",
+                            overflow: "hidden"
+                        }}>
+                            <div style={{
+                                position: "absolute",
+                                top: "0",
+                                left: "0",
+                                right: "0",
+                                height: "4px",
+                                background: "var(--accent)"
+                            }}></div>
+                            <div style={{ fontSize: "3.5rem", fontWeight: 800, color: "var(--accent)", marginBottom: "1rem" }}>
+                                100%
+                            </div>
+                            <div style={{ color: "var(--text)", fontSize: "1.1rem", fontWeight: 600, marginBottom: "0.5rem" }}>
+                                Free Courses
+                            </div>
+                            <div style={{ color: "var(--muted)", fontSize: "0.9rem" }}>
+                                Complete courses at zero cost
+                            </div>
+                        </div>
 
-        <section>
-          <h2 style={{ fontSize: "1.875rem", fontWeight: 600, color: "#fff", marginBottom: "1rem" }}>
-            Frequently Asked Questions
-          </h2>
-          <div style={{ color: "#a9b0c0", lineHeight: 1.6 }}>
-            <div style={{ marginBottom: "1.5rem" }}>
-              <h3 style={{ color: "#fff", marginBottom: "0.5rem" }}>Q: Are Udemy coupons legitimate?</h3>
-              <p>Yes! Udemy coupons are official promotional codes offered by Udemy and instructors to attract students.</p>
-            </div>
-            <div style={{ marginBottom: "1.5rem" }}>
-              <h3 style={{ color: "#fff", marginBottom: "0.5rem" }}>Q: How long do Udemy coupons last?</h3>
-              <p>Most coupons last 3-5 days, but popular 100% off coupons can expire in hours due to high demand.</p>
-            </div>
-            <div style={{ marginBottom: "1.5rem" }}>
-              <h3 style={{ color: "#fff", marginBottom: "0.5rem" }}>Q: Can I use multiple coupons on one course?</h3>
-              <p>No, Udemy only allows one coupon per course purchase.</p>
-            </div>
-            <div style={{ marginBottom: "1.5rem" }}>
-              <h3 style={{ color: "#fff", marginBottom: "0.5rem" }}>Q: Do free Udemy courses give certificates?</h3>
-              <p>Yes, even free courses provide completion certificates that you can add to your LinkedIn profile.</p>
-            </div>
-          </div>
-        </section>
-      </div>
+                        <div style={{
+                            background: "var(--card)",
+                            padding: "2.5rem 2rem",
+                            borderRadius: "20px",
+                            border: "1px solid var(--border)",
+                            transition: "all 0.3s ease",
+                            position: "relative",
+                            overflow: "hidden"
+                        }}>
+                            <div style={{
+                                position: "absolute",
+                                top: "0",
+                                left: "0",
+                                right: "0",
+                                height: "4px",
+                                background: "hsl(180, 50%, 40%)"
+                            }}></div>
+                            <div style={{ fontSize: "3.5rem", fontWeight: 800, color: "hsl(180, 50%, 40%)", marginBottom: "1rem" }}>
+                                24/7
+                            </div>
+                            <div style={{ color: "var(--text)", fontSize: "1.1rem", fontWeight: 600, marginBottom: "0.5rem" }}>
+                                Fresh Coupons
+                            </div>
+                            <div style={{ color: "var(--muted)", fontSize: "0.9rem" }}>
+                                Daily updated deals available
+                            </div>
+                        </div>
 
-      <div style={{ marginTop: "3rem", textAlign: "center" }}>
-        <a href="/deals" style={{ 
-          display: "inline-block", 
-          padding: "0.75rem 1.5rem", 
-          backgroundColor: "#3b82f6", 
-          color: "#fff", 
-          textDecoration: "none", 
-          borderRadius: "0.5rem", 
-          fontWeight: 600 
-        }}>
-          Browse Current Udemy Deals
-        </a>
-      </div>
+                        <div style={{
+                            background: "var(--card)",
+                            padding: "2.5rem 2rem",
+                            borderRadius: "20px",
+                            border: "1px solid var(--border)",
+                            transition: "all 0.3s ease",
+                            position: "relative",
+                            overflow: "hidden"
+                        }}>
+                            <div style={{
+                                position: "absolute",
+                                top: "0",
+                                left: "0",
+                                right: "0",
+                                height: "4px",
+                                background: "hsl(0, 84%, 60%)"
+                            }}></div>
+                            <div style={{ fontSize: "3.5rem", fontWeight: 800, color: "hsl(0, 84%, 60%)", marginBottom: "1rem" }}>
+                                95%
+                            </div>
+                            <div style={{ color: "var(--text)", fontSize: "1.1rem", fontWeight: 600, marginBottom: "0.5rem" }}>
+                                Average Discount
+                            </div>
+                            <div style={{ color: "var(--muted)", fontSize: "0.9rem" }}>
+                                Typical savings on paid courses
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Main Guide Content */}
+            <section class="hero-gradient" style={{ padding: "4rem 1rem" }}>
+                <div class="container" style={{ maxWidth: "1200px" }}>
+                    <div style={{ display: "grid", gap: "2rem" }}>
+                        {/* What Are Udemy Coupons */}
+                        <div
+                            style={{
+                                background: "var(--card)",
+                                padding: "2rem",
+                                borderRadius: "12px",
+                                border: "1px solid var(--border)",
+                            }}
+                        >
+                            <h2
+                                style={{
+                                    fontSize: "1.5rem",
+                                    fontWeight: 700,
+                                    marginBottom: "1rem",
+                                    color: "#fff",
+                                }}
+                            >
+                                What Are Udemy Coupons?
+                            </h2>
+                            <p style={{ color: "#cbd5e1", lineHeight: 1.6 }}>
+                                Udemy coupons are promotional codes that give you discounts on courses, ranging from 10% off to 100% off (free courses).
+                                These coupons are offered by instructors and Udemy itself to attract more students to their courses.
+                            </p>
+                        </div>
+
+                        {/* How to Find Coupons */}
+                        <div
+                            style={{
+                                background: "var(--card)",
+                                padding: "2rem",
+                                borderRadius: "12px",
+                                border: "1px solid var(--border)",
+                            }}
+                        >
+                            <h2
+                                style={{
+                                    fontSize: "1.5rem",
+                                    fontWeight: 700,
+                                    marginBottom: "1rem",
+                                    color: "#fff",
+                                }}
+                            >
+                                How to Find Valid Udemy Coupons
+                            </h2>
+                            <p style={{ marginBottom: "1rem", color: "#cbd5e1" }}>Discover coupon codes from these trusted sources:</p>
+                            <ol style={{ paddingLeft: "1.5rem", color: "#cbd5e1", lineHeight: 1.6 }}>
+                                <li style={{ marginBottom: "1rem" }}>
+                                    <strong>CourseSpeak Website</strong> - We update Udemy coupons daily and verify they work
+                                </li>
+                                <li style={{ marginBottom: "1rem" }}>
+                                    <strong>Udemy Website</strong> - Check the course page for promotional banners
+                                </li>
+                                <li style={{ marginBottom: "1rem" }}>
+                                    <strong>Instructor Websites</strong> - Many instructors offer coupons on their personal sites
+                                </li>
+                                <li style={{ marginBottom: "1rem" }}>
+                                    <strong>Social Media</strong> - Follow instructors and educational platforms
+                                </li>
+                                <li style={{ marginBottom: "1rem" }}>
+                                    <strong>Email Newsletters</strong> - Subscribe to Udemy and instructor newsletters
+                                </li>
+                            </ol>
+                        </div>
+
+                        {/* Types of Coupons */}
+                        <div
+                            style={{
+                                background: "var(--card)",
+                                padding: "2rem",
+                                borderRadius: "12px",
+                                border: "1px solid var(--border)",
+                            }}
+                        >
+                            <h2
+                                style={{
+                                    fontSize: "1.5rem",
+                                    fontWeight: 700,
+                                    marginBottom: "1rem",
+                                    color: "#fff",
+                                }}
+                            >
+                                Types of Udemy Coupons
+                            </h2>
+                            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "1.5rem", color: "#cbd5e1" }}>
+                                <div style={{ background: "#1f2330", padding: "1.5rem", borderRadius: "8px" }}>
+                                    <h3 style={{ color: "#fac72e", fontSize: "1.2rem", marginBottom: "0.5rem" }}>100% Off Coupons</h3>
+                                    <p>Get courses completely free with lifetime access</p>
+                                </div>
+                                <div style={{ background: "#1f2330", padding: "1.5rem", borderRadius: "8px" }}>
+                                    <h3 style={{ color: "#fac72e", fontSize: "1.2rem", marginBottom: "0.5rem" }}>95% Off Coupons</h3>
+                                    <p>Massive discounts on premium courses</p>
+                                </div>
+                                <div style={{ background: "#1f2330", padding: "1.5rem", borderRadius: "8px" }}>
+                                    <h3 style={{ color: "#fac72e", fontSize: "1.2rem", marginBottom: "0.5rem" }}>Site-wide Sales</h3>
+                                    <p>Udemy's regular promotional events</p>
+                                </div>
+                                <div style={{ background: "#1f2330", padding: "1.5rem", borderRadius: "8px" }}>
+                                    <h3 style={{ color: "#fac72e", fontSize: "1.2rem", marginBottom: "0.5rem" }}>Instructor Coupons</h3>
+                                    <p>Discounts on specific instructor's courses</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Pro Tips Section */}
+            <section class="card-gradient" style={{ padding: "4rem 1rem" }}>
+                <div class="container">
+                    <div style={{
+                        textAlign: "center",
+                        marginBottom: "3rem"
+                    }}>
+                        <h2 style={{
+                            fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
+                            fontWeight: 800,
+                            color: "var(--text)",
+                            marginBottom: "1rem"
+                        }}>
+                            Pro Tips for Udemy Coupons
+                        </h2>
+                        <p style={{
+                            color: "var(--muted)",
+                            fontSize: "1.1rem",
+                            maxWidth: "600px",
+                            margin: "0 auto",
+                            lineHeight: 1.6
+                        }}>
+                            Maximize your savings and learning opportunities
+                        </p>
+                    </div>
+
+                    <div style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+                        gap: "2rem"
+                    }}>
+                        <div style={{
+                            background: "var(--card)",
+                            padding: "2rem",
+                            borderRadius: "20px",
+                            border: "1px solid var(--border)",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <div style={{
+                                width: "60px",
+                                height: "60px",
+                                background: "var(--brand)",
+                                borderRadius: "16px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                marginBottom: "1.5rem"
+                            }}>
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                            </div>
+                            <h3 style={{ color: "var(--brand)", fontSize: "1.3rem", marginBottom: "1rem", fontWeight: 700 }}>
+                                Act Fast on Deals
+                            </h3>
+                            <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "0.95rem" }}>
+                                Good coupons have limited quantities and expire quickly. 100% off deals can disappear in hours.
+                            </p>
+                        </div>
+
+                        <div style={{
+                            background: "var(--card)",
+                            padding: "2rem",
+                            borderRadius: "20px",
+                            border: "1px solid var(--border)",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <div style={{
+                                width: "60px",
+                                height: "60px",
+                                background: "var(--accent)",
+                                borderRadius: "16px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                marginBottom: "1.5rem"
+                            }}>
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+                                </svg>
+                            </div>
+                            <h3 style={{ color: "var(--accent)", fontSize: "1.3rem", marginBottom: "1rem", fontWeight: 700 }}>
+                                Verify Expiration
+                            </h3>
+                            <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "0.95rem" }}>
+                                Always check coupon expiry dates. Most last 3-5 days, but popular codes expire much faster.
+                            </p>
+                        </div>
+
+                        <div style={{
+                            background: "var(--card)",
+                            padding: "2rem",
+                            borderRadius: "20px",
+                            border: "1px solid var(--border)",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <div style={{
+                                width: "60px",
+                                height: "60px",
+                                background: "hsl(180, 50%, 40%)",
+                                borderRadius: "16px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                marginBottom: "1.5rem"
+                            }}>
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+                                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                                </svg>
+                            </div>
+                            <h3 style={{ color: "hsl(180, 50%, 40%)", fontSize: "1.3rem", marginBottom: "1rem", fontWeight: 700 }}>
+                                Quality Matters
+                            </h3>
+                            <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "0.95rem" }}>
+                                Read reviews and check course content. Even free courses should provide real learning value.
+                            </p>
+                        </div>
+
+                        <div style={{
+                            background: "var(--card)",
+                            padding: "2rem",
+                            borderRadius: "20px",
+                            border: "1px solid var(--border)",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <div style={{
+                                width: "60px",
+                                height: "60px",
+                                background: "hsl(0, 84%, 60%)",
+                                borderRadius: "16px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                marginBottom: "1.5rem"
+                            }}>
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                </svg>
+                            </div>
+                            <h3 style={{ color: "hsl(0, 84%, 60%)", fontSize: "1.3rem", marginBottom: "1rem", fontWeight: 700 }}>
+                                Bookmark CourseSpeak
+                            </h3>
+                            <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "0.95rem" }}>
+                                We update coupons daily. Save our site to stay updated on the latest free course deals.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* FAQ Section */}
+            <section class="hero-gradient" style={{ padding: "4rem 1rem" }}>
+                <div class="container">
+                    <div style={{
+                        textAlign: "center",
+                        marginBottom: "3rem"
+                    }}>
+                        <h2 style={{
+                            fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
+                            fontWeight: 800,
+                            color: "var(--text)",
+                            marginBottom: "1rem"
+                        }}>
+                            Udemy Coupons FAQ
+                        </h2>
+                        <p style={{
+                            color: "var(--muted)",
+                            fontSize: "1.1rem",
+                            maxWidth: "600px",
+                            margin: "0 auto",
+                            lineHeight: 1.6
+                        }}>
+                            Answers to common questions about Udemy coupons and free courses
+                        </p>
+                    </div>
+
+                    <div style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))",
+                        gap: "2rem",
+                        maxWidth: "1200px",
+                        margin: "0 auto"
+                    }}>
+                        <div style={{
+                            background: "var(--card)",
+                            padding: "2rem",
+                            borderRadius: "20px",
+                            border: "1px solid var(--border)",
+                            position: "relative",
+                            overflow: "hidden",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <div style={{
+                                position: "absolute",
+                                top: "1rem",
+                                left: "1rem",
+                                width: "50px",
+                                height: "50px",
+                                background: "var(--brand)",
+                                borderRadius: "12px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center"
+                            }}>
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+                                </svg>
+                            </div>
+                            <h3 style={{
+                                color: "var(--brand)",
+                                fontSize: "1.3rem",
+                                marginBottom: "1rem",
+                                marginLeft: "4rem",
+                                fontWeight: 700
+                            }}>
+                                Are Udemy coupons legitimate?
+                            </h3>
+                            <p style={{ color: "var(--muted)", lineHeight: 1.7, fontSize: "1rem" }}>
+                                Yes! Udemy coupons are official promotional codes offered by Udemy and instructors to attract students.
+                            </p>
+                        </div>
+
+                        <div style={{
+                            background: "var(--card)",
+                            padding: "2rem",
+                            borderRadius: "20px",
+                            border: "1px solid var(--border)",
+                            position: "relative",
+                            overflow: "hidden",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <div style={{
+                                position: "absolute",
+                                top: "1rem",
+                                left: "1rem",
+                                width: "50px",
+                                height: "50px",
+                                background: "var(--accent)",
+                                borderRadius: "12px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center"
+                            }}>
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+                                    <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                                </svg>
+                            </div>
+                            <h3 style={{
+                                color: "var(--accent)",
+                                fontSize: "1.3rem",
+                                marginBottom: "1rem",
+                                marginLeft: "4rem",
+                                fontWeight: 700
+                            }}>
+                                How long do Udemy coupons last?
+                            </h3>
+                            <p style={{ color: "var(--muted)", lineHeight: 1.7, fontSize: "1rem" }}>
+                                Most coupons last 3-5 days, but popular 100% off coupons can expire in hours due to high demand.
+                            </p>
+                        </div>
+
+                        <div style={{
+                            background: "var(--card)",
+                            padding: "2rem",
+                            borderRadius: "20px",
+                            border: "1px solid var(--border)",
+                            position: "relative",
+                            overflow: "hidden",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <div style={{
+                                position: "absolute",
+                                top: "1rem",
+                                left: "1rem",
+                                width: "50px",
+                                height: "50px",
+                                background: "hsl(180, 50%, 40%)",
+                                borderRadius: "12px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center"
+                            }}>
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+                                    <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm2.86-2h8.28l.96-5.85-3.03 3.51L12 9.5l-2.07 2.16-3.03-3.51.96 5.85z"/>
+                                </svg>
+                            </div>
+                            <h3 style={{
+                                color: "hsl(180, 50%, 40%)",
+                                fontSize: "1.3rem",
+                                marginBottom: "1rem",
+                                marginLeft: "4rem",
+                                fontWeight: 700
+                            }}>
+                                Do free Udemy courses give certificates?
+                            </h3>
+                            <p style={{ color: "var(--muted)", lineHeight: 1.7, fontSize: "1rem" }}>
+                                Yes, even free courses provide completion certificates that you can add to your LinkedIn profile.
+                            </p>
+                        </div>
+
+                        <div style={{
+                            background: "var(--card)",
+                            padding: "2rem",
+                            borderRadius: "20px",
+                            border: "1px solid var(--border)",
+                            position: "relative",
+                            overflow: "hidden",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <div style={{
+                                position: "absolute",
+                                top: "1rem",
+                                left: "1rem",
+                                width: "50px",
+                                height: "50px",
+                                background: "hsl(0, 84%, 60%)",
+                                borderRadius: "12px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center"
+                            }}>
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+                                    <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+                                </svg>
+                            </div>
+                            <h3 style={{
+                                color: "hsl(0, 84%, 60%)",
+                                fontSize: "1.3rem",
+                                marginBottom: "1rem",
+                                marginLeft: "4rem",
+                                fontWeight: 700
+                            }}>
+                                Can I use multiple coupons?
+                            </h3>
+                            <p style={{ color: "var(--muted)", lineHeight: 1.7, fontSize: "1rem" }}>
+                                No, Udemy only allows one coupon per course purchase. Choose the best available discount.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Call to Action */}
+            <section class="card-gradient" style={{ padding: "4rem 1rem" }}>
+                <div class="container" style={{ maxWidth: "800px", textAlign: "center" }}>
+                    <h2 style={{
+                        fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
+                        fontWeight: 800,
+                        color: "var(--text)",
+                        marginBottom: "1rem"
+                    }}>
+                        Ready to Save on Udemy Courses?
+                    </h2>
+                    <p style={{
+                        color: "var(--muted)",
+                        fontSize: "1.1rem",
+                        maxWidth: "600px",
+                        margin: "0 auto 3rem",
+                        lineHeight: 1.6
+                    }}>
+                        Start exploring verified Udemy coupons and get premium courses for free. Join thousands of learners saving thousands of dollars.
+                    </p>
+
+                    <div style={{
+                        display: "flex",
+                        gap: "1rem",
+                        justifyContent: "center",
+                        flexWrap: "wrap"
+                    }}>
+                        <a
+                            href="/deals"
+                            style={{
+                                padding: "1rem 2rem",
+                                borderRadius: "12px",
+                                background: "var(--brand)",
+                                color: "var(--bg)",
+                                textDecoration: "none",
+                                fontSize: "1.1rem",
+                                fontWeight: 700,
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "0.5rem",
+                                transition: "all 0.3s ease",
+                                boxShadow: "0 4px 20px -4px hsla(45, 95%, 58%, 0.4)"
+                            }}
+                        >
+                            Browse Free Udemy Deals
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+                            </svg>
+                        </a>
+                        <a
+                            href="/how-to-redeem-coupon"
+                            style={{
+                                padding: "1rem 2rem",
+                                borderRadius: "12px",
+                                background: "transparent",
+                                color: "var(--text)",
+                                textDecoration: "none",
+                                fontSize: "1.1rem",
+                                fontWeight: 700,
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "0.5rem",
+                                transition: "all 0.3s ease",
+                                border: "2px solid var(--border)"
+                            }}
+                        >
+                            How to Redeem Coupons
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </main>
     </div>
-  </div>
+
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, hsl(222, 47%, 7%) 0%, hsl(222, 43%, 10%) 100%);
+        }
+
+        .card-gradient {
+            background: var(--bg);
+        }
+    </style>
 </Layout>
