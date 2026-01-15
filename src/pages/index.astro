@@ -175,6 +175,7 @@ const jsonLd = {
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
             "validFrom": deal.createdAt,
+            "priceValidUntil": deal.expiresAt,
             "description": "100% off - completely free course"
           },
           "aggregateRating": deal.rating ? {
