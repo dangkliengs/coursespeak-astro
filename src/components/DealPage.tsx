@@ -365,107 +365,49 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
 
                     {/* Key Takeaways Section */}
                     <div style={{ border: "1px solid #1f2330", padding: "1.5rem", borderRadius: "8px", background: "#0b0d12", marginBottom: "2rem" }}>
-
-                        <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "1rem" }}>
-                            <div style={{ width: "36px", height: "36px", borderRadius: "6px", background: "linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                <span style={{ fontSize: "1rem" }}>📋</span>
-                            </div>
-                            <h2 style={{ fontSize: "1.5rem", fontWeight: 700, color: "#fff", margin: 0 }}>Key Takeaways</h2>
-                            <span style={{ fontSize: "0.75rem", color: "#9ca3af", background: "#1f2937", padding: "3px 6px", borderRadius: "8px", border: "1px solid #374151", fontWeight: 500 }}>Course Essentials</span>
-                        </div>
-
-                        <p style={{ fontSize: "0.95rem", color: "#cbd5e1", lineHeight: "1.6", marginBottom: "1.5rem" }}>
+                        <h2 style={{ fontSize: "1.5rem", fontWeight: 700, color: "#fff", marginBottom: "1rem" }}>Key Takeaways</h2>
+                        <p style={{ fontSize: "0.95rem", color: "#cbd5e1", lineHeight: "1.6", marginBottom: "1rem" }}>
                             Course overview with structured fields: Title, Provider, Instructor, Updated Date, Difficulty, Focus, Audience, Outcomes.
                         </p>
-
-                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "0.875rem" }}>
-                            {[
-                                { icon: "📚", label: "Course Title", value: deal.title, color: "#3b82f6" },
-                                { icon: "🏢", label: "Provider", value: `${deal.provider} (via CourseSpeak listing)`, color: "#8b5cf6" },
-                                { icon: "👨‍🏫", label: "Instructor", value: deal.instructor, color: "#06b6d4" },
-                                { icon: "📅", label: "Last Updated", value: deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'N/A', color: "#10b981" },
-                                { icon: "📊", label: "Difficulty Level", value: extractDifficultyLevel(deal.title, deal.description), color: "#6366f1" },
-                                { icon: "🎯", label: "Course Focus", value: `${deal.category?.toLowerCase() || 'Programming'} fundamentals to advanced concepts`, color: "#f59e0b" },                            
-                                { icon: "🏆", label: "Learning Outcomes", value: deal.learn && deal.learn.length > 0 ? deal.learn.slice(0, 3).join(', ') : 'Core programming skills', color: "#ec4899" },
-                                { icon: "📋", label: "Prerequisites", value: deal.requirements && deal.requirements.length > 0 ? deal.requirements.join(', ') : 'None', color: "#84cc16" },
-                                { icon: "👥", label: "Target Audience", value: "Beginners to advanced programmers", color: "#ef4444" }
-                            ].map((item, idx) => (
-                                <div key={idx} style={{
-                                    background: "linear-gradient(135deg, rgba(31, 41, 55, 0.5) 0%, rgba(17, 24, 39, 0.5) 100%)",
-                                    border: "1px solid rgba(75, 85, 99, 0.3)",
-                                    borderRadius: "8px",
-                                    padding: "0.875rem",
-                                    backdropFilter: "blur(10px)",
-                                    transition: "all 0.3s ease",
-                                    cursor: "default"
-                                }}
-                                onMouseEnter={(e) => {
-                                    e.currentTarget.style.transform = "translateY(-1px)";
-                                    e.currentTarget.style.boxShadow = `0 4px 12px ${item.color}20`;
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.style.transform = "translateY(0)";
-                                    e.currentTarget.style.boxShadow = "none";
-                                }}
-                                >
-                                    <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
-                                        <div style={{
-                                            width: "24px",
-                                            height: "24px",
-                                            borderRadius: "4px",
-                                            background: `linear-gradient(135deg, ${item.color}15 0%, ${item.color}30 100%)`,
-                                            border: `1px solid ${item.color}25`,
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            fontSize: "0.8rem",
-                                            flexShrink: 0
-                                        }}>
-                                            {item.icon}
-                                        </div>
-                                        <div style={{ fontSize: "0.85rem", fontWeight: 600, color: item.color, textTransform: "uppercase", letterSpacing: "0.3px", lineHeight: "1.2" }}>
-                                            {item.label}
-                                        </div>
-                                    </div>
-                                    <div style={{ fontSize: "0.9rem", color: "#e5e7eb", lineHeight: "1.4", fontWeight: 500 }}>
-                                        {item.value}
-                                    </div>
-                                </div>
-                            ))}
+                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1rem", fontSize: "0.95rem", color: "#cbd5e1" }}>
+                            <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                                <span style={{ color: "#a9b0c0", marginTop: "2px" }}>•</span>
+                                <span><strong>Course Title:</strong> {deal.title}</span>
+                            </div>
+                            <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                                <span style={{ color: "#a9b0c0", marginTop: "2px" }}>•</span>
+                                <span><strong>Provider:</strong> {deal.provider} (via CourseSpeak listing)</span>
+                            </div>
+                            <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                                <span style={{ color: "#a9b0c0", marginTop: "2px" }}>•</span>
+                                <span><strong>Instructor:</strong> {deal.instructor}</span>
+                            </div>
+                            <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                                <span style={{ color: "#a9b0c0", marginTop: "2px" }}>•</span>
+                                <span><strong>Last Updated:</strong> {deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'N/A'}</span>
+                            </div>
+                            <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                                <span style={{ color: "#a9b0c0", marginTop: "2px" }}>•</span>
+                                <span><strong>Difficulty Level:</strong> {extractDifficultyLevel(deal.title, deal.description)}</span>
+                            </div>
+                            <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                                <span style={{ color: "#a9b0c0", marginTop: "2px" }}>•</span>
+                                <span><strong>Course Focus:</strong> {deal.category?.toLowerCase() || 'Programming'} fundamentals to advanced concepts</span>
+                            </div>
+                            <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                                <span style={{ color: "#a9b0c0", marginTop: "2px" }}>•</span>
+                                <span><strong>Learning Outcomes:</strong> {deal.learn && deal.learn.length > 0 ? deal.learn.slice(0, 3).join(', ') : 'Core programming skills'}</span>
+                            </div>
+                            <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                                <span style={{ color: "#a9b0c0", marginTop: "2px" }}>•</span>
+                                <span><strong>Prerequisites:</strong> {deal.requirements && deal.requirements.length > 0 ? deal.requirements.join(', ') : 'None'}</span>
+                            </div>
+                            <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                                <span style={{ color: "#a9b0c0", marginTop: "2px" }}>•</span>
+                                <span><strong>Target Audience:</strong> Beginners to advanced programmers</span>
+                            </div>
                         </div>
                     </div>
-
-                    {/* Course Comparison Widget */}
-                    {relatedDeals && relatedDeals.length > 0 && (
-                        <CourseComparison
-                            currentDeal={{
-                                id: deal.id,
-                                title: deal.title,
-                                provider: deal.provider,
-                                price: deal.price,
-                                originalPrice: deal.originalPrice,
-                                rating: deal.rating,
-                                students: deal.students,
-                                duration: deal.duration,
-                                url: deal.url,
-                                coupon: deal.coupon,
-                                expiresAt: deal.expiresAt
-                            }}
-                            similarDeals={relatedDeals.slice(0, 2).map(r => ({
-                                id: r.id,
-                                title: r.title,
-                                provider: r.provider,
-                                price: r.price,
-                                originalPrice: r.originalPrice,
-                                rating: r.rating,
-                                students: r.students,
-                                duration: r.duration,
-                                url: r.url,
-                                coupon: r.coupon,
-                                expiresAt: r.expiresAt
-                            }))}
-                        />
-                    )}
 
                     {/* What you'll learn */}
                     {deal.learn && deal.learn.length > 0 && (
@@ -519,103 +461,67 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                         />
                     </div>
 
-                    {/* Instructor Authority Section */}
+                    {/* Course Comparison Widget */}
+                    {relatedDeals && relatedDeals.length > 0 && (
+                        <CourseComparison
+                            currentDeal={{
+                                id: deal.id,
+                                title: deal.title,
+                                provider: deal.provider,
+                                price: deal.price,
+                                originalPrice: deal.originalPrice,
+                                rating: deal.rating,
+                                students: deal.students,
+                                duration: deal.duration,
+                                url: deal.url,
+                                coupon: deal.coupon,
+                                expiresAt: deal.expiresAt
+                            }}
+                            similarDeals={relatedDeals.slice(0, 3).map(r => ({
+                                id: r.id,
+                                title: r.title,
+                                provider: r.provider,
+                                price: r.price,
+                                originalPrice: r.originalPrice,
+                                rating: r.rating,
+                                students: r.students,
+                                duration: r.duration,
+                                url: r.url,
+                                coupon: r.coupon,
+                                expiresAt: r.expiresAt
+                            }))}
+                        />
+                    )}
+
+                    {/* Instructor Section */}
                     {deal.instructor && (
-                        <div style={{ border: "1px solid #1f2330", padding: "2rem", borderRadius: "12px", background: "linear-gradient(135deg, #0b0d12 0%, #111827 100%)", marginBottom: "2rem", position: "relative", overflow: "hidden" }}>
-                            {/* Decorative gradient accent */}
-                            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "4px", background: "linear-gradient(90deg, #06b6d4 0%, #3b82f6 50%, #8b5cf6 100%)" }}></div>
-
-                            <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "1.5rem" }}>
-                                <div style={{ width: "40px", height: "40px", borderRadius: "8px", background: "linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                    <span style={{ fontSize: "1.2rem" }}>👨‍🏫</span>
+                        <div style={{ border: "1px solid #1f2330", padding: "1.5rem", borderRadius: "8px", background: "#0b0d12", marginBottom: "2rem" }}>
+                            <h2 style={{ fontSize: "1.5rem", fontWeight: 700, color: "#fff", marginBottom: "1rem" }}>About the Instructor</h2>
+                            <p style={{ fontSize: "0.95rem", color: "#cbd5e1", lineHeight: "1.6", marginBottom: "1rem" }}>
+                                Learn from experienced professionals in the field.
+                            </p>
+                            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1rem", fontSize: "0.95rem", color: "#cbd5e1" }}>
+                                <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                                    <span style={{ color: "#a9b0c0", marginTop: "2px" }}>•</span>
+                                    <span><strong>Instructor:</strong> {deal.instructor}</span>
                                 </div>
-                                <div>
-                                    <h3 style={{ fontSize: "1.5rem", fontWeight: 700, color: "#fff", margin: 0 }}>About the Instructor</h3>
-                                    <span style={{ fontSize: "0.8rem", color: "#9ca3af", background: "#1f2937", padding: "2px 8px", borderRadius: "12px", border: "1px solid #374151" }}>Course Expert</span>
+                                <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                                    <span style={{ color: "#a9b0c0", marginTop: "2px" }}>•</span>
+                                    <span><strong>Expertise:</strong> {deal.category?.toLowerCase() || 'Technology'} education and applied programming expertise</span>
                                 </div>
-                            </div>
-
-                            <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "1.5rem" }}>
-                                {/* Instructor Avatar/Info */}
-                                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem" }}>
-                                    <div style={{ width: "80px", height: "80px", borderRadius: "50%", background: "linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px rgba(6, 182, 212, 0.3)" }}>
-                                        <span style={{ fontSize: "2rem" }}>{deal.instructor.includes(' and ') || deal.instructor.includes(', ') ? '👥' : '👨‍💻'}</span>
-                                    </div>
-                                    <div style={{ textAlign: "center" }}>
-                                        <div style={{ fontSize: "1.1rem", fontWeight: "600", color: "#fff", marginBottom: "0.25rem" }}>
-                                            {(() => {
-                                                // Parse instructor names properly
-                                                const instructorText = deal.instructor;
-
-                                                // Handle multiple instructors separated by " and " or ", "
-                                                if (instructorText.includes(' and ')) {
-                                                    const parts = instructorText.split(' and ');
-                                                    return parts.map(name => name.trim()).join(' & ');
-                                                }
-
-                                                // Handle format "Institution, Instructor Name"
-                                                if (instructorText.includes(', ')) {
-                                                    const parts = instructorText.split(', ');
-                                                    // If there are multiple parts, the instructor names come after the first comma
-                                                    if (parts.length > 2) {
-                                                        return parts.slice(1).join(', ').trim();
-                                                    } else {
-                                                        return parts[1].trim(); // Single instructor after institution
-                                                    }
-                                                }
-
-                                                // Default: return as-is for single instructor
-                                                return instructorText;
-                                            })()}
-                                        </div>
-                                        <div style={{ fontSize: "0.85rem", color: "#06b6d4", fontWeight: "500" }}>
-                                            {deal.instructor.includes(' and ') || deal.instructor.includes(', ') && deal.instructor.split(',').length > 2 ? 'Expert Instructors' : 'Senior Instructor'}
-                                        </div>
-                                        <div style={{ fontSize: "0.75rem", color: "#3b82f6", marginTop: "0.25rem" }}>
-                                            <a href={`/instructors/${deal.instructor.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}`} style={{ color: "#3b82f6", textDecoration: "underline" }}>
-                                                View Instructor Profile
-                                            </a>
-                                        </div>
-                                    </div>
+                                <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                                    <span style={{ color: "#a9b0c0", marginTop: "2px" }}>•</span>
+                                    <span><strong>Experience:</strong> 12+ years developing large-scale systems in {deal.subcategory || deal.category || 'modern technologies'}</span>
                                 </div>
-
-                                {/* Instructor Details */}
-                                <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-                                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "1rem" }}>
-                                        {/* Experience Card */}
-                                        <div style={{ background: "linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(6, 182, 212, 0.05) 100%)", border: "1px solid rgba(6, 182, 212, 0.2)", borderRadius: "8px", padding: "1rem" }}>
-                                            <div style={{ marginBottom: "0.5rem" }}>
-                                                <span style={{ fontSize: "0.9rem", fontWeight: "600", color: "#06b6d4" }}>Experience</span>
-                                            </div>
-                                            <p style={{ fontSize: "0.9rem", color: "#cbd5e1", lineHeight: "1.5", margin: 0 }}>
-                                                12+ years developing large-scale systems in {deal.subcategory || deal.category || 'modern technologies'}.
-                                            </p>
-                                        </div>
-
-                                        {/* Specialization Card */}
-                                        <div style={{ background: "linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%)", border: "1px solid rgba(139, 92, 246, 0.2)", borderRadius: "8px", padding: "1rem" }}>
-                                            <div style={{ marginBottom: "0.5rem" }}>
-                                                <span style={{ fontSize: "0.9rem", fontWeight: "600", color: "#8b5cf6" }}>Specialization</span>
-                                            </div>
-                                            <p style={{ fontSize: "0.9rem", color: "#cbd5e1", lineHeight: "1.5", margin: 0 }}>
-                                                {deal.category?.toLowerCase() || 'Technology'} education and applied programming expertise.
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    {/* Institution Info */}
-                                    <div style={{ background: "linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%)", border: "1px solid rgba(59, 130, 246, 0.2)", borderRadius: "8px", padding: "1rem" }}>
-                                        <div style={{ marginBottom: "0.5rem" }}>
-                                            <span style={{ fontSize: "0.9rem", fontWeight: "600", color: "#3b82f6" }}>Institution</span>
-                                        </div>
-                                        <p style={{ fontSize: "0.9rem", color: "#cbd5e1", lineHeight: "1.5", margin: 0 }}>
-                                            <strong>{deal.instructor.includes(',') ? deal.instructor.split(',')[0].trim() : 'Professional Academy'}</strong> - Leading provider of quality {deal.category?.toLowerCase() || 'technology'} education and professional development.
-                                        </p>
-                                    </div>
+                                <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                                    <span style={{ color: "#a9b0c0", marginTop: "2px" }}>•</span>
+                                    <span><strong>Teaching Style:</strong> Practical focus with real-world examples and hands-on projects</span>
+                                </div>
+                                <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                                    <span style={{ color: "#a9b0c0", marginTop: "2px" }}>•</span>
+                                    <span><strong>Institution:</strong> <strong>{deal.instructor.includes(',') ? deal.instructor.split(',')[0].trim() : 'Professional Academy'}</strong> - Leading provider of quality {deal.category?.toLowerCase() || 'technology'} education</span>
                                 </div>
                             </div>
-
-
                         </div>
                     )}
 

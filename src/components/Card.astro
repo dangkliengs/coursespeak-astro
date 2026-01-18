@@ -30,8 +30,7 @@ if (!deal) {
     <div class="card-meta">
       <div class="rating">
         {deal.rating && (
-          <span>⭐ {deal.rating}</span>
-          {deal.students && <span>({deal.students.toLocaleString()} students)</span>}
+          <span>⭐ {deal.rating}{deal.students && ` (${deal.students.toLocaleString()} students)`}</span>
         )}
       </div>
       <div class="category">{deal.category || 'General'}</div>
