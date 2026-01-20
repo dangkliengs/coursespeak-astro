@@ -82,7 +82,7 @@ export async function GET() {
   <url>
     <loc>${siteUrl}/deal/${deal.id}</loc>
     <lastmod>${deal.updatedAt || currentDate}</lastmod>
-    <changefreq>weekly</changefreq>
+    <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>`).join('')}
 </urlset>`;
