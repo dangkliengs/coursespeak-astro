@@ -1,4 +1,4 @@
-import { updateDeal } from '../../lib/store.js';
+import { updateDeal } from '../../lib/store';
 import { GitHubAPI } from '../../lib/github-api.js';
 
 export const prerender = false;
