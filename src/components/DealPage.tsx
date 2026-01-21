@@ -367,7 +367,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                     <div style={{ border: "1px solid #1f2330", padding: "1.5rem", borderRadius: "8px", background: "#0b0d12", marginBottom: "2rem" }}>
                         <h2 style={{ fontSize: "1.5rem", fontWeight: 700, color: "#fff", marginBottom: "1rem" }}>Key Takeaways</h2>
                         <p style={{ fontSize: "0.95rem", color: "#cbd5e1", lineHeight: "1.6", marginBottom: "1rem" }}>
-                            Course overview with structured fields: Title, Provider, Instructor, Updated Date, Difficulty, Focus, Audience, Outcomes.
+                            Course overview with structured fields: Title, Provider, Instructor, Updated Date, Difficulty, Focus, Audience, Outcomes and Coupon Code.
                         </p>
                         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1rem", fontSize: "0.95rem", color: "#cbd5e1" }}>
                             <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
@@ -384,7 +384,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                             </div>
                             <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
                                 <span style={{ color: "#a9b0c0", marginTop: "2px" }}>•</span>
-                                <span><strong>Last Updated:</strong> {deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'N/A'}</span>
+                                <span><strong>Coupon Verified on:</strong> {deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'N/A'}</span>
                             </div>
                             <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
                                 <span style={{ color: "#a9b0c0", marginTop: "2px" }}>•</span>
@@ -405,6 +405,14 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                             <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
                                 <span style={{ color: "#a9b0c0", marginTop: "2px" }}>•</span>
                                 <span><strong>Target Audience:</strong> Beginners to advanced programmers</span>
+                            </div>
+                            <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                                <span style={{ color: "#a9b0c0", marginTop: "2px" }}>•</span>
+                                <span><strong>Course Type:</strong> Self Paced Online Course. Lifetime Access</span>
+                            </div>
+                            <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                                <span style={{ color: "#a9b0c0", marginTop: "2px" }}>•</span>
+                                <span><strong>Coupon:</strong> Click on <strong>REDEEM COUPON</strong> to Enroll and apply discount code</span>
                             </div>
                         </div>
                     </div>
@@ -450,7 +458,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                     <div style={{ marginBottom: "2rem" }}>
                         <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1rem", color: "#fff" }}>Course Description</h2>
                         <p style={{ fontSize: "0.95rem", color: "#cbd5e1", lineHeight: "1.6", marginBottom: "1rem" }}>
-                            A detailed explanation of modules, tools, and project use cases included in the curriculum. from this comprehensive {deal.category?.toLowerCase() || 'programming'} courses.
+                            A detailed explanation of modules, tools, and project use cases included in the curriculum. from this comprehensive {deal.subcategory?.toLowerCase() || 'programming'} courses.
                         </p>
                         {/* Render Markdown Content */}
                         <div
@@ -665,10 +673,10 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                     {relatedDeals.length > 0 && (
                         <div style={{ marginTop: "4rem", borderTop: "1px solid #1f2330", paddingTop: "2rem" }}>
                             <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1rem", color: "#fff" }}>
-                                More Courses You Might Like
+                                More Udemy Courses You Might Like to Enroll
                             </h2>
                             <p style={{ fontSize: "0.95rem", color: "#cbd5e1", lineHeight: "1.6", marginBottom: "1.5rem" }}>
-                                This section suggests similar courses and related learning opportunities based on the current course's category, helping you discover additional educational content that matches your interests.
+                                This section suggests similar udemy courses and related learning opportunities based on the current course's category, helping you discover additional educational content that matches your interests.
                             </p>
                             <RelatedList items={relatedDeals} />
                         </div>
