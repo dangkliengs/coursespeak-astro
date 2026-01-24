@@ -109,7 +109,7 @@ const discountPercentage = deal.originalPrice && deal.price && deal.originalPric
             "aggregateRating": deal.rating ? {
                 "@type": "AggregateRating",
                 "ratingValue": deal.rating.toString(),
-                "reviewCount": deal.students?.toString() || "0",
+                "reviewCount": Math.max(1, Math.round(deal.students ?? 0)),
                 "bestRating": "5",
                 "worstRating": "1"
             } : undefined,

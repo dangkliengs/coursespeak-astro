@@ -270,7 +270,7 @@ const jsonLd = {
       },
       "aggregateRating": {
         "@type": "AggregateRating",
-        "ratingValue": "4.9",
+        "ratingValue": 4.9,
         "reviewCount": successStories.length,
         "bestRating": "5",
         "worstRating": "1"
@@ -321,7 +321,7 @@ const jsonLd = {
           "aggregateRating": deal.rating ? {
             "@type": "AggregateRating",
             "ratingValue": deal.rating.toString(),
-            "reviewCount": "1000+",
+            "reviewCount": Math.max(1, Math.round(deal.students ?? 1000)),
             "bestRating": "5"
           } : undefined
         })).filter(Boolean)

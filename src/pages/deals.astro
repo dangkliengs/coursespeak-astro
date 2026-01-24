@@ -116,7 +116,7 @@ const structuredData = {
             "ratingValue": deal.rating,
             "bestRating": "5",
             "worstRating": "1",
-            "ratingCount": "1000"
+            "ratingCount": Math.max(1, Math.round(deal.students ?? 1000))
           } : undefined,
           "educationalLevel": "Beginner to Advanced",
           "inLanguage": "en",

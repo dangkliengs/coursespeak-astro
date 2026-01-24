@@ -99,7 +99,7 @@ const structuredData = {
             "ratingValue": course.rating,
             "bestRating": "5",
             "worstRating": "1",
-            "ratingCount": "1000"
+            "ratingCount": Math.max(1, Math.round(course.students ?? 1000))
           },
           "educationalLevel": "Beginner to Advanced",
           "inLanguage": "en"

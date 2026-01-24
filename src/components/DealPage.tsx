@@ -231,7 +231,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
         "aggregateRating": deal.rating ? {
             "@type": "AggregateRating",
             "ratingValue": deal.rating.toFixed(1),
-            "reviewCount": deal.students?.toString() || "1000",
+            "reviewCount": Math.max(1, Math.round(deal.students ?? 1000)),
             "bestRating": "5",
             "worstRating": "1"
         } : undefined,

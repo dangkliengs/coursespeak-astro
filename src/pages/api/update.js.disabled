@@ -1,7 +1,5 @@
-import { updateDeal } from '../../lib/store';
-import { GitHubAPI } from '../../lib/github-api.js';
-
-export const prerender = false;
+import { githubAPI } from '../../lib/github-api.js';
+import { updateDeal as updateDealLocal } from '../../lib/store.ts';
 
 export async function POST({ request }) {
   try {
@@ -33,62 +31,20 @@ export async function POST({ request }) {
       }
     }
 
-    // Check if GitHub API is enabled
-    console.log('🔍 Environment check:');
-    console.log('USE_GITHUB_API:', process.env.USE_GITHUB_API);
-    console.log('GITHUB_TOKEN exists:', !!process.env.GITHUB_TOKEN);
-    console.log('GITHUB_TOKEN length:', process.env.GITHUB_TOKEN?.length || 0);
-    
-    const useGitHubAPI = process.env.USE_GITHUB_API === 'true' && process.env.GITHUB_TOKEN;
-    console.log('useGitHubAPI result:', useGitHubAPI);
-    
-    if (useGitHubAPI) {
-      // Update via GitHub API
-      try {
-        console.log('🚀 Attempting GitHub API update...');
-        const githubAPI = new GitHubAPI();
-        await githubAPI.updateDeal(updatedDeal);
-        console.log(`✅ Successfully updated deal ${id} via GitHub API`);
-        
-        // Trigger build after successful update
-        try {
-          console.log('🔄 Triggering GitHub Actions build...');
-          const buildResponse = await fetch(`https://api.github.com/repos/${githubAPI.repoOwner}/${githubAPI.repoName}/actions/workflows/manual-build.yml/dispatches`, {
-            method: 'POST',
-            headers: {
-              'Authorization': `token ${githubAPI.getToken()}`,
-              'Accept': 'application/vnd.github.v3+json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              ref: 'main',
-              inputs: {
-                reason: `Auto-triggered after updating deal ${id}`
-              }
-            })
-          });
-          
-          if (buildResponse.ok) {
-            console.log('✅ Build triggered successfully');
-          } else {
-            console.warn('⚠️ Failed to trigger build:', buildResponse.status);
-          }
-        } catch (buildError) {
-          console.warn('⚠️ Build trigger failed:', buildError.message);
-        }
-        
-      } catch (githubError) {
-        console.error('❌ GitHub API failed, falling back to local file:', githubError);
-        console.error('GitHub Error details:', githubError.message);
-        // Fallback to local file
-        await updateDeal(id, updatedDeal);
-        console.log(`✅ Fallback: Updated deal ${id} locally`);
-      }
+    const useGitHubApi = process.env.USE_GITHUB_API === 'false';
+
+    if (useGitHubApi) {
+      // Update deal using GitHub API
+      await githubAPI.updateDeal(updatedDeal);
     } else {
-      // Update using local store (syncs to deals.json)
-      console.log('📁 Using local file mode (GitHub API disabled)');
-      await updateDeal(id, updatedDeal);
-      console.log(`✅ Successfully updated deal ${id} locally`);
+      // Update deal locally in dev mode
+      const result = await updateDealLocal(id, updatedDeal);
+      if (!result) {
+        return new Response(JSON.stringify({ error: 'Deal not found' }), {
+          status: 404,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
     }
 
     // Redirect back to admin deals page

@@ -94,7 +94,7 @@ export default function CourseComparison({ currentDeal, similarDeals }: CourseCo
                 "aggregateRating": deal.rating ? {
                   "@type": "AggregateRating",
                   "ratingValue": deal.rating,
-                  "ratingCount": deal.students?.toString()
+                  "ratingCount": Math.max(1, Math.round(deal.students ?? 1000))
                 } : undefined
               }
             }))
