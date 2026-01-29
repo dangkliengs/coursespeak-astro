@@ -252,9 +252,9 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
             />
 
             {/* Breadcrumb / Intro Section (Not a full header) */}
-            <div style={{ background: "#1f2330", padding: "2rem 0", color: "#fff", borderBottom: "1px solid #2d3748" }}>
+            <div style={{ background: "#1f2330", padding: "2rem 0", color: "#fff", borderBottom: "1px solid #0b0d12" }}>
                 <div className="container" style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 1rem", position: "relative" }}>
-                    <div style={{ maxWidth: "900px" }}>
+                    <div style={{ maxWidth: "1200px" }}>
                         <nav aria-label="Breadcrumb" style={{ marginBottom: "1rem" }}>
                             <ol style={{
                                 display: "flex",
@@ -485,7 +485,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 coupon: deal.coupon,
                                 expiresAt: deal.expiresAt
                             }}
-                            similarDeals={relatedDeals.slice(0, 3).map(r => ({
+                            similarDeals={relatedDeals.slice(0, 1).map(r => ({
                                 id: r.id,
                                 title: r.title,
                                 provider: r.provider,

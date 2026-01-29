@@ -1,5 +1,235 @@
 [
   {
+    "id": "2582",
+    "slug": "shadcn-ui",
+    "title": "Shadcn UI & Next JS - Build beautiful dashboards with shadcn",
+    "provider": "Udemy",
+    "price": 9.99,
+    "url": "https://trk.udemy.com/zx1JyO",
+    "category": "Development",
+    "image": "https://img-c.udemycdn.com/course/480x270/5687912_e3cf_14.jpg",
+    "description": "shadcn ui - build dashboards with shadcn ui components, including shadcn ui, tailwindcss, and Next JS (shadcn ui 2026)",
+    "content": "<div>Dive into the world of frontend development with this <b>comprehensive Shadcn UI course</b>, tailored for developers eager to craft state-of-the-art dashboards using Shadcn UI in Next.js. This course is your gateway to mastering the integration of form functionality, client-side validation, component customization, and dynamic chart creation - all key skills for any aspiring web developer. Note that this course focuses only on the front-end. We do not write any backend logic, database, or implement authentication in this course. All data in this course is hardcoded / dummy data. The sole focus of this course is building out beautiful front ends with Shadcn UI.</div><div><br></div><div>In this course we'll build \"SupportMe\" - a fictional dashboard that tracks employees, teams, and customer support tickets.</div><div><br></div><div>Why This Course?</div><div><ul><li><span style=\"font-size: 1rem;\">Focused Learning Path: Concentrate on building a visually appealing, interactive dashboard. By prioritizing frontend technologies, you'll gain proficiency in the most sought-after skills in the web development industry.</span></li><li><span style=\"font-size: 1rem;\">Hands-On Shadcn UI &amp; Next.js: Learn to leverage Shadcn UI within the Next.js ecosystem, enabling you to create fast, server-rendered React.</span></li><li><span style=\"font-size: 1rem;\">Forms and Validation with Zod: Dive deep into crafting forms with react-hook-form, and implementing client-side validation using Zod, ensuring data integrity without compromising user experience.</span></li><li><span style=\"font-size: 1rem;\">Extendable Components: Get creative with Shadcn UI by extending its components. This section empowers you to tailor elements to fit the unique needs of your projects.</span></li><li><span style=\"font-size: 1rem;\">Styling with Tailwind CSS: Embrace the utility-first approach of Tailwind CSS for styling. You'll learn how to efficiently design your dashboard without leaving the comfort of your HTML.</span></li><li><span style=\"font-size: 1rem;\">Interactive Charts with Recharts: Visualize data beautifully with Recharts. This module will guide you through integrating responsive and customizable charts into your dashboard for that extra flair.</span></li><li><span style=\"font-size: 1rem;\">Pure Frontend Focus: All course projects are designed with hardcoded/dummy data. There's no backend complexity or authentication to worry about—purely frontend development to enhance your skills.</span></li></ul></div>",
+    "coupon": "JAN26B",
+    "createdAt": "2026-01-29T19:49:52.082Z",
+    "updatedAt": "2026-01-29T19:49:52.082Z",
+    "seoTitle": "Shadcn UI & Next JS - Build beautiful dashboards with shadcn",
+    "seoDescription": "shadcn ui - build dashboards with shadcn ui components, including shadcn ui, tailwindcss, and Next JS (shadcn ui 2026). This is applicable to Web Development Udemy discount offers.",
+    "seoOgImage": "https://img-c.udemycdn.com/course/480x270/5687912_e3cf_14.jpg",
+    "instructor": "Tom Phillips, WebDevEducation (Tom Phillips)",
+    "duration": "7h 30m",
+    "language": "English",
+    "subcategory": "Web Development",
+    "learn": [
+      "Increase your value and improve your knowledge as a web developer\r",
+      "Learn how to build a dashboard with shadcn ui\r",
+      "Learn client side validation with zod and react-hook-form\r",
+      "Learn how to create beautiful charts and data visualizations using recharts"
+    ],
+    "requirements": [
+      "Have a good understanding of Javascript and React\r",
+      "Experience with Tailwind CSS would be beneficial"
+    ],
+    "originalPrice": 99.99,
+    "rating": 4.8,
+    "students": 2111,
+    "expiresAt": "2026-02-02T19:49:00.000Z"
+  },
+  {
+    "id": "1760464122401",
+    "title": "Cursor AI Beginner to Pro: Build Production Web Apps with AI",
+    "provider": "Udemy",
+    "slug": "cursor-ai-beginner-to-pro",
+    "price": 9.99,
+    "coupon": "JAN26B",
+    "url": "https://trk.udemy.com/MAarQ3",
+    "category": "Development",
+    "createdAt": "2025-10-14T17:48:42.401Z",
+    "updatedAt": "2026-01-29T19:42:03.681Z",
+    "learn": [
+      "Follow best practices for using Cursor AI in real-world development\r",
+      "Build and deploy full-stack apps with modern technologies\r",
+      "Leverage AI to accelerate development workflows\r",
+      "Implement authentication, authorization, and billing with Clerk\r",
+      "Design clean, accessible, and responsive UIs with Shadcn UI & Tailwind CSS\r",
+      "Model and manage relational data using Drizzle ORM and Neon PostgreSQL\r",
+      "Deploy and scale full-stack applications with Vercel and environment best practices"
+    ],
+    "requirements": [
+      "Knowledge of Next JS would be greatly beneficial however you can still follow along with minimal Next JS knowledge"
+    ],
+    "faqs": [],
+    "curriculum": [],
+    "originalPrice": 119.99,
+    "rating": 4.7,
+    "students": 5014,
+    "subcategory": "Software Development Tools",
+    "instructor": "Tom Phillips, WebDevEducation (Tom Phillips)",
+    "duration": "6h 30m",
+    "language": "English",
+    "image": "https://img-c.udemycdn.com/course/480x270/6550795_c69d_4.jpg",
+    "subtitle": "Use Cursor AI (vibe coding) to build and ship full Next.js web apps. Includes MCP, custom rules, auth, payments + more!",
+    "description": "Use Cursor AI (vibe coding) to build and ship full Next.js web apps. Includes MCP, custom rules, auth, payments + more!",
+    "content": "Build production-grade full-stack apps faster than ever by combining the power of **Cursor AI** with the best modern web tools: Next.js 15, TypeScript, Tailwind CSS, Shadcn UI, Drizzle ORM, Clerk, and Neon PostgreSQL.\r\nIn this project-based course you'll build FlashyCardy, a sleek flashcards app where users can sign up, create decks and cards, and upgrade to a Pro plan with Stripe and Clerk billing. You'll implement full authentication, role-based access, and a SaaS-style subscription system, all while letting *Cursor AI* do 100% of the coding. AKA Vibe Coding!\r\nThat's right: the entire app is built by prompting Cursor. No manual coding required. You'll see how to guide Cursor from a blank repo to a deployed, production-ready app using Agent Mode, structured prompting, and Cursor Rules to steer the AI and get high-quality, secure, and reliable code output.\r\nYou'll also use MCP (Model Context Protocol) to seamlessly connect to your Neon PostgreSQL database and generate seed data, schemas, and queries via Drizzle ORM, all through AI.\r\nLearn how to:\r\n- Build a full-stack SaaS app from scratch using only Cursor prompts\r\n- Use Agent Mode and Cursor Rules to drive consistent, secure, and accurate development\r\n- Connect to Neon and populate relational data via MCP + Drizzle\r\n- Implement auth, access control, and Stripe billing with Clerk\r\n- Build beautiful, accessible UIs using Shadcn UI + Tailwind CSS\r\n- Deploy with Vercel using production-ready environment configs\r\nBy the end you'll have a fully functional app, \"FlashyCardy\", and the practical workflow to build real apps with AI. This isn't just about watching code get generated; it's about learning how to think, prompt, and steer AI like a pro developer.\r\nIf you're ready to stop hand-typing boilerplate and start building with AI the smart way, this is the course for you.",
+    "seoTitle": "Cursor AI Beginner to Pro: Build Production Web Apps with AI",
+    "seoDescription": "Use Cursor AI (vibe coding) to build and ship full Next.js web apps. Includes MCP, custom rules, auth, payments + more!. This is applicable to Cursor AI Udemy discount offers.",
+    "seoOgImage": "https://img-c.udemycdn.com/course/480x270/6550795_c69d_4.jpg",
+    "expiresAt": "2026-02-02T19:41:00.000Z"
+  },
+  {
+    "id": "2074",
+    "slug": "windsurf-ai",
+    "title": "Windsurf Beginner to Pro: Build Production Web Apps with AI",
+    "provider": "Udemy",
+    "price": 9.99,
+    "url": "https://trk.udemy.com/6y24kV",
+    "category": "Development",
+    "image": "https://img-c.udemycdn.com/course/480x270/6858791_9d06.jpg",
+    "description": "Use Windsurf (vibe coding) to build and ship full Next.js web apps. Includes MCP, custom rules, auth, payments + more!",
+    "content": "<div>Build production-grade full-stack apps faster than ever by combining the power of <b>Windsurf</b> with the best modern web tools: Next.js 15, TypeScript, Tailwind CSS, Shadcn UI, Drizzle ORM, Clerk, and Neon PostgreSQL.</div><div><br></div><div>In this project-based course you'll build ProStoic, a mindful journaling app where users can log personal reflections and use Mirror Mode, an AI-powered feature that analyzes challenges through a Stoic lens and offers practical steps to move forward based on Stoic philosophy. You’ll implement full authentication, role-based access, and a SaaS-style subscription system, all while letting Windsurf do 100% of the coding. AKA Vibe Coding!</div><div><br></div><div>That's right: the entire app is built by prompting Windsurf. No manual coding required. You'll see how to guide Windsurf from a blank repo to a deployed, production-ready app using Code Mode, structured prompting, and Windsurf Rules and Windsurf Workflows to steer the AI and get high-quality, secure, and reliable code output.</div><div><br></div><div>You'll also use MCP (Model Context Protocol) to seamlessly connect to your Neon PostgreSQL database and generate seed data, schemas, and queries via Drizzle ORM, all through AI.</div><div><br></div><div>Learn how to:</div><div><ul><li><span style=\"font-size: 1rem;\">Build a full-stack SaaS app from scratch using only Windsurf prompts</span></li><li><span style=\"font-size: 1rem;\">Use Agent Mode and Windsurf Rules to drive consistent, secure, and accurate development</span></li><li><span style=\"font-size: 1rem;\">Connect to Neon and populate relational data via MCP + Drizzle</span></li><li><span style=\"font-size: 1rem;\">Implement auth, access control, and Stripe billing with Clerk</span></li><li><span style=\"font-size: 1rem;\">Build beautiful, accessible UIs using Shadcn UI + Tailwind CSS</span></li><li><span style=\"font-size: 1rem;\">Deploy with Vercel using production-ready environment configs</span></li></ul></div><div><br></div><div>By the end you'll have a fully functional app, ProStoic, and the practical workflow to build real apps with AI. This isn't just about watching code get generated; it's about learning how to think, prompt, and steer AI like a pro developer.</div><div><br></div><div>If you're ready to stop hand-typing boilerplate and start building with AI the smart way, this is the course for you.</div>",
+    "coupon": "JAN26B",
+    "createdAt": "2026-01-29T19:36:36.955Z",
+    "updatedAt": "2026-01-29T19:36:36.955Z",
+    "seoTitle": "Windsurf Beginner to Pro: Build Production Web Apps with AI",
+    "seoDescription": "Use Windsurf (vibe coding) to build and ship full Next.js web apps. Includes MCP, custom rules, auth, payments + more! This is applicable to Windsurf AI Udemy discount offers.",
+    "seoOgImage": "https://img-c.udemycdn.com/course/480x270/6858791_9d06.jpg",
+    "instructor": "Tom Phillips, WebDevEducation (Tom Phillips)",
+    "duration": "3h 30m",
+    "language": "English",
+    "subcategory": "Web Development",
+    "learn": [
+      "Follow best practices for using Windsurf AI in real-world development\r",
+      "Build and deploy full-stack apps with modern technologies\r",
+      "Leverage AI to accelerate development workflows\r",
+      "Implement authentication, authorization, and billing with Clerk\r",
+      "Design clean, accessible, and responsive UIs with Shadcn UI & Tailwind CSS\r",
+      "Model and manage relational data using Drizzle ORM and Neon PostgreSQL\r",
+      "Deploy and scale full-stack applications with Vercel and environment best practices"
+    ],
+    "requirements": [
+      "Knowledge of Next JS would be greatly beneficial however you can still follow along with minimal Next JS knowledge"
+    ],
+    "originalPrice": 119.99,
+    "rating": 5,
+    "students": 109,
+    "expiresAt": "2026-02-02T19:36:00.000Z"
+  },
+  {
+    "id": "2957",
+    "slug": "wordpress-gutenberg-block-development",
+    "title": "WordPress Gutenberg Block Development with React JS and PHP",
+    "provider": "Udemy",
+    "price": 9.99,
+    "url": "https://trk.udemy.com/mOxQ5a",
+    "category": "Development",
+    "image": "https://img-c.udemycdn.com/course/480x270/3748678_744b_3.jpg",
+    "description": "Use ReactJS and PHP to build a custom WordPress Gutenberg block library - with React.js & WordPress Gutenberg (WP 6+)",
+    "content": "<div>Master <b>WordPress Gutenberg Block Development </b>with React &amp; PHP by building a completely custom WordPress block library.</div><div><br></div><div>In this course we'll be building \"Blockylicious\" - a completely custom WordPress block library built using React and PHP. We'll be building 5 different custom WordPress blocks in this course:</div><div><br></div><div>Introducing the Ultimate Gutenberg Block Library!</div><div><br></div><div>Curvy: Break the mold with aesthetically pleasing curvy shape dividers. Elevate your content separation in style.</div><div><br></div><div>Piccy Gallery &amp; Piccy Image: Craft interactive image galleries that engage and enthrall your site visitors.</div><div><br></div><div>Clicky Group &amp; Clicky Button: Elevate your call-to-action game with dynamic button groups that link directly to specific pages, not just URLs.</div><div><br></div><div>What You'll Learn:</div><div><ul><li><span style=\"font-size: 1rem;\">React within WordPress: Understand the fusion of React's component-based architecture within the Gutenberg editor for seamless block creation.</span></li><li><span style=\"font-size: 1rem;\">Static vs. Dynamic Blocks: Delve deep into the nuances and understand why dynamic blocks often win.</span></li><li><span style=\"font-size: 1rem;\">Custom Block Essentials: Explore custom block data, side panels, post data retrieval, custom toolbars, and leveraging innate WordPress toolbars and features.</span></li><li><span style=\"font-size: 1rem;\">Block Variations: Craft varied designs like Curvy, Curvy top, and Curvy bottom.</span></li><li><span style=\"font-size: 1rem;\">Block Transforms: Master the art of transforming regular text paragraphs into feature-rich Curvy blocks using React components.</span></li><li><span style=\"font-size: 1rem;\">Custom Block Metadata: Personalize your blocks with custom icons, categories, and more.</span></li><li><span style=\"font-size: 1rem;\">Inner Block Rendering: Dive into the mechanics of rendering inner blocks efficiently with React.</span></li><li><span style=\"font-size: 1rem;\">Block Restriction: Learn the art of defining which blocks fit where, such as ensuring Clicky Button blocks exclusively serve as children to Clicky Group blocks.</span></li><li><span style=\"font-size: 1rem;\">Interactive Blocks: Harness the power of JavaScript and React to create dynamic blocks that interact and respond.</span></li><li><span style=\"font-size: 1rem;\">Block Previews: Get hands-on with block previews by utilizing \"example\" in block.json.</span></li><li><span style=\"font-size: 1rem;\">Styling Techniques: Dive into different strategies for block styling from stylesheets, block.json attributes, to theme.json elements.</span></li></ul></div><div><br></div><div>Transform your WordPress designs and functionalities using custom built Gutenberg blocks enhanced by React and PHP. Enroll today and shape the future of your websites!</div>",
+    "coupon": "JAN26B",
+    "createdAt": "2026-01-29T19:29:37.475Z",
+    "updatedAt": "2026-01-29T19:29:37.475Z",
+    "seoTitle": "WordPress Gutenberg Block Development with React JS and PHP",
+    "seoDescription": "Use ReactJS and PHP to build a custom WordPress Gutenberg block library - with React.js & WordPress Gutenberg (WP 6+). This is applicable to Web Development Udemy discount offers.",
+    "seoOgImage": "https://img-c.udemycdn.com/course/480x270/3748678_744b_3.jpg",
+    "instructor": "Tom Phillips, WebDevEducation (Tom Phillips)",
+    "duration": "9h",
+    "language": "English",
+    "subcategory": "Web Development",
+    "learn": [
+      "Build a complete custom WordPress block library\r",
+      "Learn the difference between static and dynamic WordPress blocks\r",
+      "Create endless WordPress block customizations and features with React\r",
+      "Learn block variations and transform WordPress blocks into other blocks\r",
+      "Load WordPress data within blocks\r",
+      "Learn different styling techniques for WordPress blocks\r",
+      "Build a dynamic block front-end with PHP and JavaScript"
+    ],
+    "requirements": [
+      "Some familiarity with the WordPress block editor and React JS would be beneficial. Everything else is covered in the course!"
+    ],
+    "originalPrice": 119.99,
+    "rating": 4.7,
+    "students": 1572,
+    "expiresAt": "2026-02-02T19:29:00.000Z"
+  },
+  {
+    "id": "2534",
+    "slug": "github-copilot",
+    "title": "GitHub Copilot Beginner to Pro - AI for Coding & Development",
+    "provider": "Udemy",
+    "price": 9.99,
+    "url": "https://trk.udemy.com/QjVkO6",
+    "category": "Development",
+    "subcategory": "GitHub Copilot",
+    "image": "https://img-c.udemycdn.com/course/480x270/4967038_3521_9.jpg",
+    "description": "GitHub Copilot for Agentic and Vibe Coding. Use Copilot AI to generate code, unit tests, + more. (GitHub Copilot 2026)",
+    "content": "<div>This course has been completely updated for 2026!</div><div><br></div><div>Welcome to the <b>GitHub Copilot course</b>! In this course, you will learn everything you need to know about using GitHub Copilot, the revolutionary AI-powered coding tool that helps developers write and generate code faster and more efficiently.</div><div><br></div><div>Whether you're an experienced programmer or just starting out, GitHub Copilot can help you write better code in less time. With its advanced machine learning algorithms, GitHub Copilot can generate anything from code snippets to entire features all in a matter of seconds, making it easier than ever to write clean, concise, and bug-free code.</div><div><br></div><div>The highlights of this course include:</div><div><ul><li><span style=\"font-size: 1rem;\">Model Context Protocol (MCP) within GitHub Copilot Chat</span></li><li><span style=\"font-size: 1rem;\">Generating unit tests and commit messages with GitHub Copilot</span></li><li><span style=\"font-size: 1rem;\">Different agent modes (Plan mode, Agent mode, Ask mode, Edit mode, + CUSTOM AGENTS!)</span></li><li><span style=\"font-size: 1rem;\">Agent orchestration with Local agents, Cloud agents, and Background agents</span></li><li><span style=\"font-size: 1rem;\">Custom slash commands / prompts</span></li><li><span style=\"font-size: 1rem;\">Agent instructions (with a new section on Agent Skills coming soon!)</span></li><li><span style=\"font-size: 1rem;\">+ SO MUCH MORE!</span></li></ul></div><div><br></div><div>We build 2 projects in this course. The first project is a real-world practical project called \"Bucks2Bar\", a simple web application using html, javascript, and css, that allows users to input income and expenses for each month of the year, plot it to a bar chart, then download that chart as an image. The majority of this project code will be generated using GitHub Copilot and GitHub Copilot chat and will allow us to cover a wide range of Github Copilot features.</div><div><br></div><div>The second project will move onto more advanced concepts, where we build a full stack Next JS application. We take a look at how to manage GitHub Copilot Chat across all levels of a development stack, from front end code, to back end code, as well as handling authentication, validation, and database interactions. As we delve into the journey of building these projects with GitHub Copilot and GitHub Copilot chat, we take a look at many different features such as, various ways to provide context to GitHub Copilot Chat, various ways to initialize a new chat, generating unit tests and commit messages with GitHub Copilot, using the GitHub Copilot Chat feature in the GitHub mobile app, refactoring code, detecting security concerns, tips and tricks + more!</div><div><br></div><div>All of this code will be generated using GitHub Copilot Chat AI and not a single line of code is typed manually in this course!</div><div><br></div><div>This course will guide you through each step of the process, providing practical examples and real-world scenarios to help you master this powerful coding tool. By the end of the course, you'll have the skills and confidence to use GitHub Copilot to improve your coding productivity and take your coding skills to the next level.</div><div><br></div><div>So what are you waiting for? Enroll now and discover the power of generating code with GitHub Copilot!</div>",
+    "coupon": "JAN26B",
+    "createdAt": "2026-01-29T19:22:20.768Z",
+    "updatedAt": "2026-01-29T19:22:20.768Z",
+    "seoTitle": "GitHub Copilot Beginner to Pro - AI for Coding & Development",
+    "seoDescription": "GitHub Copilot for Agentic and Vibe Coding. Use Copilot AI to generate code, unit tests, + more. (GitHub Copilot 2026). This is applicable to GitHub Copilot Udemy discount offers.",
+    "seoOgImage": "https://img-c.udemycdn.com/course/480x270/4967038_3521_9.jpg",
+    "instructor": "Tom Phillips, WebDevEducation (Tom Phillips)",
+    "duration": "6h",
+    "language": "English",
+    "learn": [
+      "Turbocharge your productivity and increase your value as a web developer with GitHub Copilot\r",
+      "Use GitHub Copilot to generate code from libraries and plugins without needing to refer to documentation\r",
+      "Generate unit tests and code documentation using GitHub Copilot Chat\r",
+      "Generate secure code and identify code vulnerabilities with GitHub Copilot\r",
+      "Learn efficient prompting techniques to get the best out of GitHub Copilot"
+    ],
+    "requirements": [
+      "VSCode installed with the GitHub Copilot and GitHub Copilot Chat extensions"
+    ],
+    "originalPrice": 99.99,
+    "rating": 4.5,
+    "students": 136962,
+    "expiresAt": "2026-02-02T19:22:00.000Z"
+  },
+  {
+    "id": "1760462382409",
+    "title": "Claude Code Beginner to Pro: Agentic Coding for Developers",
+    "provider": "Udemy",
+    "slug": "claude-code-agentic-coding-for-developers",
+    "price": 9.99,
+    "coupon": "JAN26B",
+    "url": "https://trk.udemy.com/xLAYAx",
+    "category": "Development",
+    "createdAt": "2025-10-14T17:19:42.409Z",
+    "updatedAt": "2026-01-29T19:13:44.224Z",
+    "learn": [
+      "How to use Claude Code for agentic coding, including building custom workflows, automations, and slash commands.\r",
+      "How to build a full-stack Next.js app (LiftingDiary) generated almost entirely by Claude Code.\r",
+      "How to integrate modern tooling: Clerk for authentication, Postgres on Neon, Drizzle ORM, and shadcn/ui for a production-ready stack.\r",
+      "How to seed databases with MCP, enforce coding standards with custom documentation, and guide Claude Code's output to match your style.\r",
+      "Best practices for treating Claude Code as a pair-programmer while keeping your codebase clean, maintainable, and consistent.\r",
+      "Advanced techniques to extend Claude Code with your own conventions and scale agentic coding into larger projects."
+    ],
+    "requirements": [
+      "An active subscription with Claude Code.\r",
+      "Familiarity with web development concepts."
+    ],
+    "faqs": [],
+    "curriculum": [],
+    "originalPrice": 119.99,
+    "rating": 4.7,
+    "students": 3651,
+    "subcategory": "Claude Code",
+    "instructor": "Tom Phillips, WebDevEducation (Tom Phillips)",
+    "duration": "5h",
+    "language": "English",
+    "image": "https://img-c.udemycdn.com/course/480x270/6747921_31c4_3.jpg",
+    "subtitle": "Use Claude Code AI to build Next.js web apps. Includes MCP, custom rules, commands, agents, workflow automations + more!",
+    "description": "Use Claude Code AI to build Next.js web apps. Includes MCP, custom rules, commands, agents, workflow automations + more!",
+    "content": "<div>To get the most out of this course, a Claude subscription is recommended. We use premium models throughout the lessons to demonstrate the tool's full capabilities and superior output.</div><div><br></div><div>Step into the future of software development with Claude Code. In this hands-on, project-based course, you'll learn how to harness agentic coding to build full-stack applications faster, smarter, and more consistently than ever before.</div><div><br></div><div>We'll build a complete workout logging app called LiftingDiary, powered by Next.js, while letting Claude Code generate the heavy lifting for us. Along the way, you'll discover how to design and generate your own coding standards, workflows, and automations so that Claude Code writes production-ready code that feels like your code.</div><div><br></div><div>What You'll Learn:</div><div><ul><li><span style=\"font-size: 1rem;\">Agentic Coding Fundamentals</span></li><li>Understand how Claude Code works, how to steer its output, and build your own \"agentic workflows.\"</li><li><span style=\"font-size: 1rem;\">Building LiftingDiary from Scratch</span></li><li>Use Claude Code to generate an entire Next.js app, from setup to deployment.</li><li><span style=\"font-size: 1rem;\">Database &amp; Auth Integration</span></li><li><span style=\"font-size: 1rem;\">Seed a Postgres database (hosted on Neon) with sample data in seconds using MCP (Model Context Protocol).</span></li><li><span style=\"font-size: 1rem;\">Implement secure authentication with Clerk.</span></li><li><span style=\"font-size: 1rem;\">Manage schema and queries using Drizzle ORM.</span></li><li><span style=\"font-size: 1rem;\">UI &amp; Developer Experience</span></li><li><span style=\"font-size: 1rem;\">Build a modern interface with shadcn/ui.</span></li><li><span style=\"font-size: 1rem;\">Customize components and maintain design consistency.</span></li><li><span style=\"font-size: 1rem;\">Claude Code as Your Teammate</span></li><li><span style=\"font-size: 1rem;\">Write custom documentation files to guide coding standards.</span></li><li><span style=\"font-size: 1rem;\">Enforce conventions with rules to influence every line of output.</span></li><li><span style=\"font-size: 1rem;\">Create custom slash commands for common tasks.</span></li><li><span style=\"font-size: 1rem;\">Automate repetitive workflows.</span></li><li><span style=\"font-size: 1rem;\">Best Practices with Claude Code</span></li><li>Discover how to avoid pitfalls, keep your codebase maintainable, and treat Claude as an intelligent pair-programmer instead of a copy-paste machine.</li><li><span style=\"font-size: 1rem;\">Advanced Agentic Coding Techniques</span></li><li>Learn how to prompt, build workflows, and extend Claude Code with your own conventions.</li></ul></div><div><span style=\"font-size: 1rem;\">Whether you're a beginner curious about AI coding tools or an experienced developer ready to go pro with Claude Code, this course will give you the skills, confidence, and systemized approach to thrive in the new era of software development.</span></div>",
+    "seoTitle": "Claude Code Beginner to Pro: Agentic Coding for Developers",
+    "seoDescription": "Use Claude Code AI to build Next.js web apps. Includes MCP, custom rules, commands, agents, workflow automations + more!. This is applicable to Claude Code Udemy discount offers.",
+    "seoOgImage": "https://img-c.udemycdn.com/course/480x270/6747921_31c4_3.jpg",
+    "expiresAt": "2026-02-02T19:04:00.000Z"
+  },
+  {
     "id": "5416",
     "slug": "javascript-fernando-herrera",
     "title": "JavaScript Moderno: Guía para dominar el lenguaje",
@@ -32605,376 +32835,6 @@
     "subtitle": "In-depth .NET programming course from basics to advanced with OOP & LINQ. Focus on clean code, performance and practice."
   },
   {
-    "id": "1760464122401",
-    "title": "Cursor AI Beginner to Pro: Build Production Web Apps with AI",
-    "provider": "Udemy",
-    "slug": "cursor-ai-beginner-to-pro",
-    "price": 12.99,
-    "coupon": "MT251015G4",
-    "url": "https://trk.udemy.com/LKMPNO",
-    "category": "Development",
-    "createdAt": "2025-10-14T17:48:42.401Z",
-    "updatedAt": "2025-10-14T18:04:05.876Z",
-    "learn": [
-      "Follow best practices for using Cursor AI in real-world development",
-      "Build and deploy full-stack apps with modern technologies",
-      "Leverage AI to accelerate development workflows",
-      "Implement authentication, authorization, and billing with Clerk",
-      "Design clean, accessible, and responsive UIs with Shadcn UI & Tailwind CSS",
-      "Model and manage relational data using Drizzle ORM and Neon PostgreSQL",
-      "Deploy and scale full-stack applications with Vercel and environment best practices"
-    ],
-    "requirements": [
-      "Knowledge of Next JS would be greatly beneficial however you can still follow along with minimal Next JS knowledge"
-    ],
-    "faqs": [],
-    "curriculum": [
-      {
-        "section": "Introduction and project setup",
-        "lectures": [
-          {
-            "title": "Course intro"
-          },
-          {
-            "title": "Machine setup"
-          },
-          {
-            "title": "Important - read before you begin the course! (Github repo etc)"
-          },
-          {
-            "title": "Stack overview"
-          },
-          {
-            "title": "Overview of Cursor + create the Next JS project"
-          },
-          {
-            "title": "Privacy mode in Cursor"
-          },
-          {
-            "title": "Install shadcn ui + introduction to cursor rules"
-          },
-          {
-            "title": "Update font (including context window + modifying files)"
-          },
-          {
-            "title": "Enable dark mode, set up auth with clerk, + prompt tips"
-          },
-          {
-            "title": "Implement dark theme for clerk"
-          },
-          {
-            "title": "Setup postgres database on neon + drizzle for database interactions"
-          },
-          {
-            "title": "Set up database tables"
-          },
-          {
-            "title": "Create important cursor rules for security"
-          },
-          {
-            "title": "Set up github repo"
-          }
-        ]
-      },
-      {
-        "section": "Build the dashboard functionality",
-        "lectures": [
-          {
-            "title": "Use MCP in Cursor to seed the database"
-          },
-          {
-            "title": "Create the dashboard page and adjust the homepage content"
-          },
-          {
-            "title": "Update the shadcn rule file"
-          },
-          {
-            "title": "Update the auth rule file"
-          },
-          {
-            "title": "Improve the dashboard UI"
-          }
-        ]
-      },
-      {
-        "section": "Build the deck functionality",
-        "lectures": [
-          {
-            "title": "Create the deck page"
-          },
-          {
-            "title": "Implement the edit deck functionality"
-          },
-          {
-            "title": "Implement the edit and delete card functionality"
-          },
-          {
-            "title": "Implement the study deck functionality"
-          },
-          {
-            "title": "Implement create deck and delete deck"
-          }
-        ]
-      },
-      {
-        "section": "Build the subscriptions functionality",
-        "lectures": [
-          {
-            "title": "Set up clerk billing"
-          },
-          {
-            "title": "Set up cursor rule for clerk billing"
-          },
-          {
-            "title": "Implement 3 deck limit for users on free plan + pricing page"
-          },
-          {
-            "title": "Set up openai and vercel ai"
-          },
-          {
-            "title": "Implement \"generate cards with ai\" feature for users on paid plan"
-          }
-        ]
-      },
-      {
-        "section": "Extras",
-        "lectures": [
-          {
-            "title": "Prepare project for production"
-          },
-          {
-            "title": "Push to production on vercel"
-          },
-          {
-            "title": "Background agents and GitHub branches"
-          },
-          {
-            "title": "Describing Cursor AI to a Non-Developer Friend"
-          },
-          {
-            "title": "Job Interview Preparation: Explain your use of AI in your development process"
-          }
-        ]
-      },
-      {
-        "section": "Course outro",
-        "lectures": [
-          {
-            "title": "Congratulations!"
-          },
-          {
-            "title": "BONUS!"
-          }
-        ]
-      }
-    ],
-    "originalPrice": 119.99,
-    "rating": 4.7,
-    "students": 2191,
-    "subcategory": "Cursor AI",
-    "instructor": "Tom Phillips, WebDevEducation (Tom Phillips)",
-    "duration": "6h",
-    "language": "English",
-    "image": "https://img-c.udemycdn.com/course/480x270/6550795_c69d_4.jpg",
-    "subtitle": "Use Cursor AI (vibe coding) to build and ship full Next.js web apps. Includes MCP, custom rules, auth, payments + more!",
-    "description": "Use Cursor AI (vibe coding) to build and ship full Next.js web apps. Includes MCP, custom rules, auth, payments + more!",
-    "content": "Build production-grade full-stack apps faster than ever by combining the power of **Cursor AI** with the best modern web tools: Next.js 15, TypeScript, Tailwind CSS, Shadcn UI, Drizzle ORM, Clerk, and Neon PostgreSQL.\nIn this project-based course you'll build FlashyCardy, a sleek flashcards app where users can sign up, create decks and cards, and upgrade to a Pro plan with Stripe and Clerk billing. You'll implement full authentication, role-based access, and a SaaS-style subscription system, all while letting *Cursor AI* do 100% of the coding. AKA Vibe Coding!\nThat's right: the entire app is built by prompting Cursor. No manual coding required. You'll see how to guide Cursor from a blank repo to a deployed, production-ready app using Agent Mode, structured prompting, and Cursor Rules to steer the AI and get high-quality, secure, and reliable code output.\nYou'll also use MCP (Model Context Protocol) to seamlessly connect to your Neon PostgreSQL database and generate seed data, schemas, and queries via Drizzle ORM, all through AI.\nLearn how to:\n- Build a full-stack SaaS app from scratch using only Cursor prompts\n- Use Agent Mode and Cursor Rules to drive consistent, secure, and accurate development\n- Connect to Neon and populate relational data via MCP + Drizzle\n- Implement auth, access control, and Stripe billing with Clerk\n- Build beautiful, accessible UIs using Shadcn UI + Tailwind CSS\n- Deploy with Vercel using production-ready environment configs\nBy the end you'll have a fully functional app, \"FlashyCardy\", and the practical workflow to build real apps with AI. This isn't just about watching code get generated; it's about learning how to think, prompt, and steer AI like a pro developer.\nIf you're ready to stop hand-typing boilerplate and start building with AI the smart way, this is the course for you.",
-    "seoTitle": "Cursor AI Beginner to Pro: Build Production Web Apps with AI",
-    "seoDescription": "Use Cursor AI (vibe coding) to build and ship full Next.js web apps. Includes MCP, custom rules, auth, payments + more!. This is applicable to Cursor AI Udemy discount offers.",
-    "seoOgImage": "https://img-c.udemycdn.com/course/480x270/6550795_c69d_4.jpg"
-  },
-  {
-    "id": "1760462382409",
-    "title": "Claude Code Beginner to Pro: Agentic Coding for Developers",
-    "provider": "Udemy",
-    "slug": "claude-code-agentic-coding-for-developers",
-    "price": 12.99,
-    "coupon": "MT251015G4",
-    "url": "https://trk.udemy.com/JKMrZR",
-    "category": "Development",
-    "createdAt": "2025-10-14T17:19:42.409Z",
-    "updatedAt": "2025-10-14T17:41:09.958Z",
-    "learn": [
-      "How to use Claude Code for agentic coding, including building custom workflows, automations, and slash commands.",
-      "How to build a full-stack Next.js app (LiftingDiary) generated almost entirely by Claude Code.",
-      "How to integrate modern tooling: Clerk for authentication, Postgres on Neon, Drizzle ORM, and shadcn/ui for a production-ready stack.",
-      "How to seed databases with MCP, enforce coding standards with custom documentation, and guide Claude Code's output to match your style.",
-      "Best practices for treating Claude Code as a pair-programmer while keeping your codebase clean, maintainable, and consistent.",
-      "Advanced techniques to extend Claude Code with your own conventions and scale agentic coding into larger projects."
-    ],
-    "requirements": [
-      "An active subscription with Claude Code.",
-      "Familiarity with web development concepts."
-    ],
-    "faqs": [],
-    "curriculum": [
-      {
-        "section": "Introduction",
-        "lectures": [
-          {
-            "title": "Course introduction & project demo",
-            "duration": "3m 45s"
-          },
-          {
-            "title": "Important - read before you begin the course! (Github repo etc)",
-            "duration": "34s"
-          },
-          {
-            "title": "Udemy ratings & reviews",
-            "duration": "38s"
-          }
-        ]
-      },
-      {
-        "section": "Project setup & Introduction to Claude Code",
-        "lectures": [
-          {
-            "title": "Tools needed for this course",
-            "duration": "2m 30s"
-          },
-          {
-            "title": "Next JS project setup & intro to Claude Code",
-            "duration": "12m 58s"
-          },
-          {
-            "title": "Set up Clerk using Claude Code",
-            "duration": "8m 54s"
-          },
-          {
-            "title": "Prompt Claude Code to customize Clerk (includes context window)",
-            "duration": "9m 58s"
-          },
-          {
-            "title": "Explanation of the context window in Claude Code",
-            "duration": "4m 19s"
-          },
-          {
-            "title": "Finish project setup",
-            "duration": "12m 38s"
-          },
-          {
-            "title": "Generate db schema with Claude Code",
-            "duration": "10m"
-          },
-          {
-            "title": "Use Neon MCP in Claude Code to generate example data to seed the db",
-            "duration": "14m 37s"
-          }
-        ]
-      },
-      {
-        "section": "Generate Code with Claude Code",
-        "lectures": [
-          {
-            "title": "Generate the dashboard page with Claude Code",
-            "duration": "8m 31s"
-          },
-          {
-            "title": "Influence code output from Claude Code with doc files",
-            "duration": "16m 8s"
-          },
-          {
-            "title": "Generate the data-fetching doc with Claude Code and query for workouts",
-            "duration": "16m 11s"
-          },
-          {
-            "title": "Finish the main dashboard page (includes Thinking mode)",
-            "duration": "11m 14s"
-          },
-          {
-            "title": "Automate git branching and merging with Claude Code",
-            "duration": "12m 2s"
-          },
-          {
-            "title": "Generate the auth and data mutations docs with Claude Code",
-            "duration": "12m 42s"
-          },
-          {
-            "title": "Implement the create workout functionality",
-            "duration": "16m 30s"
-          },
-          {
-            "title": "Custom slash commands with Claude Code",
-            "duration": "9m 32s"
-          },
-          {
-            "title": "Implement the update workout functionality",
-            "duration": "14m 50s"
-          },
-          {
-            "title": "Claude Code sub agents",
-            "duration": "12m 54s"
-          }
-        ]
-      },
-      {
-        "section": "Advanced automations with GitHub Actions and Cloud Code",
-        "lectures": [
-          {
-            "title": "Deploy to Vercel",
-            "duration": "6m 13s"
-          },
-          {
-            "title": "Set up Claude Code GitHub Actions",
-            "duration": "4m 40s"
-          },
-          {
-            "title": "Automate GitHub issue fixing with Claude Code GitHub Actions (part 1)",
-            "duration": "8m 23s"
-          },
-          {
-            "title": "Automate GitHub issue fixing with Claude Code GitHub Actions (part 2)",
-            "duration": "22m 6s"
-          }
-        ]
-      },
-      {
-        "section": "Extras",
-        "lectures": [
-          {
-            "title": "Update the dashboard calendar UI",
-            "duration": "9m 28s"
-          },
-          {
-            "title": "Implement adding exercises and sets to a workout",
-            "duration": "6m 17s"
-          },
-          {
-            "title": "Personal v project custom slash commands",
-            "duration": "11m 8s"
-          }
-        ]
-      },
-      {
-        "section": "Course outro",
-        "lectures": [
-          {
-            "title": "Congratulations!",
-            "duration": "1m 3s"
-          },
-          {
-            "title": "BONUS!",
-            "duration": "1m 7s"
-          }
-        ]
-      }
-    ],
-    "originalPrice": 119.99,
-    "rating": 4.7,
-    "students": 206,
-    "subcategory": "Claude Code",
-    "instructor": "Tom Phillips, WebDevEducation (Tom Phillips)",
-    "duration": "4h 30m",
-    "language": "English",
-    "image": "https://img-c.udemycdn.com/course/480x270/6747921_31c4_3.jpg",
-    "subtitle": "Use Claude Code AI to build Next.js web apps. Includes MCP, custom rules, commands, agents, workflow automations + more!",
-    "description": "Use Claude Code AI to build Next.js web apps. Includes MCP, custom rules, commands, agents, workflow automations + more!",
-    "content": "Claude Code Beginner to Pro: Agentic Coding for Developers Courses Online from Udemy by Tom Phillips and WebDevEducation\nIMPORTANT! An active Claude subscription is required to take this course. Unfortunately **Claude Code** is not a free tool.\nStep into the future of software development with *Claude Code*. In this hands-on, project-based course, you'll learn how to harness agentic coding to build full-stack applications faster, smarter, and more consistently than ever before.\nWe'll build a complete workout logging app called LiftingDiary, powered by Next.js, while letting Claude Code generate the heavy lifting for us. Along the way, you'll discover how to design and generate your own coding standards, workflows, and automations so that Claude Code writes production-ready code that feels like your code.\nWhether you're a beginner curious about AI coding tools or an experienced developer ready to go pro with Claude Code, this course will give you the skills, confidence, and systemized approach to thrive in the new era of software development.",
-    "seoTitle": "Claude Code Beginner to Pro: Agentic Coding for Developers",
-    "seoDescription": "Use Claude Code AI to build Next.js web apps. Includes MCP, custom rules, commands, agents, workflow automations + more!. This is applicable to Claude Code Udemy discount offers.",
-    "seoOgImage": "https://img-c.udemycdn.com/course/480x270/6747921_31c4_3.jpg"
-  },
-  {
     "id": "2701",
     "slug": "react-bootcamp-the-complete-guide",
     "title": "React Bootcamp - The Complete Guide",
@@ -36785,24 +36645,6 @@
     "seoOgImage": "https://coursespeak.com/wp-content/uploads/Data-Visualization-with-Kibana.webp"
   },
   {
-    "id": "2957",
-    "slug": "sui-blockchain-with-move-and-reactjs",
-    "title": "Sui Blockchain with Move &amp; React.js &#8211; The Complete Guide",
-    "provider": "Udemy",
-    "price": 9.99,
-    "url": "https://www.udemy.com/course/sui-dapps-with-move-react-build-real-projects/?couponCode=ST10MT30325G1",
-    "category": "Programming Languages",
-    "image": "https://coursespeak.com/wp-content/uploads/Sui-Blockchain-with-Move.webp",
-    "description": "Develop Sui dApps with Move (Rust-based) and React. Build a voting system and meme coin. Code smart contracts for Web3.",
-    "content": "**Sui Blockchain with Move & React.js – The Complete Guide Udemy Coupon Code by [Filip Jerga](https://www.udemy.com/user/filip-jerga/)** with 17 hours on-demand video course and free 1 downloadable resource. Learn how to Develop Sui dApps with Move (Rust-based) and React. Build a voting system and meme coin. Code smart contracts for Web3.\n\n## Overview of Sui Blockchain Course\n\n## Sui Blockchain with Move & React.js – The Complete Guide Course on Udemy\n\nThis course is your ultimate guide to mastering blockchain development on the **Sui blockchain**. Whether you’re a beginner exploring the world of decentralized applications (dApps) or an experienced developer diving into Sui, this course combines practical projects with in-depth explanations of the **Move programming language** and **React**.\n\n**What Makes This Course Unique?**\n\nRather than focusing on abstract concepts, this course is project-based, ensuring you learn by building. You’ll create two fully functional applications from scratch, covering both **Move smart contracts** and **React-based frontends**, while diving deep into Sui’s unique features like **owned and shared objects, object storage, and gas fees**. Additionally, you’ll write and execute **unit tests** to ensure the reliability and security of your smart contracts.\n\n**Course Highlights**\n\n**Kickstart Your Blockchain Development Journey**\n\n*   Gain a solid understanding of blockchain principles and how Sui differentiates itself with its object-centric architecture.\n*   Set up your development environment to write, test, and deploy Move smart contracts seamlessly.\n\n**Project 1: Voting Proposal System**\n\nDelve into **Sui’s object model** by building a **voting proposal system** that covers all aspects of a professional-grade application:\n\n*   **Create and Manage Proposals:** Develop a shared object-based system for creating proposals with expiration dates.\n*   **Secure Voting Mechanisms:** Prevent double voting with a voter registry maintained within each proposal.\n*   **Tokenized Participation:** Issue NFTs to users as proof of their vote, introducing tokenized user interactions.\n*   **Testing for Perfection:** Write comprehensive **unit tests** to validate the functionality of your smart contracts, ensuring they behave as expected in all scenarios.\n*   **Advanced Design:** Learn modular programming techniques to build reusable, efficient, and secure contract modules.\n\nBy focusing on both functionality and rigorous testing, this project ensures you gain the skills to develop reliable and secure smart contracts.\n\n**Project 2: Meme Coin**\n\nBuild and release your own **meme coin**, taking the next step in your blockchain development journey:\n\n*   **Token Creation:** Define and deploy a custom token with a total supply of 1 billion.\n*   **Tokenomics Strategy:** Explore best practices for token distribution and supply management.\n*   **Liquidity Pool Fundamentals:** Gain a clear understanding of liquidity pools and how to set one up for your token to ensure tradability and market dynamics.\n*   **Frontend Integration:** Build a React-based interface to showcase your token and allow users to interact with it.\n\n**Learn Core Sui Blockchain Concepts**\n\nThis course is designed to teach you Sui’s unique features in the context of real-world applications:\n\n*   **Owned and Shared Objects:** Learn how Sui manages assets through its object-based model, and how to utilize these concepts in your projects.\n*   **Move Programming Best Practices:** Write secure and efficient smart contracts using modular and reusable components.\n*   **Unit Testing:** Master the art of testing smart contracts to ensure robust functionality and safeguard your applications.\n\n**Frontend Integration**\n\n*   Build intuitive and user-friendly dApps using **React**.\n*   Connect smart contracts to your frontend with wallet integrations and blockchain data.\n*   Create seamless user experiences that bridge blockchain functionality with real-world use cases.\n\n**Deployment and Beyond**\n\n*   Test, debug, and validate your applications using **unit tests**.\n*   Learn the steps to deploy your projects on the Sui testnet and mainnet.\n*   Discover strategies to grow your blockchain applications and build a lasting impact in the ecosystem.\n\n**By the End of This Course**\n\nYou’ll have:\n\n1.  **A Comprehensive Understanding of Sui Blockchain Development:** Master Move’s core concepts and how to leverage Sui’s unique architecture.\n2.  **Two Real-World Projects in Your Portfolio:** A rigorously tested Voting Proposal System and a Meme Coin with liquidity pool fundamentals.\n3.  **The Skills to Build and Deploy dApps:** Confidence to design, code, test, and publish innovative applications on the Sui blockchain.\n\nTake the leap into blockchain development with **Sui and Move**—join the course now and start building the future!\n\n10Expert Score\n\nSui Blockchain with Move & React.js – The Complete Guide\n\nDevelop Sui dApps with Move (Rust-based) and React. Build a voting system and meme coin. Code smart contracts for Web3.\n\n17 hours on-demand video\n\n10\n\n1 downloadable resource\n\n10\n\nAccess on mobile and TV\n\n10\n\nFull lifetime access\n\n10\n\nCertificate of completion\n\n10\n\n## What you’ll learning in this Sui Blockchain Course\n\n*   Build real-world dApps on the Sui blockchain using Move and React\n*   Master Move’s core concepts, including owned and shared objects\n*   Learn how to create coins, including a meme coin\n*   Write and execute unit tests for smart contract functionality\n\n## Top Blockchain Courses for 2025\n\n9.5\n\n[![Blockchain A-Z: Build a Blockchain, a Crypto + ChatGPT Prize](https://coursespeak.com/wp-content/uploads/thumbs_dir/Blockchain-233ynkc354kdgvdwdn35xtyp0bxqdxhul85q817l82x8.jpg)](https://coursespeak.com/build-your-blockchain-az/)\n\n### [Blockchain A-Z: Build a Blockchain, a Crypto + ChatGPT Prize](https://coursespeak.com/build-your-blockchain-az/) Best seller\n\nHarness the power of the most disruptive technology since the internet through real life examples! Master Blockchain Now\n\n$11 $119.99 [REDEEM](https://click.linksynergy.com/deeplink?id=ul5nQTvb3cM&mid=39197&murl=https%3A%2F%2Fwww.udemy.com%2Fcourse%2Fbuild-your-blockchain-az%2F%3FcouponCode%3DST9MT120225A&u1=CTNS)\n\nREDEEM COUPON\n\n[Read full review](https://coursespeak.com/build-your-blockchain-az/)\n\n9.5\n\n[![Ethereum Blockchain Developer Bootcamp With Solidity (2025)](https://coursespeak.com/wp-content/uploads/thumbs_dir/Blockchain-Developer-230hur3tvfktogk24tjuz0ss9tbnybsdp7efjgix7op8.webp)](https://coursespeak.com/blockchain-developer/)\n\n### [Ethereum Blockchain Developer Bootcamp With Solidity (2025)](https://coursespeak.com/blockchain-developer/) Best seller\n\nEthereum Blockchain Developer Bootcamp With Solidity (2025) Become An Ethereum Blockchain Developer With One Course. …\n\n$12 $119.99 [REDEEM](https://click.linksynergy.com/deeplink?id=ul5nQTvb3cM&mid=39197&murl=https%3A%2F%2Fwww.udemy.com%2Fcourse%2Fblockchain-developer%2F%3FcouponCode%3DKEEPLEARNING&u1=CTNS)\n\nREDEEM COUPON\n\n[Read full review](https://coursespeak.com/blockchain-developer/)\n\n## Our Reviews for Sui Blockchain with Move & React.js Course\n\nThis Sui Blockchain with Move & React.js – The Complete Guide course offers a comprehensive and well-structured introduction to Move (programming language). the instructor, brings a wealth of expertise in **Development**, making this course both informative and engaging.\n\nThe course structure is easy to follow. Each section, for example, covers a different aspect of Blockchain Course, ensuring a logical progression through the material. It includes video lectures, readings, and hands-on exercises, which make complex concepts accessible and practical.\n\nMoreover, the instructor explains each topic clearly and concisely. He supports the lessons with plenty of examples and exercises, which help students grasp the material effectively.\n\nWhat I appreciated most about this course is its practical focus. For instance, the instructor emphasizes teaching skills and knowledge that are directly applicable to real-world scenarios. Additionally, students gain access to helpful resources such as templates, checklists, and cheat sheets.\n\nAnother standout feature is the platform itself. **[Udemy Coupons](https://coursespeak.com/store/udemy-coupons/)** offers flexibility, allowing students to learn at their own pace and access course materials from anywhere with an internet connection. Furthermore, the multiple payment options make it easy for students to choose a plan that suits their budget.\n\nIn addition, the course community is highly active, with forums where students can ask questions and engage with peers. The instructor, consequently, is very responsive and addresses student inquiries and feedback promptly.\n\nOverall, I highly recommend **Sui Blockchain with Move & React.js – The Complete Guide** to anyone looking to learn Move (programming language). This well-organized and practical course equips you with the skills and knowledge you need to succeed in this field.",
-    "coupon": "ST10MT30325G1",
-    "createdAt": "2025-03-04T07:42:59.000Z",
-    "updatedAt": "2025-03-04T07:43:02.000Z",
-    "seoTitle": "Sui Blockchain with Move &amp; React.js &#8211; The Complete Guide",
-    "seoDescription": "Develop Sui dApps with Move (Rust-based) and React. Build a voting system and meme coin. Code smart contracts for Web3.",
-    "seoOgImage": "https://coursespeak.com/wp-content/uploads/Sui-Blockchain-with-Move.webp"
-  },
-  {
     "id": "2783",
     "slug": "amazon-fba-course-for-beginners",
     "title": "5-in-1 Amazon FBA Course &#8211; Beginner to 7-Figure Seller 2025",
@@ -36820,24 +36662,6 @@
     "seoTitle": "5-in-1 Amazon FBA Course &#8211; Beginner to 7-Figure Seller 2025",
     "seoDescription": "5-in-1 Amazon FBA Course &#8211; Beginner to 7-Figure Seller 2025 Udemy Coupon Code by Sumner Hobart, Ali Hobart with 30 hours on-demand video course tutorials and free 5 downloadable resources.…. This is applicable to Amazon FBA Udemy discount offers.",
     "seoOgImage": "https://coursespeak.com/wp-content/uploads/Amazon-FBA-Course.webp"
-  },
-  {
-    "id": "2582",
-    "slug": "servicenow-learn-scripted-rest-apis-and-integration",
-    "title": "ServiceNow &#8211; Learn Scripted REST APIs and Integration",
-    "provider": "Udemy",
-    "price": 9.99,
-    "url": "https://www.udemy.com/course/servicenow-learn-scripted-rest-apis-and-integration/?couponCode=LETSLEARNNOW",
-    "category": "IT &amp; Software",
-    "image": "https://coursespeak.com/wp-content/uploads/ServiceNow-Learn-Scripted-REST-APIs-and-Integration.webp",
-    "description": "Learn Scripted REST APIs and Integration in ServiceNow with Real-API Projects",
-    "content": "**ServiceNow – Learn Scripted REST APIs and Integration Udemy Coupon Code** by [Lukasz Szumilas](https://www.udemy.com/user/lukasz-szumilas-22/) with 9 hours on-demand video course and free 24 downloadable resources. Learn Scripted REST APIs and Integration in ServiceNow with Real-API Projects\n\n## Courses Contents\n\n*   [ServiceNow – Learn Scripted REST APIs and Integration](#servicenow-learn-scripted-rest-apis-and-integration)\n*   [What you’ll learn](#what-you-ll-learn)\n*   [Recommended Rest APIs Courses](#recommended-rest-apis-courses)\n*   [ServiceNow – Learn Scripted REST APIs and Integration Course Reviews](#servicenow-learn-scripted-rest-apis-and-integration-course-reviews)\n*   [ServiceNow – Learn Scripted REST APIs and Integration Course Rating](#servicenow-learn-scripted-rest-apis-and-integration-course-rating)\n\n## ServiceNow – Learn Scripted REST APIs and Integration\n\nServiceNow – Learn Scripted REST APIs and Integration. Do you want to build secure and reliable integrations in ServiceNow? In this course, I will guide you step by step through creating Scripted REST APIs and Real-World integration projects. Whether you are new to ServiceNow or already have some experience, you will gain the skills to handle complex integrations with confidence.\n\nBy the end of this course, you will have the confidence and skills to build and maintain robust integrations in ServiceNow. You will earn a certificate that confirms your expertise and be prepared to apply these techniques in real projects. Sign up today and take a big step forward in your ServiceNow career!\n\n**About Your Instructor**\n\nI’m Lukasz Szumilas, a ServiceNow Developer and Consultant with real-world experience from companies like Accenture and Nelem Solutions. With over 8,600 followers on LinkedIn and more than 100 published articles, I bring simple, effective lessons based on practical challenges. I share my learnings to help you succeed in your ServiceNow career.\n\n## What you’ll learn\n\n*   How to Build Scripted REST APIs: Create, test, and manage custom APIs in ServiceNow for various use cases.\n*   Integrating External Services: Learn how to connect with WeatherAPI and IPLookup to fetch and use real-time data.\n*   Discovering APIs on the Internet: Explore external APIs available online and learn how to pull and integrate their data into ServiceNow.\n*   Creating Bidirectional Integrations: Develop two-way integrations between ServiceNow instances, focusing on secure and reliable data sharing.\n*   Securing APIs: Implement best practices for authentication and authorization, including OAuth and access control rules.\n*   Debugging and Testing APIs: Use tools like REST API Explorer and Postman to troubleshoot and optimize your APIs.\n*   Managing API Versions: Learn how to version APIs to support updates without breaking existing functionality.\n\n## Recommended Rest APIs Courses\n\n9.7\n\n[![REST APIs with Flask and Python in 2025](https://coursespeak.com/wp-content/uploads/thumbs_dir/REST-APIs-with-Flask-and-Python-in-2025-2309uu5aylxb626unsgoh5szq9o4902nmay7ddkxfa30.jpg)](https://coursespeak.com/rest-apis-with-flask-and-python-in-2025/)\n\n### [REST APIs with Flask and Python in 2025](https://coursespeak.com/rest-apis-with-flask-and-python-in-2025/) Best seller\n\nREST APIs with Flask and Python in 2025. Build professional REST APIs with Python, Flask, Docker, Flask-Smorest, and …\n\n$12 $119.99 [REDEEM](https://click.linksynergy.com/deeplink?id=ul5nQTvb3cM&mid=39197&murl=https%3A%2F%2Fwww.udemy.com%2Fcourse%2Frest-api-flask-and-python%2F%3FcouponCode%3D24T1MT11625BROW&u1=CTNS)\n\nREDEEM COUPON\n\n[Read full review](https://coursespeak.com/rest-apis-with-flask-and-python-in-2025/)\n\n9.6\n\n[![NodeJS – The Complete Guide (MVC, REST APIs, GraphQL, Deno)](https://coursespeak.com/wp-content/uploads/thumbs_dir/NodeJS-The-Complete-Guide-MVC-REST-APIs-GraphQL-Deno-22ssjz6wvd9hbmybp7vu1n4hnlmmphfl58n4dovbqnrg.jpg)](https://coursespeak.com/nodejs-the-complete-guide/)\n\n### [NodeJS – The Complete Guide (MVC, REST APIs, GraphQL, Deno)](https://coursespeak.com/nodejs-the-complete-guide/) Best seller\n\nMaster Node JS & Deno.js, build REST APIs with Node.js, GraphQL APIs, add Authentication, use MongoDB, SQL & much more!\n\n$9.99 $119.99 [REDEEM](https://click.linksynergy.com/deeplink?id=ul5nQTvb3cM&mid=39197&murl=https%3A%2F%2Fwww.udemy.com%2Fcourse%2Fnodejs-the-complete-guide%2F%3FcouponCode%3DD_0925&u1=CTNS)\n\nREDEEM COUPON\n\n[Read full review](https://coursespeak.com/nodejs-the-complete-guide/)\n\n## ServiceNow – Learn Scripted REST APIs and Integration Course Reviews\n\n**Everything You Need to Know About ServiceNow – Learn Scripted REST APIs and Integration**\n\nThis course offers a comprehensive and well-structured introduction to ServiceNow. Lukasz the instructor, brings a wealth of expertise in IT & Software, making this course both informative and engaging.\n\nThe course structure is easy to follow. Each section, for example, covers a different aspect of ServiceNow Course, ensuring a logical progression through the material. It includes video lectures, readings, and hands-on exercises, which make complex concepts accessible and practical.\n\nMoreover, the instructor explains each topic clearly and concisely. He supports the lessons with plenty of examples and exercises, which help students grasp the material effectively.\n\nWhat I appreciated most about this course is its practical focus. For instance, the instructor emphasizes teaching skills and knowledge that are directly applicable to real-world scenarios. Additionally, students gain access to helpful resources such as templates, checklists, and cheat sheets.\n\nAnother standout feature is the platform itself. **[Udemy Coupons](https://coursespeak.com/store/udemy-coupons/)** offers flexibility, allowing students to learn at their own pace and access course materials from anywhere with an internet connection. Furthermore, the multiple payment options make it easy for students to choose a plan that suits their budget.\n\nIn addition, the course community is highly active, with forums where students can ask questions and engage with peers. The instructor, consequently, is very responsive and addresses student inquiries and feedback promptly.\n\nOverall, I highly recommend the **ServiceNow – Learn Scripted REST APIs and Integration** to anyone looking to learn ServiceNow. This well-organized and practical course equips you with the skills and knowledge you need to succeed in this field.\n\n## ServiceNow – Learn Scripted REST APIs and Integration Course Rating\n\n10Expert Score\n\nServiceNow – Learn Scripted REST APIs and Integration\n\nLearn Scripted REST APIs and Integration in ServiceNow with Real-API Projects\n\n9 hours on-demand video\n\n10\n\n1 practice test\n\n10\n\n2 articles\n\n10\n\n24 downloadable resources\n\n10\n\nAccess on mobile and TV\n\n10\n\nFull lifetime access\n\n10\n\nCertificate of completion\n\n10",
-    "coupon": "LETSLEARNNOW",
-    "createdAt": "2025-02-16T01:37:34.000Z",
-    "updatedAt": "2025-02-16T01:37:35.000Z",
-    "seoTitle": "ServiceNow &#8211; Learn Scripted REST APIs and Integration",
-    "seoDescription": "Learn Scripted REST APIs and Integration in ServiceNow with Real-API Projects",
-    "seoOgImage": "https://coursespeak.com/wp-content/uploads/ServiceNow-Learn-Scripted-REST-APIs-and-Integration.webp"
   },
   {
     "id": "2575",
@@ -36876,25 +36700,6 @@
     "seoTitle": "Blockchain A-Z: Build a Blockchain, a Crypto + ChatGPT Prize",
     "seoDescription": "Harness the power of the most disruptive technology since the internet through real life examples! Master Blockchain Now. This is applicable to Blockchain Udemy discount offers.",
     "seoOgImage": "https://coursespeak.com/wp-content/uploads/Blockchain.jpg"
-  },
-  {
-    "id": "2534",
-    "slug": "deep-dive-in-deep-learning-ocean",
-    "title": "A deep dive in deep learning ocean with Pytorch &amp; TensorFlow",
-    "provider": "Udemy",
-    "price": 9.99,
-    "url": "https://www.udemy.com/course/a-deep-dive-in-deep-learning-ocean-with-pytorch-tensorflow/?couponCode=ST9MT120225A",
-    "category": "IT &amp; Software",
-    "subcategory": "Deep Learning",
-    "image": "https://coursespeak.com/wp-content/uploads/A-deep-dive-in-deep-learning-ocean-with-Pytorch-TensorFlow.jpg",
-    "description": "A comprehensive course about deep learning models with theory, intuition and implementation with Pytorch and TensorFlow",
-    "content": "**A deep dive in deep learning ocean with Pytorch & TensorFlow Udemy Coupon Code** by [Zeeshan Ahmad](https://www.udemy.com/user/zeeshan-ahmad-13/) with 48.5 hours on-demand video course and free 4 downloadable resources. A comprehensive course about deep learning models with theory, intuition and implementation with Pytorch and TensorFlow\n\n## Deep Learning Course Overview\n\n*   [A deep dive in deep learning ocean with Pytorch & TensorFlow](#a-deep-dive-in-deep-learning-ocean-with-pytorch-tensorflow)\n*   [What you’ll learn](#what-you-ll-learn)\n*   [Recommended Deep Learning Courses](#recommended-deep-learning-courses)\n*   [A deep dive in deep learning ocean with Pytorch & TensorFlow Course Reviews](#a-deep-dive-in-deep-learning-ocean-with-pytorch-tensorflow-course-reviews)\n*   [A deep dive in deep learning ocean with Pytorch & TensorFlow Course Rating](#a-deep-dive-in-deep-learning-ocean-with-pytorch-tensorflow-course-rating)\n\n## A deep dive in deep learning ocean with Pytorch & TensorFlow\n\nDeep Learning and revolutionized Artificial Intelligence and data science. Deep Learning teaches computers to process data in a way that is inspired by the human brain. This is complete and comprehensive course on deep learning. This course covers the theory and intuition behind deep learning models and then implementing all the deep learning models both in Pytorch and Tensor flow.\n\nPractical Oriented explanations Deep Learning Models with implementation both in Pytorch and Tensor Flow. No need of any prerequisites. I will teach you everything from scratch.\n\n## What you’ll learn\n\n*   Theory, Maths and Implementation of all the deep learning models\n*   Pre-requisites for deep learning such as data preprocessing, Regression Analysis and Logistic Regression\n*   Build Artificial Neural Networks and use them for Regression and Classification Problems\n*   Using GPU with Deep Learning Models.\n*   Creating our own custom loss functions and custom layers for deep learning models\n*   Convolutional Neural Network ( CNN )\n*   One Dimensional CNN\n*   Setting early stopping criterion in deep learning models\n*   Transfer Learning\n*   Recurrent Neural Networks ( RNN )\n*   Time series prediction and classification\n*   Autoencoders and Variational Autoencoder ( VAE )\n*   CNN Autoencoder and LSTM Autoencoder\n*   Generative Adversarial Networks (GANs)\n*   LSTM and Bidirectional LSTM\n*   Transformer\n*   Vision Transformer\n*   Time Series Transformer\n*   Neural Style Transfer\n*   Implementation of deep learning models in Pytorch and Tensor Flow\n\n## Recommended Deep Learning Courses\n\n9.6\n\n[![PyTorch for Deep Learning Bootcamp](https://coursespeak.com/wp-content/uploads/thumbs_dir/PyTorch-for-Deep-Learning-Bootcamp-233tphqp7xm35c8r7wan2m3knm3mgtgohbzx22uf34r0.jpg)](https://coursespeak.com/pytorch-for-deep-learning-bootcamp/)\n\n### [PyTorch for Deep Learning Bootcamp](https://coursespeak.com/pytorch-for-deep-learning-bootcamp/) Best seller\n\nLearn PyTorch. Become a Deep Learning Engineer. Get Hired.\n\n$12.99 $119.99 [REDEEM](https://click.linksynergy.com/deeplink?id=ul5nQTvb3cM&mid=39197&murl=https%3A%2F%2Fwww.udemy.com%2Fcourse%2Fpytorch-for-deep-learning%2F%3FcouponCode%3DMT40825&u1=CTNS)\n\nREDEEM COUPON\n\n[Read full review](https://coursespeak.com/pytorch-for-deep-learning-bootcamp/)\n\n10\n\n[![Fast-Track Deep Learning: Master AI Foundations in 15 Days](https://coursespeak.com/wp-content/uploads/thumbs_dir/Fast-Track-Deep-Learning-Master-AI-Foundations-in-15-Days-230al76abip4gbj848yoj4dktefleges8av5zhq0nxl8.webp)](https://coursespeak.com/fast-track-deep-learning/)\n\n### [Fast-Track Deep Learning: Master AI Foundations in 15 Days](https://coursespeak.com/fast-track-deep-learning/) Best price\n\nFast-Track Deep Learning: Master AI Foundations in 15 Days. From Zero to your own AI models: Master Deep Learning with …\n\n$12 $119.99 [REDEEM](https://click.linksynergy.com/deeplink?id=ul5nQTvb3cM&mid=39197&murl=https%3A%2F%2Fwww.udemy.com%2Fcourse%2Fdeep-learning-practical%2F%3FcouponCode%3DKEEPLEARNING&u1=CTNS)\n\nREDEEM COUPON\n\n[Read full review](https://coursespeak.com/fast-track-deep-learning/)\n\n## A deep dive in deep learning ocean with Pytorch & TensorFlow Course Reviews\n\n**Everything You Need to Know About A deep dive in deep learning ocean with Pytorch & TensorFlow**\n\nThis course offers a comprehensive and well-structured introduction to Deep Learning. Zeeshan the instructor, brings a wealth of expertise in IT & Software, making this course both informative and engaging.\n\nThe course structure is easy to follow. Each section, for example, covers a different aspect of Deep Learing Course, ensuring a logical progression through the material. It includes video lectures, readings, and hands-on exercises, which make complex concepts accessible and practical.\n\nMoreover, the instructor explains each topic clearly and concisely. He supports the lessons with plenty of examples and exercises, which help students grasp the material effectively.\n\nWhat I appreciated most about this course is its practical focus. For instance, the instructor emphasizes teaching skills and knowledge that are directly applicable to real-world scenarios. Additionally, students gain access to helpful resources such as templates, checklists, and cheat sheets.\n\nAnother standout feature is the platform itself. **[Udemy Coupons](https://coursespeak.com/store/udemy-coupons/)** offers flexibility, allowing students to learn at their own pace and access course materials from anywhere with an internet connection. Furthermore, the multiple payment options make it easy for students to choose a plan that suits their budget.\n\nIn addition, the course community is highly active, with forums where students can ask questions and engage with peers. The instructor, consequently, is very responsive and addresses student inquiries and feedback promptly.\n\nOverall, I highly recommend the **A deep dive in deep learning ocean with Pytorch & TensorFlow** to anyone looking to learn Deep Learning. This well-organized and practical course equips you with the skills and knowledge you need to succeed in this field.\n\n## A deep dive in deep learning ocean with Pytorch & TensorFlow Course Rating\n\n9.7Expert Score\n\nA deep dive in deep learning ocean with Pytorch & TensorFlow\n\nA comprehensive course about deep learning models with theory, intuition and implementation with Pytorch and TensorFlow\n\n48.5 hours on-demand video\n\n9.7\n\n2 articles\n\n9.7\n\n4 downloadable resources\n\n9.7\n\nAccess on mobile and TV\n\n9.7\n\nFull lifetime access\n\n9.7\n\nCertificate of completion\n\n9.7",
-    "coupon": "ST9MT120225A",
-    "createdAt": "2025-02-12T02:39:19.000Z",
-    "updatedAt": "2025-02-12T02:39:20.000Z",
-    "seoTitle": "A deep dive in deep learning ocean with Pytorch &amp; TensorFlow",
-    "seoDescription": "A comprehensive course about deep learning models with theory, intuition and implementation with Pytorch and TensorFlow. This is applicable to Deep Learning Udemy discount offers.",
-    "seoOgImage": "https://coursespeak.com/wp-content/uploads/A-deep-dive-in-deep-learning-ocean-with-Pytorch-TensorFlow.jpg"
   },
   {
     "id": "2485",
@@ -37097,24 +36902,6 @@
     "seoTitle": "Adobe Illustrator &#8211; Beginner to Pro Level With New AI 2025",
     "seoDescription": "Adobe Illustrator - Beginner to Pro Level With New AI 2025. Master Illustrator - Easy Lessons, Plus Real-World Step-by-Step Projects for your Portfolio Plus New 2025 AI Features",
     "seoOgImage": "https://coursespeak.com/wp-content/uploads/2025/01/Adobe-Illustrator.webp"
-  },
-  {
-    "id": "2074",
-    "slug": "mastering-micro-frontends-with-module-federation",
-    "title": "Mastering Micro Frontends with Module Federation",
-    "provider": "Udemy",
-    "price": 9.99,
-    "url": "https://www.udemy.com/course/mastering-micro-frontends-with-module-federation/?couponCode=MT24125CROW",
-    "category": "IT &amp; Software",
-    "image": "https://coursespeak.com/wp-content/uploads/2025/01/Mastering-Micro-Frontends-with-Module-Federation.webp",
-    "description": "Breaking Down Monoliths: A Practical Guide to Modular Web Development",
-    "content": "**Udemy Coupon Code for [Mastering Micro Frontends with Module Federation](https://coursespeak.com/mastering-micro-frontends-with-module-federation/) Course**. Breaking Down Monoliths: A Practical Guide to Modular Web Development\n\nCreated by [Russell Canfield](https://www.udemy.com/user/russell-canfield-2/) | 6.5 hours on-demand video course\n\n## Micro Frontends Course Overview\n\n## Mastering Micro Frontends with Module Federation\n\n**Mastering Micro Frontends with Module Federation: The Ultimate Guide to Modern Web Architecture**\n\nTransform the way you build large-scale web applications with the most comprehensive, battle-tested course on Micro Frontends available today. Learn directly from an active contributor to Module Federation who has implemented these solutions for Fortune 100 companies. This course uses the latest techniques with the latest versions of each technology available: nx, rspack, vite, and module federation.\n\nWhat Makes This Course Different: Unlike other courses, you’ll learn the exact patterns and practices used by top companies to build scalable, maintainable applications. Topics are covered in-depth as we walk through implementation details, giving you a real-world hands-on experience building Micro Frontends.\n\nDon’t waste hundreds of hours figuring this out on your own. Join thousands of successful developers who have transformed their applications using these proven Micro Frontend patterns. Start mastering Micro Frontends today and revolutionize how you build web applications!\n\n## What you’ll learn\n\n*   Use micro frontends to scale your development team\n*   Implement Module Federation to break apart an application into multiple micro frontends\n*   Learn NX the leading mono-repo tooling framework and setup a new mono-repo\n*   Create applications and reusable packages for sharing advanced functionality across teams\n*   Learn various design patterns for micro frontend communication such as pub/sub\n*   Deep dive into sharing state between micro frontends with popular libraries like Tanstack React Query\n*   Create a component library with a popular framework such as Tailwindcss and CSS Modules\n*   Deploy your application and learn how to version it, allowing your to deploy continuously\n*   Gain an understanding of how micro frontends work, and if they are right for your team/project\n\n## Recommended Courses\n\n9.5\n\n[![Pentaho for ETL & Data Integration Masterclass 2025 – PDI 9](https://coursespeak.com/wp-content/uploads/thumbs_dir/Pentaho-for-ETL-2315xctt4c6tiudultdsaf1viinue1u284gb14daznws.webp)](https://coursespeak.com/pentaho-for-etl-data-integration-masterclass/)\n\n### [Pentaho for ETL & Data Integration Masterclass 2025 – PDI 9](https://coursespeak.com/pentaho-for-etl-data-integration-masterclass/) Best seller\n\nUse Pentaho Data Integration tool for ETL & Data warehousing. Do ETL development using PDI 9 without coding background\n\n$12 $119.99 [REDEEM](https://click.linksynergy.com/deeplink?id=ul5nQTvb3cM&mid=39197&murl=https%3A%2F%2Fwww.udemy.com%2Fcourse%2Fpentaho-for-etl-data-integration-masterclass%2F%3FcouponCode%3DKEEPLEARNING&u1=CTNS)\n\nREDEEM COUPON\n\n[Read full review](https://coursespeak.com/pentaho-for-etl-data-integration-masterclass/)\n\n9.6\n\n[![Reasoning Aptitude for Placements 2025 – Logical Reasoning](https://coursespeak.com/wp-content/uploads/thumbs_dir/Reasoning-Aptitude-for-Placements-2025-2315z0aty39kf7iknfb966hlg1nlk6mlxs5dwguwh32k.webp)](https://coursespeak.com/reasoning-aptitude-for-placements/)\n\n### [Reasoning Aptitude for Placements 2025 – Logical Reasoning](https://coursespeak.com/reasoning-aptitude-for-placements/) Best seller\n\nMaster your Analytical Ability and Job Aptitude Tests with Tricks!\n\n$12 $119.99 [REDEEM](https://click.linksynergy.com/deeplink?id=ul5nQTvb3cM&mid=39197&murl=https%3A%2F%2Fwww.udemy.com%2Fcourse%2Freasoning-aptitude-for-placementslacements-2020-tricks%2F%3FcouponCode%3DKEEPLEARNING&u1=CTNS)\n\nREDEEM COUPON\n\n[Read full review](https://coursespeak.com/reasoning-aptitude-for-placements/)\n\n## Mastering Micro Frontends Course Reviews\n\n**Everything You Need to Know About Mastering Micro Frontends with Module Federation**\n\nThis course offers a comprehensive and well-structured introduction to Micro Frontends. Russell, the instructor, brings a wealth of expertise in IT & Software, making this course both informative and engaging.\n\nThe course structure is easy to follow. Each section, for example, covers a different aspect of Micro Frontends Course, ensuring a logical progression through the material. It includes video lectures, readings, and hands-on exercises, which make complex concepts accessible and practical.\n\nMoreover, Russell explains each topic clearly and concisely. He supports the lessons with plenty of examples and exercises, which help students grasp the material effectively.\n\nWhat I appreciated most about this course is its practical focus. For instance, the instructor emphasizes teaching skills and knowledge that are directly applicable to real-world scenarios. Additionally, students gain access to helpful resources such as templates, checklists, and cheat sheets.\n\nAnother standout feature is the platform itself. Udemy offers flexibility, allowing students to learn at their own pace and access course materials from anywhere with an internet connection. Furthermore, the multiple payment options make it easy for students to choose a plan that suits their budget.\n\nIn addition, the course community is highly active, with forums where students can ask questions and engage with peers. The instructor, consequently, is very responsive and addresses student inquiries and feedback promptly.\n\nOverall, I highly recommend the **Mastering Micro Frontends with Module Federation** to anyone looking to learn Micro Frontends. This well-organized and practical course equips you with the skills and knowledge you need to succeed in this field.\n\n## Micro Frontends Course Rated\n\n10Expert Score\n\nMastering Micro Frontends with Module Federation\n\nBreaking Down Monoliths: A Practical Guide to Modular Web Development\n\n6.5 hours on-demand video\n\n10\n\n1 downloadable resource\n\n10\n\nAccess on mobile and TV\n\n10\n\nFull lifetime access\n\n10\n\nCertificate of completion\n\n10",
-    "coupon": "MT24125CROW",
-    "createdAt": "2025-01-24T08:50:57.000Z",
-    "updatedAt": "2025-02-08T09:40:25.000Z",
-    "seoTitle": "Mastering Micro Frontends with Module Federation",
-    "seoDescription": "Breaking Down Monoliths: A Practical Guide to Modular Web Development",
-    "seoOgImage": "https://coursespeak.com/wp-content/uploads/2025/01/Mastering-Micro-Frontends-with-Module-Federation.webp"
   },
   {
     "id": "2334",
