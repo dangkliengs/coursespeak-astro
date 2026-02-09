@@ -15,7 +15,7 @@ A modern Astro-based platform for discovering and managing Udemy course deals wi
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Astro 5.16.6
+- **Framework**: Astro 5.17
 - **UI**: React components
 - **Styling**: Tailwind CSS
 - **Deployment**: GitHub Pages
@@ -63,7 +63,7 @@ A modern Astro-based platform for discovering and managing Udemy course deals wi
 ## 🔧 Development Setup
 
 ### Prerequisites
-- Node.js 18+
+- Node.js 20+
 - GitHub Personal Access Token (for admin features)
 
 ### Local Development
