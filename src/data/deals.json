@@ -1,6 +1,7 @@
 [
   {
     "id": "5394",
+    "slug":"complete-python-with-ai-skills-to-get-your-dream-it-job",
     "title": "Complete Python with AI Skills to Get Your Dream IT Job",
     "provider": "Udemy",
     "url": "https://trk.udemy.com/c/6564357/3227798/39854?prodsku=course.6258083&u=https://www.udemy.com/course/complete-python-with-ai-skills-to-get-your-dream-it-job/?couponCode=STARTOFFEB2026",
@@ -41,7 +42,7 @@
   },
   {
     "id": "5149",
-    "slug": "linux-diagnostics-and-troubleshooting",
+    "slug": "ai-driven-linux-system-management",
     "title": "AI-Driven Linux System Management",
     "provider": "Udemy",
     "price": 9.99,
@@ -81,6 +82,7 @@
   },
   {
     "id": "4247",
+    "slug":"linux-red-hat-certified-engineer-rhce-ex294",
     "title": "Linux Red Hat Certified Engineer (RHCE - EX294)",
     "provider": "Udemy",
     "url": "https://trk.udemy.com/c/6564357/3227798/39854?prodsku=course.4685476&u=https://www.udemy.com/course/linux-red-hat-certified-engineer-rhce-ex294/?couponCode=STARTOFFEB2026",
@@ -122,6 +124,7 @@
   },
   {
     "id": "4241",
+    "slug":"it-fundamentals-everything-you-need-to-know-about-it",
     "title": "IT Fundamentals - Everything you need to know about IT",
     "provider": "Udemy",
     "url": "https://trk.udemy.com/c/6564357/3227798/39854?prodsku=course.3627542&u=https://www.udemy.com/course/it-fundamentals-everything-you-need-to-know-about-it/?couponCode=STARTOFFEB2026",
@@ -160,6 +163,7 @@
   },
   {
     "id": "3022",
+    "slug":"complete-vmware-vsphere-esxi-and-vcenter-administration",
     "title": "Complete VMWare vSphere ESXi and vCenter Administration",
     "provider": "Udemy",
     "url": "https://trk.udemy.com/c/6564357/3227798/39854?prodsku=course.1587248&u=https://www.udemy.com/course/complete-vmware-vsphere-esxi-and-vcenter-administration/?couponCode=STARTOFFEB2026",
@@ -197,6 +201,7 @@
   },
   {
     "id": "3018",
+    "slug":"unofficial-linux-redhat-certified-system-administrator-rhcsa",
     "title": "Linux Redhat Certified System Administrator (RHCSA - EX200)",
     "provider": "Udemy",
     "url": "https://trk.udemy.com/c/6564357/3227798/39854?prodsku=course.4015948&u=https://www.udemy.com/course/unofficial-linux-redhat-certified-system-administrator-rhcsa/?couponCode=STARTOFFEB2026",
@@ -234,6 +239,7 @@
   },
   {
     "id": "3014",
+    "slug":"complete-microsoft-sql-server-database-administration-course",
     "title": "Complete Microsoft SQL Server Database Administration Course",
     "provider": "Udemy",
     "url": "https://trk.udemy.com/c/6564357/3227798/39854?prodsku=course.3832968&u=https://www.udemy.com/course/complete-microsoft-sql-server-database-administration-course/?couponCode=STARTOFFEB2026",
@@ -274,6 +280,7 @@
   },
   {
     "id": "1642",
+    "slug": "complete-linux-training-course-to-get-your-dream-it-job",
     "title": "Complete Linux Training Course to Get Your Dream IT Job 2026",
     "provider": "Udemy",
     "url": "https://trk.udemy.com/c/6564357/3227798/39854?prodsku=course.1523066&u=https://www.udemy.com/course/complete-linux-training-course-to-get-your-dream-it-job/?couponCode=STARTOFFEB2026",
