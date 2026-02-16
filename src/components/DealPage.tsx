@@ -420,7 +420,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                     {/* What you'll learn */}
                     {deal.learn && deal.learn.length > 0 && (
                         <div style={{ border: "1px solid #1f2330", padding: "1.5rem", borderRadius: "8px", background: "#0b0d12", marginBottom: "2rem" }}>
-                            <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1rem", color: "#fff" }}>What you'll learn</h2>
+                            <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1rem", color: "#fff" }}>What you'll learn in this Udemy Course</h2>
                             <p style={{ fontSize: "0.95rem", color: "#cbd5e1", lineHeight: "1.6", marginBottom: "1rem" }}>
                                 The following outcomes clarify specific competencies mastered by learners through practical projects:
                             </p>
@@ -440,7 +440,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                     {/* Requirements Section */}
                     {deal.requirements && deal.requirements.length > 0 && (
                         <div style={{ border: "1px solid #1f2330", padding: "1.5rem", borderRadius: "8px", background: "#0b0d12", marginBottom: "2rem" }}>
-                            <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1rem", color: "#fff" }}>Requirements</h2>
+                            <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1rem", color: "#fff" }}>Course Requirements</h2>
                             <p style={{ fontSize: "0.95rem", color: "#cbd5e1", lineHeight: "1.6", marginBottom: "1rem" }}>
                                 This section lists the necessary background knowledge, tools, or prerequisites needed before starting the course to ensure you have the best learning experience.
                             </p>
@@ -456,7 +456,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                     )}
 
                     <div style={{ marginBottom: "2rem" }}>
-                        <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1rem", color: "#fff" }}>Course Description</h2>
+                        <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1rem", color: "#fff" }}>About This Course</h2>
                         <p style={{ fontSize: "0.95rem", color: "#cbd5e1", lineHeight: "1.6", marginBottom: "1rem" }}>
                             A detailed explanation of modules, tools, and project use cases included in the curriculum. from this comprehensive {deal.subcategory?.toLowerCase() || 'programming'} courses.
                         </p>
