@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+
 interface Deal {
   id?: string;
   title: string;
@@ -94,15 +96,18 @@ const title = String(deal.title || "").replace(/&amp;/g, "&").replace(/&quot;/g,
     position: "relative"
   }}>
     {deal.image ? (
-      <img 
-        src={deal.image} 
+      <Image 
+        src={deal.image}
         alt={title}
+        width={400}
+        height={225}
         style={{
           width: "100%",
           height: "100%",
           objectFit: "cover"
         }}
         loading="lazy"
+        inferSize={false}
       />
     ) : (
       <svg width="60" height="60" viewBox="0 0 24 24" fill="var(--muted)" opacity="0.5">

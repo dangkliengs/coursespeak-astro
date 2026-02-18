@@ -204,41 +204,95 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
     // Generate structured data for SEO/AI
     const courseStructuredData = {
         "@context": "https://schema.org",
-        "@type": "Course",
-        "name": deal.title,
-        "description": deal.description,
-        "url": `https://coursespeak.com/deal/${deal.id}`,
-        "image": deal.image,
-        "provider": {
-            "@type": "Organization",
-            "name": deal.provider || "Online Learning Platform"
-        },
-        "instructor": deal.instructor ? {
-            "@type": "Person",
-            "name": deal.instructor.split(',')[1]?.trim() || deal.instructor.split(' ')[0] || deal.instructor
-        } : undefined,
-        "offers": {
-            "@type": "Offer",
-            "price": price.toString(),
-            "priceCurrency": "USD",
-            "availability": "https://schema.org/InStock",
-            "priceValidUntil": deal.expiresAt || undefined,
-            "seller": {
-                "@type": "Organization",
-                "name": "CourseSpeak"
+        "@graph": [
+            {
+                "@type": "Course",
+                "name": deal.title,
+                "description": deal.description,
+                "url": `https://coursespeak.com/deal/${deal.id}`,
+                "image": deal.image,
+                "provider": {
+                    "@type": "Organization",
+                    "name": deal.provider || "Online Learning Platform"
+                },
+                "instructor": deal.instructor ? {
+                    "@type": "Person",
+                    "name": deal.instructor.includes(',') 
+                        ? deal.instructor.split(',')[1]?.trim() 
+                        : deal.instructor  // use full name when no comma
+                } : undefined,
+                "offers": {
+                    "@type": "Offer",
+                    "price": price.toString(),
+                    "priceCurrency": "USD",
+                    "availability": "https://schema.org/InStock",
+                    "priceValidUntil": deal.expiresAt || undefined,
+                    "seller": {
+                        "@type": "Organization",
+                        "name": "CourseSpeak"
+                    }
+                },
+                "aggregateRating": deal.rating ? {
+                    "@type": "AggregateRating",
+                    "ratingValue": deal.rating.toFixed(1),
+                    "reviewCount": Math.max(1, Math.round(deal.students ?? 1000)),
+                    "bestRating": "5",
+                    "worstRating": "1"
+                } : undefined,
+                "timeRequired": deal.duration ? (() => {
+                    const hours = parseFloat(deal.duration!);
+                    if (isNaN(hours)) return undefined;
+                    const h = Math.floor(hours);
+                    const m = Math.round((hours - h) * 60);
+                    return m > 0 ? `PT${h}H${m}M` : `PT${h}H`;
+                })() : undefined,
+                "courseMode": "online",
+                "educationalUse": "professional development",
+                "teaches": deal.learn?.slice(0, 5) || []
+            },
+            {
+                "@type": "BreadcrumbList",
+                "@id": `https://coursespeak.com/deal/${deal.id}#breadcrumb`,
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://coursespeak.com"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "All Deals",
+                        "item": "https://coursespeak.com/deals"
+                    },
+                    ...(deal.category ? [{
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": deal.category,
+                        "item": `https://coursespeak.com/categories/${deal.category.toLowerCase().replace(/\s+/g, '-')}`
+                    }] : []),
+                    {
+                        "@type": "ListItem",
+                        "position": deal.category ? 4 : 3,
+                        "name": deal.title,
+                        "item": `https://coursespeak.com/deal/${deal.id}`
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "@id": `https://coursespeak.com/deal/${deal.id}#faq`,
+                "mainEntity": autoFAQs.map(faq => ({
+                    "@type": "Question",
+                    "name": faq.q,
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": faq.a
+                    }
+                }))
             }
-        },
-        "aggregateRating": deal.rating ? {
-            "@type": "AggregateRating",
-            "ratingValue": deal.rating.toFixed(1),
-            "reviewCount": Math.max(1, Math.round(deal.students ?? 1000)),
-            "bestRating": "5",
-            "worstRating": "1"
-        } : undefined,
-        "timeRequired": deal.duration ? `PT${deal.duration.replace(/\D/g, '')}H` : undefined,
-        "courseMode": "online",
-        "educationalUse": "professional development",
-        "teaches": deal.learn?.slice(0, 5) || []
+        ]
     };
 
     return (
@@ -289,7 +343,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                     <>
                                         <li aria-hidden="true" style={{ color: "#cbd5e1" }}>›</li>
                                         <li>
-                                            <a href={`/categories/${deal.category?.toLowerCase().replace(/\s+/g, '-')}`} style={{ color: "#fff", textDecoration: "none" }} title={`Browse ${deal.subcategory} courses`}>
+                                            <a href={`/categories/${deal.category?.toLowerCase().replace(/\s+/g, '-')}/${deal.subcategory?.toLowerCase().replace(/\s+/g, '-')}`} style={{ color: "#fff", textDecoration: "none" }} title={`Browse ${deal.subcategory} courses`}>
                                                 {deal.subcategory}
                                             </a>
                                         </li>
@@ -691,7 +745,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                             <div style={{ position: "relative" }}>
                                 <img
                                   src={deal.image}
-                                  alt={deal.title}
+                                  alt={`${deal.title} course thumbnail on ${deal.provider}`}
                                   width="400"
                                   height="190"
                                   loading="lazy"

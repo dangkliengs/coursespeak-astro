@@ -64,9 +64,20 @@ if (import.meta.env.PROD) {
   deal = foundDeal;
 }
 
-// Get related deals
+// Get related deals - prioritize subcategory matching for better relevance
 const relatedDeals = allDeals
-  .filter((d) => d.id !== deal.id && d.category === deal.category)
+  .filter((d) => {
+    // Exclude current deal
+    if (d.id === deal.id) return false;
+
+    // If both deals have subcategories, match by subcategory
+    if (deal.subcategory && d.subcategory) {
+      return d.subcategory === deal.subcategory;
+    }
+
+    // Fallback: match by category
+    return d.category === deal.category;
+  })
   .slice(0, 4);
 
 // Calculate discount percentage
@@ -77,8 +88,9 @@ const discountPercentage = deal.originalPrice && deal.price && deal.originalPric
 
 <Layout
     title={`${deal.title} | ${discountPercentage}% Off Udemy Coupon`}
-    description={deal.seoDescription || deal.description}
+    description={(deal.seoDescription || deal.description)?.slice(0, 155) + ((deal.seoDescription || deal.description)?.length > 155 ? '...' : '')}
     image={deal.seoOgImage || deal.image}
+    canonical={`https://coursespeak.com/deal/${deal.id}`}
 >
     <!-- Enhanced Structured Data for SEO -->
     <script type="application/ld+json" set:html={

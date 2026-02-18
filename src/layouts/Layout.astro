@@ -24,6 +24,9 @@ const canonicalURL = canonical || new URL(Astro.url.pathname, siteUrl).href;
 // Dynamic copyright year
 const currentYear = new Date().getFullYear();
 const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(image, siteUrl).href) : null;
+
+// Get current path for navigation active states
+const currentPath = Astro.url.pathname;
 ---
 
 <!doctype html>
@@ -68,8 +71,6 @@ const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(ima
       gtag('js', new Date());
       gtag('config', 'G-VPY4HMMKBH');
     </script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8220442576502761"
-     crossorigin="anonymous"></script>
     <meta name="generator" content={Astro.generator} />
     <meta name="google-site-verification" content="HISPISPt9Gk-zER-OUkGcPtm6cyiQ7snnKwzn7aDgTY" />
     <link rel="canonical" href={canonicalURL} />
@@ -182,23 +183,28 @@ const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(ima
       "potentialAction": [
         {
           "@type": "ReadAction",
-          "target": "https://coursespeak.com/"
+          "target": "https://coursespeak.com/deals",
+          "name": "Latest Coupons"
         },
         {
           "@type": "ReadAction",
-          "target": "https://coursespeak.com/categories"
+          "target": "https://coursespeak.com/categories",
+          "name": "Categories"
         },
         {
           "@type": "ReadAction",
-          "target": "https://coursespeak.com/deals"
+          "target": "https://coursespeak.com/popular",
+          "name": "Popular"
         },
         {
           "@type": "ReadAction",
-          "target": "https://coursespeak.com/popular"
+          "target": "https://coursespeak.com/topics",
+          "name": "Topics"
         },
         {
           "@type": "ReadAction",
-          "target": "https://coursespeak.com/topics"
+          "target": "https://coursespeak.com/udemy-coupons-guide",
+          "name": "Blog/Guide"
         }
       ]
     }
@@ -232,17 +238,7 @@ const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(ima
     <meta property="article:author" content="CourseSpeak" />
     <meta property="article:publisher" content="https://coursespeak.com" />
 
-    <!-- LinkedIn specific -->
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="627" />
-
-    <!-- WhatsApp sharing -->
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="1200" />
-
     <!-- Optimized Font Loading for Core Web Vitals -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap&text=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
       rel="stylesheet"
@@ -304,6 +300,7 @@ const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(ima
     >
       <nav
         class="container"
+        aria-label="Main navigation"
         style={{
           display: "flex",
           justifyContent: "space-between",
@@ -367,8 +364,8 @@ const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(ima
             </div>
           </div>
         </a>
-        <div style={{ display: "flex", gap: "12px", alignItems: "center", flex: 1, justifyContent: "space-between" }}>
-          {/* Left Navigation */}
+        <div style={{ display: "flex", gap: "16px", alignItems: "center", flex: 1, justifyContent: "space-between" }}>
+          {/* Left Navigation Menu */}
           <div style={{ 
             display: "flex", 
             gap: "4px", 
@@ -381,9 +378,9 @@ const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(ima
             overflow: "auto"
           }}>
             <a
-              href="/"
+              href="/deals"
               style={{
-                color: "var(--text)",
+                color: currentPath === '/deals' ? 'var(--brand)' : 'var(--text)',
                 textDecoration: "none",
                 fontSize: "0.85rem",
                 fontWeight: 600,
@@ -394,19 +391,20 @@ const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(ima
                 alignItems: "center",
                 gap: "4px",
                 whiteSpace: "nowrap",
-                flexShrink: 0
+                flexShrink: 0,
+                background: currentPath === '/deals' ? 'rgba(255, 193, 7, 0.1)' : 'transparent'
               }}
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                <path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.41l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.41zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/>
               </svg>
-              Free Courses
+              Latest Coupons
             </a>
             
             <a
               href="/categories"
               style={{
-                color: "var(--text)",
+                color: currentPath === '/categories' ? 'var(--brand)' : 'var(--text)',
                 textDecoration: "none",
                 fontSize: "0.85rem",
                 fontWeight: 600,
@@ -417,7 +415,8 @@ const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(ima
                 alignItems: "center",
                 gap: "4px",
                 whiteSpace: "nowrap",
-                flexShrink: 0
+                flexShrink: 0,
+                background: currentPath === '/categories' ? 'rgba(255, 193, 7, 0.1)' : 'transparent'
               }}
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
@@ -429,32 +428,9 @@ const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(ima
             </a>
             
             <a
-              href="/deals"
-              style={{
-                color: "var(--text)",
-                textDecoration: "none",
-                fontSize: "0.85rem",
-                fontWeight: 600,
-                padding: "6px 12px",
-                borderRadius: "8px",
-                transition: "all 0.3s ease",
-                display: "flex",
-                alignItems: "center",
-                gap: "4px",
-                whiteSpace: "nowrap",
-                flexShrink: 0
-              }}
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.41l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.41zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/>
-              </svg>
-              Latest Coupons
-            </a>
-            
-            <a
               href="/popular"
               style={{
-                color: "var(--text)",
+                color: currentPath === '/popular' ? 'var(--brand)' : 'var(--text)',
                 textDecoration: "none",
                 fontSize: "0.85rem",
                 fontWeight: 600,
@@ -465,7 +441,8 @@ const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(ima
                 alignItems: "center",
                 gap: "4px",
                 whiteSpace: "nowrap",
-                flexShrink: 0
+                flexShrink: 0,
+                background: currentPath === '/popular' ? 'rgba(255, 193, 7, 0.1)' : 'transparent'
               }}
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
@@ -485,7 +462,7 @@ const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(ima
             <a
               href="/topics"
               style={{
-                color: "var(--text)",
+                color: currentPath === '/topics' ? 'var(--brand)' : 'var(--text)',
                 textDecoration: "none",
                 fontSize: "0.85rem",
                 fontWeight: 600,
@@ -496,7 +473,8 @@ const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(ima
                 alignItems: "center",
                 gap: "4px",
                 whiteSpace: "nowrap",
-                flexShrink: 0
+                flexShrink: 0,
+                background: currentPath === '/topics' ? 'rgba(255, 193, 7, 0.1)' : 'transparent'
               }}
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
@@ -504,53 +482,76 @@ const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(ima
               </svg>
               Topics
             </a>
+            
+            <a
+              href="/udemy-coupons-guide"
+              style={{
+                color: currentPath === '/udemy-coupons-guide' ? 'var(--brand)' : 'var(--text)',
+                textDecoration: "none",
+                fontSize: "0.85rem",
+                fontWeight: 600,
+                padding: "6px 12px",
+                borderRadius: "8px",
+                transition: "all 0.3s ease",
+                display: "flex",
+                alignItems: "center",
+                gap: "4px",
+                whiteSpace: "nowrap",
+                flexShrink: 0,
+                background: currentPath === '/udemy-coupons-guide' ? 'rgba(255, 193, 7, 0.1)' : 'transparent'
+              }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+              </svg>
+              Blog/Guide
+            </a>
           </div>
           
           {/* Center Search Bar */}
-          <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
-            <form action="/search" method="get" style={{ 
-              display: "flex", 
-              gap: "0",
-              background: "var(--input)",
-              borderRadius: "8px",
-              border: "1px solid var(--border)",
-              overflow: "hidden",
-              maxWidth: "300px",
-              width: "100%"
-            }}>
-              <input 
-                type="text" 
-                name="q" 
-                placeholder="Search coupons..." 
-                style={{
-                  background: 'transparent',
-                  color: 'var(--text)',
-                  border: 'none',
-                  padding: '6px 12px',
-                  fontSize: '0.85rem',
-                  width: '100%',
-                  outline: 'none'
-                }}
-              />
-              <button 
-                type="submit" 
-                style={{
-                  background: 'var(--brand)',
-                  color: 'var(--bg)',
-                  border: 'none',
-                  padding: '6px 10px',
-                  fontSize: '0.85rem',
-                  cursor: 'pointer',
-                  fontWeight: '600',
-                  transition: 'all 0.3s ease'
-                }}
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-                </svg>
-              </button>
-            </form>
-          </div>
+          <form action="/search" method="get" style={{ 
+            display: "flex", 
+            gap: "0",
+            background: "var(--card)",
+            borderRadius: "8px",
+            border: "1px solid var(--border)",
+            overflow: "hidden",
+            maxWidth: "300px",
+            width: "100%",
+            flexShrink: 0
+          }}>
+            <input 
+              type="text" 
+              name="q" 
+              placeholder="Search coupons..." 
+              style={{
+                background: 'transparent',
+                color: 'var(--text)',
+                border: 'none',
+                padding: '6px 12px',
+                fontSize: '0.85rem',
+                width: '100%',
+                outline: 'none'
+              }}
+            />
+            <button 
+              type="submit" 
+              style={{
+                background: 'var(--brand)',
+                color: 'var(--bg)',
+                border: 'none',
+                padding: '6px 10px',
+                fontSize: '0.85rem',
+                cursor: 'pointer',
+                fontWeight: '600',
+                transition: 'all 0.3s ease'
+              }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+              </svg>
+            </button>
+          </form>
         </div>
       </nav>
     </header>
@@ -693,7 +694,7 @@ const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(ima
               flexWrap: "wrap"
             }}>
               <a 
-                href="hhttps://www.facebook.com/CourseSpeakOfficial/"
+                href="https://www.facebook.com/CourseSpeakOfficial/"
                 target="_blank" 
                 rel="noopener noreferrer"
                 style={{
@@ -1063,6 +1064,69 @@ const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(ima
     </button>
 
     <script>
+      // Newsletter form feedback
+      const newsletterForm = document.querySelector('footer form');
+      if (newsletterForm) {
+        newsletterForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const emailInput = newsletterForm.querySelector('input[type="email"]') as HTMLInputElement;
+          
+          if (emailInput) {
+            const email = emailInput.value.trim();
+            
+            if (email) {
+              // Show success message inline
+              const successMsg = document.createElement('p');
+              successMsg.textContent = 'Thank you for subscribing! We\'ll send you the latest Udemy coupons and deals.';
+              successMsg.style.color = 'var(--brand)';
+              successMsg.style.fontWeight = '600';
+              successMsg.style.marginTop = '1rem';
+              successMsg.style.textAlign = 'center';
+              
+              // Remove any existing success message
+              const existingMsg = newsletterForm.querySelector('.success-message');
+              if (existingMsg) {
+                existingMsg.remove();
+              }
+              
+              // Add success class for styling
+              successMsg.className = 'success-message';
+              newsletterForm.appendChild(successMsg);
+              
+              emailInput.value = '';
+              
+              // Remove message after 5 seconds
+              setTimeout(() => {
+                successMsg.remove();
+              }, 5000);
+            } else {
+              // Show error message inline
+              const errorMsg = document.createElement('p');
+              errorMsg.textContent = 'Please enter a valid email address.';
+              errorMsg.style.color = '#ef4444';
+              errorMsg.style.fontWeight = '600';
+              errorMsg.style.marginTop = '1rem';
+              errorMsg.style.textAlign = 'center';
+              
+              // Remove any existing error message
+              const existingMsg = newsletterForm.querySelector('.error-message');
+              if (existingMsg) {
+                existingMsg.remove();
+              }
+              
+              // Add error class for styling
+              errorMsg.className = 'error-message';
+              newsletterForm.appendChild(errorMsg);
+              
+              // Remove message after 3 seconds
+              setTimeout(() => {
+                errorMsg.remove();
+              }, 3000);
+            }
+          }
+        });
+      }
+
       // Back to top functionality
       const backToTopButton = document.getElementById('backToTop');
       
