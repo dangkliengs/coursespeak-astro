@@ -54,7 +54,7 @@ const p = typeof deal.price === "number" && isFinite(deal.price) && deal.price >
 const opRaw = typeof deal.originalPrice === "number" && isFinite(deal.originalPrice) ? deal.originalPrice : 119.99;
 const op = opRaw > p ? opRaw : 119.99;
 const r = typeof deal.rating === "number" && isFinite(deal.rating) ? deal.rating : genRating(key);
-const s = typeof deal.students === "number" && isFinite(deal.students) ? deal.students : genStudents(key);
+const s = (typeof deal.students === "number" && isFinite(deal.students) && deal.students > 0) ? deal.students : genStudents(key);
 const hasDiscount = op > p && p > 0;
 const discountPct = hasDiscount ? Math.round(100 - (p / op) * 100) : null;
 const title = String(deal.title || "").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&apos;|&#8217;/g, "'").replace(/&ndash;|&#8211;/g, " & ").replace(/\s{2,}/g, " ").trim();

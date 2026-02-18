@@ -17,6 +17,25 @@ const monthNames  = [
 const currentMonth = monthNames[utcDate.getMonth()];
 const currentYear  = utcDate.getFullYear();
 
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+function genStudents(key: string): number {
+  let h = 2166136261 >>> 0;
+  for (let i = 0; i < key.length; i++) {
+    h ^= key.charCodeAt(i);
+    h += (h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24);
+  }
+  const r = (h >>> 0) / 0xffffffff;
+  const min = 1000, max = 80000;
+  const val = Math.floor(min + (max - min) * Math.pow(r, 0.6));
+  return Math.round(val / 10) * 10;
+}
+
+function formatStudents(n: number) {
+  if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, "") + "m";
+  if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "k";
+  return String(n);
+}
+
 // ─── SEO Meta ────────────────────────────────────────────────────────────────
 // [SEO TITLE]
 const pageTitle       = `100% Off Udemy Coupons ${currentMonth} ${currentYear} | Free Udemy Courses`;
@@ -559,9 +578,9 @@ const jsonLd = {
                 fontSize: "1.8rem", fontWeight: 800, marginBottom: "0.25rem",
                 background: "linear-gradient(135deg, #FFD700 0%, #FFA500 100%)",
                 WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text"
-              }}>Top-Rated Free Course</h2>
+              }}>Featured Course</h2>
               <div style={{ fontSize: "0.9rem", color: "var(--muted)" }}>
-                Highest rated · Limited enrollment slots remaining
+                New Releases Courses on Udemy · Limited enrollment slots remaining
               </div>
             </div>
           </div>
@@ -582,7 +601,7 @@ const jsonLd = {
           <div style={{ textAlign: "left" }}>
             {featuredDeals.map((deal) => {
               const r = typeof deal.rating === "number" && isFinite(deal.rating) ? deal.rating : 4.9;
-              const s = typeof deal.students === "number" && isFinite(deal.students) ? deal.students : 50000;
+              const s = (typeof deal.students === "number" && isFinite(deal.students) && deal.students > 0) ? deal.students : genStudents(deal.id || "");
               const hasDiscount = deal.originalPrice && deal.price !== undefined && deal.originalPrice > deal.price;
               const discountPct = hasDiscount && deal.originalPrice ? Math.round(100 - ((deal.price ?? 0) / deal.originalPrice) * 100) : null;
               return (
@@ -613,7 +632,7 @@ const jsonLd = {
                       <span style={{ color: "#D97706", fontSize: "1rem", fontWeight: 700 }}>{r.toFixed(1)}</span>
                     </div>
                     <span style={{ color: "var(--muted)" }}>·</span>
-                    <span style={{ color: "var(--muted)", fontSize: "0.9rem" }}>{Math.round(s / 1000)}k+ students enrolled</span>
+                    <span style={{ color: "var(--muted)", fontSize: "0.9rem" }}>{formatStudents(s)} students enrolled</span>
                     {deal.category && (
                       <>
                         <span style={{ color: "var(--muted)" }}>·</span>
