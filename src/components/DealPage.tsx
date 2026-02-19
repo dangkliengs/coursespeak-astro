@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useMemo, useState } from 'react';
 import { renderMarkdownToHtml } from "../lib/markdown";
-import { extractDifficultyLevel } from "../lib/utils";
+import { extractDifficultyLevel, slugifyCategory } from "../lib/utils";
 import ActionsPanel from "./ActionsPanel";
 import RelatedList from "./RelatedList";
 import CourseComparison from "./CourseComparison";
@@ -248,75 +248,74 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(courseStructuredData, null, 0) }}
             />
 
-            {/* Breadcrumb + Hero */}
-            <header style={{ background: "#1f2330", padding: "2rem 0", borderBottom: "1px solid #0b0d12" }}>
-                <div className="container" style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 1rem" }}>
-                    {/* Breadcrumb */}
-                    <nav aria-label="Breadcrumb" style={{ marginBottom: "1rem" }}>
-                        <ol
-                            itemScope
-                            itemType="https://schema.org/BreadcrumbList"
-                            style={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "8px",
-                                fontSize: "14px",
-                                color: "#fff",
-                                fontWeight: 600,
-                                flexWrap: "wrap",
-                                listStyle: "none",
-                                margin: 0,
-                                padding: 0
-                            }}
-                        >
-                            <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-                                <a href="/" itemProp="item" style={{ color: "#cbd5e1", textDecoration: "none" }}>
-                                    <span itemProp="name">Home</span>
-                                </a>
-                                <meta itemProp="position" content="1" />
-                            </li>
-                            <li aria-hidden="true" style={{ color: "#64748b" }}>›</li>
-                            <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-                                <a href="/deals" itemProp="item" style={{ color: "#cbd5e1", textDecoration: "none" }}>
-                                    <span itemProp="name">All Deals</span>
-                                </a>
-                                <meta itemProp="position" content="2" />
-                            </li>
-                            {deal.category && (
-                                <>
+                    {/* Breadcrumb + Hero */}
+                    <header style={{ background: "#1f2330", padding: "2rem 0", borderBottom: "1px solid #0b0d12" }}>
+                        <div className="container" style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 1rem" }}>
+                            {/* Breadcrumb */}
+                            <nav aria-label="Breadcrumb" style={{ marginBottom: "1rem" }}>
+                                <ol
+                                    itemScope
+                                    itemType="https://schema.org/BreadcrumbList"
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "8px",
+                                        fontSize: "14px",
+                                        color: "#fff",
+                                        fontWeight: 600,
+                                        flexWrap: "wrap",
+                                        listStyle: "none",
+                                        margin: 0,
+                                        padding: 0
+                                    }}
+                                >
+                                    <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+                                        <a href="/" itemProp="item" style={{ color: "#cbd5e1", textDecoration: "none" }}>
+                                            <span itemProp="name">Home</span>
+                                        </a>
+                                        <meta itemProp="position" content="1" />
+                                    </li>
                                     <li aria-hidden="true" style={{ color: "#64748b" }}>›</li>
                                     <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-                                        <a href={`/categories/${categorySlug}`} itemProp="item" style={{ color: "#cbd5e1", textDecoration: "none" }}>
-                                            <span itemProp="name">{deal.category}</span>
+                                        <a href="/deals" itemProp="item" style={{ color: "#cbd5e1", textDecoration: "none" }}>
+                                            <span itemProp="name">All Deals</span>
                                         </a>
-                                        <meta itemProp="position" content="3" />
+                                        <meta itemProp="position" content="2" />
                                     </li>
-                                </>
-                            )}
-                            {deal.subcategory && deal.subcategory !== deal.category && (
-                                <>
+                                    {deal.category && (
+                                        <>
+                                            <li aria-hidden="true" style={{ color: "#64748b" }}>›</li>
+                                            <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+                                                <a href={`/categories/${slugifyCategory(deal.category)}`} itemProp="item" style={{ color: "#cbd5e1", textDecoration: "none" }}>
+                                                    <span itemProp="name">{deal.category}</span>
+                                                </a>
+                                                <meta itemProp="position" content="3" />
+                                            </li>
+                                        </>
+                                    )}
+                                    {deal.subcategory && deal.subcategory !== deal.category && (
+                                        <>
+                                            <li aria-hidden="true" style={{ color: "#64748b" }}>›</li>
+                                            <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+                                                <a href={`/topics/${slugifyCategory(deal.subcategory)}`} itemProp="item" style={{ color: "#cbd5e1", textDecoration: "none" }}>
+                                                    <span itemProp="name">{deal.subcategory}</span>
+                                                </a>
+                                                <meta itemProp="position" content="4" />
+                                            </li>
+                                        </>
+                                    )}
                                     <li aria-hidden="true" style={{ color: "#64748b" }}>›</li>
-                                    <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-                                        <a href={`/categories/${categorySlug}/${subcategorySlug}`} itemProp="item" style={{ color: "#cbd5e1", textDecoration: "none" }}>
-                                            <span itemProp="name">{deal.subcategory}</span>
-                                        </a>
-                                        <meta itemProp="position" content="4" />
+                                    <li aria-current="page" style={{ color: "#FBBF24", fontWeight: 700, wordBreak: "break-word" }}>
+                                        {deal.title}
                                     </li>
-                                </>
-                            )}
-                            <li aria-hidden="true" style={{ color: "#64748b" }}>›</li>
-                            <li aria-current="page" style={{ color: "#FBBF24", fontWeight: 700, wordBreak: "break-word" }}>
+                                </ol>
+                            </nav>
+                            <h1 style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: 800, lineHeight: 1.2, marginBottom: "1rem", color: "#fff" }}>
                                 {deal.title}
-                            </li>
-                        </ol>
-                    </nav>
+                                {discountPct > 0 ? ` — ${discountPct}% Off Coupon` : ' — Free Coupon'}
+                            </h1>
 
-                    {/* H1 — SEO-optimized title */}
-                    <h1 style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: 800, lineHeight: 1.2, marginBottom: "1rem", color: "#fff" }}>
-                        {deal.title}
-                        {discountPct > 0 ? ` — ${discountPct}% Off Coupon` : ' — Free Coupon'}
-                    </h1>
-
+                            {/* ... */}
                     <p style={{ fontSize: "1.05rem", lineHeight: 1.6, marginBottom: "1.5rem", color: "#cbd5e1", maxWidth: "800px" }}>
                         {deal.description}
                     </p>

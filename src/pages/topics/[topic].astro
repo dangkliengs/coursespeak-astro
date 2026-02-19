@@ -26,7 +26,8 @@ export async function getStaticPaths() {
     try {
       const slug = subcategory.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
       return {
-        params: { topic: slug }
+        params: { topic: slug },
+        props: { originalTopic: subcategory }
       };
     } catch (e) {
       return null;
@@ -35,6 +36,7 @@ export async function getStaticPaths() {
 }
 
 const { topic: topicSlug } = Astro.params;
+const { originalTopic } = Astro.props;
 const urlParams = new URLSearchParams(Astro.url.search);
 const page = urlParams.get('page');
 
@@ -48,30 +50,20 @@ allDeals.forEach(deal => {
   }
 });
 
-// Find the original topic name from slug
-const allTopics = [...new Set(allDeals.map(deal => deal.subcategory).filter(sub => sub != null && typeof sub === 'string'))];
-const topicData = allTopics.map(sub => {
-  try {
-    const slug = sub.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
-    return { name: sub, slug };
-  } catch (e) {
-    return null;
-  }
-}).filter(t => t != null).find(t => t.slug === topicSlug);
-const topic = topicData ? topicData.name : ((topicSlug && typeof topicSlug === 'string') ? (function() {
-  try {
-    return topicSlug.replace(/-/g, ' ');
-  } catch (e) {
-    return 'Unknown Topic';
-  }
-})() : 'Unknown Topic');
+// Use originalTopic for exact matching, with fallback for dev mode
+let topic = originalTopic;
+if (!topic) {
+  // Fallback for dev mode or missing props
+  const allSubcategories = [...new Set(allDeals.map(deal => deal.subcategory).filter(sub => sub != null && typeof sub === 'string'))];
+  const matching = allSubcategories.find(sub => sub.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-') === topicSlug);
+  topic = matching || 'Unknown Topic';
+}
 
-// Filter deals for this topic (subcategory)
+// Filter deals for this topic (subcategory) - exact match
 const topicDeals = allDeals.filter(deal => {
   try {
     if (!deal.subcategory || typeof deal.subcategory !== 'string') return false;
-    if (!topic || typeof topic !== 'string') return false;
-    return deal.subcategory.toLowerCase() === topic.toLowerCase();
+    return deal.subcategory === topic;
   } catch (e) {
     return false;
   }
