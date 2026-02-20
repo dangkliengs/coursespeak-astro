@@ -61,16 +61,6 @@ const currentPath = Astro.url.pathname;
     <!-- Resource hints -->
     <link rel="preload" href="/favicon.svg" as="image" type="image/svg+xml" />
     
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VPY4HMMKBH"></script>
-    <script is:inline>
-      // @ts-ignore
-      window.dataLayer = window.dataLayer || [];
-      // @ts-ignore
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-VPY4HMMKBH');
-    </script>
     <meta name="generator" content={Astro.generator} />
     <meta name="google-site-verification" content="HISPISPt9Gk-zER-OUkGcPtm6cyiQ7snnKwzn7aDgTY" />
     <link rel="canonical" href={canonicalURL} />
