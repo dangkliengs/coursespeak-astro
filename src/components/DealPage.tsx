@@ -92,11 +92,6 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
         }
 
         generated.push({
-            q: `How do I redeem the coupon for "${deal.title}"?`,
-            a: `Click the "Redeem Coupon" button on this page. It will open the ${provider} course page with the discount applied automatically. If you have trouble, copy the coupon code manually and paste it at checkout.`
-        });
-
-        generated.push({
             q: `Will I get a certificate after completing this course?`,
             a: `Yes. Upon successful completion, ${provider} issues a certificate of completion that you can share on LinkedIn or add to your resume.`
         });
@@ -241,7 +236,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
     };
 
     return (
-        <div style={{ background: "#0b0d12", color: "#e2e8f0", minHeight: "100vh" }}>
+        <div style={{ background: "linear-gradient(135deg, #0b0d12 0%, #1a1d2e 100%)", color: "#e2e8f0", minHeight: "100vh" }}>
             {/* Structured Data */}
             <script
                 type="application/ld+json"
@@ -389,6 +384,25 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 </div>
                             ))}
                         </div>
+
+                        {/* Warning about Incognito mode */}
+                        <div style={{
+                            marginTop: "1.5rem",
+                            padding: "1rem",
+                            background: "linear-gradient(135deg, #fef3c7, #fde68a)",
+                            border: "1px solid #f59e0b",
+                            borderRadius: "8px",
+                            fontSize: "0.9rem",
+                            color: "#92400e"
+                        }}>
+                            <div style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
+                                <span style={{ fontSize: "1.2rem", lineHeight: 1 }}>⚠️</span>
+                                <div>
+                                    <strong style={{ display: "block", marginBottom: "4px" }}>Important:</strong>
+                                    This coupon may not function properly in private/incognito browsing mode. Please use a standard browser window and consider temporarily disabling any ad blockers or VPN services for optimal performance.
+                                </div>
+                            </div>
+                        </div>
                     </section>
 
                     {/* What You'll Learn */}
@@ -446,6 +460,43 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                             suppressHydrationWarning={true}
                         />
                     </section>
+
+                    {/* Udemy Coupons Guide Link */}
+                    <div style={{
+                        marginBottom: "2rem",
+                        padding: "1.5rem",
+                        background: "linear-gradient(135deg, rgba(255,193,7,0.08) 0%, rgba(255,215,0,0.04) 100%)",
+                        border: "1px solid rgba(255,193,7,0.2)",
+                        borderRadius: "8px",
+                        textAlign: "center",
+                        boxShadow: "0 4px 16px rgba(255,193,7,0.05)"
+                    }}>
+                        <p style={{ fontSize: "0.95rem", color: "#cbd5e1", marginBottom: "0.5rem" }}>
+                            <strong style={{ color: "#60a5fa" }}>Complete Udemy Coupons Guide</strong>
+                        </p>
+                        <p style={{ fontSize: "0.85rem", color: "#94a3b8", marginBottom: "1rem" }}>
+                            Everything you need to know about Udemy coupons: where to find them, how they work, how to redeem them, and how to avoid expired codes — explained clearly and honestly.
+                        </p>
+                        <a
+                            href="/udemy-coupons-guide"
+                            style={{
+                                display: "inline-block",
+                                padding: "0.75rem 1.5rem",
+                                background: "linear-gradient(135deg, #60a5fa, #7c3aed)",
+                                color: "#fff",
+                                textDecoration: "none",
+                                borderRadius: "6px",
+                                fontSize: "0.9rem",
+                                fontWeight: 600,
+                                transition: "all 0.2s",
+                                boxShadow: "0 2px 8px rgba(96, 165, 250, 0.3)"
+                            }}
+                            onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-1px)"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 12px rgba(96, 165, 250, 0.4)"; }}
+                            onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(0)"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 2px 8px rgba(96, 165, 250, 0.3)"; }}
+                        >
+                            📖 Read Udemy Coupons Guide →
+                        </a>
+                    </div>
 
                     {/* Course Comparison */}
                     {relatedDeals && relatedDeals.length > 0 && (
@@ -530,6 +581,9 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                             The coupon was last verified on{" "}
                             {deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : "the date shown above"}.
                             Udemy coupons are time-limited and claimed on a first-come basis — we recommend redeeming as soon as possible.
+                            <br /><br />
+                            <strong style={{ color: "#FBBF24" }}>New to redeeming coupons?</strong>{" "}
+                            Visit our <a href="/how-to-redeem-coupon" style={{ color: "#60a5fa", textDecoration: "underline" }}>How to Redeem Udemy Coupon on CourseSpeak</a> for detailed instructions on how to apply coupon codes.
                         </p>
                         <div style={{
                             padding: "1.25rem 1.5rem",
@@ -661,7 +715,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
 
                 {/* ─── RIGHT COLUMN — Sticky Sidebar ─── */}
                 <aside aria-label="Course purchase options" style={{ position: "relative" }}>
-                    <div style={{ position: "sticky", top: "2rem", background: "#1f2330", border: "1px solid #2d3748", borderRadius: "8px", overflow: "hidden", boxShadow: "0 4px 6px -1px rgba(0,0,0,0.5)" }}>
+                    <div style={{ position: "sticky", top: "2rem", background: "linear-gradient(135deg, #1f2330 0%, #2a2f42 100%)", border: "1px solid rgba(255,193,7,0.15)", borderRadius: "8px", overflow: "hidden", boxShadow: "0 8px 32px rgba(255,193,7,0.1)" }}>
                         {deal.image && (
                             <div style={{ position: "relative" }}>
                                 <img
@@ -730,7 +784,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                             onClick={() => setIsModalOpen(true)}
                                             style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(255,255,255,0.35)", borderRadius: "4px", padding: "4px 8px", fontSize: "0.7rem", fontWeight: 600, cursor: "pointer", color: "#fff", whiteSpace: "nowrap" }}
                                         >
-                                            Reveal
+                                            Copy code
                                         </button>
                                     </div>
                                 </div>
@@ -742,9 +796,30 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 target="_blank"
                                 rel="noopener noreferrer nofollow"
                                 aria-label={`Redeem coupon for ${deal.title} on ${deal.provider || "Udemy"}`}
-                                style={{ display: "block", textAlign: "center", background: "#a855f7", color: "#fff", fontWeight: 700, padding: "13px", fontSize: "1rem", borderRadius: "4px", marginBottom: "10px", textDecoration: "none", transition: "background 0.2s" }}
-                                onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = "#9333ea"; }}
-                                onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = "#a855f7"; }}
+                                style={{
+                                    display: "block",
+                                    width: "100%",
+                                    padding: "0.75rem",
+                                    background: "linear-gradient(135deg, #FFD700 0%, #FFA500 100%)",
+                                    color: "#333",
+                                    textDecoration: "none",
+                                    borderRadius: "8px",
+                                    textAlign: "center",
+                                    fontWeight: 700,
+                                    fontSize: "0.9rem",
+                                    transition: "all 0.3s ease",
+                                    border: "none",
+                                    cursor: "pointer",
+                                    boxShadow: "0 4px 16px rgba(255, 215, 0, 0.3)"
+                                }}
+                                onMouseEnter={(e) => {
+                                    (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)";
+                                    (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 6px 20px rgba(255, 215, 0, 0.4)";
+                                }}
+                                onMouseLeave={(e) => {
+                                    (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(0)";
+                                    (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 16px rgba(255, 215, 0, 0.3)";
+                                }}
                             >
                                 REDEEM COUPON
                             </a>
