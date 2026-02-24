@@ -30,6 +30,8 @@ export async function readDealsFromFile(): Promise<Deal[]> {
     console.error('Error reading deals file:', error);
     return [];
   }
+  // If data is not an array, return empty array
+  return [];
 }
 
 async function writeDealsToFile(all: Deal[]): Promise<void> {
@@ -122,4 +124,65 @@ export async function deleteDeal(id: string): Promise<void> {
 
 export async function writeDeals(all: Deal[]): Promise<void> {
   await writeDealsToFile(all);
+}
+
+// Helper function to filter and sort deals
+export async function getDeals(options: {
+  date?: string;
+  limit?: number;
+  sortBy?: 'rating';
+} = {}): Promise<Deal[]> {
+  let deals = await readDealsFromFile();
+
+  // Filter by date (YYYY-MM-DD format)
+  if (options.date) {
+    const targetDate = new Date(options.date);
+    const nextDay = new Date(targetDate);
+    nextDay.setDate(targetDate.getDate() + 1);
+
+    deals = deals.filter(deal => {
+      const dealDate = new Date(deal.updatedAt ?? deal.createdAt ?? deal.expiresAt ?? 0);
+      return dealDate >= targetDate && dealDate < nextDay;
+    });
+  }
+
+  // Sort by rating if requested
+  if (options.sortBy === 'rating') {
+    deals = deals.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
+  }
+
+  // Apply limit
+  if (options.limit) {
+    deals = deals.slice(0, options.limit);
+  }
+
+  return deals;
+}
+
+/**
+ * Get available dates for blog static generation.
+ * Capped at MAX_BLOG_DAYS so the site never grows to thousands of pages:
+ * - 1 year of daily updates without cap = 365 article pages + many index pages.
+ * - With cap 90: at most 90 article pages + 8 index pages (build stays fast, output size fixed).
+ * Dates are derived from deals (updatedAt/createdAt/expiresAt). Oldest dates beyond the cap are not generated.
+ */
+const MAX_BLOG_DAYS = 90;
+
+export async function getAvailableDates(): Promise<string[]> {
+  const deals = await readDealsFromFile();
+  const dates = new Set<string>();
+
+  deals.forEach(deal => {
+    const date = new Date(deal.updatedAt ?? deal.createdAt ?? deal.expiresAt ?? 0);
+    const dateString = date.toISOString().split('T')[0]; // YYYY-MM-DD
+    dates.add(dateString);
+  });
+
+  const today = new Date().toISOString().split('T')[0];
+  const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+  dates.add(today);
+  dates.add(yesterday);
+
+  const sortedDates = Array.from(dates).sort().reverse().slice(0, MAX_BLOG_DAYS);
+  return sortedDates;
 }

@@ -34,4 +34,6 @@ export interface Deal {
   seoTitle?: string;
   seoDescription?: string;
   seoOgImage?: string;
+  isBestseller?: boolean;
+  isNew?: boolean;
 }

@@ -251,6 +251,9 @@ const currentPath = Astro.url.pathname;
       crossorigin
     />
 
+    <!-- ConvertKit Embed Script -->
+    <script src="https://f.convertkit.com/ckjs/ck.5.js"></script>
+
     <style>
       /* Basic styles */
       body {
@@ -475,9 +478,9 @@ const currentPath = Astro.url.pathname;
             </a>
             
             <a
-              href="/udemy-coupons-guide"
+              href="/blog"
               style={{
-                color: currentPath === '/udemy-coupons-guide' ? 'var(--brand)' : 'var(--text)',
+                color: currentPath === '/blog' || currentPath.startsWith('/blog/') ? 'var(--brand)' : 'var(--text)',
                 textDecoration: "none",
                 fontSize: "0.85rem",
                 fontWeight: 600,
@@ -489,13 +492,14 @@ const currentPath = Astro.url.pathname;
                 gap: "4px",
                 whiteSpace: "nowrap",
                 flexShrink: 0,
-                background: currentPath === '/udemy-coupons-guide' ? 'rgba(255, 193, 7, 0.1)' : 'transparent'
+                background: currentPath === '/blog' || currentPath.startsWith('/blog/') ? 'rgba(255, 193, 7, 0.1)' : 'transparent'
               }}
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                <path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+                <path d="M14 17H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
               </svg>
-              Blog/Guide
+              Blog
             </a>
           </div>
           
@@ -562,88 +566,87 @@ const currentPath = Astro.url.pathname;
       }}
     >
       <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "0 1rem" }}>
-        {/* Newsletter Section */}
+        {/* Newsletter Section - Functional */}
         <div style={{
           background: "var(--card)",
-          padding: "3rem",
-          borderRadius: "24px",
-          marginBottom: "64px",
+          padding: "1.5rem",
+          borderRadius: "16px",
+          marginBottom: "32px",
           border: "1px solid var(--border)",
           textAlign: "center",
           position: "relative",
           overflow: "hidden"
         }}>
-          <div style={{
-            position: "absolute",
-            top: "-50px",
-            right: "-50px",
-            width: "150px",
-            height: "150px",
-            background: "var(--brand)",
-            borderRadius: "50%",
-            opacity: 0.1
-          }}></div>
           <h3 style={{
-            color: "#fff",
-            fontSize: "2rem",
-            fontWeight: 800,
-            marginBottom: "1rem",
+            color: "var(--text)",
+            fontSize: "1.25rem",
+            fontWeight: 700,
+            marginBottom: "0.75rem",
             background: "linear-gradient(135deg, #FFC107 0%, #FFD54F 100%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             backgroundClip: "text"
           }}>
-            Get Exclusive Udemy Coupons
+            Get Udemy Coupons
           </h3>
           <p style={{
-            color: "hsl(215, 20%, 65%)",
-            marginBottom: "2rem",
-            maxWidth: "600px",
-            margin: "0 auto 2rem",
-            fontSize: "1.1rem",
-            lineHeight: 1.6
+            color: "var(--muted)",
+            marginBottom: "1.5rem",
+            maxWidth: "500px",
+            margin: "0 auto 1.5rem",
+            fontSize: "0.9rem",
+            lineHeight: 1.5
           }}>
-            Subscribe to our newsletter and never miss a deal. Get the latest Udemy coupons delivered to your inbox daily.
+            Subscribe for daily Udemy coupon deals delivered to your inbox.
           </p>
-          <div style={{
-            display: "flex",
-            gap: "1rem",
-            maxWidth: "600px",
-            margin: "0 auto",
-            flexWrap: "wrap"
-          }}>
+          <form
+            action="/api/newsletter-signup"
+            method="POST"
+            style={{
+              display: "flex",
+              gap: "0.75rem",
+              maxWidth: "500px",
+              margin: "0 auto",
+              flexWrap: "wrap",
+              justifyContent: "center"
+            }}
+          >
             <input
               type="email"
+              name="email"
               placeholder="Enter your email"
+              required
+              autocomplete="email"
               style={{
                 flex: 1,
-                minWidth: "250px",
-                padding: "1rem 1.5rem",
-                borderRadius: "12px",
-                border: "2px solid var(--border)",
+                minWidth: "200px",
+                padding: "0.75rem",
+                borderRadius: "8px",
+                border: "1px solid var(--border)",
                 background: "var(--input)",
                 color: "var(--text)",
-                fontSize: "1rem",
-                transition: "all 0.3s ease"
+                fontSize: "0.9rem",
+                transition: "border-color 0.3s ease"
               }}
             />
             <button
+              type="submit"
               style={{
-                padding: "1rem 2.5rem",
-                borderRadius: "12px",
+                padding: "0.75rem 1.5rem",
+                borderRadius: "8px",
                 background: "linear-gradient(135deg, #FFC107 0%, #FFD54F 100%)",
                 color: "var(--bg)",
                 border: "none",
-                fontSize: "1rem",
-                fontWeight: 700,
+                fontSize: "0.9rem",
+                fontWeight: 600,
                 cursor: "pointer",
-                transition: "all 0.3s ease",
-                boxShadow: "0 4px 20px -4px rgba(255, 193, 7, 0.4)"
+                transition: "transform 0.2s ease",
+                whiteSpace: "nowrap"
               }}
             >
               Subscribe
             </button>
-          </div>
+          </form>
         </div>
 
         {/* Footer Links */}
