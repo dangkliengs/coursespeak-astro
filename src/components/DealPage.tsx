@@ -794,7 +794,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                     {/* Author Profile Section */}
                     <section aria-labelledby="author-profile-heading" style={{ border: "1px solid #1f2330", padding: "1.5rem", borderRadius: "8px", background: "#0b0d12", marginBottom: "2rem" }}>
                         <h2 id="author-profile-heading" style={{ fontSize: "1.4rem", fontWeight: 700, color: "#fff", marginBottom: "1.25rem" }}>
-                            About CourseSpeak
+                            About the Author
                         </h2>
 
                         <div style={{
@@ -818,7 +818,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                             }}>
                                 <img
                                     src="/images/author.jpg"
-                                    alt="Ananda Yuda - CourseSpeak Founder"
+                                    alt="Josh Smith - Udemy Coupon Expert"
                                     style={{
                                         width: "100%",
                                         height: "100%",
@@ -836,7 +836,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                     color: "#fff",
                                     margin: "0 0 0.5rem 0"
                                 }}>
-                                    CourseSpeak Team
+                                    Josh Smith
                                 </h3>
                                 <p style={{
                                     fontSize: "0.9375rem",
@@ -844,7 +844,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                     lineHeight: 1.6,
                                     margin: "0 0 0.75rem 0"
                                 }}>
-                                    Expert curators of verified Udemy coupons and free courses. We help millions of learners worldwide access premium education through daily-updated discount codes, verified deals, and exclusive coupon offers. Our mission is making quality education affordable and accessible to everyone.
+                                    Udemy coupon specialist with 8+ years of experience finding and verifying the best deals. I've helped thousands of students save thousands of dollars on premium courses through carefully curated coupon codes and exclusive discount offers. My mission is making high-quality education accessible and affordable for everyone.
                                 </p>
                                 <div style={{
                                     display: "flex",
