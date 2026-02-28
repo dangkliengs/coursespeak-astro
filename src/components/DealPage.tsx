@@ -151,96 +151,191 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
     const categorySlug = deal.category?.toLowerCase().replace(/\s+/g, '-') || '';
     const subcategorySlug = deal.subcategory?.toLowerCase().replace(/\s+/g, '-') || '';
 
-    // Structured data — Course + BreadcrumbList + FAQPage
-    const courseStructuredData = {
+    // Enhanced structured data for SEO
+    const enhancedStructuredData = {
         "@context": "https://schema.org",
         "@graph": [
             {
                 "@type": "Course",
+                "@id": `${typeof window !== 'undefined' ? window.location.origin : 'https://coursespeak.com'}/deal/${deal.id}#course`,
                 "name": deal.title,
-                "description": deal.description,
-                "url": `https://coursespeak.com/deal/${deal.id}`,
-                "image": deal.image,
-                "inLanguage": deal.language || "en",
+                "description": deal.description || `${deal.title} - Learn from expert instructors with verified coupons`,
+                "url": `${typeof window !== 'undefined' ? window.location.origin : 'https://coursespeak.com'}/deal/${deal.id}`,
+                "image": deal.image || `${typeof window !== 'undefined' ? window.location.origin : 'https://coursespeak.com'}/logo.svg`,
                 "provider": {
                     "@type": "Organization",
-                    "name": deal.provider || "Online Learning Platform",
-                    "sameAs": "https://www.udemy.com"
+                    "name": deal.provider || "Udemy",
+                    "url": deal.provider === "Udemy" ? "https://www.udemy.com" : (typeof window !== 'undefined' ? window.location.origin : 'https://coursespeak.com')
                 },
-                ...(deal.instructor ? {
-                    "instructor": {
-                        "@type": "Person",
-                        "name": deal.instructor.includes(',')
-                            ? deal.instructor.split(',')[1]?.trim()
-                            : deal.instructor
-                    }
-                } : {}),
-                "offers": {
-                    "@type": "Offer",
-                    "price": price.toString(),
-                    "priceCurrency": "USD",
-                    "availability": "https://schema.org/InStock",
-                    ...(deal.expiresAt ? { "priceValidUntil": deal.expiresAt } : {}),
-                    "seller": {
+                "instructor": deal.instructor ? {
+                    "@type": "Person",
+                    "name": deal.instructor,
+                    "jobTitle": "Course Instructor",
+                    "affiliation": {
                         "@type": "Organization",
-                        "name": "CourseSpeak",
-                        "url": "https://coursespeak.com"
+                        "name": deal.provider || "Udemy"
                     }
-                },
-                ...(deal.rating ? {
-                    "aggregateRating": {
-                        "@type": "AggregateRating",
-                        "ratingValue": deal.rating.toFixed(1),
-                        "reviewCount": Math.max(10, deal.students ?? 1000),
-                        "bestRating": "5",
-                        "worstRating": "1"
-                    }
-                } : {}),
-                ...(deal.duration ? (() => {
-                    const hours = parseFloat(deal.duration!);
-                    if (isNaN(hours)) return {};
-                    const h = Math.floor(hours);
-                    const m = Math.round((hours - h) * 60);
-                    return { "timeRequired": m > 0 ? `PT${h}H${m}M` : `PT${h}H` };
-                })() : {}),
-                "courseMode": "online",
-                "educationalLevel": extractDifficultyLevel(deal.title, deal.description),
-                "teaches": deal.learn?.slice(0, 8) || []
+                } : undefined,
+                "offers": [
+                    {
+                        "@type": "Offer",
+                        "price": deal.price || 0,
+                        "priceCurrency": "USD",
+                        "availability": "https://schema.org/InStock",
+                        "validThrough": deal.expiresAt || undefined,
+                        "url": deal.url || `${typeof window !== 'undefined' ? window.location.origin : 'https://coursespeak.com'}/deal/${deal.id}`,
+                        "seller": {
+                            "@type": "Organization",
+                            "name": deal.provider || "Udemy"
+                        }
+                    },
+                    deal.coupon ? {
+                        "@type": "Offer",
+                        "name": `${deal.title} - Coupon Deal`,
+                        "price": Math.max(0, (deal.price || 0) - ((deal.originalPrice || 0) - (deal.price || 0))),
+                        "priceCurrency": "USD",
+                        "availability": "https://schema.org/LimitedAvailability",
+                        "validThrough": deal.expiresAt || undefined,
+                        "url": deal.url || `${typeof window !== 'undefined' ? window.location.origin : 'https://coursespeak.com'}/deal/${deal.id}`,
+                        "description": `Use coupon code ${deal.coupon} for discount on ${deal.title}`,
+                        "seller": {
+                            "@type": "Organization",
+                            "name": deal.provider || "Udemy"
+                        }
+                    } : null
+                ].filter(Boolean),
+                "aggregateRating": deal.rating ? {
+                    "@type": "AggregateRating",
+                    "ratingValue": deal.rating,
+                    "ratingCount": deal.students || 1,
+                    "bestRating": 5,
+                    "worstRating": 1
+                } : undefined,
+                "timeRequired": deal.duration ? `PT${deal.duration.replace(/[^\d]/g, '')}H` : undefined,
+                "inLanguage": deal.language || "en",
+                "teaches": deal.learn ? deal.learn.join(", ") : undefined,
+                "educationalLevel": "Beginner to Advanced",
+                "educationalUse": "Professional Development",
+                "datePublished": deal.updatedAt || new Date().toISOString(),
+                "dateModified": deal.updatedAt || new Date().toISOString(),
+                "expires": deal.expiresAt || undefined,
+                "hasCourseInstance": {
+                    "@type": "CourseInstance",
+                    "courseMode": "online",
+                    "instructor": deal.instructor ? {
+                        "@type": "Person",
+                        "name": deal.instructor
+                    } : undefined
+                }
             },
             {
                 "@type": "BreadcrumbList",
-                "@id": `https://coursespeak.com/deal/${deal.id}#breadcrumb`,
                 "itemListElement": [
-                    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://coursespeak.com" },
-                    { "@type": "ListItem", "position": 2, "name": "All Deals", "item": "https://coursespeak.com/deals" },
-                    ...(deal.category ? [{ "@type": "ListItem", "position": 3, "name": deal.category, "item": `https://coursespeak.com/categories/${categorySlug}` }] : []),
-                    ...(deal.subcategory && deal.subcategory !== deal.category ? [{ "@type": "ListItem", "position": 4, "name": deal.subcategory, "item": `https://coursespeak.com/categories/${categorySlug}/${subcategorySlug}` }] : []),
                     {
                         "@type": "ListItem",
-                        "position": deal.subcategory && deal.subcategory !== deal.category ? 5 : deal.category ? 4 : 3,
+                        "position": 1,
+                        "name": "Home",
+                        "item": typeof window !== 'undefined' ? window.location.origin : 'https://coursespeak.com'
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Deals",
+                        "item": `${typeof window !== 'undefined' ? window.location.origin : 'https://coursespeak.com'}/deals`
+                    },
+                    deal.category ? {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": deal.category,
+                        "item": `${typeof window !== 'undefined' ? window.location.origin : 'https://coursespeak.com'}/categories/${deal.category.toLowerCase().replace(/\s+/g, '-')}`
+                    } : null,
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
                         "name": deal.title,
-                        "item": `https://coursespeak.com/deal/${deal.id}`
+                        "item": `${typeof window !== 'undefined' ? window.location.origin : 'https://coursespeak.com'}/deal/${deal.id}`
                     }
-                ]
+                ].filter(Boolean)
             },
             {
                 "@type": "FAQPage",
-                "@id": `https://coursespeak.com/deal/${deal.id}#faq`,
-                "mainEntity": autoFAQs.map(faq => ({
+                "@id": `${typeof window !== 'undefined' ? window.location.origin : 'https://coursespeak.com'}/deal/${deal.id}#faq`,
+                "mainEntity": autoFAQs.slice(0, 5).map(faq => ({
                     "@type": "Question",
                     "name": faq.q,
-                    "acceptedAnswer": { "@type": "Answer", "text": faq.a }
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": faq.a
+                    }
                 }))
+            },
+            {
+                "@type": "WebPage",
+                "@id": `${typeof window !== 'undefined' ? window.location.origin : 'https://coursespeak.com'}/deal/${deal.id}#webpage`,
+                "url": `${typeof window !== 'undefined' ? window.location.origin : 'https://coursespeak.com'}/deal/${deal.id}`,
+                "name": `${deal.title} - Udemy Coupon & Discount Code`,
+                "description": `Get ${deal.title} with ${discountPct > 0 ? discountPct + '% off' : 'free access'} using verified coupon code. ${deal.students ? deal.students.toLocaleString() + ' students enrolled.' : ''} Limited time offer.`,
+                "inLanguage": "en-US",
+                "isPartOf": {
+                    "@type": "WebSite",
+                    "name": "CourseSpeak",
+                    "url": typeof window !== 'undefined' ? window.location.origin : 'https://coursespeak.com'
+                },
+                "datePublished": deal.updatedAt || new Date().toISOString(),
+                "dateModified": deal.updatedAt || new Date().toISOString(),
+                "publisher": {
+                    "@type": "Organization",
+                    "name": "CourseSpeak",
+                    "url": typeof window !== 'undefined' ? window.location.origin : 'https://coursespeak.com',
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": `${typeof window !== 'undefined' ? window.location.origin : 'https://coursespeak.com'}/logo.svg`
+                    },
+                    "sameAs": [
+                        "https://www.facebook.com/CourseSpeakOfficial/",
+                        "https://x.com/courses_peak"
+                    ]
+                }
+            },
+            {
+                "@type": "Organization",
+                "@id": `${typeof window !== 'undefined' ? window.location.origin : 'https://coursespeak.com'}#organization`,
+                "name": "CourseSpeak",
+                "url": typeof window !== 'undefined' ? window.location.origin : 'https://coursespeak.com',
+                "logo": `${typeof window !== 'undefined' ? window.location.origin : 'https://coursespeak.com'}/logo.svg`,
+                "description": "CourseSpeak provides verified Udemy coupons and discount codes for premium online courses. We help learners worldwide access quality education at affordable prices.",
+                "foundingDate": "2024",
+                "sameAs": [
+                    "https://www.facebook.com/CourseSpeakOfficial/",
+                    "https://x.com/courses_peak"
+                ],
+                "contactPoint": {
+                    "@type": "ContactPoint",
+                    "contactType": "customer service",
+                    "availableLanguage": "English"
+                }
             }
         ]
     };
+
+    // Add structured data script
+    useEffect(() => {
+        const script = document.createElement('script');
+        script.type = 'application/ld+json';
+        script.textContent = JSON.stringify(enhancedStructuredData);
+        document.head.appendChild(script);
+
+        return () => {
+            document.head.removeChild(script);
+        };
+    }, []);
 
     return (
         <div style={{ background: "linear-gradient(135deg, #0b0d12 0%, #1a1d2e 100%)", color: "#e2e8f0", minHeight: "100vh" }}>
             {/* Structured Data */}
             <script
                 type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(courseStructuredData, null, 0) }}
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(enhancedStructuredData, null, 0) }}
             />
 
                     {/* Breadcrumb + Hero */}
@@ -491,8 +586,6 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 transition: "all 0.2s",
                                 boxShadow: "0 2px 8px rgba(96, 165, 250, 0.3)"
                             }}
-                            onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-1px)"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 12px rgba(96, 165, 250, 0.4)"; }}
-                            onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(0)"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 2px 8px rgba(96, 165, 250, 0.3)"; }}
                         >
                             📖 Read Udemy Coupons Guide →
                         </a>
@@ -697,6 +790,216 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                             </div>
                         </section>
                     )}
+
+                    {/* Author Profile Section */}
+                    <section aria-labelledby="author-profile-heading" style={{ border: "1px solid #1f2330", padding: "1.5rem", borderRadius: "8px", background: "#0b0d12", marginBottom: "2rem" }}>
+                        <h2 id="author-profile-heading" style={{ fontSize: "1.4rem", fontWeight: 700, color: "#fff", marginBottom: "1.25rem" }}>
+                            About CourseSpeak
+                        </h2>
+
+                        <div style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "1.5rem",
+                            flexWrap: "wrap"
+                        }}>
+                            {/* Author Avatar */}
+                            <div style={{
+                                width: "80px",
+                                height: "80px",
+                                borderRadius: "50%",
+                                background: "#1f2330",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                flexShrink: 0,
+                                overflow: "hidden",
+                                border: `3px solid #FBBF24`
+                            }}>
+                                <img
+                                    src="/images/author.jpg"
+                                    alt="Ananda Yuda - CourseSpeak Founder"
+                                    style={{
+                                        width: "100%",
+                                        height: "100%",
+                                        objectFit: "cover"
+                                    }}
+                                    loading="lazy"
+                                />
+                            </div>
+
+                            {/* Author Info */}
+                            <div style={{ flex: 1, minWidth: "280px" }}>
+                                <h3 style={{
+                                    fontSize: "1.25rem",
+                                    fontWeight: 700,
+                                    color: "#fff",
+                                    margin: "0 0 0.5rem 0"
+                                }}>
+                                    CourseSpeak Team
+                                </h3>
+                                <p style={{
+                                    fontSize: "0.9375rem",
+                                    color: "#cbd5e1",
+                                    lineHeight: 1.6,
+                                    margin: "0 0 0.75rem 0"
+                                }}>
+                                    Expert curators of verified Udemy coupons and free courses. We help millions of learners worldwide access premium education through daily-updated discount codes, verified deals, and exclusive coupon offers. Our mission is making quality education affordable and accessible to everyone.
+                                </p>
+                                <div style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "1rem",
+                                    flexWrap: "wrap"
+                                }}>
+                                    <div style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "0.5rem"
+                                    }}>
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#FBBF24">
+                                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                        </svg>
+                                        <span style={{
+                                            fontSize: "0.8125rem",
+                                            color: "#cbd5e1",
+                                            fontWeight: 600
+                                        }}>
+                                            4.8/5 Average Rating
+                                        </span>
+                                    </div>
+                                    <div style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "0.5rem"
+                                    }}>
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#FBBF24">
+                                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                        <span style={{
+                                            fontSize: "0.8125rem",
+                                            color: "#cbd5e1",
+                                            fontWeight: 600
+                                        }}>
+                                            Trusted by 2M+ Students
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Social Links */}
+                            <div style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: "0.5rem"
+                            }}>
+                                <a href="https://www.linkedin.com/in/anandayuda/" target="_blank" rel="noopener noreferrer" style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    width: "40px",
+                                    height: "40px",
+                                    borderRadius: "8px",
+                                    background: "linear-gradient(135deg, #0077b5 0%, #005885 100%)",
+                                    border: "1px solid #0077b5",
+                                    textDecoration: "none",
+                                    transition: "all 0.3s ease",
+                                    flexShrink: 0
+                                }}
+                                onMouseEnter={(e) => (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"}
+                                onMouseLeave={(e) => (e.currentTarget as HTMLElement).style.transform = "translateY(0)"}
+                                >
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                    </svg>
+                                </a>
+
+                                <a href="https://www.facebook.com/CourseSpeakOfficial/" target="_blank" rel="noopener noreferrer" style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    width: "40px",
+                                    height: "40px",
+                                    borderRadius: "8px",
+                                    background: "linear-gradient(135deg, #1877f2 0%, #166fe5 100%)",
+                                    border: "1px solid #1877f2",
+                                    textDecoration: "none",
+                                    transition: "all 0.3s ease",
+                                    flexShrink: 0
+                                }}
+                                onMouseEnter={(e) => (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"}
+                                onMouseLeave={(e) => (e.currentTarget as HTMLElement).style.transform = "translateY(0)"}
+                                >
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                                    </svg>
+                                </a>
+
+                                <a href="https://x.com/courses_peak" target="_blank" rel="noopener noreferrer" style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    width: "40px",
+                                    height: "40px",
+                                    borderRadius: "8px",
+                                    background: "linear-gradient(135deg, #000000 0%, #333333 100%)",
+                                    border: "1px solid #000000",
+                                    textDecoration: "none",
+                                    transition: "all 0.3s ease",
+                                    flexShrink: 0
+                                }}
+                                onMouseEnter={(e) => (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"}
+                                onMouseLeave={(e) => (e.currentTarget as HTMLElement).style.transform = "translateY(0)"}
+                                >
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+
+                        {/* Call to Action */}
+                        <div style={{
+                            marginTop: "1.5rem",
+                            padding: "1rem",
+                            background: "linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(251, 191, 36, 0.05) 100%)",
+                            border: "1px solid rgba(251, 191, 36, 0.2)",
+                            borderRadius: "8px",
+                            textAlign: "center"
+                        }}>
+                            <p style={{ fontSize: "0.95rem", color: "#cbd5e1", marginBottom: "0.75rem" }}>
+                                <strong style={{ color: "#FBBF24" }}>Follow Us for Daily Coupon Updates</strong>
+                            </p>
+                            <p style={{ fontSize: "0.85rem", color: "#94a3b8", marginBottom: "1rem" }}>
+                                Get notified when we publish new coupon deals and exclusive discount codes.
+                            </p>
+                            <a
+                                href="/blog"
+                                style={{
+                                    display: "inline-block",
+                                    padding: "0.75rem 1.5rem",
+                                    background: "linear-gradient(135deg, #FBBF24, #F59E0B)",
+                                    color: "#1f2330",
+                                    textDecoration: "none",
+                                    borderRadius: "6px",
+                                    fontSize: "0.9rem",
+                                    fontWeight: 600,
+                                    transition: "all 0.2s",
+                                    boxShadow: "0 2px 8px rgba(251, 191, 36, 0.3)"
+                                }}
+                                onMouseEnter={e => {
+                                    (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-1px)";
+                                    (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 12px rgba(251, 191, 36, 0.4)";
+                                }}
+                                onMouseLeave={e => {
+                                    (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(0)";
+                                    (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 2px 8px rgba(251, 191, 36, 0.3)";
+                                }}
+                            >
+                                📖 Visit Our Blog →
+                            </a>
+                        </div>
+                    </section>
 
                     {/* Related Deals */}
                     {relatedDeals.length > 0 && (

@@ -133,11 +133,11 @@ export default function CourseComparison({ currentDeal, similarDeals }: CourseCo
             style={{
               background: "#0b0d12",
               borderRadius: "10px",
-              border: deal.id === currentDeal.id ? "2px solid #3b82f6" : "1px solid #374151",
+              border: deal.id === currentDeal.id ? "2px solid #FBBF24" : "1px solid #1f2330",
               overflow: "hidden",
               transition: "all 0.3s ease",
               position: "relative",
-              boxShadow: deal.id === currentDeal.id ? "0 0 15px rgba(59, 130, 246, 0.15)" : "0 2px 4px -1px rgba(0, 0, 0, 0.2)"
+              boxShadow: deal.id === currentDeal.id ? "0 0 15px rgba(251, 191, 36, 0.15)" : "0 2px 4px -1px rgba(0, 0, 0, 0.2)"
             }}
             itemScope
             itemType="https://schema.org/Course"

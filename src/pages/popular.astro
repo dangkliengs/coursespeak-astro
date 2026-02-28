@@ -219,10 +219,10 @@ const structuredData = {
       >
         <div class="container" style="max-width:860px; display:flex; gap:2rem; flex-wrap:wrap; align-items:center;">
           <div style="flex:1; min-width:240px;">
-            <h2 id="about-heading" style="font-size:0.95rem; font-weight:700; color:var(--text); margin-bottom:0.35rem;">
+            <h2 id="about-heading" style="font-size:1.1rem; font-weight:700; color:var(--text); margin-bottom:0.5rem;">
               Why these courses are here
             </h2>
-            <p style="font-size:0.85rem; color:var(--muted); line-height:1.65; margin:0;">
+            <p style="font-size:0.95rem; color:var(--muted); line-height:1.65; margin:0;">
               This page lists Udemy courses with <strong style="color:var(--text);">perfect 5.0★ ratings</strong> —
               courses where every reviewer gave the highest score. They're often newer releases,
               but the rating reflects genuine, unfiltered student satisfaction.
@@ -264,88 +264,11 @@ const structuredData = {
           <div
             role="list"
             aria-label="Top-rated Udemy courses"
-            style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:1.5rem; margin-bottom:3rem;"
+            style="display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:1.5rem; margin-bottom:3rem;"
           >
-            {popularCourses.map((course, index) => {
-              const price = course.price ?? 9.99;
-              const originalPrice = course.originalPrice ?? 119.99;
-              const discountPct = originalPrice > price ? Math.round(100 - (price / originalPrice) * 100) : 0;
-
-              return (
-                <article
-                  role="listitem"
-                  class="course-card"
-                  style="background:var(--card); border:1px solid var(--border); border-radius:16px; overflow:hidden; display:flex; flex-direction:column;"
-                >
-                  {/* Thumbnail */}
-                  <div style="position:relative; height:160px; flex-shrink:0;">
-                    <img
-                      src={course.image || "/images/course-placeholder.jpg"}
-                      alt={`${course.title} — Udemy course thumbnail`}
-                      loading="lazy"
-                      decoding="async"
-                      width="400"
-                      height="160"
-                      style="width:100%; height:100%; object-fit:cover; display:block;"
-                    />
-                    {course.rating === 5.0 && (
-                      <div aria-label="Perfect 5.0 star rating" style="position:absolute; top:0.65rem; left:0.65rem; background:#f59e0b; color:#000; font-size:0.68rem; font-weight:800; padding:3px 7px; border-radius:6px; line-height:1.4;">
-                        ★ 5.0 Perfect
-                      </div>
-                    )}
-                    {discountPct > 0 && (
-                      <div style="position:absolute; top:0.65rem; right:0.65rem; background:#ef4444; color:#fff; font-size:0.68rem; font-weight:700; padding:3px 7px; border-radius:6px;">
-                        {discountPct}% OFF
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Content */}
-                  <div style="padding:1.1rem; flex:1; display:flex; flex-direction:column;">
-                    {course.category && (
-                      <a href={`/categories/${slugifyCategory(course.category)}`} style="font-size:0.7rem; font-weight:600; color:var(--brand); text-decoration:none; margin-bottom:0.4rem; display:inline-block; text-transform:uppercase; letter-spacing:0.4px;">
-                        {course.category}
-                      </a>
-                    )}
-                    <h3 style="font-size:0.93rem; font-weight:700; color:var(--text); margin-bottom:0.4rem; line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">
-                      <a href={`/deal/${course.id}`} style="color:inherit; text-decoration:none;">
-                        {course.title}
-                      </a>
-                    </h3>
-                    {course.instructor && (
-                      <p style="font-size:0.78rem; color:var(--muted); margin-bottom:0.6rem;">by {course.instructor}</p>
-                    )}
-                    <div style="display:flex; align-items:center; gap:0.4rem; margin-bottom:0.6rem;">
-                      <span style="font-size:0.85rem; font-weight:700; color:#f59e0b;" aria-label={`${course.rating} out of 5 stars`}>
-                        {course.rating?.toFixed(1)}
-                      </span>
-                      <span aria-hidden="true" style="color:#f59e0b; font-size:0.75rem;">★★★★★</span>
-                      {course.students && (
-                        <span style="font-size:0.75rem; color:var(--muted);">({course.students.toLocaleString()} students)</span>
-                      )}
-                    </div>
-                    {course.duration && (
-                      <p style="font-size:0.75rem; color:var(--muted); margin-bottom:0.6rem;">🕐 {course.duration} on-demand video</p>
-                    )}
-                    <div style="display:flex; align-items:center; gap:0.5rem; margin-top:auto; margin-bottom:0.85rem;">
-                      <span style="font-size:1rem; font-weight:800; color:var(--text);">{price === 0 ? "Free" : `$${price}`}</span>
-                      {discountPct > 0 && (
-                        <span style="font-size:0.8rem; color:var(--muted); text-decoration:line-through;">${originalPrice}</span>
-                      )}
-                    </div>
-                    <a
-                      href={`/deal/${course.id}`}
-                      rel="nofollow"
-                      aria-label={`Get coupon for ${course.title}`}
-                      class="cta-btn"
-                      style="display:block; text-align:center; padding:0.65rem; background:var(--brand); color:var(--bg); text-decoration:none; border-radius:8px; font-weight:700; font-size:0.875rem;"
-                    >
-                      Get Coupon →
-                    </a>
-                  </div>
-                </article>
-              );
-            })}
+            {popularCourses.map((course, index) => (
+              <DealCard deal={course} />
+            ))}
           </div>
 
           <div style="text-align:center;">
