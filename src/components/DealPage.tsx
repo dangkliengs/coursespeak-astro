@@ -484,11 +484,11 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                         <div style={{
                             marginTop: "1.5rem",
                             padding: "1rem",
-                            background: "linear-gradient(135deg, #fef3c7, #fde68a)",
-                            border: "1px solid #f59e0b",
+                            background: "linear-gradient(135deg, #5e240250, #5e240250)",
+                            border: "1px solid #eeff54ff",
                             borderRadius: "8px",
                             fontSize: "0.9rem",
-                            color: "#92400e"
+                            color: "#eeff54ff"
                         }}>
                             <div style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
                                 <span style={{ fontSize: "1.2rem", lineHeight: 1 }}>⚠️</span>
@@ -577,7 +577,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                             style={{
                                 display: "inline-block",
                                 padding: "0.75rem 1.5rem",
-                                background: "linear-gradient(135deg, #60a5fa, #7c3aed)",
+                                background: "linear-gradient(135deg, #53240250, #5e240250)",
                                 color: "#fff",
                                 textDecoration: "none",
                                 borderRadius: "6px",

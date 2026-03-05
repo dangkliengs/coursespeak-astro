@@ -611,13 +611,14 @@ const jsonLd = {
                     background: "linear-gradient(135deg, #FFD700 0%, #FFA500 100%)",
                     color: "var(--bg)", padding: "0.4rem 1rem", borderRadius: "20px",
                     fontSize: "0.75rem", fontWeight: 800, textTransform: "uppercase",
-                    letterSpacing: "0.5px", marginBottom: "1.25rem"
+                    marginBottom: "1rem"
                   }}>
                     ★ #1 Top Rated Course today
                   </div>
 
                   <h3 style={{ fontSize: "2rem", fontWeight: 800, color: "var(--text)", marginBottom: "1rem", lineHeight: 1.2 }}>
                     <a href={`/deal/${deal.id}`} style={{ color: "inherit", textDecoration: "none" }}>{deal.title}</a>
+                    {deal.instructor && <span style={{ fontSize: "0.9rem", fontWeight: 600, color: "var(--muted)", display: "block", marginTop: "0.5rem" }}>by {deal.instructor}</span>}
                   </h3>
 
                   <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.25rem", flexWrap: "wrap" }}>
@@ -691,7 +692,6 @@ const jsonLd = {
             {featuredDeals.map((deal) => (
               deal.image ? (
                 <div style={{ position: "relative" }}>
-                  {/* [SEO FIX] alt text deskriptif */}
                   <img
                     src={deal.image}
                     alt={`${deal.title} — Free Udemy Course with 100% Off Coupon`}
@@ -865,7 +865,7 @@ const jsonLd = {
   </section>
 
   <!-- ══════════════════════════════════════════════════════════════════════
-       7. SEO PROSE — Ditempatkan setelah coupon cards, sebelum categories
+       7. SEO PROSE
        ══════════════════════════════════════════════════════════════════════ -->
   <section class="section-wrapper prose-section" style={{ background: "var(--bg)" }} aria-label="About free Udemy coupons">
     <div class="container">
