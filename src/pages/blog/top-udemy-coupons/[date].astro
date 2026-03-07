@@ -174,7 +174,7 @@ const jsonLd = {
             </div>
             <div class="course-list">
               {deals.slice(0, 6).map(deal => (
-                <a href={`/deal/${deal.slug || deal.id}`} class="course-item" title={deal.title}>
+                <a href={`/deal/${deal.id}`} class="course-item" title={deal.title}>
                   <div class="item-image">
                     <img src={deal.image} alt={deal.title} class="item-thumb" width="120" height="68" loading="lazy" onerror="this.style.display='none'" />
                   </div>
@@ -195,7 +195,7 @@ const jsonLd = {
               <>
                 <div class="course-list hidden-rows" id={`hide-${slugifyCat(cat)}`} style="display:none">
                   {deals.slice(6).map(deal => (
-                    <a href={`/deal/${deal.slug || deal.id}`} class="course-item" title={deal.title}>
+                    <a href={`/deal/${deal.id}`} class="course-item" title={deal.title}>
                       <div class="item-image">
                         <img src={deal.image} alt={deal.title} class="item-thumb" width="120" height="68" loading="lazy" onerror="this.style.display='none'" />
                       </div>
@@ -224,7 +224,7 @@ const jsonLd = {
         <h2 id="explore-heading" class="explore-head">Explore all {totalCoupons} coupons</h2>
         <div class="course-list">
           {allDeals.map(deal => (
-            <a href={`/deal/${deal.slug || deal.id}`} class="course-item" title={deal.title}>
+            <a href={`/deal/${deal.id}`} class="course-item" title={deal.title}>
               <div class="item-image">
                 <img src={deal.image} alt={deal.title} class="item-thumb" width="120" height="68" loading="lazy" onerror="this.style.display='none'" />
               </div>
