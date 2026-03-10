@@ -1477,10 +1477,30 @@ const pageDescription = "Edit a course deal on CourseSpeak.";
     }
   }
 
+  // Keyboard shortcuts to prevent scrolling
+  function handleKeyboardShortcuts(e: KeyboardEvent) {
+    const editor = document.getElementById('contentEditor');
+    if (!editor || document.activeElement !== editor) return;
+
+    if (e.ctrlKey) {
+      // Prevent default browser behavior for these shortcuts
+      if (e.key === 'b' || e.key === 'B') {
+        e.preventDefault();
+        formatText('insertUnorderedList');
+      } else if (e.key === 'n' || e.key === 'N') {
+        e.preventDefault();
+        formatText('insertOrderedList');
+      }
+    }
+  }
+
   // Initialize on page load
   document.addEventListener('DOMContentLoaded', function() {
     // Initialize tabs - show basic tab by default
     showTab('basic');
+
+    // Add keyboard shortcut listener
+    document.addEventListener('keydown', handleKeyboardShortcuts);
 
     // Initialize editor
     const editor = document.getElementById('contentEditor');

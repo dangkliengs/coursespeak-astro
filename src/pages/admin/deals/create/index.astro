@@ -1288,7 +1288,7 @@ const pageDescription = "Create a new course deal on CourseSpeak.";
           }
         }
 
-        // Rich text editor functions
+        // Rich text editor functions with keyboard shortcuts
         function formatText(command: string) {
           document.execCommand(command, false, undefined);
           const editor = document.getElementById('contentEditor');
@@ -1315,6 +1315,23 @@ const pageDescription = "Create a new course deal on CourseSpeak.";
           const hiddenField = document.getElementById('contentField') as HTMLInputElement;
           if (editor && hiddenField) {
             hiddenField.value = editor.innerHTML;
+          }
+        }
+
+        // Keyboard shortcuts to prevent scrolling
+        function handleKeyboardShortcuts(e: KeyboardEvent) {
+          const editor = document.getElementById('contentEditor');
+          if (!editor || document.activeElement !== editor) return;
+
+          if (e.ctrlKey) {
+            // Prevent default browser behavior for these shortcuts
+            if (e.key === 'b' || e.key === 'B') {
+              e.preventDefault();
+              formatText('insertUnorderedList');
+            } else if (e.key === 'n' || e.key === 'N') {
+              e.preventDefault();
+              formatText('insertOrderedList');
+            }
           }
         }
 
@@ -1365,6 +1382,9 @@ const pageDescription = "Create a new course deal on CourseSpeak.";
 
         // Initialize
         showTab('basic');
+
+        // Add keyboard shortcut listener
+        document.addEventListener('keydown', handleKeyboardShortcuts);
 
         // Make functions globally accessible
         (window as any).showTab = showTab;
