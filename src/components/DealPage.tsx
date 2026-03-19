@@ -455,7 +455,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                             Key Takeaways — Course Overview
                         </h2>
                         <p style={{ fontSize: "0.9rem", color: "#94a3b8", marginBottom: "1.25rem" }}>
-                            The following summarizes all verified data points for <strong style={{ color: "#fff" }}>{deal.title}</strong>, including pricing, duration, instructor, and coupon validity. All data is sourced directly from Udemy and verified by CourseSpeak on <time dateTime={new Date().toISOString()}>{new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>.
+                            The following summarizes all verified data points for <strong style={{ color: "#fff" }}>{deal.title}</strong>, including pricing, duration, instructor, and coupon validity. All data is sourced directly from Udemy and verified by CourseSpeak on <time dateTime={deal.updatedAt ? new Date(deal.updatedAt).toISOString() : new Date().toISOString()}>{deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>.
                         </p>
                         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "0.85rem", fontSize: "0.9rem", color: "#cbd5e1" }}>
                             {[
@@ -861,7 +861,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 </div>
                             </div>
                             <p style={{ fontSize: "0.8rem", color: "#64748b", marginTop: "1rem", fontStyle: "italic" }}>
-                                * Rating distribution is approximated from the aggregate score. Sourced from {deal.provider || "Udemy"}. Last verified: {deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long' }) : "March 2026"}.
+                                * Rating distribution is approximated from the aggregate score. Sourced from {deal.provider || "Udemy"}. Last verified: {deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : "March 2026"}.
                             </p>
                         </section>
                     )}
@@ -927,7 +927,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 Frequently Asked Questions
                             </h2>
                             <p style={{ fontSize: "0.9rem", color: "#94a3b8", marginBottom: "1.5rem" }}>
-                                The following questions and answers cover the most common queries about <strong style={{ color: "#fff" }}>{deal.title}</strong>, its coupon code, pricing, and enrollment process. All answers are based on verified data from {deal.provider || "Udemy"} as of {deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : "March 19, 2026"}.
+                                The following questions and answers cover the most common queries about <strong style={{ color: "#fff" }}>{deal.title}</strong>, its coupon code, pricing, and enrollment process. All answers are based on verified data from {deal.provider || "Udemy"} as of {deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}.
                             </p>
                             <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
                                 {autoFAQs.map((faq, idx) => (
