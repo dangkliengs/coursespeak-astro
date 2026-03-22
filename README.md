@@ -7,7 +7,7 @@
 [![Daily Blog](https://img.shields.io/badge/Daily_Coupon_Blog-Updated_Every_Day-6366F1?style=for-the-badge)](https://coursespeak.com/blog)
 [![Admin](https://img.shields.io/badge/Admin_Dashboard-Full_CRUD_Built_In-6D28D9?style=for-the-badge)](https://coursespeak.com)
 
-CourseSpeak.com is a high-performance Udemy coupon platform trusted by 100,000+ learners worldwide. Built with Astro 6, React, and Tailwind CSS — featuring a full admin dashboard, sub-second load times, and 966+ verified free Udemy coupons updated daily.
+CourseSpeak.com is a high-performance Udemy coupon platform trusted by 100,000+ learners worldwide. Built with Astro 6, React, and Tailwind CSS — featuring a full admin dashboard, sub-second load times, and 1000+ verified free Udemy coupons updated daily.
 
 Get free Udemy courses at [coursespeak.com/deals](https://coursespeak.com/deals)
 
@@ -234,4 +234,4 @@ This repository is shared for educational and transparency purposes. Copying or 
 
 ---
 
-Get 984+ free Udemy courses with verified 100% OFF coupons at [CourseSpeak.com](https://coursespeak.com) — admin dashboard, Astro 6, trusted by 100,000+ learners, updated daily.
+Get 1000+ free Udemy courses with verified 100% OFF coupons at [CourseSpeak.com](https://coursespeak.com) — admin dashboard, Astro 6, trusted by 100,000+ learners, updated daily.
