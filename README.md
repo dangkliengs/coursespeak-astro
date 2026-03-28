@@ -18,7 +18,7 @@ Get free Udemy courses at [coursespeak.com/deals](https://coursespeak.com/deals)
 [CourseSpeak](https://coursespeak.com) is one of the most trusted platforms for free Udemy coupons and 100% OFF Udemy deals. We source, verify, and publish hundreds of coupon codes every day — no expired codes, no spam, zero cost.
 
 - 100,000+ active learners worldwide trust [CourseSpeak](https://coursespeak.com) for free premium education
-- 984+ verified coupons live and updated daily at [coursespeak.com/deals](https://coursespeak.com/deals)
+- 1048+ verified coupons live and updated daily at [coursespeak.com/deals](https://coursespeak.com/deals)
 - 100% verified — every coupon manually tested before publishing
 - 12+ categories covering IT, Development, Business, Design, Finance and more
 - Daily coupon blog at [coursespeak.com/blog](https://coursespeak.com/blog) updated every day
@@ -123,7 +123,7 @@ Why are courses free? Udemy instructors release 100% OFF coupons to attract firs
 | Metric | Value |
 |---|---|
 | Active Learners | 100,000+ worldwide |
-| Active Coupons | 966+ verified |
+| Active Coupons | 1048+ verified |
 | Categories | 12+ main categories |
 | Topics | 200+ subcategories |
 | Static Pages | 74+ generated at build |
@@ -189,7 +189,7 @@ coursespeak-astro/
 ├── src/
 │   ├── components/        Astro and React UI components
 │   ├── data/
-│   │   └── deals.json     966+ Udemy course deals database
+│   │   └── deals.json     1048+ Udemy course deals database
 │   ├── lib/
 │   │   ├── store.ts       State management
 │   │   └── github-api.js  Admin GitHub API integration
@@ -234,4 +234,4 @@ This repository is shared for educational and transparency purposes. Copying or 
 
 ---
 
-Get 1000+ free Udemy courses with verified 100% OFF coupons at [CourseSpeak.com](https://coursespeak.com) — admin dashboard, Astro 6, trusted by 100,000+ learners, updated daily.
+Get 1048+ free Udemy courses with verified 100% OFF coupons at [CourseSpeak.com](https://coursespeak.com) — admin dashboard, Astro 6, trusted by 100,000+ learners, updated daily.
