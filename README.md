@@ -1,13 +1,13 @@
 # CourseSpeak — 100% OFF Udemy Coupons & Free Courses 2026
 
 [![Live Site](https://img.shields.io/badge/CourseSpeak.com-100%25_Free_Udemy_Courses-4F46E5?style=for-the-badge&logo=udemy&logoColor=white)](https://coursespeak.com)
-[![Free Coupons](https://img.shields.io/badge/966%2B_Active_Coupons-100%25_OFF_Verified-10B981?style=for-the-badge)](https://coursespeak.com/deals)
+[![Free Coupons](https://img.shields.io/badge/1048%2B_Active_Coupons-100%25_OFF_Verified-10B981?style=for-the-badge)](https://coursespeak.com/deals)
 [![Categories](https://img.shields.io/badge/12%2B_Categories-Browse_Free_Courses-F59E0B?style=for-the-badge)](https://coursespeak.com/categories)
 [![Popular](https://img.shields.io/badge/Top_Rated_Courses-View_Popular-EF4444?style=for-the-badge)](https://coursespeak.com/popular)
 [![Daily Blog](https://img.shields.io/badge/Daily_Coupon_Blog-Updated_Every_Day-6366F1?style=for-the-badge)](https://coursespeak.com/blog)
 [![Admin](https://img.shields.io/badge/Admin_Dashboard-Full_CRUD_Built_In-6D28D9?style=for-the-badge)](https://coursespeak.com)
 
-CourseSpeak.com is a high-performance Udemy coupon platform trusted by 100,000+ learners worldwide. Built with Astro 6, React, and Tailwind CSS — featuring a full admin dashboard, sub-second load times, and 1000+ verified free Udemy coupons updated daily.
+CourseSpeak.com is a high-performance Udemy coupon platform trusted by 100,000+ learners worldwide. Built with Astro 6.1, React, and Tailwind CSS — featuring a full admin dashboard, sub-second load times, and 1000+ verified free Udemy coupons updated daily.
 
 Get free Udemy courses at [coursespeak.com/deals](https://coursespeak.com/deals)
 
