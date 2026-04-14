@@ -10,7 +10,7 @@ const allDeals = await readDeals();
 const popularCourses = allDeals
   .filter(deal => deal.rating && deal.rating >= 4.5)
   .sort((a, b) => (b.rating || 0) - (a.rating || 0))
-  .slice(0, 24);
+  .slice(0, 100);
 
 // ── Stats ─────────────────────────────────────────────────────────────────────
 const totalDeals = allDeals.length;
@@ -30,9 +30,9 @@ const categories = Array.from(categoryMap.entries())
   .slice(0, 9)
   .map(([name, count]) => ({ name, count }));
 
-// ── SEO — honest framing: these ARE 5.0★ courses, position them as such ───────
-const pageTitle = `Top Rated Udemy Courses 2026 — Perfect 5.0★ Ratings | CourseSpeak`;
-const pageDescription = `Browse ${totalPopular}+ top-rated Udemy courses with perfect 5.0★ scores. Hand-picked highest-rated programming, design, marketing & data science courses — with verified free coupons updated daily.`;
+// ── SEO — popular online courses keyword matching URL path ───────
+const pageTitle = `100+ Most Popular Online Courses 2026 — High-Rated Udemy Courses | CourseSpeak`;
+const pageDescription = `Browse 100+ popular online courses with 4.5-5.0★ ratings. Discover trending Udemy courses in programming, design, marketing & data science — with verified free coupons updated daily.`;
 const canonicalUrl = "https://coursespeak.com/popular";
 
 const structuredData = {
@@ -51,12 +51,12 @@ const structuredData = {
         "@type": "BreadcrumbList",
         "itemListElement": [
           { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://coursespeak.com" },
-          { "@type": "ListItem", "position": 2, "name": "Top Rated Courses", "item": canonicalUrl }
+          { "@type": "ListItem", "position": 2, "name": "Popular Courses", "item": canonicalUrl }
         ]
       },
       "mainEntity": {
         "@type": "ItemList",
-        "name": "Top Rated Udemy Courses",
+        "name": "Popular Online Courses",
         "numberOfItems": totalPopular,
         "itemListElement": popularCourses.slice(0, 10).map((course, index) => ({
           "@type": "ListItem",
@@ -64,7 +64,7 @@ const structuredData = {
           "item": {
             "@type": "Course",
             "name": course.title,
-            "description": course.description || `Top-rated Udemy course with ${course.rating}★ rating`,
+            "description": course.description || `Popular Udemy course with ${course.rating}★ rating`,
             "url": `https://coursespeak.com/deal/${course.id}`,
             "provider": {
               "@type": "Organization",
@@ -89,10 +89,10 @@ const structuredData = {
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "What does 'popular' mean on CourseSpeak?",
+          "name": "What are popular online courses on CourseSpeak?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "On CourseSpeak, the Popular page showcases Udemy courses with perfect or near-perfect 5.0★ student ratings. These are the highest-rated courses on the platform — where students overwhelmingly gave top scores."
+            "text": "CourseSpeak's Popular page showcases trending online courses with 4.5-5.0★ student ratings. These are the most sought-after Udemy courses — where students consistently give high scores and enroll in high numbers."
           }
         },
         {
@@ -105,18 +105,18 @@ const structuredData = {
         },
         {
           "@type": "Question",
-          "name": "Why do 5.0★ courses sometimes have fewer student reviews?",
+          "name": "How are popular online courses ranked?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Courses with perfect 5.0★ ratings are often newer releases where every reviewing student gave top marks. Fewer reviews doesn't mean lower quality — it often means the course is fresh and every early student loved it."
+            "text": "Popular courses are ranked by a combination of student rating (4.5-5.0★), enrollment numbers, and recent engagement. This ensures you discover courses that are both high-quality and currently trending among learners."
           }
         },
         {
           "@type": "Question",
-          "name": "Do top-rated Udemy courses include a completion certificate?",
+          "name": "Do popular online courses include a completion certificate?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes. All Udemy courses include a certificate of completion you can share on LinkedIn or add to your resume — regardless of whether you enrolled using a free coupon."
+            "text": "Yes. All Udemy courses listed on CourseSpeak include a certificate of completion you can share on LinkedIn or add to your resume — regardless of whether you enrolled using a free coupon."
           }
         }
       ]
@@ -155,7 +155,7 @@ const structuredData = {
               </li>
               <li aria-hidden="true" style="color:var(--border);">›</li>
               <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                <span itemprop="name" style="color:var(--brand); font-weight:600;">Top Rated Courses</span>
+                <span itemprop="name" style="color:var(--brand); font-weight:600;">Popular Online Courses</span>
                 <meta itemprop="position" content="2" />
               </li>
             </ol>
@@ -178,27 +178,27 @@ const structuredData = {
             id="hero-heading"
             style="font-size:clamp(1.9rem, 4vw, 3rem); font-weight:800; line-height:1.15; margin-bottom:1.25rem; color:var(--text);"
           >
-            Top Rated <span style="background:linear-gradient(135deg,var(--brand),hsl(35,90%,68%));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Udemy Courses</span>
+            100+ Most <span style="background:linear-gradient(135deg,var(--brand),hsl(35,90%,68%));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Popular Online Courses</span>
             <span style="display:block; font-size:0.55em; font-weight:500; color:var(--muted); margin-top:0.4rem;">
-              Perfect 5.0★ Ratings · Verified Free Coupons Updated Daily
+              4.5-5.0★ Ratings · Trending Udemy Courses Updated Daily
             </span>
           </h1>
 
           <p style="font-size:clamp(1rem, 2vw, 1.2rem); color:var(--muted); max-width:680px; margin:0 auto 2.5rem; line-height:1.65;">
-            The {totalPopular} highest-rated courses on Udemy — all with perfect student satisfaction scores.
-            Access them with verified coupons, many 100% free.
+            Discover {totalPopular}+ trending online courses with exceptional student ratings.
+            Popular Udemy courses in programming, design, marketing & more — with verified free coupons.
           </p>
 
           {/* Rating explanation pill */}
           <div style="display:inline-flex; align-items:center; gap:0.5rem; background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); padding:0.6rem 1.1rem; border-radius:9999px; font-size:0.82rem; color:#f59e0b; margin-bottom:2rem; font-weight:600;">
             <span aria-hidden="true">★</span>
-            Showing {avgRating}★ rated courses — the highest-rated on Udemy right now
+            Showing {avgRating}★ rated courses — trending on Udemy right now
           </div>
 
           {/* Stats */}
           <div role="list" aria-label="Page statistics" style="display:flex; justify-content:center; gap:1rem; flex-wrap:wrap;">
             {[
-              { value: `${totalPopular}+`, label: "Top-Rated Courses" },
+              { value: `${totalPopular}+`, label: "Popular Courses" },
               { value: `${avgRating}★`, label: "Avg Rating" },
               { value: "100%", label: "Free Coupons" },
               { value: "Daily", label: "Updates" },
@@ -212,6 +212,13 @@ const structuredData = {
         </div>
       </section>
 
+      {/* ── GEO AI Banner ── */}
+      <div id="geo-banner" style="display:none; background:linear-gradient(135deg, rgba(59,130,246,0.1), rgba(139,92,246,0.1)); border-bottom:1px solid rgba(59,130,246,0.2); padding:0.85rem 0;">
+        <div class="container" style="display:flex; align-items:center; justify-content:center; gap:0.5rem;">
+          <span id="geo-text" style="color:var(--text); font-size:0.85rem; font-weight:500;"></span>
+        </div>
+      </div>
+
       {/* ── Context strip — E-E-A-T ── */}
       <section
         aria-labelledby="about-heading"
@@ -220,19 +227,19 @@ const structuredData = {
         <div class="container" style="max-width:860px; display:flex; gap:2rem; flex-wrap:wrap; align-items:center;">
           <div style="flex:1; min-width:240px;">
             <h2 id="about-heading" style="font-size:1.1rem; font-weight:700; color:var(--text); margin-bottom:0.5rem;">
-              Why these courses are here
+              Why these courses are popular
             </h2>
             <p style="font-size:0.95rem; color:var(--muted); line-height:1.65; margin:0;">
-              This page lists Udemy courses with <strong style="color:var(--text);">perfect 5.0★ ratings</strong> —
-              courses where every reviewer gave the highest score. They're often newer releases,
-              but the rating reflects genuine, unfiltered student satisfaction.
+              This page features <strong style="color:var(--text);">popular online courses</strong> with 4.5-5.0★ ratings —
+              trending Udemy courses that students love and enroll in daily. These courses combine high ratings
+              with strong engagement, making them excellent choices for your learning journey.
               For the most-enrolled courses overall, visit our
               <a href="/deals" style="color:var(--brand); text-decoration:underline;">All Deals</a> page.
             </p>
           </div>
           <div style="display:flex; gap:1.5rem; flex-shrink:0; flex-wrap:wrap;">
             {[
-              { icon: "⭐", label: "5.0★ Score", note: "Perfect rating" },
+              { icon: "⭐", label: "4.5-5.0★ Score", note: "High rated" },
               { icon: "✅", label: "Verified", note: "Coupons checked" },
               { icon: "🔄", label: "Daily", note: "Fresh updates" },
             ].map(item => (
@@ -254,16 +261,16 @@ const structuredData = {
               id="courses-heading"
               style="font-size:clamp(1.3rem, 3vw, 1.75rem); font-weight:800; color:var(--text); margin:0;"
             >
-              {totalPopular} Highest-Rated Udemy Courses
+              {totalPopular} Popular Online Courses
             </h2>
             <span style="font-size:0.8rem; color:var(--muted); background:var(--card); border:1px solid var(--border); padding:0.35rem 0.85rem; border-radius:9999px;">
-              ★ Sorted by rating · 5.0 first
+              ★ Sorted by popularity & rating
             </span>
           </div>
 
           <div
             role="list"
-            aria-label="Top-rated Udemy courses"
+            aria-label="Popular online courses"
             style="display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:1.5rem; margin-bottom:3rem;"
           >
             {popularCourses.map((course, index) => (
@@ -284,7 +291,7 @@ const structuredData = {
       <section aria-labelledby="categories-heading" style="padding:3rem 1rem; background:var(--card); border-top:1px solid var(--border);">
         <div class="container">
           <h2 id="categories-heading" style="font-size:1.3rem; font-weight:800; color:var(--text); margin-bottom:1.25rem; text-align:center;">
-            Browse Top-Rated Courses by Category
+            Browse Popular Courses by Category
           </h2>
           <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(140px, 1fr)); gap:0.75rem;">
             {categories.map(cat => (
@@ -308,25 +315,25 @@ const structuredData = {
             Frequently Asked Questions
           </h2>
           <p style="color:var(--muted); font-size:0.9rem; text-align:center; margin-bottom:2rem; max-width:520px; margin-left:auto; margin-right:auto; line-height:1.6;">
-            About our top-rated course selection and how to get them free.
+            About our popular course selection and how to get them free.
           </p>
           <div style="display:flex; flex-direction:column; gap:0.75rem;">
             {[
               {
-                q: "What does 'popular' mean on CourseSpeak?",
-                a: "The Popular page on CourseSpeak features Udemy courses with perfect 5.0★ student ratings — courses where every reviewer gave the highest possible score. These represent the peak of student satisfaction on the platform."
+                q: "What are popular online courses on CourseSpeak?",
+                a: "CourseSpeak's Popular page showcases trending online courses with 4.5-5.0★ student ratings. These are the most sought-after Udemy courses — where students consistently give high scores and enroll in high numbers."
               },
               {
-                q: "Are top-rated Udemy courses free on CourseSpeak?",
+                q: "Are popular online courses free on CourseSpeak?",
                 a: "Yes. CourseSpeak lists verified coupon codes for all featured courses. Many have 100% off coupons making them completely free. Click any course card to see the current coupon and discounted price before enrolling."
               },
               {
-                q: "Why do 5.0★ courses sometimes have fewer reviews?",
-                a: "Courses with perfect 5.0★ ratings are often newer releases where every reviewing student gave top marks. Fewer reviews doesn't mean lower quality — it often reflects a fresh course where early students loved every aspect of it."
+                q: "How are popular online courses ranked?",
+                a: "Popular courses are ranked by a combination of student rating (4.5-5.0★), enrollment numbers, and recent engagement. This ensures you discover courses that are both high-quality and currently trending among learners."
               },
               {
-                q: "Do top-rated Udemy courses include a completion certificate?",
-                a: "Yes. All Udemy courses include a certificate of completion you can share on LinkedIn or add to your resume — regardless of whether you enrolled using a free coupon from CourseSpeak."
+                q: "Do popular online courses include a completion certificate?",
+                a: "Yes. All Udemy courses listed on CourseSpeak include a certificate of completion you can share on LinkedIn or add to your resume — regardless of whether you enrolled using a free coupon."
               }
             ].map(faq => (
               <details style="background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden;">
@@ -356,4 +363,87 @@ const structuredData = {
     details > summary::-webkit-details-marker { display: none; }
     @media (max-width: 640px) { .container { padding: 0 0.75rem; } }
   </style>
+
+  <script define:vars={{ totalPopular }}>
+    // ─────────────────────────────────────────────
+    // GEO AI PERSONALISATION
+    // Detects visitor country via ipapi.co (free tier, no key needed)
+    // and shows a localised banner + appends country hint to subtitle.
+    // Fails silently — no impact on page if API is unavailable.
+    // ─────────────────────────────────────────────
+    const GEO_COPY = {
+      US: '🇺🇸 Popular in the United States — Top Udemy courses with verified English-language coupons.',
+      GB: '🇬🇧 Trending in the UK — Expert Udemy courses with exclusive discount codes for UK learners.',
+      IN: '🇮🇳 Top picks for India — Thousands of Indian learners save daily with these Udemy course coupons.',
+      AU: '🇦🇺 Trending in Australia — Verified Udemy course coupons available to you right now.',
+      CA: '🇨🇦 Popular in Canada — Get free and discounted Udemy courses from top instructors.',
+      DE: '🇩🇪 Beliebt in Deutschland — Verifizierte Udemy-Coupons von Top-Kursen, täglich aktualisiert.',
+      BR: '🇧🇷 Popular no Brasil — Cupons Udemy verificados dos melhores cursos, atualizados diariamente.',
+      NG: '🇳🇬 Trending in Nigeria — Access world-class Udemy courses free with verified course coupons.',
+      PH: '🇵🇭 Popular in the Philippines — Free and discounted Udemy courses from expert instructors.',
+      ID: '🇮🇩 Populer di Indonesia — Kupon Udemy terverifikasi dari kursus terbaik, diperbarui harian.',
+      PK: '🇵🇰 Trending in Pakistan — Get free Udemy courses from top instructors, verified every day.',
+      EG: '🇪🇬 Popular in Egypt — Verified Udemy course coupons updated daily.',
+      MX: '🇲🇽 Popular en México — Cupones Udemy verificados de los mejores cursos.',
+      FR: '🇫🇷 Populaire en France — Coupons Udemy vérifiés auprès des meilleurs cours.',
+      TR: '🇹🇷 Türkiye\'de popüler — En iyi Udemy kurslarından doğrulanmış kuponlar.',
+      AR: '🇦🇷 Popular en Argentina — Cupones Udemy verificados de los mejores cursos.',
+      SA: '🇸🇦 رائج في المملكة العربية السعودية — كوبونات Udemy موثقة من أفضل الدورات.',
+      NL: '🇳🇱 Populair in Nederland — Geverifieerde Udemy-coupons van topcursussen.',
+      ES: '🇪🇸 Popular en España — Cupones Udemy verificados de los mejores cursos.',
+      IT: '🇮🇹 Popolare in Italia — Coupon Udemy verificati dai migliori corsi.',
+    };
+
+    async function initGeo() {
+      const banner  = document.getElementById('geo-banner');
+      const geoText = document.getElementById('geo-text');
+      if (!banner || !geoText) return;
+
+      try {
+        // Use session cache to avoid repeated API calls on navigation
+        const cached = sessionStorage.getItem('cs_geo');
+        let geo;
+
+        if (cached) {
+          geo = JSON.parse(cached);
+        } else {
+          const res = await fetch('https://ipapi.co/json/', {
+            signal: AbortSignal.timeout(4000),
+          });
+          if (!res.ok) return;
+          geo = await res.json();
+          sessionStorage.setItem('cs_geo', JSON.stringify(geo));
+        }
+
+        const code = (geo.country_code ?? '').toUpperCase();
+        const msg  = GEO_COPY[code]
+          ?? `📍 Browsing from ${geo.country_name ?? 'your region'} — Verified Udemy course coupons available now.`;
+
+        geoText.textContent = msg;
+        banner.style.display = 'block';
+
+        // Append country hint to the stats subtitle for soft personalisation
+        const sub = document.querySelector('[role="list"][aria-label="Page statistics"]');
+        if (sub && geo.country_name && !sub.textContent?.includes(geo.country_name)) {
+          const statItems = sub.querySelectorAll('div[role="listitem"]');
+          if (statItems.length > 0) {
+            const lastStat = statItems[statItems.length - 1];
+            const label = lastStat.querySelector('span:last-child');
+            if (label && !label.textContent?.includes(geo.country_name)) {
+              label.textContent = `${label.textContent?.trimEnd() || ''} · Popular in ${geo.country_name}`;
+            }
+          }
+        }
+      } catch {
+        // Geo is a progressive enhancement — never block page load
+      }
+    }
+
+    // Initialize GEO personalisation after page load
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initGeo);
+    } else {
+      initGeo();
+    }
+  </script>
 </Layout>

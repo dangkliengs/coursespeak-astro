@@ -221,7 +221,7 @@ const jsonLd = {
             "price": "0",
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
-            "validFrom": deal.createdAt,
+            "validFrom": (deal as any).createdAt || new Date().toISOString().split('T')[0],
             "priceValidUntil": deal.expiresAt,
             "description": "100% off - completely free Udemy course"
           },

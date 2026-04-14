@@ -376,33 +376,26 @@ const pageDescription = "Edit a course deal on CourseSpeak.";
                     }}>
                       Provider *
                     </label>
-                    <select
+                    <input
+                      type="text"
                       name="provider"
+                      value="Udemy"
                       required
-                      value={deal.provider}
+                      readonly
                       style={{
                         width: "100%",
                         padding: "1rem",
-                        backgroundColor: "rgba(51, 65, 85, 0.8)",
-                        border: "2px solid transparent",
+                        backgroundColor: "rgba(30, 41, 59, 0.8)",
+                        border: "2px solid rgba(91, 140, 255, 0.2)",
                         borderRadius: "0.75rem",
-                        color: "#e2e8f0",
+                        color: "#94a3b8",
                         fontSize: "1rem",
                         transition: "all 0.2s ease",
                         outline: "none",
-                        cursor: "pointer",
+                        cursor: "not-allowed",
                         boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)"
                       }}
-                      onfocus="this.style.borderColor='#60a5fa'"
-                      onblur="this.style.borderColor='transparent'"
-                    >
-                      <option value="" style={{ backgroundColor: "#334155", color: "#e2e8f0" }}>Select provider</option>
-                      <option value="Udemy" style={{ backgroundColor: "#334155", color: "#e2e8f0" }}>Udemy</option>
-                      <option value="Coursera" style={{ backgroundColor: "#334155", color: "#e2e8f0" }}>Coursera</option>
-                      <option value="edX" style={{ backgroundColor: "#334155", color: "#e2e8f0" }}>edX</option>
-                      <option value="Skillshare" style={{ backgroundColor: "#334155", color: "#e2e8f0" }}>Skillshare</option>
-                      <option value="Pluralsight" style={{ backgroundColor: "#334155", color: "#e2e8f0" }}>Pluralsight</option>
-                    </select>
+                    />
                   </div>
 
                   <div>

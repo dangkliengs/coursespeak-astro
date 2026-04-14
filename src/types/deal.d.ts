@@ -18,4 +18,12 @@ export interface Deal {
   instructor?: string;
   duration?: string;
   level?: string;
+  language?: string;
+  learn?: string[];
+  requirements?: string[];
+  seoTitle?: string;
+  seoDescription?: string;
+  seoOgImage?: string;
+  expiresAt?: string;
+  createdAt?: string;
 }
