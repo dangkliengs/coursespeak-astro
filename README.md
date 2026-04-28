@@ -1,14 +1,14 @@
 # CourseSpeak — 100% OFF Udemy Coupons & Free Courses 2026
 
 [![Live Site](https://img.shields.io/badge/CourseSpeak.com-100%25_Free_Udemy_Courses-4F46E5?style=for-the-badge&logo=udemy&logoColor=white)](https://coursespeak.com)
-[![Free Coupons](https://img.shields.io/badge/1150%2B_Active_Coupons-100%25_OFF_Verified-10B981?style=for-the-badge)](https://coursespeak.com/deals)
+[![Free Coupons](https://img.shields.io/badge/1163%2B_Active_Coupons-100%25_OFF_Verified-10B981?style=for-the-badge)](https://coursespeak.com/deals)
 [![Instructors](https://img.shields.io/badge/Instructors-Browse_Top_Instructors-F59E0B?style=for-the-badge)](https://coursespeak.com/instructors)
 [![Categories](https://img.shields.io/badge/12%2B_Categories-Browse_Free_Courses-F59E0B?style=for-the-badge)](https://coursespeak.com/categories)
 [![Popular](https://img.shields.io/badge/Top_Rated_Courses-View_Popular-EF4444?style=for-the-badge)](https://coursespeak.com/popular)
 [![Daily Blog](https://img.shields.io/badge/Daily_Coupon_Blog-Updated_Every_Day-6366F1?style=for-the-badge)](https://coursespeak.com/blog)
 [![Admin](https://img.shields.io/badge/Admin_Dashboard-Full_CRUD_Built_In-6D28D9?style=for-the-badge)](https://coursespeak.com)
 
-CourseSpeak.com is a high-performance Udemy coupon platform trusted by 100,000+ learners worldwide. Built with Astro 6.1, React, and Tailwind CSS — featuring a full admin dashboard, sub-second load times, and 1150+ verified free Udemy coupons updated daily.
+CourseSpeak.com is a high-performance Udemy coupon platform trusted by 150,000+ learners worldwide. Built with Astro 6.1, React, and Tailwind CSS — featuring a full admin dashboard, sub-second load times, and 1150+ verified free Udemy coupons updated daily.
 
 Get free Udemy courses at [coursespeak.com/deals](https://coursespeak.com/deals)
 
@@ -18,8 +18,8 @@ Get free Udemy courses at [coursespeak.com/deals](https://coursespeak.com/deals)
 
 [CourseSpeak](https://coursespeak.com) is one of the most trusted platforms for free Udemy coupons and 100% OFF Udemy deals. We source, verify, and publish hundreds of coupon codes every day — no expired codes, no spam, zero cost.
 
-- 100,000+ active learners worldwide trust [CourseSpeak](https://coursespeak.com) for free premium education
-- 1150+ verified coupons live and updated daily at [coursespeak.com/deals](https://coursespeak.com/deals)
+- 150,000+ active learners worldwide trust [CourseSpeak](https://coursespeak.com) for free premium education
+- 1163+ verified coupons live and updated daily at [coursespeak.com/deals](https://coursespeak.com/deals)
 - 100% verified — every coupon manually tested before publishing
 - 14+ categories covering IT, Development, Business, Design, Finance and more
 - Daily coupon blog at [coursespeak.com/blog](https://coursespeak.com/blog) updated every day
@@ -53,15 +53,15 @@ All 14 categories at [coursespeak.com/categories](https://coursespeak.com/catego
 
 | Category | Coupons | Link |
 |---|---|---|
-| IT and Software | 387 | [coursespeak.com/categories/it-and-software](https://coursespeak.com/categories/it-and-software) |
-| Development | 339 | [coursespeak.com/categories/development](https://coursespeak.com/categories/development) |
-| Business | 89 | [coursespeak.com/categories/business](https://coursespeak.com/categories/business) |
-| Programming Languages | 30 | [coursespeak.com/categories/programming-languages](https://coursespeak.com/categories/programming-languages) |
-| Teaching and Academics | 24 | [coursespeak.com/categories/teaching-and-academics](https://coursespeak.com/categories/teaching-and-academics) |
-| Design | 20 | [coursespeak.com/categories/design](https://coursespeak.com/categories/design) |
-| Finance and Accounting | 20 | [coursespeak.com/categories/finance-and-accounting](https://coursespeak.com/categories/finance-and-accounting) |
-| Office Productivity | 20 | [coursespeak.com/categories/office-productivity](https://coursespeak.com/categories/office-productivity) |
-| Marketing | 12 | [coursespeak.com/categories/marketing](https://coursespeak.com/categories/marketing) |
+| IT and Software | 465 | [coursespeak.com/categories/it-and-software](https://coursespeak.com/categories/it-and-software) |
+| Development | 391 | [coursespeak.com/categories/development](https://coursespeak.com/categories/development) |
+| Business | 124 | [coursespeak.com/categories/business](https://coursespeak.com/categories/business) |
+| Programming Languages | 32 | [coursespeak.com/categories/programming-languages](https://coursespeak.com/categories/programming-languages) |
+| Teaching and Academics | 33 | [coursespeak.com/categories/teaching-and-academics](https://coursespeak.com/categories/teaching-and-academics) |
+| Design | 25 | [coursespeak.com/categories/design](https://coursespeak.com/categories/design) |
+| Finance and Accounting | 26 | [coursespeak.com/categories/finance-and-accounting](https://coursespeak.com/categories/finance-and-accounting) |
+| Office Productivity | 25 | [coursespeak.com/categories/office-productivity](https://coursespeak.com/categories/office-productivity) |
+| Marketing | 14 | [coursespeak.com/categories/marketing](https://coursespeak.com/categories/marketing) |
 | Photography and Video | 9 | [coursespeak.com/categories/photography-and-video](https://coursespeak.com/categories/photography-and-video) |
 | Music | 9 | [coursespeak.com/categories/music](https://coursespeak.com/categories/music) |
 | Personal Development | 7 | [coursespeak.com/categories/personal-development](https://coursespeak.com/categories/personal-development) |
@@ -87,7 +87,7 @@ Find 100% OFF coupons by skill at [coursespeak.com/topics](https://coursespeak.c
 | Software Testing | [coursespeak.com/topics/software-testing](https://coursespeak.com/topics/software-testing) |
 | 3D Animation | [coursespeak.com/topics/3d-animation](https://coursespeak.com/topics/3d-animation) |
 
-Browse all 411+ topics at [coursespeak.com/topics](https://coursespeak.com/topics)
+Browse all 427+ topics at [coursespeak.com/topics](https://coursespeak.com/topics)
 
 ---
 
@@ -131,10 +131,10 @@ Why are courses free? Udemy instructors release 100% OFF coupons to attract firs
 
 | Metric | Value |
 |---|---|
-| Active Learners | 100,000+ worldwide |
-| Active Coupons | 1150+ verified |
+| Active Learners | 150,000+ worldwide |
+| Active Coupons | 1163+ verified |
 | Categories | 14+ main categories |
-| Topics | 411+ subcategories |
+| Topics | 427+ subcategories |
 | Static Pages | 74+ generated at build |
 | Build Time | Under 25 seconds |
 | Verification | 100% manual before publishing |
@@ -160,7 +160,7 @@ Performance: 74+ static pages, sub-second load times, mobile-first, all Core Web
 
 ## Admin Dashboard
 
-[CourseSpeak](https://coursespeak.com) includes a production-ready admin panel built into the Astro 6 static architecture — a rare capability for a fully static site.
+[CourseSpeak](https://coursespeak.com) includes a production-ready admin panel built into the Astro 6.1 static architecture — a rare capability for a fully static site.
 
 - Add, edit, and delete Udemy course deals via browser UI
 - Rich text WYSIWYG editor for course descriptions
@@ -198,7 +198,7 @@ coursespeak-astro/
 ├── src/
 │   ├── components/        Astro and React UI components
 │   ├── data/
-│   │   └── deals.json     1150+ Udemy course deals database
+│   │   └── deals.json     1163+ Udemy course deals database
 │   ├── lib/
 │   │   ├── store.ts       State management
 │   │   └── github-api.js  Admin GitHub API integration
@@ -208,7 +208,7 @@ coursespeak-astro/
 │   │   ├── deal/[id]/     Individual course pages
 │   │   ├── blog/          Daily coupon articles
 │   │   ├── categories/    14 category browse pages
-│   │   ├── topics/        411+ topic pages
+│   │   ├── topics/        427+ topic pages
 │   │   ├── instructors/   Top instructors page
 │   │   └── popular/       Top-rated courses
 │   └── layouts/
@@ -245,4 +245,4 @@ This repository is shared for educational and transparency purposes. Copying or 
 
 ---
 
-Get 1150+ free Udemy courses with verified 100% OFF coupons at [CourseSpeak.com](https://coursespeak.com) — admin dashboard, Astro 6, trusted by 100,000+ learners, updated daily.
+Get 1163+ free Udemy courses with verified 100% OFF coupons at [CourseSpeak.com](https://coursespeak.com) — admin dashboard, Astro 6, trusted by 150,000+ learners, updated daily.
