@@ -28,6 +28,7 @@ interface Deal {
     language?: string;
     expiresAt?: string;
     learn?: string[];
+    skills?: string[];
     faqs?: { q: string; a: string }[];
 }
 
@@ -1213,9 +1214,6 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                     decoding="async"
                                     style={{ width: "100%", height: "190px", objectFit: "cover", display: "block" }}
                                 />
-                                <div aria-hidden="true" style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", background: "rgba(255,255,255,0.9)", borderRadius: "50%", width: "48px", height: "48px", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 12px rgba(0,0,0,0.4)" }}>
-                                    <div style={{ width: 0, height: 0, borderTop: "9px solid transparent", borderBottom: "9px solid transparent", borderLeft: "15px solid #111", marginLeft: "3px" }}></div>
-                                </div>
                             </div>
                         )}
 

@@ -88,7 +88,7 @@ const discountPercentage = deal.originalPrice && deal.price && deal.originalPric
 
 <Layout
     title={`${deal.title} | ${discountPercentage}% Off Udemy Coupon`}
-    description={(deal.seoDescription || deal.description)?.slice(0, 155) + ((deal.seoDescription || deal.description)?.length > 155 ? '...' : '')}
+    description={(deal.seoDescription || deal.description).slice(0, 155) + ((deal.seoDescription || deal.description).length > 155 ? '...' : '')}
     image={deal.seoOgImage || deal.image}
     canonical={`https://coursespeak.com/deal/${deal.id}`}
 >
