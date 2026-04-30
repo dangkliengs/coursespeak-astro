@@ -42,7 +42,7 @@ export default function DealCard({ deal }: { deal: any }) {
           <div style={{ marginBottom: 8, position: "relative" }}>
             <img
               src={String(deal.image)}
-              alt={title}
+              alt={`${title} - ${deal.category || 'Course'} by ${deal.provider || 'Udemy'}`}
               loading="lazy"
               width="400"
               height="225"

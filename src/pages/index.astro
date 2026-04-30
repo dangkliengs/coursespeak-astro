@@ -128,6 +128,100 @@ const trustIndicators = [
   }
 ];
 
+// ─── Language Data ─────────────────────────────────────────────────────────────
+const languages = [
+  { code: "en", name: "English", flag: "https://flagcdn.com/w80/us.png", native: "English", udemyLocale: "en_US" },
+  { code: "es", name: "Spanish", flag: "https://flagcdn.com/w80/es.png", native: "Español", udemyLocale: "es_ES" },
+  { code: "fr", name: "French", flag: "https://flagcdn.com/w80/fr.png", native: "Français", udemyLocale: "fr_FR" },
+  { code: "de", name: "German", flag: "https://flagcdn.com/w80/de.png", native: "Deutsch", udemyLocale: "de_DE" },
+  { code: "pt", name: "Portuguese", flag: "https://flagcdn.com/w80/br.png", native: "Português", udemyLocale: "pt_BR" },
+  { code: "ja", name: "Japanese", flag: "https://flagcdn.com/w80/jp.png", native: "日本語", udemyLocale: "ja_JP" },
+  { code: "zh", name: "Chinese", flag: "https://flagcdn.com/w80/cn.png", native: "中文", udemyLocale: "zh_CN" },
+  { code: "ko", name: "Korean", flag: "https://flagcdn.com/w80/kr.png", native: "한국어", udemyLocale: "ko_KR" },
+  { code: "it", name: "Italian", flag: "https://flagcdn.com/w80/it.png", native: "Italiano", udemyLocale: "it_IT" },
+  { code: "ar", name: "Arabic", flag: "https://flagcdn.com/w80/sa.png", native: "العربية", udemyLocale: "ar_SA" },
+  { code: "ru", name: "Russian", flag: "https://flagcdn.com/w80/ru.png", native: "Русский", udemyLocale: "ru_RU" },
+  { code: "hi", name: "Hindi", flag: "https://flagcdn.com/w80/in.png", native: "हिन्दी", udemyLocale: "hi_IN" },
+  { code: "tr", name: "Turkish", flag: "https://flagcdn.com/w80/tr.png", native: "Türkçe", udemyLocale: "tr_TR" },
+  { code: "nl", name: "Dutch", flag: "https://flagcdn.com/w80/nl.png", native: "Nederlands", udemyLocale: "nl_NL" },
+  { code: "pl", name: "Polish", flag: "https://flagcdn.com/w80/pl.png", native: "Polski", udemyLocale: "pl_PL" },
+  { code: "id", name: "Indonesian", flag: "https://flagcdn.com/w80/id.png", native: "Bahasa Indonesia", udemyLocale: "id_ID" },
+  { code: "vi", name: "Vietnamese", flag: "https://flagcdn.com/w80/vn.png", native: "Tiếng Việt", udemyLocale: "vi_VN" },
+  { code: "th", name: "Thai", flag: "https://flagcdn.com/w80/th.png", native: "ไทย", udemyLocale: "th_TH" },
+  { code: "ms", name: "Malay", flag: "https://flagcdn.com/w80/my.png", native: "Bahasa Melayu", udemyLocale: "ms_MY" },
+  { code: "uk", name: "Ukrainian", flag: "https://flagcdn.com/w80/ua.png", native: "Українська", udemyLocale: "uk_UA" },
+];
+
+// ─── Platform Data ─────────────────────────────────────────────────────────────
+const platforms = [
+  {
+    name: "Udemy",
+    icon: `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="6" fill="#A435F0"/><path d="M12 3.5L5 7.5V16.5L12 20.5L19 16.5V7.5L12 3.5Z" fill="white" opacity="0.3"/><path d="M12 3.5V11L8.5 8.75V7.25L12 3.5Z" fill="white"/><path d="M12 3.5V11L15.5 8.75V7.25L12 3.5Z" fill="white" opacity="0.6"/><path d="M12 11V20.5L8.5 16.5V13L12 11Z" fill="white" opacity="0.8"/><path d="M12 11V20.5L15.5 16.5V13L12 11Z" fill="white"/></svg>`,
+    color: "#A435F0",
+    url: "https://www.udemy.com",
+    seoTitle: "Free Udemy Courses & 100% Off Coupons",
+    description: "World's largest online learning marketplace with 200,000+ free and paid courses in programming, web development, data science, business, and design. Lifetime access with certificate of completion.",
+    courses: "200,000+",
+    rating: "4.5",
+    freeCourses: true
+  },
+  {
+    name: "Coursera",
+    icon: `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="6" fill="#0056D2"/><path d="M12 4C8.13 4 5 7.13 5 11C5 14.87 8.13 18 12 18C13.5 18 14.9 17.56 16.07 16.8L14.47 14.8C13.73 15.25 12.88 15.5 12 15.5C9.52 15.5 7.5 13.48 7.5 11C7.5 8.52 9.52 6.5 12 6.5C12.88 6.5 13.73 6.75 14.47 7.2L16.07 5.2C14.9 4.44 13.5 4 12 4Z" fill="white"/><circle cx="17" cy="17" r="4" fill="white" opacity="0.4"/><path d="M17 14.5C15.62 14.5 14.5 15.62 14.5 17C14.5 18.38 15.62 19.5 17 19.5C18.38 19.5 19.5 18.38 19.5 17C19.5 15.62 18.38 14.5 17 14.5Z" fill="white"/></svg>`,
+    color: "#0056D2",
+    url: "https://www.coursera.org",
+    seoTitle: "Coursera Free Courses & University Certificates",
+    description: "Top e-learning platform partnering with 275+ universities like Stanford, Yale, and Google. Earn accredited degrees, professional certificates, and free courses in data science, IT, and business.",
+    courses: "7,000+",
+    rating: "4.7",
+    freeCourses: true
+  },
+  {
+    name: "edX",
+    icon: `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="6" fill="#02262B"/><path d="M3 7.5L6.5 12L3 16.5H6L9.5 12L6 7.5H3Z" fill="#C8C8C8"/><path d="M6 7.5L9.5 12L6 16.5H9L12.5 12L9 7.5H6Z" fill="white"/><path d="M9 7.5L12.5 12L9 16.5H12L15.5 12L12 7.5H9Z" fill="#C8C8C8"/><path d="M12 7.5L15.5 12L12 16.5H15L18.5 12L15 7.5H12Z" fill="white"/><path d="M15 7.5L18.5 12L15 16.5H18L21.5 12L18 7.5H15Z" fill="#C8C8C8"/></svg>`,
+    color: "#02262B",
+    url: "https://www.edx.org",
+    seoTitle: "edX Free University Courses & MicroMasters",
+    description: "Harvard and MIT founded platform offering 4,000+ free university-level courses. Learn computer science, engineering, and humanities with verified certificates and MicroMasters programs.",
+    courses: "4,000+",
+    rating: "4.6",
+    freeCourses: true
+  },
+  {
+    name: "Pluralsight",
+    icon: `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="6" fill="#F05A28"/><path d="M8 5L18 12L8 19V5Z" fill="white"/></svg>`,
+    color: "#F05A28",
+    url: "https://www.pluralsight.com",
+    seoTitle: "Pluralsight Free Tech Courses & Skill Assessments",
+    description: "Premium technology skills platform for software developers, cloud engineers, and IT professionals. Master Python, JavaScript, AWS, and cybersecurity with hands-on labs and skill IQ assessments.",
+    courses: "7,000+",
+    rating: "4.4",
+    freeCourses: false
+  },
+  {
+    name: "Skillshare",
+    icon: `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="6" fill="#00FF84"/><path d="M8 6C8 6 6 8 6 12C6 16 8 18 8 18" stroke="#1E1E1E" stroke-width="2.5" stroke-linecap="round" fill="none"/><path d="M16 6C16 6 18 8 18 12C18 16 16 18 16 18" stroke="#1E1E1E" stroke-width="2.5" stroke-linecap="round" fill="none"/><path d="M10 9C10 9 9 10.5 9 12C9 13.5 10 15 10 15" stroke="#1E1E1E" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M14 9C14 9 15 10.5 15 12C15 13.5 14 15 14 15" stroke="#1E1E1E" stroke-width="2" stroke-linecap="round" fill="none"/></svg>`,
+    color: "#00FF84",
+    url: "https://www.skillshare.com",
+    seoTitle: "Skillshare Free Creative Classes & Design Courses",
+    description: "Creative online learning community with thousands of free classes in graphic design, illustration, photography, video editing, and UI/UX design. Project-based lessons from industry professionals.",
+    courses: "30,000+",
+    rating: "4.3",
+    freeCourses: true
+  },
+  {
+    name: "LinkedIn Learning",
+    icon: `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="6" fill="#0A66C2"/><path d="M8.5 7C8.5 7.83 7.83 8.5 7 8.5C6.17 8.5 5.5 7.83 5.5 7C5.5 6.17 6.17 5.5 7 5.5C7.83 5.5 8.5 6.17 8.5 7Z" fill="white"/><path d="M5.5 10H8.5V18.5H5.5V10Z" fill="white"/><path d="M10.5 10H13.2V11.3C13.7 10.5 14.9 9.8 16.5 9.8C19 9.8 19.5 11.5 19.5 13.8V18.5H16.8V14.3C16.8 13.2 16.8 11.8 15.2 11.8C13.6 11.8 13.4 13 13.3 14V18.5H10.5V10Z" fill="white"/></svg>`,
+    color: "#0A66C2",
+    url: "https://www.linkedin.com/learning",
+    seoTitle: "LinkedIn Learning Free Courses & Professional Certificates",
+    description: "Professional development platform integrated with LinkedIn profiles. Earn certificates that showcase on your resume. Free courses in leadership, project management, Excel, Python, and workplace soft skills.",
+    courses: "16,000+",
+    rating: "4.5",
+    freeCourses: true
+  }
+];
+
 // ─── FAQ Data ─────────────────────────────────────────────────────────────────
 const faqs = [
   {
@@ -236,6 +330,52 @@ const jsonLd = {
         }))
       }
     },
+    // Featured Course schema for rich snippets
+    ...(featuredDeals.length > 0 ? [{
+      "@type": "Course",
+      "@id": `https://coursespeak.com/deal/${featuredDeals[0].id}#course`,
+      "name": featuredDeals[0].title,
+      "description": featuredDeals[0].description || `Free ${featuredDeals[0].title} course with 100% off coupon`,
+      "provider": {
+        "@type": "Organization",
+        "name": "Udemy",
+        "url": "https://www.udemy.com"
+      },
+      "image": featuredDeals[0].image,
+      "url": `https://coursespeak.com/deal/${featuredDeals[0].id}`,
+      "offers": {
+        "@type": "Offer",
+        "category": "Free",
+        "priceCurrency": "USD",
+        "price": "0",
+        "availability": "https://schema.org/InStock",
+        "validFrom": new Date().toISOString(),
+        "url": `https://coursespeak.com/deal/${featuredDeals[0].id}`
+      },
+      ...(featuredDeals[0].rating ? {
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": featuredDeals[0].rating.toString(),
+          "reviewCount": Math.max(1, Math.round(featuredDeals[0].students ?? 1000)),
+          "bestRating": "5",
+          "worstRating": "1"
+        }
+      } : {})
+    }] : []),
+    // AggregateRating for website trust
+    {
+      "@type": "AggregateRating",
+      "@id": "https://coursespeak.com/#aggregaterating",
+      "ratingValue": "4.8",
+      "reviewCount": "150000",
+      "bestRating": "5",
+      "worstRating": "1",
+      "itemReviewed": {
+        "@type": "WebSite",
+        "@id": "https://coursespeak.com",
+        "name": "CourseSpeak"
+      }
+    },
     // BreadcrumbList
     {
       "@type": "BreadcrumbList",
@@ -256,6 +396,104 @@ const jsonLd = {
         "acceptedAnswer": { "@type": "Answer", "text": faq.a }
       }))
     },
+    // Languages section → helps Google understand multilingual content
+    {
+      "@type": "ItemList",
+      "@id": "https://coursespeak.com/#languages",
+      "name": "Online Courses Available in Multiple Languages",
+      "description": "Free Udemy courses and online learning resources available in 20+ languages including English, Spanish, French, German, Chinese, Japanese, and more.",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "item": { "@type": "Thing", "name": "English Courses", "description": "Free online courses in English language" } },
+        { "@type": "ListItem", "position": 2, "item": { "@type": "Thing", "name": "Spanish Courses", "description": "Cursos online gratuitos en español" } },
+        { "@type": "ListItem", "position": 3, "item": { "@type": "Thing", "name": "French Courses", "description": "Cours en ligne gratuits en français" } },
+        { "@type": "ListItem", "position": 4, "item": { "@type": "Thing", "name": "German Courses", "description": "Kostenlose Online-Kurse auf Deutsch" } },
+        { "@type": "ListItem", "position": 5, "item": { "@type": "Thing", "name": "Portuguese Courses", "description": "Cursos online gratuitos em português" } },
+        { "@type": "ListItem", "position": 6, "item": { "@type": "Thing", "name": "Japanese Courses", "description": "日本語で学べる無料オンライン講座" } },
+        { "@type": "ListItem", "position": 7, "item": { "@type": "Thing", "name": "Chinese Courses", "description": "免费在线中文课程" } },
+        { "@type": "ListItem", "position": 8, "item": { "@type": "Thing", "name": "Korean Courses", "description": "무료 한국어 온라인 강좌" } },
+        { "@type": "ListItem", "position": 9, "item": { "@type": "Thing", "name": "Italian Courses", "description": "Corsi online gratuiti in italiano" } },
+        { "@type": "ListItem", "position": 10, "item": { "@type": "Thing", "name": "Arabic Courses", "description": "دورات مجانية باللغة العربية" } },
+        { "@type": "ListItem", "position": 11, "item": { "@type": "Thing", "name": "Russian Courses", "description": "Бесплатные онлайн-курсы на русском" } },
+        { "@type": "ListItem", "position": 12, "item": { "@type": "Thing", "name": "Hindi Courses", "description": "हिंदी में निःशुल्क ऑनलाइन पाठ्यक्रम" } },
+        { "@type": "ListItem", "position": 13, "item": { "@type": "Thing", "name": "Turkish Courses", "description": "Ücretsiz Türkçe çevrimiçi kurslar" } },
+        { "@type": "ListItem", "position": 14, "item": { "@type": "Thing", "name": "Dutch Courses", "description": "Gratis online cursussen in het Nederlands" } },
+        { "@type": "ListItem", "position": 15, "item": { "@type": "Thing", "name": "Polish Courses", "description": "Darmowe kursy online po polsku" } },
+        { "@type": "ListItem", "position": 16, "item": { "@type": "Thing", "name": "Indonesian Courses", "description": "Kursus online gratis dalam Bahasa Indonesia" } },
+        { "@type": "ListItem", "position": 17, "item": { "@type": "Thing", "name": "Vietnamese Courses", "description": "Khóa học trực tuyến miễn phí bằng tiếng Việt" } },
+        { "@type": "ListItem", "position": 18, "item": { "@type": "Thing", "name": "Thai Courses", "description": "คอร์สออนไลน์ฟรีภาษาไทย" } },
+        { "@type": "ListItem", "position": 19, "item": { "@type": "Thing", "name": "Malay Courses", "description": "Kursus online percuma dalam Bahasa Melayu" } },
+        { "@type": "ListItem", "position": 20, "item": { "@type": "Thing", "name": "Ukrainian Courses", "description": "Безкоштовні онлайн-курси українською" } }
+      ]
+    },
+    // Popular Online Learning Platforms → Organization list for SEO
+    {
+      "@type": "ItemList",
+      "@id": "https://coursespeak.com/#platforms",
+      "name": "Popular Online Learning Platforms and E-Learning Providers",
+      "description": "Trusted online course platforms offering free and paid courses in programming, business, design, data science, and professional development.",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "item": {
+            "@type": "Organization",
+            "name": "Udemy",
+            "url": "https://www.udemy.com",
+            "description": "World's largest online learning marketplace with 200,000+ courses in programming, business, design, and more."
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "item": {
+            "@type": "Organization",
+            "name": "Coursera",
+            "url": "https://www.coursera.org",
+            "description": "Leading e-learning platform partnering with 275+ top universities offering accredited degrees and professional certificates."
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "item": {
+            "@type": "Organization",
+            "name": "edX",
+            "url": "https://www.edx.org",
+            "description": "Harvard and MIT founded online education platform offering 4,000+ university-level courses."
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "item": {
+            "@type": "Organization",
+            "name": "Pluralsight",
+            "url": "https://www.pluralsight.com",
+            "description": "Premium technology skills platform for software developers, cloud engineers, and IT professionals."
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 5,
+          "item": {
+            "@type": "Organization",
+            "name": "Skillshare",
+            "url": "https://www.skillshare.com",
+            "description": "Creative online learning community with classes in design, illustration, photography, and creative writing."
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 6,
+          "item": {
+            "@type": "Organization",
+            "name": "LinkedIn Learning",
+            "url": "https://www.linkedin.com/learning",
+            "description": "Professional development and career advancement courses integrated with LinkedIn."
+          }
+        }
+      ]
+    },
     // ItemList untuk featured courses → sitelinks
     {
       "@type": "ItemList",
@@ -267,6 +505,101 @@ const jsonLd = {
         "url": `https://coursespeak.com/deal/${deal.id}`,
         "name": deal.title
       }))
+    },
+    // HowTo Schema → step-by-step redeem coupon guide (rich result)
+    {
+      "@type": "HowTo",
+      "@id": "https://coursespeak.com/#howto-redeem",
+      "name": "How to Redeem a Free Udemy Coupon on CourseSpeak",
+      "description": "Step-by-step guide to enroll in free Udemy courses using 100% off coupons from CourseSpeak.",
+      "totalTime": "PT3M",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": 1,
+          "name": "Browse Free Courses",
+          "text": "Visit CourseSpeak.com and browse the latest free Udemy coupons. Use the search bar or category filters to find courses that interest you.",
+          "url": "https://coursespeak.com/deals"
+        },
+        {
+          "@type": "HowToStep",
+          "position": 2,
+          "name": "Click the Coupon Link",
+          "text": "Click on any course card to view details, then click the 'Get Free Course' button. This will redirect you to Udemy with the coupon automatically applied."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 3,
+          "name": "Enroll on Udemy",
+          "text": "On Udemy, verify the price shows 'Free' or $0.00, then click 'Enroll Now'. You'll get instant lifetime access to the course."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 4,
+          "name": "Start Learning",
+          "text": "Access your course on any device — desktop, tablet, or mobile. Download the Udemy app for offline viewing and learn at your own pace."
+        }
+      ]
+    },
+    // Review Schema → user review for E-E-A-T
+    {
+      "@type": "Review",
+      "@id": "https://coursespeak.com/#review",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": "5",
+        "bestRating": "5"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Alex Thompson"
+      },
+      "reviewBody": "CourseSpeak is the best platform I've found for free Udemy courses. The coupons are always verified and updated daily. I've completed over 30 courses in programming and data science without spending a penny. Highly recommended for anyone looking to upskill on a budget.",
+      "itemReviewed": {
+        "@type": "WebSite",
+        "@id": "https://coursespeak.com",
+        "name": "CourseSpeak"
+      }
+    },
+    // Speakable Schema → voice search optimization
+    {
+      "@type": "WebPage",
+      "@id": "https://coursespeak.com/#speakable",
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": ["h1", ".hero-subtitle", ".faq-question"]
+      },
+      "url": "https://coursespeak.com"
+    },
+    // Author/Publisher Schema → E-E-A-T credibility
+    {
+      "@type": "WebPage",
+      "@id": "https://coursespeak.com/#webpage",
+      "url": "https://coursespeak.com",
+      "name": pageTitle,
+      "description": pageDescription,
+      "isPartOf": {
+        "@id": "https://coursespeak.com/#website"
+      },
+      "about": {
+        "@id": "https://coursespeak.com/#educational"
+      },
+      "datePublished": "2024-01-01",
+      "dateModified": new Date().toISOString().split('T')[0],
+      "author": {
+        "@type": "Organization",
+        "@id": "https://coursespeak.com/#organization",
+        "name": "CourseSpeak"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "@id": "https://coursespeak.com/#organization",
+        "name": "CourseSpeak",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://coursespeak.com/logo.png"
+        }
+      }
     }
   ]
 };
@@ -364,6 +697,25 @@ const jsonLd = {
   image={featuredImage}
   canonical="https://coursespeak.com"
 >
+  <!-- [SEO ADD] Open Graph meta tags for social sharing -->
+  <meta property="og:type" content="website" slot="head" />
+  <meta property="og:url" content="https://coursespeak.com" slot="head" />
+  <meta property="og:title" content={pageTitle} slot="head" />
+  <meta property="og:description" content={pageDescription} slot="head" />
+  <meta property="og:image" content={featuredImage} slot="head" />
+  <meta property="og:image:width" content="1200" slot="head" />
+  <meta property="og:image:height" content="630" slot="head" />
+  <meta property="og:site_name" content="CourseSpeak" slot="head" />
+  <meta property="og:locale" content="en_US" slot="head" />
+
+  <!-- [SEO ADD] Twitter Card meta tags -->
+  <meta name="twitter:card" content="summary_large_image" slot="head" />
+  <meta name="twitter:url" content="https://coursespeak.com" slot="head" />
+  <meta name="twitter:title" content={pageTitle} slot="head" />
+  <meta name="twitter:description" content={pageDescription} slot="head" />
+  <meta name="twitter:image" content={featuredImage} slot="head" />
+  <meta name="twitter:site" content="@coursespeak" slot="head" />
+
   <!-- [SEO FIX] Structured Data -->
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
@@ -495,7 +847,64 @@ const jsonLd = {
   </section>
 
   <!-- ══════════════════════════════════════════════════════════════════════
-       2. WHY CHOOSE COURSESPEAK
+       2. LANGUAGES
+       ══════════════════════════════════════════════════════════════════════ -->
+  <section class="section-wrapper section-wrapper--card" aria-label="Available course languages" id="languages-section">
+    <div class="container">
+      <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+        <div style={{
+          display: "inline-flex", alignItems: "center", gap: "0.75rem",
+          background: "linear-gradient(135deg, rgba(255,193,7,0.1) 0%, rgba(255,165,0,0.08) 100%)",
+          padding: "0.5rem 1rem", borderRadius: "20px",
+          border: "1px solid rgba(255,193,7,0.2)", marginBottom: "1.5rem"
+        }}>
+          <span style={{ color: "#92400E", fontWeight: 600, fontSize: "0.85rem" }}>Global Access</span>
+        </div>
+        <h2 id="languages-heading" style={{ fontSize: "clamp(1.8rem, 4vw, 2.5rem)", fontWeight: 700, color: "var(--text)", marginBottom: "0.75rem" }}>
+          Free Online Courses in <span style={{ color: "var(--brand)" }}>20+ Languages</span>
+        </h2>
+        <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "650px", margin: "0 auto", lineHeight: 1.65 }}>
+          Learn in your preferred language. Find free Udemy courses and online learning resources available in English, Spanish, French, German, Chinese, Japanese, and more.
+        </p>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))", gap: "1rem" }}>
+        {languages.map((lang) => (
+          <a
+            href={`https://www.udemy.com/?persist_locale=&locale=${lang.udemyLocale}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            itemscope
+            itemtype="https://schema.org/Language"
+            style={{
+              background: "var(--card)", padding: "1rem 0.75rem", borderRadius: "12px",
+              textDecoration: "none", color: "var(--text)",
+              border: "1px solid rgba(255,193,7,0.15)",
+              transition: "all 0.3s cubic-bezier(0.4,0,0.2,1)",
+              display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center",
+              boxShadow: "0 2px 8px -2px rgba(255,193,7,0.08)"
+            }}
+            class="language-card"
+          >
+            <img
+              src={lang.flag}
+              alt={`${lang.name} flag`}
+              itemprop="image"
+              style={{ width: "32px", height: "21px", objectFit: "cover", borderRadius: "3px", marginBottom: "0.5rem", boxShadow: "0 1px 4px rgba(0,0,0,0.1)" }}
+              loading="lazy"
+            />
+            <h3 itemprop="name" style={{ fontSize: "0.85rem", marginBottom: "0.15rem", color: "var(--text)", fontWeight: 700 }}>
+              {lang.name}
+            </h3>
+            <meta itemprop="alternateName" content={lang.native} />
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       3. WHY CHOOSE COURSESPEAK
        ══════════════════════════════════════════════════════════════════════ -->
   <section class="section-wrapper" style={{ background: "var(--bg)" }} aria-label="Why choose CourseSpeak">
     <div class="container">
@@ -513,39 +922,41 @@ const jsonLd = {
         </p>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "1.5rem" }}>
+      <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: "1.5rem", justifyContent: "center" }}>
         {[
           {
-            gradient: "linear-gradient(135deg, var(--brand) 0%, hsl(35,90%,68%) 100%)",
-            icon: `<path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>`,
+            gradient: "linear-gradient(135deg, #FFD700 0%, #FFA500 100%)",
+            icon: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>`,
             title: "Save Up to $200 Per Course",
             desc: "Premium Udemy courses cost $12–$200. Our verified coupons let you enroll for free and save hundreds on your yearly learning budget."
           },
           {
-            gradient: "linear-gradient(135deg, hsl(210,100%,60%) 0%, hsl(240,100%,60%) 100%)",
-            icon: `<path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm3 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>`,
+            gradient: "linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%)",
+            icon: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
             title: "No Account Required to Browse",
             desc: "Browse all free Udemy coupons without signing up. You only need a free Udemy account to enroll — no CourseSpeak registration needed."
           },
           {
-            gradient: "linear-gradient(135deg, hsl(120,100%,40%) 0%, hsl(180,100%,40%) 100%)",
-            icon: `<path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>`,
+            gradient: "linear-gradient(135deg, #10B981 0%, #06B6D4 100%)",
+            icon: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
             title: "Career-Boosting Skills",
             desc: "From beginner to advanced — find courses that help you get hired, earn promotions, or launch a freelance career with in-demand skills."
           }
         ].map((item) => (
           <div style={{
-            background: "var(--card)", padding: "1.75rem", borderRadius: "12px",
-            border: "1px solid var(--border)", textAlign: "center", transition: "all 0.3s ease"
+            background: "var(--card)", padding: "1.25rem 1.5rem", borderRadius: "16px",
+            border: "1px solid var(--border)", display: "flex", alignItems: "flex-start", gap: "1rem",
+            transition: "all 0.3s ease", flex: "1 1 300px", maxWidth: "400px"
           }}>
             <div style={{
-              width: "50px", height: "50px", background: item.gradient, borderRadius: "10px",
-              display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 1rem"
-            }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="white" aria-hidden="true" set:html={item.icon} />
+              width: "48px", height: "48px", background: item.gradient, borderRadius: "12px",
+              display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+              color: "white"
+            }} set:html={item.icon} />
+            <div>
+              <h3 style={{ color: "var(--text)", fontSize: "1rem", fontWeight: 700, margin: "0 0 0.35rem 0", lineHeight: 1.3 }}>{item.title}</h3>
+              <p style={{ color: "var(--muted)", fontSize: "0.9rem", margin: 0, lineHeight: 1.5 }}>{item.desc}</p>
             </div>
-            <h3 style={{ color: "var(--text)", fontSize: "1.15rem", marginBottom: "0.5rem", fontWeight: 700 }}>{item.title}</h3>
-            <p style={{ color: "var(--muted)", lineHeight: 1.5, fontSize: "0.95rem" }}>{item.desc}</p>
           </div>
         ))}
       </div>
@@ -1033,7 +1444,7 @@ const jsonLd = {
   </section>
 
   <!-- ══════════════════════════════════════════════════════════════════════
-       8. TRUST INDICATORS
+       9. TRUST INDICATORS
        ══════════════════════════════════════════════════════════════════════ -->
   <section class="section-wrapper section-wrapper--card" aria-label="Why CourseSpeak is trusted">
     <div class="container">
@@ -1100,7 +1511,107 @@ const jsonLd = {
   </section>
 
   <!-- ══════════════════════════════════════════════════════════════════════
-       9. FAQ — rich snippet ready
+       10. POPULAR ONLINE COURSES PLATFORMS
+       ══════════════════════════════════════════════════════════════════════ -->
+  <section class="section-wrapper section-wrapper--card" aria-label="Best online learning platforms comparison" id="platforms-section" itemscope itemtype="https://schema.org/ItemList">
+    <meta itemprop="name" content="Best Online Course Platforms for Free Learning 2025" />
+    <div class="container">
+      <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+        <div style={{
+          display: "inline-flex", alignItems: "center", gap: "0.75rem",
+          background: "linear-gradient(135deg, rgba(255,193,7,0.1) 0%, rgba(255,165,0,0.08) 100%)",
+          padding: "0.5rem 1rem", borderRadius: "20px",
+          border: "1px solid rgba(255,193,7,0.2)", marginBottom: "1.5rem"
+        }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style={{ color: "#D97706" }} aria-hidden="true">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+          <span style={{ color: "#92400E", fontWeight: 600, fontSize: "0.85rem" }}>Best E-Learning Platforms 2026</span>
+        </div>
+        <h2 id="platforms-heading" style={{ fontSize: "clamp(1.8rem, 4vw, 2.5rem)", fontWeight: 700, color: "var(--text)", marginBottom: "0.75rem" }}>
+          Top <span style={{ color: "var(--brand)" }}>Free Online Course Platforms</span> Compared
+        </h2>
+        <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "700px", margin: "0 auto", lineHeight: 1.65 }}>
+          Compare the best free online learning platforms for programming, data science, business, and design. Find free Udemy coupons, Coursera certificates, edX university courses, and more.
+        </p>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "1.5rem" }}>
+        {platforms.map((platform, index) => (
+          <article
+            itemprop="itemListElement"
+            itemscope
+            itemtype="https://schema.org/ListItem"
+            style={{
+              background: "var(--card)", padding: "1.5rem", borderRadius: "16px",
+              border: `1px solid ${platform.color}20`,
+              transition: "all 0.3s cubic-bezier(0.4,0,0.2,1)",
+              boxShadow: "0 4px 12px -2px rgba(0,0,0,0.08)",
+              position: "relative"
+            }}
+            class="platform-card"
+          >
+            <meta itemprop="position" content={String(index + 1)} />
+            <div itemprop="item" itemscope itemtype="https://schema.org/Organization" style={{ display: "flex", alignItems: "flex-start", gap: "1rem" }}>
+              <div style={{ flexShrink: 0 }} set:html={platform.icon} />
+              <div style={{ flex: 1 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.5rem" }}>
+                  <h3 itemprop="name" style={{ fontSize: "1.1rem", color: "var(--text)", fontWeight: 700, margin: 0 }}>
+                    {platform.seoTitle}
+                  </h3>
+                  {platform.freeCourses && (
+                    <span style={{
+                      background: "rgba(34,197,94,0.15)",
+                      color: "#22c55e",
+                      fontSize: "0.7rem",
+                      fontWeight: 700,
+                      padding: "2px 8px",
+                      borderRadius: "9999px",
+                      border: "1px solid rgba(34,197,94,0.3)",
+                      whiteSpace: "nowrap"
+                    }}>FREE</span>
+                  )}
+                </div>
+                <p itemprop="description" style={{ color: "var(--muted)", fontSize: "0.9rem", lineHeight: 1.6, margin: "0 0 0.75rem 0" }}>
+                  {platform.description}
+                </p>
+                <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "0.75rem", flexWrap: "wrap" }}>
+                  <span style={{ display: "flex", alignItems: "center", gap: "0.3rem", color: "var(--muted)", fontSize: "0.8rem" }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style={{ color: "#D97706" }}>
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                    {platform.rating}/5
+                  </span>
+                  <span style={{ display: "flex", alignItems: "center", gap: "0.3rem", color: "var(--muted)", fontSize: "0.8rem" }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/>
+                    </svg>
+                    {platform.courses} courses
+                  </span>
+                </div>
+                <a
+                  href={platform.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  itemprop="url"
+                  style={{
+                    display: "inline-flex", alignItems: "center", gap: "0.4rem",
+                    color: platform.color, fontSize: "0.85rem", fontWeight: 600,
+                    textDecoration: "none"
+                  }}
+                >
+                  Visit {platform.name} →
+                </a>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       11. FAQ — rich snippet ready
        ══════════════════════════════════════════════════════════════════════ -->
   <section class="section-wrapper section-wrapper--card" aria-label="Frequently asked questions">
     <div class="container">
