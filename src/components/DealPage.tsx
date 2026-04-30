@@ -345,8 +345,6 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                             {/* Breadcrumb */}
                             <nav aria-label="Breadcrumb" style={{ marginBottom: "1rem" }}>
                                 <ol
-                                    itemScope
-                                    itemType="https://schema.org/BreadcrumbList"
                                     style={{
                                         display: "flex",
                                         alignItems: "center",
@@ -360,38 +358,34 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                         padding: 0
                                     }}
                                 >
-                                    <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-                                        <a href="/" itemProp="item" style={{ color: "#cbd5e1", textDecoration: "none" }}>
-                                            <span itemProp="name">Home</span>
+                                    <li>
+                                        <a href="/" style={{ color: "#cbd5e1", textDecoration: "none" }}>
+                                            Home
                                         </a>
-                                        <meta itemProp="position" content="1" />
                                     </li>
                                     <li aria-hidden="true" style={{ color: "#64748b" }}>›</li>
-                                    <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-                                        <a href="/deals" itemProp="item" style={{ color: "#cbd5e1", textDecoration: "none" }}>
-                                            <span itemProp="name">All Deals</span>
+                                    <li>
+                                        <a href="/deals" style={{ color: "#cbd5e1", textDecoration: "none" }}>
+                                            All Deals
                                         </a>
-                                        <meta itemProp="position" content="2" />
                                     </li>
                                     {deal.category && (
                                         <>
                                             <li aria-hidden="true" style={{ color: "#64748b" }}>›</li>
-                                            <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-                                                <a href={`/categories/${slugifyCategory(deal.category)}`} itemProp="item" style={{ color: "#cbd5e1", textDecoration: "none" }}>
-                                                    <span itemProp="name">{deal.category}</span>
+                                            <li>
+                                                <a href={`/categories/${slugifyCategory(deal.category)}`} style={{ color: "#cbd5e1", textDecoration: "none" }}>
+                                                    {deal.category}
                                                 </a>
-                                                <meta itemProp="position" content="3" />
                                             </li>
                                         </>
                                     )}
                                     {deal.subcategory && deal.subcategory !== deal.category && (
                                         <>
                                             <li aria-hidden="true" style={{ color: "#64748b" }}>›</li>
-                                            <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-                                                <a href={`/topics/${slugifyCategory(deal.subcategory)}`} itemProp="item" style={{ color: "#cbd5e1", textDecoration: "none" }}>
-                                                    <span itemProp="name">{deal.subcategory}</span>
+                                            <li>
+                                                <a href={`/topics/${slugifyCategory(deal.subcategory)}`} style={{ color: "#cbd5e1", textDecoration: "none" }}>
+                                                    {deal.subcategory}
                                                 </a>
-                                                <meta itemProp="position" content="4" />
                                             </li>
                                         </>
                                     )}

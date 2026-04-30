@@ -563,29 +563,31 @@ const currentPath = Astro.url.pathname;
           borderBottom: "1px solid var(--border)"
         }}
       >
-        <ol itemscope itemtype="https://schema.org/BreadcrumbList" style={{ display: "flex", gap: "8px", listStyle: "none", margin: 0, padding: 0, alignItems: "center" }}>
-          <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style={{ display: "flex", alignItems: "center" }}>
-            <a itemprop="item" href="/" style={{ color: "var(--muted)", textDecoration: "none", display: "flex", alignItems: "center", gap: "4px" }}>
+        <ol style={{ display: "flex", gap: "8px", listStyle: "none", margin: 0, padding: 0, alignItems: "center" }}>
+          <li style={{ display: "flex", alignItems: "center" }}>
+            <a href="/" style={{ color: "var(--muted)", textDecoration: "none", display: "flex", alignItems: "center", gap: "4px" }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
               </svg>
-              <span itemprop="name">Home</span>
+              <span>Home</span>
             </a>
-            <meta itemprop="position" content="1" />
           </li>
           <li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
-          <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style={{ display: "flex", alignItems: "center" }}>
-            <span itemprop="name" style={{ color: "var(--text)", fontWeight: 500 }}>
+          <li style={{ display: "flex", alignItems: "center" }}>
+            <span style={{ color: "var(--text)", fontWeight: 500 }}>
               {currentPath === '/deals' ? 'All Deals' : 
                currentPath === '/categories' ? 'Categories' :
                currentPath === '/topics' ? 'Topics' :
                currentPath === '/popular' ? 'Popular' :
+               currentPath === '/instructors' ? 'Instructors' :
+               currentPath === '/blog' ? 'Blog' :
+               currentPath === '/about' ? 'About' :
+               currentPath === '/contact' ? 'Contact' :
                currentPath.startsWith('/deal/') ? 'Course Details' :
                currentPath.startsWith('/categories/') ? 'Category' :
+               currentPath.startsWith('/blog/') ? 'Blog' :
                'Page'}
             </span>
-            <meta itemprop="position" content="2" />
-            <meta itemprop="item" content={`https://coursespeak.com${currentPath}`} />
           </li>
         </ol>
       </nav>
