@@ -553,7 +553,7 @@ const currentPath = Astro.url.pathname;
     </header>
 
     <!-- Breadcrumb Navigation -->
-    {currentPath !== '/' && (
+    {currentPath !== '/' && !currentPath.startsWith('/deal/') && (
       <nav 
         aria-label="Breadcrumb" 
         class="container" 
