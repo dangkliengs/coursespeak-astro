@@ -378,10 +378,10 @@ const currentPath = Astro.url.pathname;
           </div>
         </a>
 
-        {/* Navigation: Left Links - Search - Right Links (Udemy-style) */}
+        {/* Navigation: All Links on Left - Search on Right */}
         <div style={{ display: "flex", gap: "4px", alignItems: "center", flex: 1, justifyContent: "space-between", minWidth: 0 }}>
           
-          {/* LEFT SIDE: Latest Coupons + Categories */}
+          {/* LEFT SIDE: All Menu Links */}
           <div style={{ display: "flex", gap: "4px", alignItems: "center" }}>
             <a
               itemprop="url"
@@ -433,56 +433,7 @@ const currentPath = Astro.url.pathname;
               </svg>
               <span itemprop="name">Course Categories</span>
             </a>
-          </div>
-
-          {/* CENTER: Search Bar */}
-          <form action="/search" method="get" style={{ 
-            display: "flex", 
-            gap: "0",
-            background: "var(--card)",
-            borderRadius: "8px",
-            border: "1px solid var(--border)",
-            overflow: "hidden",
-            flex: 1,
-            maxWidth: "400px",
-            margin: "0 16px"
-          }}>
-            <input 
-              type="text" 
-              name="q" 
-              placeholder="Search for anything..." 
-              style={{
-                background: 'transparent',
-                color: 'var(--text)',
-                border: 'none',
-                padding: '8px 12px',
-                fontSize: '0.85rem',
-                width: '100%',
-                outline: 'none'
-              }}
-            />
-            <button 
-              type="submit" 
-              style={{
-                background: 'var(--brand)',
-                color: 'var(--bg)',
-                border: 'none',
-                padding: '8px 12px',
-                fontSize: '0.85rem',
-                cursor: 'pointer',
-                fontWeight: '600',
-                display: 'flex',
-                alignItems: 'center'
-              }}
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-              </svg>
-            </button>
-          </form>
-
-          {/* RIGHT SIDE: Top Instructors - Learning Topics - Top Udemy Coupons */}
-          <div style={{ display: "flex", gap: "4px", alignItems: "center", paddingRight: "8px" }}>
+            
             <a
               itemprop="url"
               href="/instructors"
@@ -556,6 +507,52 @@ const currentPath = Astro.url.pathname;
               <span itemprop="name">Top Udemy Coupons</span>
             </a>
           </div>
+
+          {/* RIGHT SIDE: Search Bar */}
+          <form action="/search" method="get" style={{ 
+            display: "flex", 
+            gap: "0",
+            background: "var(--card)",
+            borderRadius: "8px",
+            border: "1px solid var(--border)",
+            overflow: "hidden",
+            width: "280px",
+            flexShrink: 0,
+            marginRight: "8px"
+          }}>
+            <input 
+              type="text" 
+              name="q" 
+              placeholder="Search courses..." 
+              style={{
+                background: 'transparent',
+                color: 'var(--text)',
+                border: 'none',
+                padding: '6px 10px',
+                fontSize: '0.8rem',
+                width: '100%',
+                outline: 'none'
+              }}
+            />
+            <button 
+              type="submit" 
+              style={{
+                background: 'var(--brand)',
+                color: 'var(--bg)',
+                border: 'none',
+                padding: '6px 10px',
+                fontSize: '0.8rem',
+                cursor: 'pointer',
+                fontWeight: '600',
+                display: 'flex',
+                alignItems: 'center'
+              }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+              </svg>
+            </button>
+          </form>
         </div>
       </nav>
     </header>
