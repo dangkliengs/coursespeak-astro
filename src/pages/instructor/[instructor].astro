@@ -1,0 +1,531 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import DealCard from "../../components/DealCard.astro";
+import { readDeals } from "../../lib/store";
+import type { Deal } from "../../types/deal";
+
+import { parseInstructors, createInstructorSlug } from "../../lib/instructors";
+
+// Types
+interface InstructorData {
+  name: string;
+  slug: string;
+  courses: Deal[];
+  totalStudents: number;
+  avgRating: number;
+  categories: string[];
+  totalReviews: number;
+  courseCount: number;
+  providers: string[];
+}
+
+// Generate static paths for instructors with 3+ courses
+export async function getStaticPaths() {
+  const allDeals = await readDeals();
+  
+  // Group deals by INDIVIDUAL instructor (split comma-separated names)
+  const instructorMap = new Map<string, Deal[]>();
+  
+  allDeals.forEach((deal) => {
+    const instructors = parseInstructors(deal.instructor);
+    
+    // Add this course to each individual instructor
+    instructors.forEach((instructorName) => {
+      if (!instructorMap.has(instructorName)) {
+        instructorMap.set(instructorName, []);
+      }
+      instructorMap.get(instructorName)!.push(deal);
+    });
+  });
+  
+  // Filter instructors with 3+ courses and create paths
+  const paths = [];
+  
+  for (const [name, courses] of instructorMap.entries()) {
+    if (courses.length >= 3) {
+      const slug = createInstructorSlug(name);
+      
+      paths.push({
+        params: { instructor: slug },
+        props: { 
+          instructorName: name,
+          instructorSlug: slug 
+        }
+      });
+    }
+  }
+  
+  return paths;
+}
+
+// Get props from static path generation
+let { instructorName, instructorSlug } = Astro.props;
+const { instructor } = Astro.params;
+
+// Fetch all deals first (used for both lookup and filtering)
+const allDeals = await readDeals();
+
+// Fallback: if props not available (SSR mode), look up by slug
+if (!instructorName && instructor) {
+  const instructorMap = new Map<string, string>();
+  
+  allDeals.forEach((deal) => {
+    const instructors = parseInstructors(deal.instructor);
+    instructors.forEach((name) => {
+      const slug = createInstructorSlug(name);
+      instructorMap.set(slug, name);
+    });
+  });
+  
+  instructorName = instructorMap.get(instructor) || instructor;
+  instructorSlug = instructor;
+}
+
+// Guard against missing instructor
+if (!instructorName) {
+  return Astro.redirect('/instructors');
+}
+
+// Ensure instructorSlug is defined
+if (!instructorSlug) {
+  instructorSlug = instructorName.toLowerCase()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .substring(0, 100);
+}
+
+// Filter deals for this instructor (check if instructorName is in comma-separated list)
+const instructorCourses = allDeals.filter(d => {
+  const instructors = parseInstructors(d.instructor);
+  return instructors.includes(instructorName);
+});
+
+// Calculate instructor stats (students data comes from deals.json)
+const totalStudents = instructorCourses.reduce((sum, c) => sum + (c.students || 0), 0);
+const avgRating = instructorCourses.length > 0 
+  ? Number((instructorCourses.reduce((sum, c) => sum + (c.rating || 0), 0) / instructorCourses.length).toFixed(1))
+  : 0;
+const categories = [...new Set(instructorCourses.map(c => c.category).filter(Boolean))];
+const providers = [...new Set(instructorCourses.map(c => c.provider).filter(Boolean))];
+const totalReviews = instructorCourses.reduce((sum, c) => sum + (c.students || 0), 0);
+
+const instructorData: InstructorData = {
+  name: instructorName,
+  slug: instructorSlug,
+  courses: instructorCourses,
+  totalStudents,
+  avgRating,
+  categories,
+  totalReviews,
+  courseCount: instructorCourses.length,
+  providers
+};
+
+// SEO Data
+const currentDate = new Date();
+const monthNames = ["January","February","March","April","May","June",
+  "July","August","September","October","November","December"];
+const currentMonth = monthNames[currentDate.getMonth()];
+const currentYear = currentDate.getFullYear();
+
+const siteUrl = "https://coursespeak.com";
+const instructorUrl = `${siteUrl}/instructor/${instructorSlug}`;
+
+const pageTitle = `${instructorName} | ${instructorData.courseCount} Free Udemy Courses ${currentMonth} ${currentYear}`;
+const pageDescription = `Access ${instructorData.courseCount} free Udemy courses by ${instructorName}. ${instructorData.totalStudents.toLocaleString()}+ students enrolled. Average rating ${instructorData.avgRating}★. Browse programming, development, and more free courses with 100% off coupons.`;
+
+// FAQ Data
+const faqs = [
+  {
+    q: `Who is ${instructorName}?`,
+    a: `${instructorName} is a top Udemy instructor with ${instructorData.courseCount} courses and ${instructorData.totalStudents.toLocaleString()}+ students. They teach in ${categories.join(", ")}.`
+  },
+  {
+    q: `How many free courses does ${instructorName} offer?`,
+    a: `${instructorName} currently offers ${instructorData.courseCount} courses on CourseSpeak, many with 100% off coupons making them completely free.`
+  },
+  {
+    q: `What is the average rating of ${instructorName}'s courses?`,
+    a: `The average rating for ${instructorName}'s courses is ${instructorData.avgRating} out of 5 stars, based on student reviews.`
+  },
+  {
+    q: `What topics does ${instructorName} teach?`,
+    a: `${instructorName} teaches courses in ${categories.slice(0, 3).join(", ")}${categories.length > 3 ? " and more" : ""}. Their expertise covers multiple areas in technology and professional development.`
+  },
+  {
+    q: `Are ${instructorName}'s courses worth it?`,
+    a: `With ${instructorData.totalStudents.toLocaleString()}+ students and an average rating of ${instructorData.avgRating}★, ${instructorName}'s courses are highly rated. Many are available free with coupons on CourseSpeak.`
+  }
+];
+
+// Structured Data
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": `${instructorUrl}#webpage`,
+      "url": instructorUrl,
+      "name": pageTitle,
+      "description": pageDescription,
+      "isPartOf": { "@id": `${siteUrl}/#website` },
+      "breadcrumb": { "@id": `${instructorUrl}#breadcrumb` },
+      "inLanguage": "en-US",
+      "dateModified": currentDate.toISOString().split('T')[0]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${instructorUrl}#breadcrumb`,
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": siteUrl },
+        { "@type": "ListItem", "position": 2, "name": "Instructors", "item": `${siteUrl}/instructors` },
+        { "@type": "ListItem", "position": 3, "name": instructorName, "item": instructorUrl }
+      ]
+    },
+    {
+      "@type": "Person",
+      "@id": `${instructorUrl}#person`,
+      "name": instructorName,
+      "description": `Udemy instructor with ${instructorData.courseCount} courses and ${instructorData.totalStudents.toLocaleString()}+ students`,
+      "worksFor": {
+        "@type": "Organization",
+        "name": providers[0] || "Udemy",
+        "url": "https://www.udemy.com"
+      },
+      "aggregateRating": instructorData.avgRating > 0 ? {
+        "@type": "AggregateRating",
+        "ratingValue": instructorData.avgRating.toString(),
+        "bestRating": "5",
+        "ratingCount": instructorData.totalReviews.toString()
+      } : undefined,
+      "teaches": categories
+    },
+    {
+      "@type": "ItemList",
+      "@id": `${instructorUrl}#courses`,
+      "name": `Courses by ${instructorName}`,
+      "numberOfItems": instructorData.courseCount,
+      "itemListElement": instructorCourses.map((course, index) => ({
+        "@type": "ListItem",
+        "position": index + 1,
+        "item": {
+          "@type": "Course",
+          "name": course.title,
+          "description": course.description,
+          "url": `${siteUrl}/deal/${course.id}`,
+          "provider": {
+            "@type": "Organization",
+            "name": course.provider || "Udemy",
+            "url": "https://www.udemy.com"
+          },
+          "author": { "@id": `${instructorUrl}#person` },
+          "offers": {
+            "@type": "Offer",
+            "price": String(course.price ?? "0"),
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock"
+          },
+          "aggregateRating": course.rating ? {
+            "@type": "AggregateRating",
+            "ratingValue": course.rating.toString(),
+            "ratingCount": String(course.students || 0)
+          } : undefined
+        }
+      }))
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${instructorUrl}#faq`,
+      "mainEntity": faqs.map(faq => ({
+        "@type": "Question",
+        "name": faq.q,
+        "acceptedAnswer": { "@type": "Answer", "text": faq.a }
+      }))
+    }
+  ]
+};
+
+// Calculate savings for display
+function getMaxDiscount(course: Deal): number {
+  if (!course.originalPrice || !course.price || course.price >= course.originalPrice) return 0;
+  return Math.round(100 - (course.price / course.originalPrice) * 100);
+}
+
+function hasFreeCourse(course: Deal): boolean {
+  return course.price === 0;
+}
+---
+
+<Layout title={pageTitle} description={pageDescription} canonical={instructorUrl}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    <link rel="preconnect" href="https://img-c.udemycdn.com" />
+  </Fragment>
+
+  <div style={{ minHeight: "100vh", color: "var(--text)" }}>
+    {/* Hero Section */}
+    <section style={{ 
+      padding: "4rem 1rem 3rem", 
+      textAlign: "center", 
+      background: "linear-gradient(135deg, hsl(222, 47%, 7%) 0%, hsl(222, 43%, 10%) 100%)",
+      position: "relative",
+      overflow: "hidden"
+    }}>
+      {/* Background decoration */}
+      <div style={{ 
+        position: "absolute", 
+        top: "10%", 
+        left: "5%", 
+        width: "300px", 
+        height: "300px", 
+        background: "var(--brand)", 
+        filter: "blur(120px)", 
+        opacity: 0.05, 
+        borderRadius: "50%",
+        pointerEvents: "none"
+      }} />
+      
+      <div class="container" style={{ maxWidth: "900px", position: "relative", zIndex: 1 }}>
+        {/* Instructor Avatar */}
+        <div style={{
+          width: "100px",
+          height: "100px",
+          borderRadius: "50%",
+          background: "linear-gradient(135deg, var(--brand) 0%, #FFD54F 100%)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          margin: "0 auto 1.5rem",
+          fontSize: "2.5rem",
+          fontWeight: 700,
+          color: "var(--bg)"
+        }}>
+          {instructorName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}
+        </div>
+
+        {/* Title */}
+        <h1 style={{ 
+          fontSize: "clamp(1.8rem, 4vw, 2.5rem)", 
+          fontWeight: 800, 
+          marginBottom: "0.75rem",
+          color: "var(--text)"
+        }}>
+          {instructorName}
+        </h1>
+        
+        <p style={{ 
+          color: "var(--muted)", 
+          fontSize: "1rem", 
+          maxWidth: "600px", 
+          margin: "0 auto 1.5rem", 
+          lineHeight: 1.6 
+        }}>
+          Top Udemy instructor with <strong style={{ color: "var(--brand)" }}>{instructorData.courseCount} courses</strong> and <strong style={{ color: "var(--brand)" }}>{instructorData.totalStudents.toLocaleString()}+ students</strong>
+        </p>
+
+        {/* Category Tags */}
+        <div style={{ 
+          display: "flex", 
+          justifyContent: "center", 
+          gap: "0.5rem", 
+          flexWrap: "wrap",
+          marginBottom: "2rem"
+        }}>
+          {categories.map(cat => (
+            <a 
+              href={`/categories/${cat.toLowerCase().replace(/\s+/g, '-')}`}
+              style={{
+                background: "var(--card)",
+                border: "1px solid var(--border)",
+                borderRadius: "20px",
+                padding: "0.4rem 0.875rem",
+                fontSize: "0.85rem",
+                color: "var(--text)",
+                textDecoration: "none",
+                transition: "all 0.2s ease"
+              }}
+            >
+              {cat}
+            </a>
+          ))}
+        </div>
+
+        {/* Stats Row */}
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))",
+          gap: "1rem",
+          maxWidth: "500px",
+          margin: "0 auto"
+        }}>
+          <div style={{
+            background: "var(--card)",
+            border: "1px solid var(--border)",
+            borderRadius: "12px",
+            padding: "1rem"
+          }}>
+            <div style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--brand)" }}>
+              {instructorData.courseCount}
+            </div>
+            <div style={{ fontSize: "0.8rem", color: "var(--muted)" }}>Courses</div>
+          </div>
+          
+          <div style={{
+            background: "var(--card)",
+            border: "1px solid var(--border)",
+            borderRadius: "12px",
+            padding: "1rem"
+          }}>
+            <div style={{ fontSize: "1.5rem", fontWeight: 700, color: "hsl(210, 100%, 65%)" }}>
+              {instructorData.totalStudents.toLocaleString()}
+            </div>
+            <div style={{ fontSize: "0.8rem", color: "var(--muted)" }}>Students</div>
+          </div>
+          
+          <div style={{
+            background: "var(--card)",
+            border: "1px solid var(--border)",
+            borderRadius: "12px",
+            padding: "1rem"
+          }}>
+            <div style={{ fontSize: "1.5rem", fontWeight: 700, color: "hsl(35, 90%, 68%)" }}>
+              {instructorData.avgRating}★
+            </div>
+            <div style={{ fontSize: "0.8rem", color: "var(--muted)" }}>Avg Rating</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* Courses Section */}
+    <section style={{ padding: "3rem 1rem" }}>
+      <div class="container" style={{ maxWidth: "1400px" }}>
+        <div style={{ 
+          display: "flex", 
+          justifyContent: "space-between", 
+          alignItems: "center", 
+          marginBottom: "2rem",
+          flexWrap: "wrap",
+          gap: "1rem"
+        }}>
+          <div>
+            <h2 style={{ 
+              fontSize: "1.5rem", 
+              fontWeight: 700, 
+              color: "var(--text)", 
+              margin: "0 0 0.25rem" 
+            }}>
+              <span style={{ color: "var(--brand)" }}>{instructorName}'s</span> Free Courses
+            </h2>
+            <p style={{ color: "var(--muted)", margin: 0, fontSize: "0.9rem" }}>
+              {instructorData.courseCount} courses with verified coupons
+            </p>
+          </div>
+          
+          <a href="/instructors" style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.4rem",
+            padding: "0.5rem 1rem",
+            background: "var(--card)",
+            border: "1px solid var(--border)",
+            borderRadius: "8px",
+            color: "var(--text)",
+            textDecoration: "none",
+            fontSize: "0.875rem",
+            fontWeight: 600
+          }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+            </svg>
+            All Instructors
+          </a>
+        </div>
+
+        {/* Courses Grid */}
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+          gap: "1.5rem",
+          marginBottom: "3rem"
+        }}>
+          {instructorCourses.map((course) => (
+            <DealCard deal={course} />
+          ))}
+        </div>
+
+        {/* No Courses Fallback */}
+        {instructorCourses.length === 0 && (
+          <div style={{ 
+            textAlign: "center", 
+            padding: "4rem 2rem",
+            background: "var(--card)",
+            borderRadius: "16px",
+            border: "1px solid var(--border)"
+          }}>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="var(--muted)" style={{ marginBottom: "1rem" }}>
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            </svg>
+            <h3 style={{ color: "var(--text)", marginBottom: "0.5rem" }}>No courses available</h3>
+            <p style={{ color: "var(--muted)" }}>This instructor currently has no active deals.</p>
+          </div>
+        )}
+      </div>
+    </section>
+
+    {/* FAQ Section */}
+    <section style={{ padding: "3rem 1rem", background: "var(--bg)" }}>
+      <div class="container" style={{ maxWidth: "900px" }}>
+        <h2 style={{ 
+          fontSize: "1.5rem", 
+          fontWeight: 700, 
+          marginBottom: "2rem",
+          textAlign: "center"
+        }}>
+          Frequently Asked Questions about {instructorName}
+        </h2>
+        
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+          {faqs.map((faq, index) => (
+            <div 
+              itemscope 
+              itemprop="mainEntity" 
+              itemtype="https://schema.org/Question"
+              style={{
+                background: "var(--card)",
+                border: "1px solid var(--border)",
+                borderRadius: "12px",
+                overflow: "hidden"
+              }}
+            >
+              <div style={{ padding: "1.25rem 1.5rem", borderBottom: "1px solid var(--border)" }}>
+                <h3 itemprop="name" style={{ margin: 0, fontSize: "1rem", fontWeight: 600, color: "var(--text)" }}>
+                  {faq.q}
+                </h3>
+              </div>
+              <div 
+                itemscope 
+                itemprop="acceptedAnswer" 
+                itemtype="https://schema.org/Answer"
+                style={{ padding: "1.25rem 1.5rem", background: "rgba(255,193,7,0.03)" }}
+              >
+                <p itemprop="text" style={{ margin: 0, color: "var(--muted)", lineHeight: 1.6, fontSize: "0.95rem" }}>
+                  {faq.a}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+</style>

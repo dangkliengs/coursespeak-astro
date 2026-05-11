@@ -5,25 +5,33 @@ import { readDeals } from "../lib/store";
 
 const allDeals = await readDeals();
 
+// Get language filter from query params
+const languageFilter = Astro.url.searchParams.get('language');
+
+// Filter deals by language if provided
+const filteredDeals = languageFilter
+  ? allDeals.filter((d: any) => d.language === languageFilter)
+  : allDeals;
+
 const PAGE_SIZE = 12;
 
 // Get current page from URL params
 const currentPage = Math.max(1, parseInt(Astro.params.page || '1', 10));
 
-// Pagination calculation
-const totalPages = Math.ceil(allDeals.length / PAGE_SIZE);
+// Pagination calculation (use filtered deals)
+const totalPages = Math.ceil(filteredDeals.length / PAGE_SIZE);
 const startIndex = (currentPage - 1) * PAGE_SIZE;
 const endIndex = startIndex + PAGE_SIZE;
-const currentItems = allDeals.slice(startIndex, endIndex);
+const currentItems = filteredDeals.slice(startIndex, endIndex);
 
-// Pagination URLs
+// Pagination URLs (include language filter if active)
 const siteUrl = "https://coursespeak.com";
-const baseDealsUrl = `${siteUrl}/deals`;
-const currentUrl = currentPage === 1 ? baseDealsUrl : `${baseDealsUrl}/${currentPage}`;
+const baseDealsUrl = languageFilter ? `${siteUrl}/deals?language=${encodeURIComponent(languageFilter)}` : `${siteUrl}/deals`;
+const currentUrl = currentPage === 1 ? baseDealsUrl : `${baseDealsUrl}/${currentPage}${languageFilter ? `?language=${encodeURIComponent(languageFilter)}` : ''}`;
 const prevUrl = currentPage > 1
-  ? (currentPage === 2 ? baseDealsUrl : `${baseDealsUrl}/${currentPage - 1}`)
+  ? (currentPage === 2 ? baseDealsUrl : `${baseDealsUrl}/${currentPage - 1}${languageFilter ? `?language=${encodeURIComponent(languageFilter)}` : ''}`)
   : null;
-const nextUrl = currentPage < totalPages ? `${baseDealsUrl}/${currentPage + 1}` : null;
+const nextUrl = currentPage < totalPages ? `${baseDealsUrl}/${currentPage + 1}${languageFilter ? `?language=${encodeURIComponent(languageFilter)}` : ''}` : null;
 
 // Dynamic SEO
 const currentDate = new Date();
@@ -32,11 +40,12 @@ const monthNames = ["January","February","March","April","May","June",
 const currentMonth = monthNames[currentDate.getMonth()];
 const currentYear = currentDate.getFullYear();
 
-// Real stats from data
-const totalDeals = allDeals.length;
-const freeDeals = allDeals.filter((d: any) => d.price === 0 || d.price === null).length;
+// Real stats from data (use filtered deals if filter is active)
+const displayDeals = filteredDeals;
+const totalDeals = displayDeals.length;
+const freeDeals = displayDeals.filter((d: any) => d.price === 0 || d.price === null).length;
 const avgSavings = (() => {
-  const valid = allDeals.filter((d: any) => d.originalPrice && d.price !== undefined && d.originalPrice > 0);
+  const valid = displayDeals.filter((d: any) => d.originalPrice && d.price !== undefined && d.originalPrice > 0);
   if (valid.length === 0) return 90;
   const total = valid.reduce((sum: number, d: any) =>
     sum + ((d.originalPrice - (d.price ?? 0)) / d.originalPrice) * 100, 0);
@@ -45,11 +54,15 @@ const avgSavings = (() => {
 
 // Page-aware title & description
 const pageTitle = currentPage === 1
-  ? `Free Udemy Coupons ${currentMonth} ${currentYear} | ${totalDeals}+ 100% Off Deals`
+  ? (languageFilter
+    ? `${languageFilter} Udemy Coupons ${currentMonth} ${currentYear} | ${totalDeals}+ Deals`
+    : `Free Udemy Coupons ${currentMonth} ${currentYear} | ${totalDeals}+ 100% Off Deals`)
   : `Udemy Deals — Page ${currentPage} of ${totalPages} | CourseSpeak`;
 
 const pageDescription = currentPage === 1
-  ? `Browse ${totalDeals}+ verified Udemy coupons with ${freeDeals}+ free courses. Save up to ${avgSavings}% on programming, web development, data science and more. Updated daily.`
+  ? (languageFilter
+    ? `Browse ${totalDeals} verified ${languageFilter} Udemy coupons with ${freeDeals}+ free courses. Save up to ${avgSavings}% on programming, web development, data science and more.`
+    : `Browse ${totalDeals}+ verified Udemy coupons with ${freeDeals}+ free courses. Save up to ${avgSavings}% on programming, web development, data science and more. Updated daily.`)
   : `Page ${currentPage} of Udemy deals. Browse more verified free courses and 100% off coupons on CourseSpeak.`;
 
 // FAQ data — identical between schema and visible HTML (Google requirement)
@@ -265,10 +278,10 @@ const structuredData = {
       <div style={{ background: "var(--card)", borderBottom: "1px solid var(--border)", padding: "1.5rem 0", textAlign: "center" }}>
         <div class="container">
           <h1 style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--text)", margin: "0 0 0.25rem" }}>
-            Udemy Deals & Free Coupons — Page {currentPage}
+            {languageFilter ? `${languageFilter} Udemy Deals — Page ${currentPage}` : `Udemy Deals & Free Coupons — Page ${currentPage}`}
           </h1>
           <p style={{ color: "var(--muted)", margin: 0, fontSize: "0.9rem" }}>
-            Showing {startIndex + 1}–{Math.min(endIndex, allDeals.length)} of {allDeals.length} verified courses
+            Showing {startIndex + 1}–{Math.min(endIndex, filteredDeals.length)} of {filteredDeals.length} verified courses
           </p>
         </div>
       </div>
@@ -281,13 +294,27 @@ const structuredData = {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem", flexWrap: "wrap", gap: "1rem" }}>
           <div>
             <h2 style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--text)", margin: "0 0 0.25rem" }}>
-              <span style={{ color: "var(--brand)" }}>Latest</span> Udemy Coupons & Deals
+              <span style={{ color: "var(--brand)" }}>{languageFilter ? `${languageFilter}` : "Latest"}</span> Udemy Coupons & Deals
             </h2>
             <p style={{ color: "var(--muted)", margin: 0, fontSize: "0.9rem" }}>
-              Showing {startIndex + 1}–{Math.min(endIndex, allDeals.length)} of {allDeals.length} courses
+              Showing {startIndex + 1}–{Math.min(endIndex, filteredDeals.length)} of {filteredDeals.length} courses
               {currentPage > 1 ? ` — Page ${currentPage}` : ""}
             </p>
           </div>
+          {languageFilter && (
+            <a href="/deals" style={{
+              display: "inline-flex", alignItems: "center", gap: "0.4rem",
+              padding: "0.5rem 1rem", background: "var(--card)",
+              border: "1px solid var(--border)", borderRadius: "8px",
+              color: "var(--text)", textDecoration: "none",
+              fontSize: "0.875rem", fontWeight: 600
+            }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+              </svg>
+              Clear Filter
+            </a>
+          )}
           <a href="/categories" style={{
             display: "inline-flex", alignItems: "center", gap: "0.4rem",
             padding: "0.5rem 1rem", background: "var(--card)",

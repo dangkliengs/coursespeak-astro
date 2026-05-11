@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import { readDeals } from '../lib/store';
 import type { Deal } from '../types/deal.d';
+import { parseInstructors, createInstructorSlug } from '../lib/instructors';
 
 // ─────────────────────────────────────────────
 // TYPES
@@ -23,33 +24,41 @@ interface Instructor {
 const deals: Deal[] = await readDeals();
 const instructorMap = new Map<string, Instructor>();
 
+// ... parseInstructors removed (using import)
+
 deals.forEach((deal: Deal) => {
   if (!deal.instructor) return;
+  
+  // Split comma-separated instructors
+  const instructorNames = parseInstructors(deal.instructor);
+  
+  // Add course to each individual instructor
+  instructorNames.forEach((instructorName) => {
+    if (!instructorMap.has(instructorName)) {
+      instructorMap.set(instructorName, {
+        name: instructorName,
+        courses: [],
+        totalStudents: 0,
+        avgRating: 0,
+        categories: [],
+        totalReviews: 0,
+        provider: deal.provider || 'Udemy',
+        courseCount: 0,
+      });
+    }
 
-  if (!instructorMap.has(deal.instructor)) {
-    instructorMap.set(deal.instructor, {
-      name: deal.instructor,
-      courses: [],
-      totalStudents: 0,
-      avgRating: 0,
-      categories: [],
-      totalReviews: 0,
-      provider: deal.provider || 'Udemy',
-      courseCount: 0,
-    });
-  }
-
-  const inst = instructorMap.get(deal.instructor)!;
-  inst.courses.push(deal);
-  if (deal.students) inst.totalStudents += deal.students;
-  if (deal.rating) {
-    const count = inst.courses.length;
-    inst.avgRating = (inst.avgRating * (count - 1) + deal.rating) / count;
-    inst.totalReviews += deal.students || 0;
-  }
-  if (deal.category && !inst.categories.includes(deal.category)) {
-    inst.categories.push(deal.category);
-  }
+    const inst = instructorMap.get(instructorName)!;
+    inst.courses.push(deal);
+    if (deal.students) inst.totalStudents += deal.students;
+    if (deal.rating) {
+      const count = inst.courses.length;
+      inst.avgRating = (inst.avgRating * (count - 1) + deal.rating) / count;
+      inst.totalReviews += deal.students || 0;
+    }
+    if (deal.category && !inst.categories.includes(deal.category)) {
+      inst.categories.push(deal.category);
+    }
+  });
 });
 
 const instructors: Instructor[] = Array.from(instructorMap.values())
@@ -403,11 +412,21 @@ const structuredData = {
 
                 {/* Instructor header */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-                  <div class="inst-avatar" aria-hidden="true">
+                  <a 
+                    href={`/instructor/${createInstructorSlug(instructor.name)}`}
+                    class="inst-avatar" 
+                    aria-hidden="true"
+                    style={{ textDecoration: 'none' }}
+                  >
                     {getInitials(instructor.name)}
-                  </div>
+                  </a>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <h3 class="inst-name">{instructor.name}</h3>
+                    <a 
+                      href={`/instructor/${createInstructorSlug(instructor.name)}`}
+                      style={{ textDecoration: 'none' }}
+                    >
+                      <h3 class="inst-name" style={{ cursor: 'pointer' }}>{instructor.name}</h3>
+                    </a>
                     <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.35rem', fontSize: '0.85rem', color: 'var(--muted)' }}>
                       <span>{instructor.courseCount} courses</span>
                       <span>·</span>
@@ -474,15 +493,15 @@ const structuredData = {
                   </div>
                 )}
 
-                {/* Single CTA — no "Free Only" button */}
+                {/* Single CTA — link to instructor detail page */}
                 <a
-                  href={`/search?q=${encodeURIComponent(instructor.name)}`}
+                  href={`/instructor/${createInstructorSlug(instructor.name)}`}
                   class="cta-btn"
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
                     <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
                   </svg>
-                  View All Coupons
+                  View All Courses
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style={{ marginLeft: 'auto', opacity: 0.6 }}>
                     <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
                   </svg>

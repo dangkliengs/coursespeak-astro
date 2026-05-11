@@ -568,7 +568,7 @@ const currentPath = Astro.url.pathname;
           borderBottom: "1px solid var(--border)"
         }}
       >
-        <ol style={{ display: "flex", gap: "8px", listStyle: "none", margin: 0, padding: 0, alignItems: "center" }}>
+        <ol style={{ display: "flex", gap: "8px", listStyle: "none", margin: 0, padding: 0, alignItems: "center", flexWrap: "wrap" }}>
           <li style={{ display: "flex", alignItems: "center" }}>
             <a href="/" style={{ color: "var(--muted)", textDecoration: "none", display: "flex", alignItems: "center", gap: "4px" }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -577,23 +577,110 @@ const currentPath = Astro.url.pathname;
               <span>Home</span>
             </a>
           </li>
-          <li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
-          <li style={{ display: "flex", alignItems: "center" }}>
-            <span style={{ color: "var(--text)", fontWeight: 500 }}>
-              {currentPath === '/deals' ? 'All Deals' : 
-               currentPath === '/categories' ? 'Categories' :
-               currentPath === '/topics' ? 'Topics' :
-               currentPath === '/popular' ? 'Popular' :
-               currentPath === '/instructors' ? 'Instructors' :
-               currentPath === '/blog' ? 'Blog' :
-               currentPath === '/about' ? 'About' :
-               currentPath === '/contact' ? 'Contact' :
-               currentPath.startsWith('/deal/') ? 'Course Details' :
-               currentPath.startsWith('/categories/') ? 'Category' :
-               currentPath.startsWith('/blog/') ? 'Blog' :
-               'Page'}
-            </span>
-          </li>
+          
+          {/* Build breadcrumb based on path */}
+          {currentPath === '/deals' && (
+            <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
+            <li><span style={{ color: "var(--text)", fontWeight: 500 }}>All Deals</span></li></>
+          )}
+          
+          {currentPath === '/categories' && (
+            <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
+            <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Categories</span></li></>
+          )}
+          
+          {currentPath.startsWith('/categories/') && (
+            <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
+            <li><a href="/categories" style={{ color: "var(--muted)", textDecoration: "none" }}>Categories</a></li>
+            <li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
+            <li><span style={{ color: "var(--text)", fontWeight: 500 }}>{currentPath.split('/')[2]?.replace(/-/g, ' ')?.replace(/\b\w/g, l => l.toUpperCase()) || 'Category'}</span></li></>
+          )}
+          
+          {currentPath === '/topics' && (
+            <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
+            <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Topics</span></li></>
+          )}
+          
+          {currentPath.startsWith('/topic/') && (
+            <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
+            <li><a href="/topics" style={{ color: "var(--muted)", textDecoration: "none" }}>Topics</a></li>
+            <li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
+            <li><span style={{ color: "var(--text)", fontWeight: 500 }}>{currentPath.split('/')[2]?.replace(/-/g, ' ')?.replace(/\b\w/g, l => l.toUpperCase()) || 'Topic'}</span></li></>
+          )}
+          
+          {currentPath === '/popular' && (
+            <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
+            <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Popular</span></li></>
+          )}
+          
+          {currentPath === '/instructors' && (
+            <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
+            <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Instructors</span></li></>
+          )}
+          
+          {currentPath.startsWith('/instructor/') && (
+            <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
+            <li><a href="/instructors" style={{ color: "var(--muted)", textDecoration: "none" }}>Instructors</a></li>
+            <li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
+            <li><span style={{ color: "var(--text)", fontWeight: 500 }}>{currentPath.split('/')[2]?.replace(/-/g, ' ')?.replace(/\b\w/g, l => l.toUpperCase()) || 'Instructor'}</span></li></>
+          )}
+          
+          {currentPath === '/blog' && (
+            <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
+            <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Blog</span></li></>
+          )}
+          
+          {currentPath.startsWith('/blog/') && (
+            <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
+            <li><a href="/blog" style={{ color: "var(--muted)", textDecoration: "none" }}>Blog</a></li>
+            <li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
+            <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Post</span></li></>
+          )}
+          
+          {currentPath === '/about' && (
+            <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
+            <li><span style={{ color: "var(--text)", fontWeight: 500 }}>About</span></li></>
+          )}
+          
+          {currentPath === '/contact' && (
+            <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
+            <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Contact</span></li></>
+          )}
+          
+          {currentPath === '/privacy' && (
+            <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
+            <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Privacy Policy</span></li></>
+          )}
+          
+          {currentPath === '/terms' && (
+            <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
+            <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Terms of Service</span></li></>
+          )}
+          
+          {currentPath === '/sitemap' && (
+            <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
+            <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Sitemap</span></li></>
+          )}
+          
+          {currentPath === '/how-to-redeem-coupon' && (
+            <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
+            <li><span style={{ color: "var(--text)", fontWeight: 500 }}>How to Redeem</span></li></>
+          )}
+          
+          {currentPath === '/udemy-coupons-guide' && (
+            <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
+            <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Udemy Guide</span></li></>
+          )}
+          
+          {/* Fallback for other pages */}
+          {!['/deals', '/categories', '/topics', '/popular', '/instructors', '/blog', '/about', '/contact', '/privacy', '/terms', '/sitemap', '/how-to-redeem-coupon', '/udemy-coupons-guide'].includes(currentPath) && 
+           !currentPath.startsWith('/categories/') && 
+           !currentPath.startsWith('/topic/') && 
+           !currentPath.startsWith('/instructor/') && 
+           !currentPath.startsWith('/blog/') && (
+            <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
+            <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Page</span></li></>
+          )}
         </ol>
       </nav>
     )}
@@ -966,15 +1053,24 @@ const currentPath = Astro.url.pathname;
                   transition: "all 0.3s ease"
                 }}>Contact Us</a>
               </li>
-                             <li style={{ marginBottom: "12px" }}>
-                 <a href="/success-stories" style={{ 
-                   color: "hsl(215, 20%, 85%)", 
-                   textDecoration: "none",
-                   fontSize: "0.9rem",
-                   fontWeight: "500",
-                   transition: "all 0.3s ease"
-                 }}>Student Success Stories</a>
-               </li>
+              <li style={{ marginBottom: "12px" }}>
+                <a href="/success-stories" style={{ 
+                  color: "hsl(215, 20%, 85%)", 
+                  textDecoration: "none",
+                  fontSize: "0.9rem",
+                  fontWeight: "500",
+                  transition: "all 0.3s ease"
+                }}>Student Success Stories</a>
+              </li>
+              <li style={{ marginBottom: "12px" }}>
+                <a href="/sitemap" style={{ 
+                  color: "hsl(215, 20%, 85%)", 
+                  textDecoration: "none",
+                  fontSize: "0.9rem",
+                  fontWeight: "500",
+                  transition: "all 0.3s ease"
+                }}>Sitemap</a>
+              </li>
             </ul>
           </div>
         </div>

@@ -69,6 +69,36 @@ function getTopicDescription(topic: string): string {
   return `Udemy courses on ${topic} covering foundational to advanced skills with practical projects and expert instruction.`;
 }
 
+// Helper for FAQ dynamic content
+const pythonCount = topicCounts['Python'] || topicCounts['python'] || 20;
+
+const faqData = [
+  {
+    q: "What are Udemy course topics on CourseSpeak?",
+    a: "CourseSpeak organizes Udemy courses into specialized topic pages - such as Python, Web Development, Data Science, and Cybersecurity. Each topic page lists verified coupon deals for courses in that subject area, updated daily."
+  },
+  {
+    q: "How do I find free or discounted Udemy courses by topic?",
+    a: "Click any topic on this page to browse verified Udemy coupon deals for that subject. Each listing shows the discount percentage, original price, and a direct enrollment link. Click \"Redeem Coupon\" to apply the discount automatically."
+  },
+  {
+    q: "Are the Udemy coupons on CourseSpeak actually free?",
+    a: "Many coupons listed on CourseSpeak offer 100% off, making the course completely free. Others provide significant discounts (80-95% off). Each listing shows the current price after coupon so you know exactly what to expect before clicking."
+  },
+  {
+    q: "How often are new Udemy topic deals added?",
+    a: "New deals are added every day. Udemy coupons expire quickly, so we recommend checking back frequently or bookmarking the topic page most relevant to your learning goals."
+  },
+  {
+    q: "Which topics have the most free Udemy courses?",
+    a: `Popular topics with the most free courses include Python (${pythonCount}+ courses), Web Development, Data Science, JavaScript, and React. Check the course count badge on each topic card.`
+  },
+  {
+    q: "Can I learn a complete skill by browsing one topic?",
+    a: "Yes - each topic page contains courses from beginner to advanced levels. You can start with fundamentals and progress through intermediate and advanced courses, often with learning paths suggested by the community."
+  }
+];
+
 // Structured data
 const structuredData = {
   "@context": "https://schema.org",
@@ -107,50 +137,22 @@ const structuredData = {
     },
     {
       "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "What are Udemy course topics on CourseSpeak?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "CourseSpeak organizes Udemy courses into specialized topic pages - such as Python, Web Development, Data Science, and Cybersecurity. Each topic page lists verified coupon deals for courses in that subject area, updated daily."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How do I find free or discounted Udemy courses by topic?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Click any topic on this page to browse verified Udemy coupon deals for that subject. Each listing shows the discount percentage, original price, and a direct enrollment link. Click \"Redeem Coupon\" to apply the discount automatically."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Are the Udemy coupons on CourseSpeak actually free?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Many coupons listed on CourseSpeak offer 100% off, making the course completely free. Others provide significant discounts (80-95% off). Each listing shows the current price after coupon so you know exactly what to expect before clicking."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How often are new Udemy topic deals added?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "New deals are added every day. Udemy coupons expire quickly, so we recommend checking back frequently or bookmarking the topic page most relevant to your learning goals."
-          }
+      "mainEntity": faqData.map(faq => ({
+        "@type": "Question",
+        "name": faq.q,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": faq.a
         }
-      ]
+      }))
     }
   ]
 };
 
-// Topic card accent colors
-const accentColors = [
-  "#4a90e2", "#e91e63", "#00bcd4", "#4caf50",
-  "#ff9800", "#9c27b0", "#607d8b", "#3f51b5",
-  "#f44336", "#009688", "#795548", "#ff5722"
-];
+// Use consistent theme colors
+const brandColor = "var(--brand)";
+const brandSoft = "rgba(255, 193, 7, 0.1)";
+const brandBorder = "rgba(255, 193, 7, 0.3)";
 ---
 
 <Layout title={title} description={description}>
@@ -297,7 +299,7 @@ const accentColors = [
             style="display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:1.5rem;"
           >
             {topicsData.map((topicData, index) => {
-              const accent = accentColors[index % accentColors.length];
+              const accent = brandColor;
               const description = getTopicDescription(topicData.name);
 
               return (
@@ -305,11 +307,11 @@ const accentColors = [
                   role="listitem"
                   style="background:linear-gradient(135deg, var(--bg) 0%, rgba(255,255,255,0.02) 100%); border:1px solid var(--border); border-radius:12px; overflow:hidden; transition:all 0.3s ease; cursor:pointer; position:relative;"
                   class="topic-item"
-                  onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 12px 32px rgba(0,0,0,0.15)'; this.style.borderColor=accent"
+                  onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 12px 32px rgba(255,193,7,0.15)'; this.style.borderColor='var(--brand)'"
                   onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'; this.style.borderColor='var(--border)'"
                 >
                   {/* Gradient accent line */}
-                  <div style={`height:4px; background:linear-gradient(90deg, ${accent}, ${accent}88); position:absolute; top:0; left:0; right:0;`}></div>
+                  <div style={`height:4px; background:linear-gradient(90deg, var(--brand), rgba(255,193,7,0.5)); position:absolute; top:0; left:0; right:0;`}></div>
                   
                   <div style="padding:1.5rem;">
                     {/* Icon and Title */}
@@ -333,8 +335,8 @@ const accentColors = [
                           <span style={`font-size:0.75rem; font-weight:600; color:${accent}; background:${accent}11; padding:0.2rem 0.5rem; border-radius:6px; border:1px solid ${accent}33;`}>
                             {topicData.count} courses
                           </span>
-                          <span style="font-size:0.75rem; font-weight:600; color:#f59e0b; background:#f59e0b11; padding:0.2rem 0.5rem; border-radius:6px; border:1px solid #f59e0b33;">
-                            ¥ 4.5
+                          <span style="font-size:0.75rem; font-weight:600; color:var(--brand); background:rgba(255,193,7,0.1); padding:0.2rem 0.5rem; border-radius:6px; border:1px solid rgba(255,193,7,0.3);">
+                            ★ 4.5
                           </span>
                         </div>
                       </div>
@@ -352,10 +354,10 @@ const accentColors = [
                       <span style="font-size:0.8rem; font-weight:600; color:var(--brand); background:var(--brand)11; padding:0.3rem 0.6rem; border-radius:6px;">
                         {topicData.count} courses
                       </span>
-                      <span style="font-size:0.8rem; font-weight:600; color:#f59e0b; background:#f59e0b11; padding:0.3rem 0.6rem; border-radius:6px;">
-                        ¥ 4.5 rating
+                      <span style="font-size:0.8rem; font-weight:600; color:var(--brand); background:rgba(255,193,7,0.1); padding:0.3rem 0.6rem; border-radius:6px;">
+                        ★ 4.5 rating
                       </span>
-                      <span style="font-size:0.8rem; font-weight:600; color:#10b981; background:#10b98111; padding:0.3rem 0.6rem; border-radius:6px;">
+                      <span style="font-size:0.8rem; font-weight:600; color:var(--muted); background:var(--card); padding:0.3rem 0.6rem; border-radius:6px;">
                         {Math.floor(Math.random() * 5 + 1)}k students
                       </span>
                     </div>
@@ -365,10 +367,10 @@ const accentColors = [
                       <span style="font-size:0.75rem; font-weight:600; color:var(--muted); background:var(--brand)11; padding:0.3rem 0.8rem; border-radius:20px;">
                         Verified coupons
                       </span>
-                      <span style="font-size:0.75rem; font-weight:600; color:var(--muted); background:#f59e0b11; padding:0.3rem 0.8rem; border-radius:20px;">
+                      <span style="font-size:0.75rem; font-weight:600; color:var(--muted); background:var(--card); padding:0.3rem 0.8rem; border-radius:20px; border:1px solid var(--border);">
                         Daily updates
                       </span>
-                      <span style={`font-size:0.75rem; font-weight:600; color:${accent}; background:${accent}11; padding:0.3rem 0.8rem; border-radius:20px;`}>
+                      <span style="font-size:0.75rem; font-weight:600; color:var(--brand); background:rgba(255,193,7,0.1); padding:0.3rem 0.8rem; border-radius:20px; border:1px solid rgba(255,193,7,0.3);">
                         Popular
                       </span>
                     </div>
@@ -376,11 +378,11 @@ const accentColors = [
                     {/* CTA Button */}
                     <a
                       href={`/topics/${topicData.slug}`}
-                      style={`display:block; text-align:center; padding:0.8rem; background:linear-gradient(135deg, ${accent}, ${accent}dd); color:white; text-decoration:none; border-radius:8px; font-weight:700; font-size:0.9rem; transition:all 0.2s; box-shadow:0 4px 12px ${accent}33;`}
+                      style="display:block; text-align:center; padding:0.8rem; background:linear-gradient(135deg, var(--brand), rgba(255,193,7,0.9)); color:var(--bg); text-decoration:none; border-radius:8px; font-weight:700; font-size:0.9rem; transition:all 0.2s; box-shadow:0 4px 12px rgba(255,193,7,0.2);"
                       aria-label={`Browse ${topicData.count} ${topicData.name} courses`}
                       onclick="event.stopPropagation()"
-                      onmouseover={`this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 20px ${accent}44'`}
-                      onmouseout={`this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px ${accent}33'`}
+                      onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 20px rgba(255,193,7,0.3)'"
+                      onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(255,193,7,0.2)'"
                     >
                       Explore {topicData.name} Courses
                     </a>
@@ -409,38 +411,28 @@ const accentColors = [
             Common questions about how CourseSpeak's topic pages work and how to get the best Udemy deals.
           </p>
 
-          <div style="display:flex; flex-direction:column; gap:1rem;">
-            {[
-              {
-                q: "What are Udemy course topics on CourseSpeak?",
-                a: "CourseSpeak organizes Udemy courses into specialized topic pages - such as Python, Web Development, Data Science, and Cybersecurity. Each topic page lists verified coupon deals for courses in that subject area, updated daily."
-              },
-              {
-                q: "How do I find free or discounted Udemy courses by topic?",
-                a: "Click any topic on this page to browse verified Udemy coupon deals for that subject. Each listing shows the discount percentage, original price, and a direct enrollment link. Click \"Redeem Coupon\" to apply the discount automatically."
-              },
-              {
-                q: "Are the Udemy coupons on CourseSpeak actually free?",
-                a: "Many coupons listed on CourseSpeak offer 100% off, making the course completely free. Others provide significant discounts (80-95% off). Each listing shows the current price after coupon so you know exactly what to expect before clicking."
-              },
-              {
-                q: "How often are new Udemy topic deals added?",
-                a: "New deals are added every day. Udemy coupons expire quickly, so we recommend checking back frequently or bookmarking the topic page most relevant to your learning goals."
-              }
-            ].map((faq, i) => (
-              <details
+          <div style="display:flex; flex-direction:column; gap:1rem;" itemscope itemtype="https://schema.org/FAQPage">
+            {faqData.map((faq) => (
+              <div
+                itemprop="mainEntity"
+                itemscope
+                itemtype="https://schema.org/Question"
                 style="background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden;"
               >
-                <summary
-                  style="padding:1.1rem 1.25rem; font-weight:600; color:var(--text); font-size:0.95rem; cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; gap:1rem;"
+                <div
+                  style="padding:1.1rem 1.25rem; font-weight:600; color:var(--text); font-size:0.95rem; border-bottom:1px solid var(--border);"
                 >
-                  {faq.q}
-                  <span aria-hidden="true" style="color:var(--muted); flex-shrink:0; font-size:1.1rem;">+</span>
-                </summary>
-                <div style="padding:0 1.25rem 1.1rem; color:var(--muted); font-size:0.9rem; line-height:1.65;">
-                  <p style="margin:0;">{faq.a}</p>
+                  <span itemprop="name">{faq.q}</span>
                 </div>
-              </details>
+                <div
+                  itemprop="acceptedAnswer"
+                  itemscope
+                  itemtype="https://schema.org/Answer"
+                  style="padding:1.1rem 1.25rem; background:rgba(255,193,7,0.03);"
+                >
+                  <p itemprop="text" style="margin:0; color:var(--muted); font-size:0.9rem; line-height:1.65;">{faq.a}</p>
+                </div>
+              </div>
             ))}
           </div>
         </div>
@@ -512,7 +504,7 @@ const accentColors = [
     }
   </style>
 
-  <script define:vars={{ topicsData, accentColors }}>
+  <script define:vars={{ topicsData }}>
     // Helper functions
     function getTopicDescription(topicName) {
       const topic = topicName.toLowerCase();

@@ -128,29 +128,55 @@ const trustIndicators = [
   }
 ];
 
-// ─── Language Data ─────────────────────────────────────────────────────────────
-const languages = [
-  { code: "en", name: "English", flag: "https://flagcdn.com/w80/us.png", native: "English", udemyLocale: "en_US" },
-  { code: "es", name: "Spanish", flag: "https://flagcdn.com/w80/es.png", native: "Español", udemyLocale: "es_ES" },
-  { code: "fr", name: "French", flag: "https://flagcdn.com/w80/fr.png", native: "Français", udemyLocale: "fr_FR" },
-  { code: "de", name: "German", flag: "https://flagcdn.com/w80/de.png", native: "Deutsch", udemyLocale: "de_DE" },
-  { code: "pt", name: "Portuguese", flag: "https://flagcdn.com/w80/br.png", native: "Português", udemyLocale: "pt_BR" },
-  { code: "ja", name: "Japanese", flag: "https://flagcdn.com/w80/jp.png", native: "日本語", udemyLocale: "ja_JP" },
-  { code: "zh", name: "Chinese", flag: "https://flagcdn.com/w80/cn.png", native: "中文", udemyLocale: "zh_CN" },
-  { code: "ko", name: "Korean", flag: "https://flagcdn.com/w80/kr.png", native: "한국어", udemyLocale: "ko_KR" },
-  { code: "it", name: "Italian", flag: "https://flagcdn.com/w80/it.png", native: "Italiano", udemyLocale: "it_IT" },
-  { code: "ar", name: "Arabic", flag: "https://flagcdn.com/w80/sa.png", native: "العربية", udemyLocale: "ar_SA" },
-  { code: "ru", name: "Russian", flag: "https://flagcdn.com/w80/ru.png", native: "Русский", udemyLocale: "ru_RU" },
-  { code: "hi", name: "Hindi", flag: "https://flagcdn.com/w80/in.png", native: "हिन्दी", udemyLocale: "hi_IN" },
-  { code: "tr", name: "Turkish", flag: "https://flagcdn.com/w80/tr.png", native: "Türkçe", udemyLocale: "tr_TR" },
-  { code: "nl", name: "Dutch", flag: "https://flagcdn.com/w80/nl.png", native: "Nederlands", udemyLocale: "nl_NL" },
-  { code: "pl", name: "Polish", flag: "https://flagcdn.com/w80/pl.png", native: "Polski", udemyLocale: "pl_PL" },
-  { code: "id", name: "Indonesian", flag: "https://flagcdn.com/w80/id.png", native: "Bahasa Indonesia", udemyLocale: "id_ID" },
-  { code: "vi", name: "Vietnamese", flag: "https://flagcdn.com/w80/vn.png", native: "Tiếng Việt", udemyLocale: "vi_VN" },
-  { code: "th", name: "Thai", flag: "https://flagcdn.com/w80/th.png", native: "ไทย", udemyLocale: "th_TH" },
-  { code: "ms", name: "Malay", flag: "https://flagcdn.com/w80/my.png", native: "Bahasa Melayu", udemyLocale: "ms_MY" },
-  { code: "uk", name: "Ukrainian", flag: "https://flagcdn.com/w80/ua.png", native: "Українська", udemyLocale: "uk_UA" },
-];
+// ─── Language Data (Dynamic from deals.json) ─────────────────────────────────────
+
+// Normalize language names (fix typos like "Englilsh", "Engliish", etc.)
+function normalizeLanguage(lang: string | undefined): string | undefined {
+  if (!lang) return undefined;
+  const lower = lang.toLowerCase();
+  // Fix common typos
+  if (lower.startsWith('engl')) return 'English';
+  return lang;
+}
+
+// Extract unique languages from deals
+const uniqueLanguages = [...new Set(
+  allDeals
+    .map(d => d.language)
+    .filter(Boolean)
+    .map(normalizeLanguage)
+    .filter(Boolean) as string[]
+)];
+
+// Language metadata mapping
+const languageMetadata: Record<string, { code: string; name: string; flag: string; native: string; udemyLocale: string }> = {
+  "English": { code: "en", name: "English", flag: "https://flagcdn.com/w80/us.png", native: "English", udemyLocale: "en_US" },
+  "Spanish": { code: "es", name: "Spanish", flag: "https://flagcdn.com/w80/es.png", native: "Español", udemyLocale: "es_ES" },
+  "French": { code: "fr", name: "French", flag: "https://flagcdn.com/w80/fr.png", native: "Français", udemyLocale: "fr_FR" },
+  "German": { code: "de", name: "German", flag: "https://flagcdn.com/w80/de.png", native: "Deutsch", udemyLocale: "de_DE" },
+  "Portuguese": { code: "pt", name: "Portuguese", flag: "https://flagcdn.com/w80/br.png", native: "Português", udemyLocale: "pt_BR" },
+  "Japanese": { code: "ja", name: "Japanese", flag: "https://flagcdn.com/w80/jp.png", native: "日本語", udemyLocale: "ja_JP" },
+  "Chinese": { code: "zh", name: "Chinese", flag: "https://flagcdn.com/w80/cn.png", native: "中文", udemyLocale: "zh_CN" },
+  "Korean": { code: "ko", name: "Korean", flag: "https://flagcdn.com/w80/kr.png", native: "한국어", udemyLocale: "ko_KR" },
+  "Italian": { code: "it", name: "Italian", flag: "https://flagcdn.com/w80/it.png", native: "Italiano", udemyLocale: "it_IT" },
+  "Arabic": { code: "ar", name: "Arabic", flag: "https://flagcdn.com/w80/sa.png", native: "العربية", udemyLocale: "ar_SA" },
+  "Russian": { code: "ru", name: "Russian", flag: "https://flagcdn.com/w80/ru.png", native: "Русский", udemyLocale: "ru_RU" },
+  "Hindi": { code: "hi", name: "Hindi", flag: "https://flagcdn.com/w80/in.png", native: "हिन्दी", udemyLocale: "hi_IN" },
+  "Turkish": { code: "tr", name: "Turkish", flag: "https://flagcdn.com/w80/tr.png", native: "Türkçe", udemyLocale: "tr_TR" },
+  "Dutch": { code: "nl", name: "Dutch", flag: "https://flagcdn.com/w80/nl.png", native: "Nederlands", udemyLocale: "nl_NL" },
+  "Polish": { code: "pl", name: "Polish", flag: "https://flagcdn.com/w80/pl.png", native: "Polski", udemyLocale: "pl_PL" },
+  "Indonesian": { code: "id", name: "Indonesian", flag: "https://flagcdn.com/w80/id.png", native: "Bahasa Indonesia", udemyLocale: "id_ID" },
+  "Vietnamese": { code: "vi", name: "Vietnamese", flag: "https://flagcdn.com/w80/vn.png", native: "Tiếng Việt", udemyLocale: "vi_VN" },
+  "Thai": { code: "th", name: "Thai", flag: "https://flagcdn.com/w80/th.png", native: "ไทย", udemyLocale: "th_TH" },
+  "Malay": { code: "ms", name: "Malay", flag: "https://flagcdn.com/w80/my.png", native: "Bahasa Melayu", udemyLocale: "ms_MY" },
+  "Ukrainian": { code: "uk", name: "Ukrainian", flag: "https://flagcdn.com/w80/ua.png", native: "Українська", udemyLocale: "uk_UA" },
+};
+
+// Build languages array from actual deals data (show all for SEO competitiveness)
+const languages = uniqueLanguages
+  .map(lang => languageMetadata[lang])
+  .filter(Boolean)
+  .sort((a, b) => a.name.localeCompare(b.name));
 
 // ─── Platform Data ─────────────────────────────────────────────────────────────
 const platforms = [
@@ -863,19 +889,17 @@ const jsonLd = {
           <span style={{ color: "#92400E", fontWeight: 600, fontSize: "0.85rem" }}>Global Access</span>
         </div>
         <h2 id="languages-heading" style={{ fontSize: "clamp(1.8rem, 4vw, 2.5rem)", fontWeight: 700, color: "var(--text)", marginBottom: "0.75rem" }}>
-          Free Online Courses in <span style={{ color: "var(--brand)" }}>20+ Languages</span>
+          Free Online Courses in <span style={{ color: "var(--brand)" }}>Multiple Languages</span>
         </h2>
         <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "650px", margin: "0 auto", lineHeight: 1.65 }}>
-          Learn in your preferred language. Find free Udemy courses and online learning resources available in English, Spanish, French, German, Chinese, Japanese, and more.
+          Learn in your preferred language. Find free Udemy courses and online learning resources available in {languages.map(l => l.name).join(", ")}.
         </p>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))", gap: "1rem" }}>
         {languages.map((lang) => (
           <a
-            href={`https://www.udemy.com/?persist_locale=&locale=${lang.udemyLocale}`}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={`/deals?language=${encodeURIComponent(lang.name)}`}
             itemscope
             itemtype="https://schema.org/Language"
             style={{
