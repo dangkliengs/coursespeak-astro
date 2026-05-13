@@ -197,13 +197,17 @@ const title = String(deal.title || "").replace(/&amp;/g, "&").replace(/&quot;/g,
         <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--muted)">
           <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
         </svg>
-        <span style={{
-          color: "var(--text)",
-          fontSize: "0.85rem",
-          fontWeight: 600
-        }}>
+        <a 
+          href={`/instructor/${deal.instructor.toLowerCase().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-").substring(0, 100)}`}
+          style={{
+            color: "var(--text)",
+            fontSize: "0.85rem",
+            fontWeight: 600,
+            textDecoration: "none"
+          }}
+        >
           By {deal.instructor}
-        </span>
+        </a>
       </div>
     )}
 

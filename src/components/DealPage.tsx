@@ -892,7 +892,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                             </div>
                             <div style={{ marginTop: "1.5rem" }}>
                                 <a 
-                                    href={deal.url} 
+                                    href={`/instructor/${deal.instructor.toLowerCase().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-").substring(0, 100)}`}
                                     target="_blank" 
                                     rel="noopener noreferrer" 
                                     style={{
@@ -1330,6 +1330,26 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                     Share this deal
                                 </button>
                                 <ActionsPanel deal={{ ...deal, url: deal.url || '' }} />
+                            </div>
+
+                            {/* Affiliate Disclosure */}
+                            <div style={{
+                                marginTop: "1rem",
+                                padding: "0.75rem",
+                                background: "rgba(251, 191, 36, 0.05)",
+                                border: "1px solid rgba(251, 191, 36, 0.1)",
+                                borderRadius: "6px",
+                                fontSize: "0.75rem",
+                                color: "#9ca3af",
+                                textAlign: "center",
+                                lineHeight: 1.4
+                            }}>
+                                <span>We may earn a commission when you purchase through our links. </span>
+                                <a href="/affiliate-disclosure" style={{
+                                    color: "#FBBF24",
+                                    textDecoration: "none",
+                                    fontWeight: 600
+                                }}>Learn more</a>
                             </div>
                         </div>
                     </div>
