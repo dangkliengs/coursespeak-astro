@@ -104,7 +104,8 @@ function getTopDeals(courses: Deal[]): Deal[] {
 // ─────────────────────────────────────────────
 // AGGREGATED STATS
 // ─────────────────────────────────────────────
-const totalCourses  = instructors.reduce((s, i) => s + i.courseCount, 0);
+// One row per deal in deals.json — do not sum per-instructor counts (co-teachers double-count)
+const dealCount = deals.length;
 const totalStudents = instructors.reduce((s, i) => s + i.totalStudents, 0);
 const avgRating     = (
   instructors.reduce((s, i) => s + i.avgRating, 0) / (instructors.length || 1)
@@ -129,7 +130,7 @@ const currentYear  = now.getFullYear();
 const siteUrl      = 'https://coursespeak.com';
 const canonicalUrl = `${siteUrl}/instructors`;
 const title        = `Top Udemy Instructors with Free Coupons ${currentMonth} ${currentYear} | CourseSpeak`;
-const description  = `Browse ${instructors.length} expert Udemy instructors offering ${totalCourses}+ verified courses. Get free & discounted coupons updated daily — ${currentMonth} ${currentYear}.`;
+const description  = `Browse ${instructors.length} expert Udemy instructors offering ${dealCount}+ verified courses. Get free & discounted coupons updated daily — ${currentMonth} ${currentYear}.`;
 
 // ─────────────────────────────────────────────
 // FAQs — identical between schema and HTML (Google requirement)
@@ -141,7 +142,7 @@ const faqs = [
   },
   {
     q: 'How do I get a free course from a Udemy instructor?',
-    a: 'Click "View All Coupons" on any instructor card to see their latest verified deals. Click the coupon link — it redirects to Udemy with the discount automatically applied. For 100% off coupons, you can enroll completely free with no payment required.',
+    a: 'Click "View All Courses" on any instructor card to see their latest verified deals. Click the coupon link — it redirects to Udemy with the discount automatically applied. For 100% off coupons, you can enroll completely free with no payment required.',
   },
   {
     q: 'Are instructor coupons on CourseSpeak verified?',
@@ -154,6 +155,10 @@ const faqs = [
   {
     q: 'Do free Udemy courses from these instructors include certificates?',
     a: 'Yes. All Udemy courses obtained through coupons include official completion certificates, lifetime access, and all course materials including future updates — same as paid enrollment.',
+  },
+  {
+    q: 'Can I filter instructors by category or rating?',
+    a: 'Yes! Use the category and rating filters above the instructor grid to find instructors in specific topics like development, design, business, or data science. You can also sort by students, courses, rating, or name to find the perfect instructor for your learning goals.',
   },
 ];
 
@@ -181,6 +186,16 @@ const structuredData = {
       dateModified: now.toISOString().split('T')[0],
       inLanguage: 'en-US',
       breadcrumb: { '@id': `${canonicalUrl}#breadcrumb` },
+      about: {
+        '@type': 'Thing',
+        'name': 'Udemy Instructors with Free Coupons',
+        'description': 'Browse expert Udemy instructors offering verified discount coupons and free courses'
+      },
+      audience: {
+        '@type': 'Audience',
+        'audienceType': 'Learners worldwide seeking free and discounted courses from top Udemy instructors',
+        'geographicArea': ['United States', 'United Kingdom', 'India', 'Canada', 'Australia', 'Germany', 'France', 'Brazil', 'Japan', 'Global']
+      },
       mainEntity: {
         '@type': 'ItemList',
         name: `Top Udemy Instructors — ${currentMonth} ${currentYear}`,
@@ -195,6 +210,7 @@ const structuredData = {
             worksFor: { '@type': 'Organization', name: inst.provider },
             knowsAbout: inst.categories,
             description: `Expert Udemy instructor in ${inst.categories.join(', ')} with ${inst.courseCount} courses and ${inst.totalStudents.toLocaleString()} students.`,
+            areaServed: ['United States', 'United Kingdom', 'India', 'Canada', 'Australia', 'Germany', 'France', 'Brazil', 'Japan', 'Global'],
             ...(inst.avgRating
               ? {
                   aggregateRating: {
@@ -269,7 +285,7 @@ const structuredData = {
         }}>
           Discover exclusive discount codes from{' '}
           <strong style={{ color: 'var(--text)' }}>{instructors.length} expert instructors</strong>.
-          Browse <strong style={{ color: 'var(--text)' }}>{totalCourses.toLocaleString()} courses</strong> with up to{' '}
+          Browse <strong style={{ color: 'var(--text)' }}>{dealCount.toLocaleString()} courses</strong> with up to{' '}
           <strong style={{ color: 'var(--brand)' }}>100% off</strong> — verified and updated daily.
         </p>
 
@@ -277,7 +293,7 @@ const structuredData = {
         <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
           {[
             { label: `${instructors.length} Instructors`,         path: 'M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z',   color: 'var(--brand)' },
-            { label: `${totalCourses.toLocaleString()} Courses`,  path: 'M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 8H5V9h7v2zm0-4H5V5h7v2z',       color: 'hsl(35, 90%, 68%)' },
+            { label: `${dealCount.toLocaleString()} Courses`,  path: 'M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 8H5V9h7v2zm0-4H5V5h7v2z',       color: 'hsl(35, 90%, 68%)' },
             { label: `${totalFree}+ Free Courses`,                path: 'M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z',                                                                 color: 'hsl(120, 70%, 45%)' },
             { label: `${avgRating} Avg Rating`,                   path: 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z',                  color: 'hsl(210, 100%, 60%)' },
           ].map((stat) => (
@@ -527,44 +543,29 @@ const structuredData = {
       </div>
     </section>
 
-    {/* ── FAQ — synced with schema, identical to /deals pattern ── */}
+    {/* ── FAQ — synced with schema, full width grid layout ── */}
     <section class="card-gradient" style={{ padding: '4rem 1rem' }}>
-      <div class="container" style={{ maxWidth: '900px' }}>
+      <div class="container" style={{ maxWidth: '1400px' }}>
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <h2 style={{ fontSize: 'clamp(1.5rem, 4vw, 2rem)', fontWeight: 800, color: 'var(--text)', marginBottom: '0.75rem' }}>
-            Frequently Asked Questions
+            Frequently Asked Questions About Udemy Instructors
           </h2>
-          <p style={{ color: 'var(--muted)', fontSize: '1rem', maxWidth: '550px', margin: '0 auto', lineHeight: 1.6 }}>
-            Everything about Udemy instructor coupons on CourseSpeak
+          <p style={{ color: 'var(--muted)', fontSize: '1rem', maxWidth: '700px', margin: '0 auto', lineHeight: 1.6 }}>
+            Get answers to common questions about finding, filtering, and enrolling in courses from top Udemy instructors with verified coupons
           </p>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '1.5rem' }}>
           {faqs.map((faq) => (
-            <div class="faq-item" style={{
+            <div style={{
               background: 'var(--card)', borderRadius: '14px',
               border: '1px solid var(--border)', overflow: 'hidden',
             }}>
-              <button
-                class="faq-question"
-                aria-expanded="false"
-                style={{
-                  width: '100%', padding: '1.25rem 1.5rem',
-                  background: 'transparent', border: 'none',
-                  textAlign: 'left', cursor: 'pointer',
-                  display: 'flex', justifyContent: 'space-between',
-                  alignItems: 'center', gap: '1rem',
-                  fontSize: '1rem', fontWeight: 600, color: 'var(--text)',
-                }}
-              >
-                <span>{faq.q}</span>
-                <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"
-                  style={{ flexShrink: 0, transition: 'transform 0.25s ease' }}>
-                  <path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"/>
-                </svg>
-              </button>
-              <div class="faq-answer" style={{ maxHeight: '0', overflow: 'hidden', transition: 'max-height 0.3s ease' }}>
-                <p style={{ padding: '0 1.5rem 1.25rem', color: 'var(--muted)', lineHeight: 1.7, margin: 0, fontSize: '0.95rem' }}>
+              <div style={{ padding: '1.25rem 1.5rem' }}>
+                <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: 'var(--text)', marginBottom: '0.75rem' }}>
+                  {faq.q}
+                </h3>
+                <p style={{ color: 'var(--muted)', lineHeight: 1.7, margin: 0, fontSize: '0.95rem' }}>
                   {faq.a}
                 </p>
               </div>
@@ -574,37 +575,153 @@ const structuredData = {
       </div>
     </section>
 
-    {/* ── CTA — mirrors /deals footer CTA ── */}
-    <section class="hero-gradient" style={{ padding: '4rem 1rem' }}>
-      <div class="container" style={{ maxWidth: '700px', textAlign: 'center' }}>
-        <h2 style={{ fontSize: 'clamp(1.5rem, 4vw, 2rem)', fontWeight: 800, color: 'var(--text)', marginBottom: '1rem' }}>
-          Find Courses by Category
-        </h2>
-        <p style={{ color: 'var(--muted)', maxWidth: '500px', margin: '0 auto 2rem', lineHeight: 1.6 }}>
-          Browse {totalCourses.toLocaleString()}+ free Udemy coupons organized by subject — programming, design, marketing, data science, and more.
-        </p>
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <a href="/categories" style={{
-            display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-            padding: '0.875rem 2rem', background: 'var(--brand)',
-            color: 'var(--bg)', borderRadius: '10px', textDecoration: 'none',
-            fontSize: '1rem', fontWeight: 700,
-            boxShadow: '0 4px 20px -4px hsla(45, 95%, 58%, 0.4)',
-          }}>
-            Browse Categories
+    {/* ── ABOUT INSTRUCTORS — SEO Content (6 items) ── */}
+    <section style={{ padding: '4rem 1rem', background: 'var(--card)' }}>
+      <div class="container" style={{ maxWidth: '1400px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+          <h2 style={{ fontSize: 'clamp(1.5rem, 4vw, 2rem)', fontWeight: 800, color: 'var(--text)', marginBottom: '0.75rem' }}>
+            About Udemy Instructors & Free Coupons
+          </h2>
+          <p style={{ color: 'var(--muted)', fontSize: '1rem', maxWidth: '700px', margin: '0 auto', lineHeight: 1.6 }}>
+            Everything you need to know about finding and using verified coupon codes from top Udemy instructors worldwide
+          </p>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
+          <div style={{ background: 'var(--bg)', padding: '2rem', borderRadius: '12px', border: '1px solid var(--border)' }}>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--brand)">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              Who Are Top Udemy Instructors?
+            </h3>
+            <p style={{ color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>
+              CourseSpeak features {instructors.length} verified Udemy instructors with proven track records. These instructors have taught millions of students worldwide and maintain high ratings across their courses. From programming and data science to design and business, our instructors cover all major learning topics with expertise and practical experience.
+            </p>
+          </div>
+
+          <div style={{ background: 'var(--bg)', padding: '2rem', borderRadius: '12px', border: '1px solid var(--border)' }}>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="hsl(120, 70%, 45%)">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+              </svg>
+              How to Get Free Courses
+            </h3>
+            <p style={{ color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>
+              Browse our instructor directory, click on any instructor to view their courses, and click the coupon link. You'll be redirected to Udemy with the discount automatically applied. For 100% off coupons, simply click "Enroll Now" and complete checkout without any payment. All courses include full benefits: lifetime access, certificates, and all materials.
+            </p>
+          </div>
+
+          <div style={{ background: 'var(--bg)', padding: '2rem', borderRadius: '12px', border: '1px solid var(--border)' }}>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="hsl(210, 100%, 60%)">
+                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+              </svg>
+              Verified Coupon System
+            </h3>
+            <p style={{ color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>
+              Every coupon on CourseSpeak is manually verified before publishing. Our team checks each coupon daily to ensure it works and provides the advertised discount. Expired or invalid coupons are immediately removed, so you can trust that every deal you see is legitimate and ready to use. No broken coupons, ever.
+            </p>
+          </div>
+
+          <div style={{ background: 'var(--bg)', padding: '2rem', borderRadius: '12px', border: '1px solid var(--border)' }}>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="hsl(35, 90%, 68%)">
+                <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>
+              </svg>
+              Global Instructor Access
+            </h3>
+            <p style={{ color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>
+              Our instructor directory works globally, serving learners in the US, UK, India, Canada, Australia, Germany, France, Brazil, Japan, and 150+ other countries. All instructors support multiple languages including English, Spanish, Portuguese, French, German, Japanese, Chinese, and more. Find courses in your preferred language and region.
+            </p>
+          </div>
+
+          <div style={{ background: 'var(--bg)', padding: '2rem', borderRadius: '12px', border: '1px solid var(--border)' }}>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="hsl(280, 70%, 60%)">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+              Filter & Sort Features
+            </h3>
+            <p style={{ color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>
+              Use our advanced filters to find the perfect instructor. Filter by category (development, design, business, data science), minimum rating (4.5+, 4.0+, 3.5+), and sort by students, courses, rating, or name. These powerful filtering options help you quickly find instructors that match your learning goals and preferences.
+            </p>
+          </div>
+
+          <div style={{ background: 'var(--bg)', padding: '2rem', borderRadius: '12px', border: '1px solid var(--border)' }}>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="hsl(200, 70%, 60%)">
+                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+              </svg>
+              Course Benefits Included
+            </h3>
+            <p style={{ color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>
+              All courses obtained through instructor coupons include full Udemy benefits: lifetime access to course materials, downloadable resources, completion certificates, instructor Q&A support, and all future course updates. You can learn at your own pace, revisit lessons anytime, and showcase your new skills with verified certificates on LinkedIn and your resume.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* ── AFFILIATE DISCLOSURE ── */}
+    <section style={{ padding: '3rem 1rem', background: 'linear-gradient(135deg, rgba(255,193,7,0.05) 0%, rgba(255,165,0,0.03) 100%)' }}>
+      <div class="container" style={{ maxWidth: '1400px' }}>
+        <div style={{ background: 'var(--card)', border: '1px solid rgba(255,193,7,0.2)', borderRadius: '12px', padding: '2rem', textAlign: 'center', maxWidth: '900px', margin: '0 auto' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(255,193,7,0.1)', padding: '0.5rem 1rem', borderRadius: '20px', marginBottom: '1rem' }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--brand)">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0 2h-2v2h2v-2z"/>
+            </svg>
+            <span style={{ color: '#92400E', fontWeight: 600, fontSize: '0.85rem' }}>Transparency First</span>
+          </div>
+          <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text)', marginBottom: '0.75rem' }}>
+            Affiliate Disclosure
+          </h3>
+          <p style={{ color: 'var(--muted)', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '1.5rem', maxWidth: '650px', margin: '0 auto 1.5rem' }}>
+            CourseSpeak is an affiliate marketing platform. We earn small commissions from qualifying purchases made through our links. This helps us maintain and improve CourseSpeak at no cost to you. Our affiliate relationships do not influence which instructors or courses we recommend.
+          </p>
+          <a href="/affiliate-disclosure" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1.5rem', background: 'var(--brand)', color: 'var(--bg)', textDecoration: 'none', borderRadius: '8px', fontSize: '0.9rem', fontWeight: 600, transition: 'all 0.2s ease' }}>
+            Read Full Disclosure
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
             </svg>
           </a>
-          <a href="/deals" style={{
-            display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-            padding: '0.875rem 2rem', background: 'transparent',
-            color: 'var(--text)', border: '2px solid var(--border)',
-            borderRadius: '10px', textDecoration: 'none',
-            fontSize: '1rem', fontWeight: 700,
-          }}>
-            All Deals
-          </a>
+        </div>
+      </div>
+    </section>
+
+    {/* ── CTA — full width ── */}
+    <section class="hero-gradient" style={{ padding: '4rem 1rem' }}>
+      <div class="container" style={{ maxWidth: '1400px' }}>
+        <div style={{ maxWidth: '700px', margin: '0 auto', textAlign: 'center' }}>
+          <h2 style={{ fontSize: 'clamp(1.5rem, 4vw, 2rem)', fontWeight: 800, color: 'var(--text)', marginBottom: '1rem' }}>
+            Find Courses by Category
+          </h2>
+          <p style={{ color: 'var(--muted)', maxWidth: '500px', margin: '0 auto 2rem', lineHeight: 1.6 }}>
+            Browse {dealCount.toLocaleString()}+ free Udemy coupons organized by subject — programming, design, marketing, data science, and more.
+          </p>
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <a href="/categories" style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+              padding: '0.875rem 2rem', background: 'var(--brand)',
+              color: 'var(--bg)', borderRadius: '10px', textDecoration: 'none',
+              fontSize: '1rem', fontWeight: 700,
+              boxShadow: '0 4px 20px -4px hsla(45, 95%, 58%, 0.4)',
+            }}>
+              Browse Categories
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+              </svg>
+            </a>
+            <a href="/deals" style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+              padding: '0.875rem 2rem', background: 'transparent',
+              color: 'var(--text)', border: '2px solid var(--border)',
+              borderRadius: '10px', textDecoration: 'none',
+              fontSize: '1rem', fontWeight: 700,
+            }}>
+              All Deals
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -614,7 +731,7 @@ const structuredData = {
 
 <style>
   .container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 0 1rem;
   }

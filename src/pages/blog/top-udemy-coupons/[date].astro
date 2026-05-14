@@ -36,6 +36,7 @@ const totalCoupons = allDeals.length;
 const catCount = categories.length;
 const topCats = categories.slice(0, 3).map(([c]) => c).join(', ');
 const pageUrl = `${siteUrl}/blog/top-udemy-coupons/${date}/`;
+const coverImageUrl = `${siteUrl}/api/blog-cover/${date}`;
 
 // @ts-ignore - Astro frontmatter variables
 const pageTitle = `Udemy Coupons ${dateLabel} - Daily Discount Deals | CourseSpeak`;
@@ -91,6 +92,12 @@ const jsonLd = {
       "dateModified": `${date}T00:00:00Z`,
       "author": { "@type": "Organization", "name": "CourseSpeak", "url": siteUrl },
       "publisher": { "@type": "Organization", "name": "CourseSpeak", "url": siteUrl, "logo": { "@type": "ImageObject", "url": `${siteUrl}/logo.svg` } },
+      "image": {
+        "@type": "ImageObject",
+        "url": coverImageUrl,
+        "width": 1200,
+        "height": 630,
+      },
       "mainEntityOfPage": { "@type": "WebPage", "@id": pageUrl },
     },
     {
@@ -131,6 +138,8 @@ const jsonLd = {
   description={metaDescription}
   canonical={pageUrl}
   type="article"
+  image={`/api/blog-cover/${date}`}
+  ogImageType="image/svg+xml"
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
@@ -138,6 +147,19 @@ const jsonLd = {
     <div class="post-container">
 
       <header class="post-header">
+        <figure class="post-cover" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
+          <meta itemprop="url" content={coverImageUrl} />
+          <meta itemprop="width" content="1200" />
+          <meta itemprop="height" content="630" />
+          <img
+            class="post-cover-img"
+            src={`/api/blog-cover/${date}`}
+            width="1200"
+            height="630"
+            alt={`Top Udemy Coupons ${dateLabel} — featured cover image`}
+            fetchpriority="high"
+          />
+        </figure>
         <h1 class="post-title" itemprop="headline">Top Udemy Coupons ({dateLabel})</h1>
         <p class="post-meta">
           <time itemprop="datePublished" datetime={`${date}T00:00:00Z`}>{dateLabel}</time>
@@ -378,6 +400,21 @@ const jsonLd = {
   .breadcrumb a:hover { text-decoration: underline; }
   .breadcrumb .sep { margin: 0 0.35rem; color: var(--muted); }
   .post-header { margin-bottom: 1.5rem; }
+  .post-cover {
+    margin: 0 0 1.25rem;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    line-height: 0;
+    background: var(--card);
+  }
+  .post-cover-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 1200 / 630;
+    object-fit: cover;
+  }
   .post-title { font-size: 1.75rem; font-weight: 800; color: var(--text); margin: 0 0 0.5rem; line-height: 1.25; }
   .post-meta { font-size: 0.875rem; color: var(--muted); margin: 0 0 0.5rem; }
   .meta-today { color: var(--destructive); font-weight: 600; }

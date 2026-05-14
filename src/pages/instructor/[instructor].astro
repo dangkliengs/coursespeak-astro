@@ -4,7 +4,7 @@ import DealCard from "../../components/DealCard.astro";
 import { readDeals } from "../../lib/store";
 import type { Deal } from "../../types/deal";
 
-import { parseInstructors, createInstructorSlug } from "../../lib/instructors";
+import { parseInstructors, createInstructorSlug, instructorSlugLookupKeys } from "../../lib/instructors";
 
 // Types
 interface InstructorData {
@@ -65,20 +65,23 @@ const { instructor } = Astro.params;
 // Fetch all deals first (used for both lookup and filtering)
 const allDeals = await readDeals();
 
-// Fallback: if props not available (SSR mode), look up by slug
+// Fallback: if props not available (SSR mode), resolve slug → display name (never use raw slug as name)
 if (!instructorName && instructor) {
-  const instructorMap = new Map<string, string>();
-  
+  const slugToName = new Map<string, string>();
+
   allDeals.forEach((deal) => {
-    const instructors = parseInstructors(deal.instructor);
-    instructors.forEach((name) => {
-      const slug = createInstructorSlug(name);
-      instructorMap.set(slug, name);
-    });
+    for (const name of parseInstructors(deal.instructor)) {
+      for (const key of instructorSlugLookupKeys(name)) {
+        slugToName.set(key, name);
+      }
+    }
   });
-  
-  instructorName = instructorMap.get(instructor) || instructor;
-  instructorSlug = instructor;
+
+  const mapped = slugToName.get(instructor);
+  if (mapped) {
+    instructorName = mapped;
+    instructorSlug = instructor;
+  }
 }
 
 // Guard against missing instructor
@@ -88,11 +91,7 @@ if (!instructorName) {
 
 // Ensure instructorSlug is defined
 if (!instructorSlug) {
-  instructorSlug = instructorName.toLowerCase()
-    .replace(/[^\w\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-")
-    .substring(0, 100);
+  instructorSlug = createInstructorSlug(instructorName);
 }
 
 // Filter deals for this instructor (check if instructorName is in comma-separated list)

@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useMemo, useState } from 'react';
 import { renderMarkdownToHtml } from "../lib/markdown";
 import { extractDifficultyLevel, slugifyCategory } from "../lib/utils";
+import { createInstructorSlug, parseInstructors } from "../lib/instructors";
 import ActionsPanel from "./ActionsPanel";
 import RelatedList from "./RelatedList";
 import CourseComparison from "./CourseComparison";
@@ -33,6 +34,10 @@ interface Deal {
 }
 
 export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, relatedDeals?: any[] }) {
+    const instructorProfileSlug = deal.instructor
+        ? createInstructorSlug(parseInstructors(deal.instructor)[0] ?? deal.instructor)
+        : "";
+
     const bodyContent = deal.content || deal.description || "";
     
     const isHtmlContent = bodyContent.includes('<') && bodyContent.includes('>');
@@ -892,7 +897,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                             </div>
                             <div style={{ marginTop: "1.5rem" }}>
                                 <a 
-                                    href={`/instructor/${deal.instructor.toLowerCase().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-").substring(0, 100)}`}
+                                    href={`/instructor/${instructorProfileSlug}`}
                                     target="_blank" 
                                     rel="noopener noreferrer" 
                                     style={{

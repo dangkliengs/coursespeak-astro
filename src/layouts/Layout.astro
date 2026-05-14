@@ -5,6 +5,8 @@ interface Props {
   title?: string;
   description?: string;
   image?: string;
+  /** MIME type for og:image (e.g. image/svg+xml for generated covers). */
+  ogImageType?: string;
   type?: string;
   canonical?: string;
 }
@@ -14,6 +16,7 @@ const {
   title = "CourseSpeak - Free Udemy Courses & Deals",
   description = "Find verified Udemy deals with 100% off coupons. Updated daily with free courses and discounts.",
   image, // No default - let each page provide its own image
+  ogImageType = "image/jpeg",
   type = "website",
   canonical,
 } = Astro.props;
@@ -213,7 +216,7 @@ const currentPath = Astro.url.pathname;
     {absoluteImageUrl && <meta property="og:image:width" content="1200" />}
     {absoluteImageUrl && <meta property="og:image:height" content="630" />}
     {absoluteImageUrl && <meta property="og:image:alt" content={title} />}
-    {absoluteImageUrl && <meta property="og:image:type" content="image/jpeg" />}
+    {absoluteImageUrl && <meta property="og:image:type" content={ogImageType} />}
 
     <!-- Enhanced Twitter Cards -->
     <meta property="twitter:card" content={absoluteImageUrl ? "summary_large_image" : "summary"} />
