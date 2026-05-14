@@ -36,7 +36,7 @@ const totalCoupons = allDeals.length;
 const catCount = categories.length;
 const topCats = categories.slice(0, 3).map(([c]) => c).join(', ');
 const pageUrl = `${siteUrl}/blog/top-udemy-coupons/${date}/`;
-const coverImageUrl = `${siteUrl}/api/blog-cover/${date}`;
+const coverImageUrl = `${siteUrl}/api/blog-cover/${date}.svg`;
 
 // @ts-ignore - Astro frontmatter variables
 const pageTitle = `Udemy Coupons ${dateLabel} - Daily Discount Deals | CourseSpeak`;
@@ -138,7 +138,7 @@ const jsonLd = {
   description={metaDescription}
   canonical={pageUrl}
   type="article"
-  image={`/api/blog-cover/${date}`}
+  image={`/api/blog-cover/${date}.svg`}
   ogImageType="image/svg+xml"
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -153,7 +153,7 @@ const jsonLd = {
           <meta itemprop="height" content="630" />
           <img
             class="post-cover-img"
-            src={`/api/blog-cover/${date}`}
+            src={`/api/blog-cover/${date}.svg`}
             width="1200"
             height="630"
             alt={`Top Udemy Coupons ${dateLabel} — featured cover image`}

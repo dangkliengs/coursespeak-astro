@@ -4,6 +4,8 @@ import { getAvailableDates } from '../../../lib/store.js';
 
 const ISO = /^\d{4}-\d{2}-\d{2}$/;
 
+export const prerender = true;
+
 export async function getStaticPaths() {
   const dates = await getAvailableDates();
   return dates.map((date) => ({
