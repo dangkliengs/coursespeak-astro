@@ -452,7 +452,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                     <section aria-labelledby="key-takeaways-heading" style={{ border: "1px solid #1f2330", padding: "1.5rem", borderRadius: "2.5rem", background: "#0b0d12", marginBottom: "2rem" }}>
                         <h2 id="key-takeaways-heading" style={{ fontSize: "1.4rem", fontWeight: 700, color: "#fff", marginBottom: "1rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
                             <span style={{ width: "6px", height: "32px", background: "#22c55e", borderRadius: "9999px" }} aria-hidden="true"></span>
-                            Key Takeaways — Course Overview
+                            Course Overview - Key Takeaways
                         </h2>
                         <p style={{ fontSize: "0.9rem", color: "#94a3b8", marginBottom: "1.25rem" }}>
                             The following summarizes all verified data points for <strong style={{ color: "#fff" }}>{deal.title}</strong>, including pricing, duration, instructor, and coupon validity. All data is sourced directly from Udemy and verified by CourseSpeak on <time dateTime={deal.updatedAt ? new Date(deal.updatedAt).toISOString() : new Date().toISOString()}>{deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>.
