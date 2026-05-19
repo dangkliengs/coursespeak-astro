@@ -74,7 +74,7 @@ const currentPath = Astro.url.pathname;
     <title>{title}</title>
 
     <!-- Comprehensive SEO Meta Tags -->
-    <meta name="author" content="CourseSpeak" />
+    <meta name="author" content="Josh Smith" />
     <meta name="publisher" content="CourseSpeak" />
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <meta name="googlebot" content="index, follow" />
@@ -86,7 +86,7 @@ const currentPath = Astro.url.pathname;
     <meta name="keywords" content="udemy courses, online learning, course deals, udemy coupons, free courses, discounted courses, online education, skill development" />
     <meta name="classification" content="Education, Online Learning, Course Deals" />
     <meta name="category" content="Education" />
-    <link rel="author" href="https://coursespeak.com" />
+    <link rel="author" href="https://www.linkedin.com/in/anandayuda/" />
     <link rel="publisher" href="https://coursespeak.com" />
 
     <!-- Organization Structured Data -->
@@ -101,7 +101,8 @@ const currentPath = Astro.url.pathname;
       "foundingDate": "2023",
       "sameAs": [
         "https://www.facebook.com/CourseSpeakOfficial",
-        "https://x.com/courses_peak"
+        "https://x.com/courses_peak",
+        "https://www.linkedin.com/company/coursespeak"
       ],
       "contactPoint": {
         "@type": "ContactPoint",
@@ -134,7 +135,8 @@ const currentPath = Astro.url.pathname;
           "https://coursespeak.com/privacy",
           "https://coursespeak.com/terms",
           "https://coursespeak.com/udemy-coupons-guide",
-          "https://coursespeak.com/how-to-redeem-coupon"
+          "https://coursespeak.com/how-to-redeem-coupon",
+          "https://coursespeak.com/blog"
         ]
       }
     }
@@ -194,7 +196,12 @@ const currentPath = Astro.url.pathname;
         {
           "@type": "ReadAction",
           "target": "https://coursespeak.com/udemy-coupons-guide",
-          "name": "Blog/Guide"
+          "name": "Coupons Guide"
+        },
+        {
+          "@type": "ReadAction",
+          "target": "https://coursespeak.com/blog",
+          "name": "Blog"
         }
       ]
     }
@@ -225,7 +232,7 @@ const currentPath = Astro.url.pathname;
     {absoluteImageUrl && <meta property="twitter:image:alt" content={title} />}
 
     <!-- Additional Social Sharing Meta Tags -->
-    <meta property="article:author" content="CourseSpeak" />
+    <meta property="article:author" content="Josh Smith" />
     <meta property="article:publisher" content="https://coursespeak.com" />
 
     <!-- Optimized Font Loading for Core Web Vitals -->
