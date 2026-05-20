@@ -5,7 +5,7 @@ User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://coursespeak.com/sitemap.xml
+Sitemap: https://coursespeak.com/sitemap-index.xml
 
 # Crawl delay (optional - be respectful to servers)
 Crawl-delay: 1
@@ -22,10 +22,13 @@ Disallow: /*.json$
 # Allow specific important areas
 Allow: /deals
 Allow: /categories
+Allow: /instructors
+Allow: /topics
 Allow: /popular
 Allow: /success-stories
 Allow: /udemy-coupons-guide
 Allow: /how-to-redeem-coupon
+Allow: /blog
 
 # Popular search engines
 User-agent: Googlebot
