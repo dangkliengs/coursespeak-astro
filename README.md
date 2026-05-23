@@ -1,7 +1,7 @@
 # CourseSpeak — 100% OFF Udemy Coupons & Free Courses 2026
 
 [![Live Site](https://img.shields.io/badge/CourseSpeak.com-100%25_Free_Udemy_Courses-4F46E5?style=for-the-badge&logo=udemy&logoColor=white)](https://coursespeak.com)
-[![Free Coupons](https://img.shields.io/badge/1233%2B_Active_Coupons-100%25_OFF_Verified-10B981?style=for-the-badge)](https://coursespeak.com/deals)
+[![Free Coupons](https://img.shields.io/badge/1240%2B_Active_Coupons-100%25_OFF_Verified-10B981?style=for-the-badge)](https://coursespeak.com/deals)
 [![Instructors](https://img.shields.io/badge/Instructors-Browse_Top_Instructors-F59E0B?style=for-the-badge)](https://coursespeak.com/instructors)
 [![Categories](https://img.shields.io/badge/12%2B_Categories-Browse_Free_Courses-F59E0B?style=for-the-badge)](https://coursespeak.com/categories)
 [![Popular](https://img.shields.io/badge/Top_Rated_Courses-View_Popular-EF4444?style=for-the-badge)](https://coursespeak.com/popular)
@@ -19,7 +19,7 @@ Get free Udemy courses at [coursespeak.com/deals](https://coursespeak.com/deals)
 [CourseSpeak](https://coursespeak.com) is one of the most trusted platforms for free Udemy coupons and 100% OFF Udemy deals. We source, verify, and publish hundreds of coupon codes every day — no expired codes, no spam, zero cost.
 
 - 150,000+ active learners worldwide trust [CourseSpeak](https://coursespeak.com) for free premium education
-- 1233+ verified coupons live and updated daily at [coursespeak.com/deals](https://coursespeak.com/deals)
+- 1240+ verified coupons live and updated daily at [coursespeak.com/deals](https://coursespeak.com/deals)
 - 100% verified — every coupon manually tested before publishing
 - 14+ categories covering IT, Development, Business, Design, Finance and more
 - Daily coupon blog at [coursespeak.com/blog](https://coursespeak.com/blog) updated every day
@@ -132,7 +132,7 @@ Why are courses free? Udemy instructors release 100% OFF coupons to attract firs
 | Metric | Value |
 |---|---|
 | Active Learners | 150,000+ worldwide |
-| Active Coupons | 1233+ verified |
+| Active Coupons | 1240+ verified |
 | Categories | 14+ main categories |
 | Topics | 514+ subcategories |
 | Static Pages | 74+ generated at build |
@@ -151,7 +151,7 @@ Why are courses free? Udemy instructors release 100% OFF coupons to attract firs
 | Deployment | GitHub Pages |
 | Admin API | GitHub API with full CRUD |
 | SEO | Schema.org structured data |
-| Database | 1233+ courses in deals.json |
+| Database | 1240+ courses in deals.json |
 | Auth | GitHub Personal Access Token |
 
 Performance: 74+ static pages, sub-second load times, mobile-first, all Core Web Vitals green.
@@ -198,7 +198,7 @@ coursespeak-astro/
 ├── src/
 │   ├── components/        Astro and React UI components
 │   ├── data/
-│   │   └── deals.json     1233+ Udemy course deals database
+│   │   └── deals.json     1240+ Udemy course deals database
 │   ├── lib/
 │   │   ├── store.ts       State management
 │   │   └── github-api.js  Admin GitHub API integration
@@ -245,4 +245,4 @@ This repository is shared for educational and transparency purposes. Copying or 
 
 ---
 
-Get 1233+ free Udemy courses with verified 100% OFF coupons at [CourseSpeak.com](https://coursespeak.com) — admin dashboard, Astro 6.3, trusted by 150,000+ learners, updated daily.
+Get 1240+ free Udemy courses with verified 100% OFF coupons at [CourseSpeak.com](https://coursespeak.com) — admin dashboard, Astro 6.3, trusted by 150,000+ learners, updated daily.
