@@ -3,8 +3,10 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout
-    title="About CourseSpeak | Free Udemy Coupons Platform"
-    description="Learn about CourseSpeak's mission to make education accessible. We help 150K+ learners access premium courses for free through verified Udemy coupons."
+    title="About CourseSpeak: Free Udemy Coupons"
+    description="Discover CourseSpeak: Your trusted source for verified free Udemy coupons and 100% off online courses. Join 150K+ learners accessing premium education without cost."
+    image="https://coursespeak.com/logo.svg"
+    canonical="https://coursespeak.com/about"
 >
     <!-- About Page Enhanced Structured Data -->
     <script type="application/ld+json">
@@ -25,7 +27,7 @@ import Layout from "../layouts/Layout.astro";
             "url": "https://coursespeak.com/logo.svg"
           },
           "datePublished": "2023-01-01",
-          "dateModified": "2026-01-15",
+          "dateModified": "2026-05-24",
           "inLanguage": "en-US",
           "breadcrumb": {
             "@type": "BreadcrumbList",
@@ -49,7 +51,13 @@ import Layout from "../layouts/Layout.astro";
             "name": "CourseSpeak",
             "description": "Online learning platform providing free Udemy course coupons and discounts",
             "foundingDate": "2023",
-            "mission": "To make quality education accessible and affordable for everyone through verified coupon codes"
+            "mission": "To make quality education accessible and affordable for everyone through verified coupon codes",
+            "author": {
+              "@type": "Person",
+              "name": "CourseSpeak Team",
+              "jobTitle": "Founder & Education Advocate",
+              "description": "Passionate about democratizing education and removing financial barriers to quality learning"
+            }
           }
         },
         {
@@ -60,9 +68,139 @@ import Layout from "../layouts/Layout.astro";
           "logo": "https://coursespeak.com/logo.svg",
           "description": "Free Udemy coupons platform helping learners access premium courses for free",
           "foundingDate": "2023",
+          "numberOfEmployees": "1-10",
+          "areaServed": "Worldwide",
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "Customer Support",
+            "url": "https://coursespeak.com/contact"
+          },
           "sameAs": [
             "https://x.com/courses_peak",
             "https://www.facebook.com/CourseSpeakOfficial/"
+          ],
+          "knowsAbout": ["Udemy Coupons", "Online Education", "Free Courses", "Course Discounts", "Educational Technology"],
+          "founder": {
+            "@type": "Person",
+            "name": "CourseSpeak Team",
+            "description": "Education Advocate & Platform Creator"
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://coursespeak.com/#website",
+          "url": "https://coursespeak.com",
+          "name": "CourseSpeak",
+          "description": "Free Udemy coupons and premium courses for learners worldwide",
+          "publisher": {
+            "@id": "https://coursespeak.com/#organization"
+          },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://coursespeak.com/search?q={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "Article",
+          "@id": "https://coursespeak.com/about#article",
+          "headline": "About CourseSpeak - How We're Democratizing Online Education",
+          "alternativeHeadline": "Free Udemy Coupons & Premium Courses for 150K+ Learners",
+          "description": "Learn how CourseSpeak helps 150K+ students access premium Udemy courses for free with verified coupons. Discover our mission, team, and why educators choose us.",
+          "image": "https://coursespeak.com/logo.svg",
+          "datePublished": "2023-01-01",
+          "dateModified": "2026-05-24",
+          "author": {
+            "@type": "Person",
+            "name": "Josh Smith",
+            "jobTitle": "Lead Course Reviewer",
+            "url": "https://coursespeak.com/about",
+            "sameAs": ["https://x.com/courses_peak", "https://www.facebook.com/CourseSpeakOfficial/"]
+          },
+          "publisher": {
+            "@id": "https://coursespeak.com/#organization"
+          },
+          "articleBody": "CourseSpeak is a platform dedicated to making quality education accessible to everyone. Founded in 2023, we provide verified 100% off Udemy coupons and free course deals from top learning platforms worldwide. Our mission is to democratize education and remove financial barriers to premium learning. With 150K+ happy learners and 50K+ free courses, we've established ourselves as the most trusted coupon platform. Our team, led by reviewer Josh Smith, meticulously vets every course to ensure only the best educational content reaches our community.",
+          "wordCount": 2000,
+          "inLanguage": "en-US",
+          "isAccessibleForFree": true,
+          "isPartOf": {
+            "@id": "https://coursespeak.com/#website"
+          },
+          "mainEntity": {
+            "@id": "https://coursespeak.com/#organization"
+          }
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What makes CourseSpeak different from other coupon sites?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "CourseSpeak offers 100% verified coupons that are tested before sharing. We focus on premium quality courses from reputable instructors with daily updates and lifetime access to all free courses. Our Lead Reviewer Josh Smith personally curates every course to ensure 4.5★+ quality standards."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is CourseSpeak really free?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, CourseSpeak is completely free to use. We provide verified free course deals and 100% off Udemy coupons at no cost to our users. Our platform, coupons, and recommendations are all free."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How often are new deals added?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "We add fresh coupons and deals every single day, 24/7. Our team continuously searches and verifies new opportunities for our community. On average we add 50+ new deals daily."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Do free courses include certificates?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, most of our featured free courses include completion certificates. When you enroll through our verified coupons, you get lifetime access to the course material, completion certificate, and all premium features."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How do you choose which courses to feature?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Every course featured on CourseSpeak goes through rigorous review. We only feature courses with 4.5★+ ratings, reputable instructors, comprehensive content, and proven student satisfaction. Quality over quantity is our priority."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How are coupons verified on CourseSpeak?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Every coupon code is personally tested before publishing to ensure it works. We check expiration dates, discount amounts, and course availability. We remove expired coupons immediately and update daily. This 100% verification guarantee sets us apart."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is CourseSpeak affiliated with Udemy?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "While we're not officially affiliated with Udemy, we are an independent platform that helps learners find verified discounts and free courses on Udemy and other platforms. We maintain ethical standards and always provide authentic, working coupons."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How can I trust CourseSpeak coupons?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Every coupon on CourseSpeak is 100% verified and tested by our team. We check each code before publishing and remove expired ones immediately. With 150K+ satisfied learners, we've built a trusted reputation in the community."
+              }
+            }
           ]
         }
       ]
@@ -124,7 +262,7 @@ import Layout from "../layouts/Layout.astro";
                             WebkitTextFillColor: "transparent",
                             backgroundClip: "text"
                         }}>
-                            Democratizing Education
+                            Making Education Accessible for Everyone
                         </span>
                     </h1>
                     <p
@@ -137,7 +275,7 @@ import Layout from "../layouts/Layout.astro";
                             fontWeight: 400
                         }}
                     >
-                        Founded in 2023, CourseSpeak is on a mission to make quality education accessible to everyone. We believe learning should never be limited by budget constraints.
+                        Founded in 2023, CourseSpeak is on a mission to make quality education accessible to everyone. "Democratizing education" means removing financial barriers so anyone, anywhere can access premium online courses for free through verified Udemy coupons.
                     </p>
                 </div>
 
@@ -471,7 +609,7 @@ import Layout from "../layouts/Layout.astro";
                 </div>
             </section>
 
-            {/* Why Choose Us */}
+            {/* Why Choose Us - 6 Grid Items */}
             <section class="card-gradient" style={{ padding: "4rem 1rem" }}>
                 <div class="container">
                     <div style={{
@@ -499,124 +637,833 @@ import Layout from "../layouts/Layout.astro";
 
                     <div style={{
                         display: "grid",
-                        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-                        gap: "2rem"
+                        gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                        gap: "1.5rem"
                     }}>
                         <div style={{
                             background: "var(--card)",
-                            padding: "2rem",
-                            borderRadius: "20px",
+                            padding: "1.5rem",
+                            borderRadius: "16px",
                             border: "1px solid var(--border)",
                             transition: "all 0.3s ease"
                         }}>
+                            <div style={{
+                                width: "50px",
+                                height: "50px",
+                                background: "var(--brand)",
+                                borderRadius: "12px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                marginBottom: "1rem"
+                            }}>
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+                                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                                </svg>
+                            </div>
+                            <h3 style={{ color: "var(--brand)", fontSize: "1.1rem", marginBottom: "0.5rem", fontWeight: 700 }}>
+                                100% Verified
+                            </h3>
+                            <p style={{ color: "var(--muted)", lineHeight: 1.5, fontSize: "0.9rem" }}>
+                                Every coupon tested & verified to work
+                            </p>
+                        </div>
+
+                        <div style={{
+                            background: "var(--card)",
+                            padding: "1.5rem",
+                            borderRadius: "16px",
+                            border: "1px solid var(--border)",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <div style={{
+                                width: "50px",
+                                height: "50px",
+                                background: "var(--accent)",
+                                borderRadius: "12px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                marginBottom: "1rem"
+                            }}>
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+                                    <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                                </svg>
+                            </div>
+                            <h3 style={{ color: "var(--accent)", fontSize: "1.1rem", marginBottom: "0.5rem", fontWeight: 700 }}>
+                                Daily Updates
+                            </h3>
+                            <p style={{ color: "var(--muted)", lineHeight: 1.5, fontSize: "0.9rem" }}>
+                                Fresh deals added every single day
+                            </p>
+                        </div>
+
+                        <div style={{
+                            background: "var(--card)",
+                            padding: "1.5rem",
+                            borderRadius: "16px",
+                            border: "1px solid var(--border)",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <div style={{
+                                width: "50px",
+                                height: "50px",
+                                background: "hsl(180, 50%, 40%)",
+                                borderRadius: "12px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                marginBottom: "1rem"
+                            }}>
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                            </div>
+                            <h3 style={{ color: "hsl(180, 50%, 40%)", fontSize: "1.1rem", marginBottom: "0.5rem", fontWeight: 700 }}>
+                                Premium Quality
+                            </h3>
+                            <p style={{ color: "var(--muted)", lineHeight: 1.5, fontSize: "0.9rem" }}>
+                                4.5★+ courses from expert instructors
+                            </p>
+                        </div>
+
+                        <div style={{
+                            background: "var(--card)",
+                            padding: "1.5rem",
+                            borderRadius: "16px",
+                            border: "1px solid var(--border)",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <div style={{
+                                width: "50px",
+                                height: "50px",
+                                background: "hsl(0, 84%, 60%)",
+                                borderRadius: "12px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                marginBottom: "1rem"
+                            }}>
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                </svg>
+                            </div>
+                            <h3 style={{ color: "hsl(0, 84%, 60%)", fontSize: "1.1rem", marginBottom: "0.5rem", fontWeight: 700 }}>
+                                Lifetime Access
+                            </h3>
+                            <p style={{ color: "var(--muted)", lineHeight: 1.5, fontSize: "0.9rem" }}>
+                                Free courses with lifetime access
+                            </p>
+                        </div>
+
+                        <div style={{
+                            background: "var(--card)",
+                            padding: "1.5rem",
+                            borderRadius: "16px",
+                            border: "1px solid var(--border)",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <div style={{
+                                width: "50px",
+                                height: "50px",
+                                background: "hsl(45, 95%, 58%)",
+                                borderRadius: "12px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                marginBottom: "1rem"
+                            }}>
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                </svg>
+                            </div>
+                            <h3 style={{ color: "hsl(45, 95%, 58%)", fontSize: "1.1rem", marginBottom: "0.5rem", fontWeight: 700 }}>
+                                Community 150K+
+                            </h3>
+                            <p style={{ color: "var(--muted)", lineHeight: 1.5, fontSize: "0.9rem" }}>
+                                Thriving global learner community
+                            </p>
+                        </div>
+
+                        <div style={{
+                            background: "var(--card)",
+                            padding: "1.5rem",
+                            borderRadius: "16px",
+                            border: "1px solid var(--border)",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <div style={{
+                                width: "50px",
+                                height: "50px",
+                                background: "hsl(280, 60%, 55%)",
+                                borderRadius: "12px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                marginBottom: "1rem"
+                            }}>
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+                                    <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/>
+                                </svg>
+                            </div>
+                            <h3 style={{ color: "hsl(280, 60%, 55%)", fontSize: "1.1rem", marginBottom: "0.5rem", fontWeight: 700 }}>
+                                Built w/ Astro
+                            </h3>
+                            <p style={{ color: "var(--muted)", lineHeight: 1.5, fontSize: "0.9rem" }}>
+                                Lightning-fast performance & UX
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Meet the Lead Reviewer - Josh Smith (replaced with provided author markup) */}
+            <section class="card-gradient" style={{ padding: "4rem 1rem" }}>
+                <div class="container">
+                    <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
+                        <h2 style={{ fontSize: "clamp(1.8rem, 4vw, 2.5rem)", fontWeight: 800, color: "var(--text)", marginBottom: "1rem" }}>
+                            <span style={{ width: "6px", height: "32px", background: "#22c55e", borderRadius: "9999px", display: "inline-block", verticalAlign: "middle", marginRight: "0.75rem" }} aria-hidden="true"></span>
+                            About the Author
+                        </h2>
+                        <p style={{ color: "var(--muted)", maxWidth: "600px", margin: "0 auto", lineHeight: 1.6 }}>Expert educator ensuring only the best courses make it to CourseSpeak</p>
+                    </div>
+
+                    <div style={{ display: "flex", alignItems: "center", gap: "1.5rem", flexWrap: "wrap", maxWidth: "900px", margin: "0 auto", background: "var(--card)", padding: "1.5rem", borderRadius: "12px", border: "1px solid var(--border)" }}>
+                        <div style={{ width: "80px", height: "80px", borderRadius: "50%", background: "#1f2330", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, overflow: "hidden", border: "3px solid #FBBF24" }}>
+                            <img src="/images/author.jpg" alt="Josh Smith - Udemy Coupon Expert" style={{ width: "100%", height: "100%", objectFit: "cover" }} loading="lazy" />
+                        </div>
+                        <div style={{ flex: 1, minWidth: "280px", color: "var(--text)" }}>
+                            <h3 style={{ fontSize: "1.25rem", fontWeight: 700, color: "#fff", margin: "0 0 0.5rem 0" }}>Josh Smith</h3>
+                            <p style={{ fontSize: "0.9375rem", color: "#cbd5e1", lineHeight: 1.6, margin: "0 0 0.75rem 0" }}>Udemy coupon specialist with 8+ years of experience finding and verifying the best deals. I've helped thousands of students save thousands of dollars on premium courses through carefully curated coupon codes and exclusive discount offers. My mission is making high-quality education accessible and affordable for everyone.</p>
+                            <div style={{ display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap", color: "#cbd5e1" }}>
+                                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#FBBF24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+                                    <span style={{ fontSize: "0.8125rem", color: "#cbd5e1", fontWeight: 600 }}>4.8/5 Average Rating</span>
+                                </div>
+                                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#FBBF24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <span style={{ fontSize: "0.8125rem", color: "#cbd5e1", fontWeight: 600 }}>Trusted by 2M+ Students</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                            <a href="https://www.linkedin.com/in/anandayuda/" target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "40px", height: "40px", borderRadius: "8px", background: "linear-gradient(135deg,#0077b5 0%,#005885 100%)", border: "1px solid #0077b5", textDecoration: "none", transition: "all 0.3s ease", flexShrink: 0 }}>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"></path></svg>
+                            </a>
+                            <a href="https://www.facebook.com/CourseSpeakOfficial/" target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "40px", height: "40px", borderRadius: "8px", background: "linear-gradient(135deg,#1877f2 0%,#166fe5 100%)", border: "1px solid #1877f2", textDecoration: "none", transition: "all 0.3s ease", flexShrink: 0 }}>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path></svg>
+                            </a>
+                            <a href="https://x.com/courses_peak" target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "40px", height: "40px", borderRadius: "8px", background: "linear-gradient(135deg,#000000 0%,#333333 100%)", border: "1px solid #000000", textDecoration: "none", transition: "all 0.3s ease", flexShrink: 0 }}>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div style={{ marginTop: "1.5rem", padding: "1rem", background: "linear-gradient(135deg, rgba(251,191,36,0.1) 0%, rgba(251,191,36,0.05) 100%)", border: "1px solid rgba(251,191,36,0.2)", borderRadius: "8px", textAlign: "center", maxWidth: "900px", margin: "1.5rem auto 0" }}>
+                        <p style={{ fontSize: "0.95rem", color: "#cbd5e1", marginBottom: "0.75rem" }}><strong style={{ color: "#FBBF24" }}>Follow Us for Daily Coupon Updates</strong></p>
+                        <p style={{ fontSize: "0.85rem", color: "#94a3b8", marginBottom: "1rem" }}>Get notified when we publish new coupon deals and exclusive discount codes.</p>
+                        <a href="/blog" style={{ display: "inline-block", padding: "0.75rem 1.5rem", background: "linear-gradient(135deg,#FBBF24,#F59E0B)", color: "#1f2330", textDecoration: "none", borderRadius: "6px", fontSize: "0.9rem", fontWeight: 600, transition: "all .2s", boxShadow: "0 2px 8px rgba(251,191,36,0.3)" }}>📖 Visit Our Blog →</a>
+                    </div>
+                </div>
+            </section>
+
+            {/* Comparison Section */}
+            <section class="card-gradient" style={{ padding: "4rem 1rem" }}>
+                <div class="container">
+                    <div style={{
+                        textAlign: "center",
+                        marginBottom: "3rem"
+                    }}>
+                        <h2 style={{
+                            fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
+                            fontWeight: 800,
+                            color: "var(--text)",
+                            marginBottom: "1rem"
+                        }}>
+                            Why CourseSpeak Stands Out
+                        </h2>
+                        <p style={{
+                            color: "var(--muted)",
+                            fontSize: "1.1rem",
+                            maxWidth: "600px",
+                            margin: "0 auto",
+                            lineHeight: 1.6
+                        }}>
+                            A detailed comparison with other popular coupon platforms
+                        </p>
+                    </div>
+
+                    <div style={{
+                        overflowX: "auto",
+                        borderRadius: "16px",
+                        border: "1px solid var(--border)"
+                    }}>
+                        <table style={{
+                            width: "100%",
+                            borderCollapse: "collapse",
+                            backgroundColor: "var(--card)"
+                        }}>
+                            <thead>
+                                <tr style={{
+                                    borderBottom: "2px solid var(--border)",
+                                    backgroundColor: "rgba(var(--brand-rgb, 45), 90%, 58%), 0.05)"
+                                }}>
+                                    <th style={{
+                                        padding: "1.5rem",
+                                        textAlign: "left",
+                                        fontWeight: 700,
+                                        color: "var(--text)",
+                                        fontSize: "1rem"
+                                    }}>Feature</th>
+                                    <th style={{
+                                        padding: "1.5rem",
+                                        textAlign: "center",
+                                        fontWeight: 700,
+                                        color: "var(--brand)",
+                                        fontSize: "1rem"
+                                    }}>CourseSpeak</th>
+                                    <th style={{
+                                        padding: "1.5rem",
+                                        textAlign: "center",
+                                        fontWeight: 600,
+                                        color: "var(--muted)",
+                                        fontSize: "1rem"
+                                    }}>Real.Discount</th>
+                                    <th style={{
+                                        padding: "1.5rem",
+                                        textAlign: "center",
+                                        fontWeight: 600,
+                                        color: "var(--muted)",
+                                        fontSize: "1rem"
+                                    }}>DiscUdemy</th>
+                                    <th style={{
+                                        padding: "1.5rem",
+                                        textAlign: "center",
+                                        fontWeight: 600,
+                                        color: "var(--muted)",
+                                        fontSize: "1rem"
+                                    }}>Other Sites</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style={{ borderBottom: "1px solid var(--border)" }}>
+                                    <td style={{ padding: "1.5rem", fontWeight: 600, color: "var(--text)" }}>Verified Coupons</td>
+                                    <td style={{ padding: "1.5rem", textAlign: "center", color: "var(--brand)", fontWeight: 700 }}>✓ 100%</td>
+                                    <td style={{ padding: "1.5rem", textAlign: "center", color: "var(--muted)" }}>~80%</td>
+                                    <td style={{ padding: "1.5rem", textAlign: "center", color: "var(--muted)" }}>~70%</td>
+                                    <td style={{ padding: "1.5rem", textAlign: "center", color: "var(--muted)" }}>~60%</td>
+                                </tr>
+                                <tr style={{ borderBottom: "1px solid var(--border)" }}>
+                                    <td style={{ padding: "1.5rem", fontWeight: 600, color: "var(--text)" }}>Daily Updates</td>
+                                    <td style={{ padding: "1.5rem", textAlign: "center", color: "var(--brand)", fontWeight: 700 }}>✓ Yes</td>
+                                    <td style={{ padding: "1.5rem", textAlign: "center", color: "var(--muted)" }}>~3x/week</td>
+                                    <td style={{ padding: "1.5rem", textAlign: "center", color: "var(--muted)" }}>~2x/week</td>
+                                    <td style={{ padding: "1.5rem", textAlign: "center", color: "var(--muted)" }}>Irregular</td>
+                                </tr>
+                                <tr style={{ borderBottom: "1px solid var(--border)" }}>
+                                    <td style={{ padding: "1.5rem", fontWeight: 600, color: "var(--text)" }}>Lifetime Access</td>
+                                    <td style={{ padding: "1.5rem", textAlign: "center", color: "var(--brand)", fontWeight: 700 }}>✓ Yes</td>
+                                    <td style={{ padding: "1.5rem", textAlign: "center", color: "var(--muted)" }}>Limited</td>
+                                    <td style={{ padding: "1.5rem", textAlign: "center", color: "var(--muted)" }}>Limited</td>
+                                    <td style={{ padding: "1.5rem", textAlign: "center", color: "var(--muted)" }}>Limited</td>
+                                </tr>
+                                <tr style={{ borderBottom: "1px solid var(--border)" }}>
+                                    <td style={{ padding: "1.5rem", fontWeight: 600, color: "var(--text)" }}>Premium Quality Filter</td>
+                                    <td style={{ padding: "1.5rem", textAlign: "center", color: "var(--brand)", fontWeight: 700 }}>✓ 4.5★+</td>
+                                    <td style={{ padding: "1.5rem", textAlign: "center", color: "var(--muted)" }}>~3.5★+</td>
+                                    <td style={{ padding: "1.5rem", textAlign: "center", color: "var(--muted)" }}>No filter</td>
+                                    <td style={{ padding: "1.5rem", textAlign: "center", color: "var(--muted)" }}>No filter</td>
+                                </tr>
+                                <tr style={{ borderBottom: "1px solid var(--border)" }}>
+                                    <td style={{ padding: "1.5rem", fontWeight: 600, color: "var(--text)" }}>User Community</td>
+                                    <td style={{ padding: "1.5rem", textAlign: "center", color: "var(--brand)", fontWeight: 700 }}>✓ 150K+</td>
+                                    <td style={{ padding: "1.5rem", textAlign: "center", color: "var(--muted)" }}>~50K</td>
+                                    <td style={{ padding: "1.5rem", textAlign: "center", color: "var(--muted)" }}>~30K</td>
+                                    <td style={{ padding: "1.5rem", textAlign: "center", color: "var(--muted)" }}>Varied</td>
+                                </tr>
+                                <tr>
+                                    <td style={{ padding: "1.5rem", fontWeight: 600, color: "var(--text)" }}>Fast Performance</td>
+                                    <td style={{ padding: "1.5rem", textAlign: "center", color: "var(--brand)", fontWeight: 700 }}>✓ Built with Astro</td>
+                                    <td style={{ padding: "1.5rem", textAlign: "center", color: "var(--muted)" }}>Standard</td>
+                                    <td style={{ padding: "1.5rem", textAlign: "center", color: "var(--muted)" }}>Slow</td>
+                                    <td style={{ padding: "1.5rem", textAlign: "center", color: "var(--muted)" }}>Varies</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p style={{
+                        textAlign: "center",
+                        color: "var(--muted)",
+                        fontSize: "0.9rem",
+                        marginTop: "2rem"
+                    }}>
+                        Comparison based on public information and user reviews (as of May 2026)
+                    </p>
+                </div>
+            </section>
+
+            {/* Built with Astro Section */}
+            <section class="hero-gradient" style={{ padding: "4rem 1rem" }}>
+                <div class="container">
+                    <div style={{
+                        textAlign: "center"
+                    }}>
+                        <h2 style={{
+                            fontSize: "clamp(1.5rem, 3vw, 2rem)",
+                            fontWeight: 800,
+                            color: "var(--text)",
+                            marginBottom: "1rem"
+                        }}>
+                            Built with Modern Technology
+                        </h2>
+                        <p style={{
+                            color: "var(--muted)",
+                            fontSize: "1rem",
+                            marginBottom: "2rem",
+                            lineHeight: 1.6
+                        }}>
+                            CourseSpeak is built with <strong>Astro</strong>, a modern web framework designed for speed, performance, and exceptional user experience. Astro enables us to deliver lightning-fast page loads and seamless interactions.
+                        </p>
+                        <div style={{
+                            display: "flex",
+                            gap: "1rem",
+                            justifyContent: "center",
+                            flexWrap: "wrap"
+                        }}>
+                            <a
+                                href="https://astro.build/showcase"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "0.5rem",
+                                    padding: "0.75rem 1.5rem",
+                                    borderRadius: "12px",
+                                    background: "var(--brand)",
+                                    color: "var(--bg)",
+                                    textDecoration: "none",
+                                    fontSize: "1rem",
+                                    fontWeight: 700,
+                                    transition: "all 0.3s ease",
+                                    boxShadow: "0 4px 20px -4px hsla(45, 95%, 58%, 0.4)"
+                                }}
+                            >
+                                View Astro Showcase
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+                                </svg>
+                            </a>
+                            <a
+                                href="https://astro.build/blog/whats-new-march-2026/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "0.5rem",
+                                    padding: "0.75rem 1.5rem",
+                                    borderRadius: "12px",
+                                    background: "transparent",
+                                    color: "var(--text)",
+                                    textDecoration: "none",
+                                    fontSize: "1rem",
+                                    fontWeight: 700,
+                                    transition: "all 0.3s ease",
+                                    border: "2px solid var(--border)"
+                                }}
+                            >
+                                Latest Astro Updates
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Articles Section for SEO */}
+            <section class="card-gradient" style={{ padding: "4rem 1rem" }}>
+                <div class="container">
+                    <div style={{
+                        textAlign: "center",
+                        marginBottom: "3rem"
+                    }}>
+                        <h2 style={{
+                            fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
+                            fontWeight: 800,
+                            color: "var(--text)",
+                            marginBottom: "1rem"
+                        }}>
+                            Free Udemy Courses & Learning Resources
+                        </h2>
+                        <p style={{
+                            color: "var(--muted)",
+                            fontSize: "1.1rem",
+                            maxWidth: "600px",
+                            margin: "0 auto",
+                            lineHeight: 1.6
+                        }}>
+                            Discover guides, tutorials, and resources to maximize your online learning with 100% off coupons
+                        </p>
+                    </div>
+
+                    <div style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+                        gap: "2rem"
+                    }}>
+                        <article style={{
+                            background: "var(--card)",
+                            padding: "2rem",
+                            borderRadius: "16px",
+                            border: "1px solid var(--border)",
+                            transition: "all 0.3s ease",
+                            cursor: "pointer"
+                        }} itemscope itemtype="https://schema.org/Article">
+                            <meta itemprop="datePublished" content="2023-01-01" />
+                            <meta itemprop="author" content="CourseSpeak Team" />
                             <div style={{
                                 width: "60px",
                                 height: "60px",
                                 background: "var(--brand)",
-                                borderRadius: "16px",
+                                borderRadius: "12px",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
-                                marginBottom: "1.5rem"
+                                marginBottom: "1rem"
                             }}>
                                 <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
-                                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
                                 </svg>
                             </div>
-                            <h3 style={{ color: "var(--brand)", fontSize: "1.3rem", marginBottom: "1rem", fontWeight: 700 }}>
-                                100% Verified Coupons
+                            <h3 style={{
+                                color: "var(--brand)",
+                                fontSize: "1.3rem",
+                                marginBottom: "0.5rem",
+                                fontWeight: 700
+                            }} itemprop="headline">
+                                How to Get Free Udemy Courses with 100% Off Coupons
                             </h3>
-                            <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "0.95rem" }}>
-                                Every coupon code is tested and verified to work. No more expired links or fake discounts.
+                            <p style={{
+                                color: "var(--muted)",
+                                lineHeight: 1.6,
+                                fontSize: "0.95rem",
+                                marginBottom: "1rem"
+                            }} itemprop="description">
+                                Step-by-step guide to finding, verifying, and redeeming free Udemy course coupons. Learn how to access premium online courses for free with verified coupon codes and maximize your learning without spending money.
                             </p>
-                        </div>
+                            <a href="/how-to-redeem-coupon" style={{
+                                color: "var(--brand)",
+                                textDecoration: "none",
+                                fontWeight: 600,
+                                fontSize: "0.95rem",
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "0.5rem"
+                            }}>
+                                Read Guide →
+                            </a>
+                        </article>
 
-                        <div style={{
+                        <article style={{
                             background: "var(--card)",
                             padding: "2rem",
-                            borderRadius: "20px",
+                            borderRadius: "16px",
                             border: "1px solid var(--border)",
-                            transition: "all 0.3s ease"
-                        }}>
+                            transition: "all 0.3s ease",
+                            cursor: "pointer"
+                        }} itemscope itemtype="https://schema.org/Article">
+                            <meta itemprop="datePublished" content="2023-02-01" />
+                            <meta itemprop="author" content="CourseSpeak Team" />
                             <div style={{
                                 width: "60px",
                                 height: "60px",
                                 background: "var(--accent)",
-                                borderRadius: "16px",
+                                borderRadius: "12px",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
-                                marginBottom: "1.5rem"
+                                marginBottom: "1rem"
                             }}>
                                 <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
-                                    <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                                    <path d="M11 15h2v2h-2zm0-8h2v6h-2zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
                                 </svg>
                             </div>
-                            <h3 style={{ color: "var(--accent)", fontSize: "1.3rem", marginBottom: "1rem", fontWeight: 700 }}>
-                                Daily Fresh Content
+                            <h3 style={{
+                                color: "var(--accent)",
+                                fontSize: "1.3rem",
+                                marginBottom: "0.5rem",
+                                fontWeight: 700
+                            }} itemprop="headline">
+                                Best Free Programming Courses for Beginners 2026
                             </h3>
-                            <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "0.95rem" }}>
-                                New courses and deals are added every single day from top learning platforms worldwide.
+                            <p style={{
+                                color: "var(--muted)",
+                                lineHeight: 1.6,
+                                fontSize: "0.95rem",
+                                marginBottom: "1rem"
+                            }} itemprop="description">
+                                Curated selection of top-rated free programming courses including Python, JavaScript, Web Development, and Data Science. Start your coding journey with 100% off Udemy coupons from expert instructors.
                             </p>
-                        </div>
+                            <a href="/categories" style={{
+                                color: "var(--accent)",
+                                textDecoration: "none",
+                                fontWeight: 600,
+                                fontSize: "0.95rem",
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "0.5rem"
+                            }}>
+                                Explore Free Courses →
+                            </a>
+                        </article>
 
-                        <div style={{
+                        <article style={{
                             background: "var(--card)",
                             padding: "2rem",
-                            borderRadius: "20px",
+                            borderRadius: "16px",
                             border: "1px solid var(--border)",
-                            transition: "all 0.3s ease"
-                        }}>
+                            transition: "all 0.3s ease",
+                            cursor: "pointer"
+                        }} itemscope itemtype="https://schema.org/Article">
+                            <meta itemprop="datePublished" content="2023-03-01" />
+                            <meta itemprop="author" content="CourseSpeak Team" />
                             <div style={{
                                 width: "60px",
                                 height: "60px",
                                 background: "hsl(180, 50%, 40%)",
-                                borderRadius: "16px",
+                                borderRadius: "12px",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
-                                marginBottom: "1.5rem"
+                                marginBottom: "1rem"
                             }}>
                                 <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
-                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                                 </svg>
                             </div>
-                            <h3 style={{ color: "hsl(180, 50%, 40%)", fontSize: "1.3rem", marginBottom: "1rem", fontWeight: 700 }}>
-                                Premium Quality
+                            <h3 style={{
+                                color: "hsl(180, 50%, 40%)",
+                                fontSize: "1.3rem",
+                                marginBottom: "0.5rem",
+                                fontWeight: 700
+                            }} itemprop="headline">
+                                Career Success Stories: From Free Courses to High-Paying Jobs
                             </h3>
-                            <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "0.95rem" }}>
-                                We focus on high-rated courses from expert instructors. Quality education that transforms careers.
+                            <p style={{
+                                color: "var(--muted)",
+                                lineHeight: 1.6,
+                                fontSize: "0.95rem",
+                                marginBottom: "1rem"
+                            }} itemprop="description">
+                                Real success stories from learners who transformed their careers using free Udemy courses. Discover how students landed jobs at Google, OpenAI, and top companies after learning with CourseSpeak coupons.
                             </p>
-                        </div>
+                            <a href="/success-stories" style={{
+                                color: "hsl(180, 50%, 40%)",
+                                textDecoration: "none",
+                                fontWeight: 600,
+                                fontSize: "0.95rem",
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "0.5rem"
+                            }}>
+                                Read Success Stories →
+                            </a>
+                        </article>
+                    </div>
+                </div>
+            </section>
 
-                        <div style={{
-                            background: "var(--card)",
-                            padding: "2rem",
-                            borderRadius: "20px",
-                            border: "1px solid var(--border)",
-                            transition: "all 0.3s ease"
+            {/* FAQ Section for SEO */}
+            <section class="card-gradient" style={{ padding: "4rem 1rem" }}>
+                <div class="container">
+                    <div style={{
+                        textAlign: "center",
+                        marginBottom: "3rem"
+                    }}>
+                        <h2 style={{
+                            fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
+                            fontWeight: 800,
+                            color: "var(--text)",
+                            marginBottom: "1rem"
                         }}>
-                            <div style={{
-                                width: "60px",
-                                height: "60px",
-                                background: "hsl(0, 84%, 60%)",
-                                borderRadius: "16px",
+                            Frequently Asked Questions
+                        </h2>
+                        <p style={{
+                            color: "var(--muted)",
+                            fontSize: "1.1rem",
+                            maxWidth: "600px",
+                            margin: "0 auto",
+                            lineHeight: 1.6
+                        }}>
+                            Everything you need to know about CourseSpeak
+                        </p>
+                    </div>
+
+                    <div style={{
+                        maxWidth: "800px",
+                        margin: "0 auto",
+                        display: "grid",
+                        gap: "1.5rem"
+                    }}>
+                        <details style={{
+                            background: "var(--card)",
+                            padding: "1.5rem",
+                            borderRadius: "12px",
+                            border: "1px solid var(--border)",
+                            cursor: "pointer"
+                        }}>
+                            <summary style={{
+                                color: "var(--text)",
+                                fontSize: "1rem",
+                                fontWeight: 700,
                                 display: "flex",
                                 alignItems: "center",
-                                justifyContent: "center",
-                                marginBottom: "1.5rem"
+                                gap: "0.5rem"
                             }}>
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
-                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                                </svg>
-                            </div>
-                            <h3 style={{ color: "hsl(0, 84%, 60%)", fontSize: "1.3rem", marginBottom: "1rem", fontWeight: 700 }}>
-                                Lifetime Access
-                            </h3>
-                            <p style={{ color: "var(--muted)", lineHeight: 1.6, fontSize: "0.95rem" }}>
-                                Free courses come with lifetime access, certificates, and all premium features included.
+                                What makes CourseSpeak different from other coupon sites?
+                            </summary>
+                            <p style={{
+                                color: "var(--muted)",
+                                marginTop: "1rem",
+                                lineHeight: 1.6
+                            }}>
+                                CourseSpeak stands out through 100% verified coupons, daily updates, premium quality filtering (4.5★+ courses only), lifetime access to free courses, and a community of 150K+ learners. We're built with Astro for lightning-fast performance and exceptional user experience. Every course and coupon is personally reviewed by our lead reviewer Josh Smith to ensure real value.
                             </p>
-                        </div>
+                        </details>
+
+                        <details style={{
+                            background: "var(--card)",
+                            padding: "1.5rem",
+                            borderRadius: "12px",
+                            border: "1px solid var(--border)",
+                            cursor: "pointer"
+                        }}>
+                            <summary style={{
+                                color: "var(--text)",
+                                fontSize: "1rem",
+                                fontWeight: 700,
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "0.5rem"
+                            }}>
+                                Is CourseSpeak really free to use?
+                            </summary>
+                            <p style={{
+                                color: "var(--muted)",
+                                marginTop: "1rem",
+                                lineHeight: 1.6
+                            }}>
+                                Yes, CourseSpeak is completely free! We provide verified free course deals and 100% off Udemy coupons at no cost. We never charge users for access to our platform or coupon codes. Our mission is to make education accessible, not profitable from learners.
+                            </p>
+                        </details>
+
+                        <details style={{
+                            background: "var(--card)",
+                            padding: "1.5rem",
+                            borderRadius: "12px",
+                            border: "1px solid var(--border)",
+                            cursor: "pointer"
+                        }}>
+                            <summary style={{
+                                color: "var(--text)",
+                                fontSize: "1rem",
+                                fontWeight: 700,
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "0.5rem"
+                            }}>
+                                How often are new deals added?
+                            </summary>
+                            <p style={{
+                                color: "var(--muted)",
+                                marginTop: "1rem",
+                                lineHeight: 1.6
+                            }}>
+                                We add fresh coupons and deals every single day, 24/7. Our team continuously searches, verifies, and curates the best learning opportunities for our community. On average, we update 50K+ courses with new deals throughout the year.
+                            </p>
+                        </details>
+
+                        <details style={{
+                            background: "var(--card)",
+                            padding: "1.5rem",
+                            borderRadius: "12px",
+                            border: "1px solid var(--border)",
+                            cursor: "pointer"
+                        }}>
+                            <summary style={{
+                                color: "var(--text)",
+                                fontSize: "1rem",
+                                fontWeight: 700,
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "0.5rem"
+                            }}>
+                                Do free courses include certificates?
+                            </summary>
+                            <p style={{
+                                color: "var(--muted)",
+                                marginTop: "1rem",
+                                lineHeight: 1.6
+                            }}>
+                                Yes! Most of our featured free courses include completion certificates. When you enroll through our verified coupons, you get lifetime access to the course material, completion certificate, and all premium features that paid students receive. Check individual course details for specific certificate information.
+                            </p>
+                        </details>
+
+                        <details style={{
+                            background: "var(--card)",
+                            padding: "1.5rem",
+                            borderRadius: "12px",
+                            border: "1px solid var(--border)",
+                            cursor: "pointer"
+                        }}>
+                            <summary style={{
+                                color: "var(--text)",
+                                fontSize: "1rem",
+                                fontWeight: 700,
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "0.5rem"
+                            }}>
+                                How do you choose which courses to feature?
+                            </summary>
+                            <p style={{
+                                color: "var(--muted)",
+                                marginTop: "1rem",
+                                lineHeight: 1.6
+                            }}>
+                                Every course featured on CourseSpeak goes through rigorous review by our Lead Course Reviewer Josh Smith. We only feature courses with 4.5★+ ratings, reputable instructors, comprehensive content, and proven student satisfaction. We prioritize quality over quantity to ensure our community gets real educational value.
+                            </p>
+                        </details>
+
+                        <details style={{
+                            background: "var(--card)",
+                            padding: "1.5rem",
+                            borderRadius: "12px",
+                            border: "1px solid var(--border)",
+                            cursor: "pointer"
+                        }}>
+                            <summary style={{
+                                color: "var(--text)",
+                                fontSize: "1rem",
+                                fontWeight: 700,
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "0.5rem"
+                            }}>
+                                How are coupons verified on CourseSpeak?
+                            </summary>
+                            <p style={{
+                                color: "var(--muted)",
+                                marginTop: "1rem",
+                                lineHeight: 1.6
+                            }}>
+                                Every coupon code on CourseSpeak is personally tested before publishing to ensure it works. We check expiration dates, discount amounts, and course availability. We remove expired coupons immediately and update our database daily. This 100% verification guarantee sets us apart from other coupon sites.
+                            </p>
+                        </details>
                     </div>
                 </div>
             </section>
