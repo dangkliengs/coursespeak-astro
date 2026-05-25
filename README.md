@@ -1,14 +1,14 @@
 # CourseSpeak — 100% OFF Udemy Coupons & Free Courses 2026
 
 [![Live Site](https://img.shields.io/badge/CourseSpeak.com-100%25_Free_Udemy_Courses-4F46E5?style=for-the-badge&logo=udemy&logoColor=white)](https://coursespeak.com)
-[![Free Coupons](https://img.shields.io/badge/1240%2B_Active_Coupons-100%25_OFF_Verified-10B981?style=for-the-badge)](https://coursespeak.com/deals)
+[![Free Coupons](https://img.shields.io/badge/1.2k%2B_Active_Coupons-100%25_OFF_Verified-10B981?style=for-the-badge)](https://coursespeak.com/deals)
 [![Instructors](https://img.shields.io/badge/Instructors-Browse_Top_Instructors-F59E0B?style=for-the-badge)](https://coursespeak.com/instructors)
 [![Categories](https://img.shields.io/badge/12%2B_Categories-Browse_Free_Courses-F59E0B?style=for-the-badge)](https://coursespeak.com/categories)
 [![Popular](https://img.shields.io/badge/Top_Rated_Courses-View_Popular-EF4444?style=for-the-badge)](https://coursespeak.com/popular)
 [![Daily Blog](https://img.shields.io/badge/Daily_Coupon_Blog-Updated_Every_Day-6366F1?style=for-the-badge)](https://coursespeak.com/blog)
 [![Admin](https://img.shields.io/badge/Admin_Dashboard-Full_CRUD_Built_In-6D28D9?style=for-the-badge)](https://coursespeak.com)
 
-CourseSpeak.com is a high-performance Udemy coupon platform trusted by 150,000+ learners worldwide. Built with Astro 6.3, React, and Tailwind CSS — featuring a full admin dashboard, sub-second load times, and 1200+ verified free Udemy coupons updated daily.
+CourseSpeak.com is a high-performance Udemy coupon platform trusted by 150,000+ learners worldwide. Built with Astro 6.3, React, and Tailwind CSS — featuring a full admin dashboard, sub-second load times, and 1.2k+ verified free Udemy coupons updated daily. Featured in the Official Astro Showcase March 2026.
 
 Get free Udemy courses at [coursespeak.com/deals](https://coursespeak.com/deals)
 
@@ -132,7 +132,7 @@ Why are courses free? Udemy instructors release 100% OFF coupons to attract firs
 | Metric | Value |
 |---|---|
 | Active Learners | 150,000+ worldwide |
-| Active Coupons | 1240+ verified |
+| Active Coupons | 1.2k+ verified |
 | Categories | 14+ main categories |
 | Topics | 514+ subcategories |
 | Static Pages | 74+ generated at build |
@@ -145,10 +145,10 @@ Why are courses free? Udemy instructors release 100% OFF coupons to attract firs
 
 | Layer | Technology |
 |---|---|
-| Framework | Astro 6.3, static site generation |
-| UI Components | React |
-| Styling | Tailwind CSS |
-| Deployment | GitHub Pages |
+| Framework | [Astro 6.3](https://astro.build/), static site generation |
+| UI Components | [React] (https://react.dev/) |
+| Styling | [Tailwind CSS] (https://tailwindcss.com/)|
+| Deployment | [GitHub Pages](https://github.com/)|
 | Admin API | GitHub API with full CRUD |
 | SEO | Schema.org structured data |
 | Database | 1240+ courses in deals.json |
@@ -198,7 +198,7 @@ coursespeak-astro/
 ├── src/
 │   ├── components/        Astro and React UI components
 │   ├── data/
-│   │   └── deals.json     1240+ Udemy course deals database
+│   │   └── deals.json     1.2k+ Udemy course deals database
 │   ├── lib/
 │   │   ├── store.ts       State management
 │   │   └── github-api.js  Admin GitHub API integration
@@ -245,4 +245,4 @@ This repository is shared for educational and transparency purposes. Copying or 
 
 ---
 
-Get 1240+ free Udemy courses with verified 100% OFF coupons at [CourseSpeak.com](https://coursespeak.com) — admin dashboard, Astro 6.3, trusted by 150,000+ learners, updated daily.
+Get 1.2k+ free Udemy courses with verified 100% OFF coupons at [CourseSpeak.com](https://coursespeak.com) — admin dashboard, Astro 6.3, trusted by 150,000+ learners, updated daily.
