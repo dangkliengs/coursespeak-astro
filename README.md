@@ -146,9 +146,9 @@ Why are courses free? Udemy instructors release 100% OFF coupons to attract firs
 | Layer | Technology |
 |---|---|
 | Framework | [Astro 6.3](https://astro.build/), static site generation |
-| UI Components | [React] (https://react.dev/) |
-| Styling | [Tailwind CSS] (https://tailwindcss.com/)|
-| Deployment | [GitHub Pages](https://github.com/)|
+| UI Components | [React] (https://react.dev)|
+| Styling | [Tailwind CSS] (https://tailwindcss.com)|
+| Deployment | [GitHub Pages](https://github.com)|
 | Admin API | GitHub API with full CRUD |
 | SEO | Schema.org structured data |
 | Database | 1240+ courses in deals.json |
