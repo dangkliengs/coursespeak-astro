@@ -82,7 +82,6 @@ const topicName = displayName;
 
 // Get category for this topic (assuming all deals in topic have same category)
 const category = topicDeals.length > 0 && topicDeals[0].category ? topicDeals[0].category : 'Development';
-const categoryImage = `/categories/${category.toLowerCase().replace(/\s+/g, '-')}.svg`;
 
 // Generate related searches
 const generateRelatedSearches = (topic: string) => {
@@ -119,21 +118,41 @@ const topics = [...new Set(allDeals.map(deal => deal.subcategory).filter(sub => 
 
 ---
 
-<Layout title={`Best Udemy Courses for ${topicName} in 2026`} description={topicDescription}>
+<Layout title={`Best Udemy Courses for ${topicName} in 2026`} description={topicDescription} canonical={`https://coursespeak.com/topics/${topicSlug}`}>
   <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "2rem 1rem" }}>
     {/* Page Header */}
     <div style={{ textAlign: "center", marginBottom: "3rem" }}>
-      <div style={{ marginBottom: "2rem" }}>
-        <img
-          src={categoryImage}
-          alt={`${topicName} courses`}
-          style={{
-            width: "80px",
-            height: "80px",
-            borderRadius: "12px",
-            boxShadow: "0 4px 8px rgba(0,0,0,0.1)"
-          }}
-        />
+      <div style={{ marginBottom: "1.5rem", display: "inline-flex", gap: "0.75rem", alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
+        <span style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "0.5rem",
+          padding: "0.75rem 1rem",
+          borderRadius: "999px",
+          background: "rgba(56, 189, 248, 0.12)",
+          color: "#0369A1",
+          fontWeight: 700,
+          fontSize: "0.95rem",
+          border: "1px solid rgba(56, 189, 248, 0.2)"
+        }}>
+          <span aria-hidden="true">🏷️</span>
+          {topicName}
+        </span>
+        <span style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "0.4rem",
+          padding: "0.75rem 1rem",
+          borderRadius: "999px",
+          background: "rgba(16, 185, 129, 0.12)",
+          color: "#047857",
+          fontWeight: 600,
+          fontSize: "0.95rem",
+          border: "1px solid rgba(16, 185, 129, 0.2)"
+        }}>
+          <span aria-hidden="true">✨</span>
+          {topicDeals.length}+ courses
+        </span>
       </div>
       <h1 style={{
         fontSize: "2.5rem",

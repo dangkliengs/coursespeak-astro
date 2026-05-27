@@ -607,7 +607,7 @@ const currentPath = Astro.url.pathname;
             <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Topics</span></li></>
           )}
           
-          {currentPath.startsWith('/topic/') && (
+          {currentPath.startsWith('/topics/') && (
             <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
             <li><a href="/topics" style={{ color: "var(--muted)", textDecoration: "none" }}>Topics</a></li>
             <li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
@@ -681,7 +681,7 @@ const currentPath = Astro.url.pathname;
           {/* Fallback for other pages */}
           {!['/deals', '/categories', '/topics', '/popular', '/instructors', '/blog', '/about', '/contact', '/privacy', '/terms', '/sitemap', '/how-to-redeem-coupon', '/udemy-coupons-guide'].includes(currentPath) && 
            !currentPath.startsWith('/categories/') && 
-           !currentPath.startsWith('/topic/') && 
+           !currentPath.startsWith('/topics/') && 
            !currentPath.startsWith('/instructor/') && 
            !currentPath.startsWith('/blog/') && (
             <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
@@ -802,16 +802,33 @@ const currentPath = Astro.url.pathname;
           <div>
             <h3
               style={{
-                background: "linear-gradient(135deg, #FFC107 0%, #FFD54F 100%)",
+                marginBottom: "16px",
+                fontSize: "1.2rem",
+                fontWeight: "700",
+                lineHeight: "1.1"
+              }}
+            >
+              <span style={{
+                display: "inline-block",
+                background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
-                marginBottom: "16px",
-                fontSize: "1.2rem",
-                fontWeight: "700"
-              }}
-            >
-              CourseSpeak
+                color: "transparent"
+              }}>
+                Course
+              </span>
+              <span style={{
+                display: "inline-block",
+                background: "linear-gradient(135deg, var(--text) 0%, var(--muted) 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                color: "transparent",
+                marginLeft: "0.2rem"
+              }}>
+                Speak
+              </span>
             </h3>
             <p style={{ 
               fontSize: "0.9rem", 
