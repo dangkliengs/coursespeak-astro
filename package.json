@@ -14,12 +14,12 @@
     "mode:restore": "node scripts/auto-switch.js restore"
   },
   "dependencies": {
-    "@astrojs/node": "^10.1.1",
-    "@astrojs/react": "^5.0.5",
-    "@astrojs/sitemap": "^3.7.2",
+    "@astrojs/node": "^10.1.2",
+    "@astrojs/react": "^5.0.6",
+    "@astrojs/sitemap": "^3.7.3",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
-    "astro": "^6.3.7",
+    "astro": "^6.4.2",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "remark": "^15.0.1",
