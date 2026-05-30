@@ -61,8 +61,8 @@ const pageTitle = currentPage === 1
 
 const pageDescription = currentPage === 1
   ? (languageFilter
-    ? `Browse ${totalDeals} verified ${languageFilter} Udemy coupons with ${freeDeals}+ free courses. Save up to ${avgSavings}% on programming, web development, data science and more.`
-    : `Browse ${totalDeals}+ verified Udemy coupons with ${freeDeals}+ free courses. Save up to ${avgSavings}% on programming, web development, data science and more. Updated daily.`)
+    ? `Browse ${totalDeals} verified ${languageFilter} Udemy coupons with free courses. Save up to ${avgSavings}% on programming, web development, data science and more.`
+    : `Browse ${totalDeals}+ verified Udemy coupons with free courses. Save up to ${avgSavings}% on programming, web development, data science and more. Updated daily.`)
   : `Page ${currentPage} of Udemy deals. Browse more verified free courses and 100% off coupons on CourseSpeak.`;
 
 // FAQ data — identical between schema and visible HTML (Google requirement)
@@ -146,7 +146,7 @@ const structuredData = {
       "mainEntity": {
         "@type": "ItemList",
         "name": `Udemy Deals & Free Coupons — ${currentMonth} ${currentYear}`,
-        "description": `${totalDeals}+ verified Udemy course deals with ${freeDeals}+ free options`,
+        "description": `${totalDeals}+ verified Udemy course deals with free coupons`,
         "numberOfItems": allDeals.length,
         "itemListElement": currentItems.map((deal: any, index: number) => ({
           "@type": "ListItem",
@@ -199,12 +199,6 @@ const structuredData = {
 };
 ---
 
-<!--
-  FIX 1: prevUrl/nextUrl — Layout.astro Props interface doesn't have these.
-  Inject rel=prev/next directly in <head> using Astro's head slot instead.
-  Add this slot to Layout.astro: <slot name="head" slot="head" />
-  inside the <head> tag.
--->
 <Layout
   title={pageTitle}
   description={pageDescription}
@@ -258,7 +252,7 @@ const structuredData = {
             maxWidth: "650px", margin: "0 auto 2.5rem", lineHeight: 1.7
           }}>
             Browse <strong style={{ color: "var(--text)" }}>{totalDeals}+ verified Udemy deals</strong> with{" "}
-            <strong style={{ color: "var(--text)" }}>{freeDeals}+ free courses</strong>. Save up to{" "}
+            <strong style={{ color: "var(--text)" }}>free courses</strong>. Save up to{" "}
             <strong style={{ color: "var(--brand)" }}>{avgSavings}%</strong> on programming, web development,
             data science, and marketing — updated daily.
           </p>
@@ -266,7 +260,7 @@ const structuredData = {
           <div style={{ display: "flex", justifyContent: "center", gap: "1rem", flexWrap: "wrap" }}>
             {[
               { label: `${totalDeals}+ Courses`, path: "M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z", color: "var(--brand)" },
-              { label: `${freeDeals}+ Free`, path: "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z", color: "hsl(120, 70%, 45%)" },
+              { label: `Free Courses`, path: "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z", color: "hsl(120, 70%, 45%)" },
               { label: `Save ${avgSavings}%`, path: "M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z", color: "hsl(35, 90%, 68%)" },
               { label: "Verified Daily", path: "M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z", color: "hsl(210, 100%, 60%)" }
             ].map(stat => (
