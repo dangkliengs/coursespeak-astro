@@ -19,16 +19,19 @@ for (const deal of allDeals) {
 }
 const categories = Object.entries(grouped).sort((a, b) => b[1].length - a[1].length);
 
-// @ts-ignore
-const dateObj = new Date(`${date}T00:00:00.000Z`);
+const dateObj = new globalThis.Date(`${date}T00:00:00.000Z`);
 const dateLabel = dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-// @ts-ignore
-const isToday = date === new Date().toISOString().substring(0, 10);
 
-// @ts-ignore
-const prev = new Date(dateObj.getTime() - 86400000);
-// @ts-ignore
-const next = new Date(dateObj.getTime() + 86400000);
+function jakartaDateString(dateValue = new globalThis.Date()) {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jakarta' }).format(dateValue);
+}
+
+const today = jakartaDateString();
+const yesterday = jakartaDateString(new globalThis.Date(globalThis.Date.now() - 86400000));
+const isToday = date === today;
+
+const prev = new globalThis.Date(dateObj.getTime() - 86400000);
+const next = new globalThis.Date(dateObj.getTime() + 86400000);
 const prevDate = prev.toISOString().substring(0, 10);
 const nextDate = next.toISOString().substring(0, 10);
 
@@ -174,7 +177,7 @@ const jsonLd = {
       <div class="filter-row">
         <span class="tab tab-active" aria-current="true">Select All</span>
         {/* @ts-ignore */}
-        <a href={`/blog/top-udemy-coupons/${new Date().toISOString().substring(0, 10)}/`} class="tab">Last 24 Hrs</a>
+        <a href={`/blog/top-udemy-coupons/${today}/`} class="tab">Last 24 Hrs</a>
       </div>
 
       <!-- Categories: grid of course cards per category -->

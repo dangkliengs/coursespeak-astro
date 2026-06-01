@@ -4,7 +4,10 @@ import { getAvailableDates } from '../../lib/store.js';
 
 const siteUrl = "https://coursespeak.com";
 const ARTICLES_PER_PAGE = 12;
-const today = new Date().toISOString().substring(0, 10);
+function jakartaDateString(dateValue = new Date()) {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jakarta' }).format(dateValue);
+}
+const today = jakartaDateString();
 const dates = await getAvailableDates();
 const totalPages = Math.max(1, Math.ceil(dates.length / ARTICLES_PER_PAGE));
 const page1Dates = dates.slice(0, ARTICLES_PER_PAGE);
