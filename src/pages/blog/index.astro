@@ -45,7 +45,7 @@ const articles = page1Dates.map((date, index) => {
     title: `Top Udemy Coupons — ${shortLabel}`,
     url: `${siteUrl}/blog/top-udemy-coupons/${date}/`,
     excerpt,
-    coverImage: `${siteUrl}/api/blog-cover/${date}.svg`,
+    coverImage: `${siteUrl}/api/blog-cover/${date}.svg?version=${date}`,
   };
 });
 
@@ -139,7 +139,7 @@ const jsonLd = {
   title="Blog | CourseSpeak — Daily Udemy Coupons & Free Course Deals"
   description="Browse daily Udemy coupon articles. Top free courses and verified discount codes by date. Updated every day — CourseSpeak."
   canonical={`${siteUrl}/blog`}
-  image="/api/blog-cover-feed.svg"
+  image="/api/blog-cover-feed.svg?version=v1"
   ogImageType="image/svg+xml"
 >
   {totalPages > 1 && (
@@ -175,7 +175,7 @@ const jsonLd = {
             <article class="article-card" itemscope itemtype="https://schema.org/BlogPosting">
               <a href={`/blog/top-udemy-coupons/${a.date}/`} class="article-card-thumb" aria-hidden="true" tabindex="-1">
                 <img
-                  src={`/api/blog-cover/${a.date}.svg`}
+                  src={`/api/blog-cover/${a.date}.svg?version=${a.date}`}
                   width="1200"
                   height="630"
                   class="article-card-image"
