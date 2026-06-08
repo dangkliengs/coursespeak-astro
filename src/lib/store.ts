@@ -19,6 +19,51 @@ function resolveDealsFilePath(): string {
 const DEALS_FILE = resolveDealsFilePath();
 const DEALS_DIR = path.dirname(DEALS_FILE);
 
+/**
+ * ==================== TIMEZONE HELPER (ASIA/JAKARTA) ====================
+ * All date operations now consistently use Asia/Jakarta (WIB) timezone.
+ * Day boundary starts at 00:00:00 WIB.
+ */
+const TIMEZONE = 'Asia/Jakarta';
+
+/**
+ * Get start of day (00:00:00) in Asia/Jakarta timezone
+ */
+function getStartOfDayInJakarta(dateInput: string | Date): Date {
+  const date = new Date(dateInput);
+  
+  const formatter = new Intl.DateTimeFormat('en-CA', {
+    timeZone: TIMEZONE,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
+  
+  const parts = formatter.formatToParts(date);
+  const year = parts.find(p => p.type === 'year')!.value;
+  const month = parts.find(p => p.type === 'month')!.value;
+  const day = parts.find(p => p.type === 'day')!.value;
+  
+  return new Date(`${year}-${month}-${day}T00:00:00`);
+}
+
+/**
+ * Get current date (YYYY-MM-DD) in Asia/Jakarta
+ */
+function getCurrentDateInJakarta(): string {
+  return new Date().toLocaleDateString('en-CA', { timeZone: TIMEZONE });
+}
+
+/**
+ * Get yesterday's date (YYYY-MM-DD) in Asia/Jakarta
+ */
+function getYesterdayInJakarta(): string {
+  const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
+  return yesterday.toLocaleDateString('en-CA', { timeZone: TIMEZONE });
+}
+
+/* ==================================================================== */
+
 export async function readDealsFromFile(): Promise<Deal[]> {
   try {
     const buf = await fs.readFile(DEALS_FILE, "utf-8");
@@ -30,7 +75,6 @@ export async function readDealsFromFile(): Promise<Deal[]> {
     console.error('Error reading deals file:', error);
     return [];
   }
-  // If data is not an array, return empty array
   return [];
 }
 
@@ -41,7 +85,6 @@ async function writeDealsToFile(all: Deal[]): Promise<void> {
 
 function sortByRecency(deals: Deal[]): Deal[] {
   return [...deals].sort((a, b) => {
-    // Match homepage sorting: updatedAt || createdAt || expiresAt
     const timeA = new Date(a.updatedAt ?? a.createdAt ?? a.expiresAt ?? 0).getTime();
     const timeB = new Date(b.updatedAt ?? b.createdAt ?? b.expiresAt ?? 0).getTime();
     return timeB - timeA;  // Newest first
@@ -67,12 +110,14 @@ export async function createDeal(deal: Deal): Promise<Deal> {
   if (deal.slug && all.some((item) => item.slug === deal.slug)) {
     throw new Error("Slug already exists");
   }
+
   const now = new Date().toISOString();
   const next: Deal = {
     ...deal,
     createdAt: deal.createdAt ?? now,
     updatedAt: deal.updatedAt ?? now,
   };
+
   all.unshift(next);
   const sortedAll = sortByRecency(all);
   await writeDealsToFile(sortedAll);
@@ -126,7 +171,6 @@ export async function writeDeals(all: Deal[]): Promise<void> {
   await writeDealsToFile(all);
 }
 
-// Helper function to filter and sort deals
 export async function getDeals(options: {
   date?: string;
   limit?: number;
@@ -134,11 +178,10 @@ export async function getDeals(options: {
 } = {}): Promise<Deal[]> {
   let deals = await readDealsFromFile();
 
-  // Filter by date (YYYY-MM-DD format)
+  // Filter by date (YYYY-MM-DD format) using Asia/Jakarta timezone
   if (options.date) {
-    const targetDate = new Date(options.date);
-    const nextDay = new Date(targetDate);
-    nextDay.setDate(targetDate.getDate() + 1);
+    const targetDate = getStartOfDayInJakarta(options.date);
+    const nextDay = new Date(targetDate.getTime() + 24 * 60 * 60 * 1000);
 
     deals = deals.filter(deal => {
       const dealDate = new Date(deal.updatedAt ?? deal.createdAt ?? deal.expiresAt ?? 0);
@@ -146,12 +189,10 @@ export async function getDeals(options: {
     });
   }
 
-  // Sort by rating if requested
   if (options.sortBy === 'rating') {
     deals = deals.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
   }
 
-  // Apply limit
   if (options.limit) {
     deals = deals.slice(0, options.limit);
   }
@@ -161,10 +202,7 @@ export async function getDeals(options: {
 
 /**
  * Get available dates for blog static generation.
- * Capped at MAX_BLOG_DAYS so the site never grows to thousands of pages:
- * - 1 year of daily updates without cap = 365 article pages + many index pages.
- * - With cap 90: at most 90 article pages + 8 index pages (build stays fast, output size fixed).
- * Dates are derived from deals (updatedAt/createdAt/expiresAt). Oldest dates beyond the cap are not generated.
+ * Uses Asia/Jakarta timezone consistently.
  */
 const MAX_BLOG_DAYS = 90;
 
@@ -174,14 +212,13 @@ export async function getAvailableDates(): Promise<string[]> {
 
   deals.forEach(deal => {
     const date = new Date(deal.updatedAt ?? deal.createdAt ?? deal.expiresAt ?? 0);
-    const dateString = date.toISOString().split('T')[0]; // YYYY-MM-DD
+    const dateString = date.toLocaleDateString('en-CA', { timeZone: TIMEZONE });
     dates.add(dateString);
   });
 
-  const today = new Date().toISOString().split('T')[0];
-  const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-  dates.add(today);
-  dates.add(yesterday);
+  // Always include today and yesterday based on WIB
+  dates.add(getCurrentDateInJakarta());
+  dates.add(getYesterdayInJakarta());
 
   const sortedDates = Array.from(dates).sort().reverse().slice(0, MAX_BLOG_DAYS);
   return sortedDates;
