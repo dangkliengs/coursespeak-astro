@@ -7,15 +7,12 @@ import HeaderSearch from "../components/HeaderSearch";
 import { readDeals } from "../lib/store";
 import { uniqueProviders } from "../lib/mockData";
 
-// ─── Date helpers ────────────────────────────────────────────────────────────
-const currentDate = new Date();
-const utcDate     = new Date(currentDate.toISOString());
-const monthNames  = [
-  "January","February","March","April","May","June",
-  "July","August","September","October","November","December"
-];
-const currentMonth = monthNames[utcDate.getMonth()];
-const currentYear  = utcDate.getFullYear();
+// ─── Date helpers (WIB/Asia-Jakarta) ─────────────────────────────────────────
+const TIMEZONE = 'Asia/Jakarta';
+const nowWIB = new Date();
+const currentMonth = nowWIB.toLocaleDateString('en-US', { timeZone: TIMEZONE, month: 'long' });
+const currentYear  = nowWIB.toLocaleDateString('en-US', { timeZone: TIMEZONE, year: 'numeric' });
+const todayWIB     = nowWIB.toLocaleDateString('en-CA', { timeZone: TIMEZONE });
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function genStudents(key: string): number {
@@ -341,7 +338,7 @@ const jsonLd = {
             "price": "0",
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
-            "validFrom": (deal as any).createdAt || new Date().toISOString().split('T')[0],
+            "validFrom": (deal as any).createdAt || todayWIB,
             "priceValidUntil": deal.expiresAt,
             "description": "100% off - completely free Udemy course"
           },
@@ -613,7 +610,7 @@ const jsonLd = {
         "@id": "https://coursespeak.com/#educational"
       },
       "datePublished": "2024-01-01",
-      "dateModified": new Date().toISOString().split('T')[0],
+      "dateModified": todayWIB,
       "author": {
         "@type": "Organization",
         "@id": "https://coursespeak.com/#organization",

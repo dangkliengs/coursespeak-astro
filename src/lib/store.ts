@@ -44,7 +44,7 @@ function getStartOfDayInJakarta(dateInput: string | Date): Date {
   const month = parts.find(p => p.type === 'month')!.value;
   const day = parts.find(p => p.type === 'day')!.value;
   
-  return new Date(`${year}-${month}-${day}T00:00:00`);
+  return new Date(`${year}-${month}-${day}T00:00:00+07:00`);
 }
 
 /**

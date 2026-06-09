@@ -33,12 +33,12 @@ const prevUrl = currentPage > 1
   : null;
 const nextUrl = currentPage < totalPages ? `${baseDealsUrl}/${currentPage + 1}${languageFilter ? `?language=${encodeURIComponent(languageFilter)}` : ''}` : null;
 
-// Dynamic SEO
+// Dynamic SEO (WIB/Asia-Jakarta)
+const TIMEZONE = 'Asia/Jakarta';
 const currentDate = new Date();
-const monthNames = ["January","February","March","April","May","June",
-  "July","August","September","October","November","December"];
-const currentMonth = monthNames[currentDate.getMonth()];
-const currentYear = currentDate.getFullYear();
+const currentMonth = currentDate.toLocaleDateString('en-US', { timeZone: TIMEZONE, month: 'long' });
+const currentYear  = currentDate.toLocaleDateString('en-US', { timeZone: TIMEZONE, year: 'numeric' });
+const todayWIB     = currentDate.toLocaleDateString('en-CA', { timeZone: TIMEZONE });
 
 // Real stats from data (use filtered deals if filter is active)
 const displayDeals = filteredDeals;
@@ -131,7 +131,7 @@ const structuredData = {
       "description": pageDescription,
       "isPartOf": { "@id": siteUrl },
       "breadcrumb": { "@id": `${currentUrl}#breadcrumb` },
-      "dateModified": currentDate.toISOString().split('T')[0],
+      "dateModified": todayWIB,
       "inLanguage": "en-US",
       "about": {
         "@type": "Thing",
@@ -169,7 +169,7 @@ const structuredData = {
               "price": String(deal.price ?? "0"),
               "priceCurrency": "USD",
               "availability": "https://schema.org/InStock",
-              "priceValidUntil": deal.expiresAt || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+              "priceValidUntil": deal.expiresAt || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString('en-CA', { timeZone: TIMEZONE }),
               "seller": { "@type": "Organization", "name": "CourseSpeak", "url": siteUrl },
               "areaServed": ["United States", "United Kingdom", "India", "Canada", "Australia", "Germany", "France", "Brazil", "Japan", "Global"]
             },

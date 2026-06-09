@@ -26,17 +26,16 @@ const instructors = Array.from(instructorSet).sort();
 const dates = [...new Set(
   allDeals.map(d => {
     const date = new Date(d.updatedAt ?? d.createdAt ?? d.expiresAt ?? 0);
-    return date.toISOString().split('T')[0];
+    return date.toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' });
   })
 )].sort().reverse().slice(0, 30);
 
-const currentDate = new Date();
-const monthNames = ["January","February","March","April","May","June",
-  "July","August","September","October","November","December"];
-const currentMonth = monthNames[currentDate.getMonth()];
-const currentYear = currentDate.getFullYear();
+const TIMEZONE = 'Asia/Jakarta';
+const jakartaNow = new Date();
+const jakartaMonth = jakartaNow.toLocaleDateString('en-US', { timeZone: TIMEZONE, month: 'long' });
+const jakartaYear  = jakartaNow.toLocaleDateString('en-US', { timeZone: TIMEZONE, year: 'numeric' });
 
-const pageTitle = `Sitemap | CourseSpeak - Free Udemy Courses ${currentMonth} ${currentYear}`;
+const pageTitle = `Sitemap | CourseSpeak - Free Udemy Courses ${jakartaMonth} ${jakartaYear}`;
 const pageDescription = "Navigate CourseSpeak easily. Find all pages, categories, topics, instructors, and blog posts in one place.";
 const canonical = "https://coursespeak.com/sitemap";
 const siteUrl = "https://coursespeak.com";
@@ -78,7 +77,7 @@ const structuredData = {
       "isPartOf": { "@id": `${siteUrl}/#website` },
       "breadcrumb": { "@id": `${canonical}#breadcrumb` },
       "inLanguage": "en-US",
-      "dateModified": currentDate.toISOString().split('T')[0]
+      "dateModified": jakartaNow.toLocaleDateString('en-CA', { timeZone: TIMEZONE })
     },
     {
       "@type": "BreadcrumbList",
