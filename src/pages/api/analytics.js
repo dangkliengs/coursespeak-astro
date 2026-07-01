@@ -21,8 +21,17 @@ function getDateRange() {
 
 const { start: START_DATE, end: END_DATE } = getDateRange();
 
+const IMPACT_API_USERNAME = import.meta.env.IMPACT_API_USERNAME;
+const IMPACT_API_PASSWORD = import.meta.env.IMPACT_API_PASSWORD;
+
 // Impact API configuration with dynamic date range
-const IMPACT_API_URL = `https://IRkzwzAfJuZq6564357xvKZ6f43NJYGxb1:WAy9vV5.GgZqSTiYSmo.TEiQqVbxWtVc@api.impact.com/Mediapartners/IRkzwzAfJuZq6564357xvKZ6f43NJYGxb1/ReportExport/partner_performance_by_day.json?PUB_CAMPAIGN=0&CONV_CURRENCY=USD&START_DATE=${START_DATE}&END_DATE=${END_DATE}&timeRange=CUSTOM&compareEnabled=false`;
+const IMPACT_API_URL = `https://api.impact.com/Mediapartners/IRkzwzAfJuZq6564357xvKZ6f43NJYGxb1/ReportExport/partner_performance_by_day.json?PUB_CAMPAIGN=0&CONV_CURRENCY=USD&START_DATE=${START_DATE}&END_DATE=${END_DATE}&timeRange=CUSTOM&compareEnabled=false`;
+
+const IMPACT_AUTH_HEADERS = IMPACT_API_USERNAME && IMPACT_API_PASSWORD
+  ? {
+      Authorization: `Basic ${Buffer.from(`${IMPACT_API_USERNAME}:${IMPACT_API_PASSWORD}`).toString('base64')}`,
+    }
+  : {};
 
 // Initialize analytics data if file doesn't exist
 if (!fs.existsSync(METRICS_FILE)) {
@@ -38,7 +47,9 @@ if (!fs.existsSync(METRICS_FILE)) {
 async function fetchImpactData() {
   try {
     console.log('Fetching Impact API data...');
-    const response = await fetch(IMPACT_API_URL);
+    const response = await fetch(IMPACT_API_URL, {
+      headers: IMPACT_AUTH_HEADERS,
+    });
     console.log('Impact API response status:', response.status);
     
     if (!response.ok) {
@@ -51,7 +62,9 @@ async function fetchImpactData() {
     if (data.Status === 'QUEUED' && data.ResultUri) {
       console.log('Status is QUEUED, fetching from ResultUri:', data.ResultUri);
       const resultUrl = `https://api.impact.com${data.ResultUri}`;
-      const resultResponse = await fetch(resultUrl);
+      const resultResponse = await fetch(resultUrl, {
+        headers: IMPACT_AUTH_HEADERS,
+      });
       console.log('ResultUri response status:', resultResponse.status);
       
       if (resultResponse.ok) {

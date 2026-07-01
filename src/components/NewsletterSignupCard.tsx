@@ -1,62 +1,6 @@
 "use client";
 
-import { useState } from "react";
-
-type Status = "idle" | "loading" | "success" | "error";
-
-type Message = {
-  type: "success" | "error";
-  text: string;
-};
-
-const successMessages = [
-  "You're in! We'll send the latest deals soon.",
-  "Thanks for subscribing! Fresh coupons are on the way.",
-  "Subscription confirmed. Watch your inbox for new Udemy coupons.",
-];
-
 export default function NewsletterSignupCard() {
-  const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<Status>("idle");
-  const [message, setMessage] = useState<Message | null>(null);
-
-  const disabled = status === "loading";
-
-  const pickSuccessMessage = () => {
-    const idx = Math.floor(Math.random() * successMessages.length);
-    return successMessages[idx];
-  };
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!email.trim()) {
-      setMessage({ type: "error", text: "Please enter a valid email address." });
-      return;
-    }
-    try {
-      setStatus("loading");
-      setMessage(null);
-      const response = await fetch("/api/newsletter-signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim() }),
-      });
-      if (!response.ok) {
-        const err = await response.json().catch(() => ({ message: "Unable to subscribe right now." }));
-        throw new Error(err.message || "Unable to subscribe right now.");
-      }
-      setStatus("success");
-      setMessage({ type: "success", text: pickSuccessMessage() });
-      setEmail("");
-    } catch (error) {
-      const text = error instanceof Error ? error.message : "Failed to subscribe. Please try again.";
-      setStatus("error");
-      setMessage({ type: "error", text });
-    } finally {
-      setStatus((prev) => (prev === "loading" ? "idle" : prev));
-    }
-  };
-
   return (
     <div
       className="card"
@@ -86,10 +30,14 @@ export default function NewsletterSignupCard() {
           </div>
           <h3 style={{ margin: "0 0 6px", fontSize: 20 }}>Get the freshest Udemy coupons</h3>
           <p className="muted" style={{ margin: 0 }}>
-            Join 150,000+ learners receiving weekly Udemy free coupons, 100% off deals, and handpicked guides from Coursespeak.
+            Join 250,000+ learners receiving weekly Udemy free coupons, 100% off deals, and handpicked guides from Coursespeak.
           </p>
         </div>
-        <form onSubmit={handleSubmit} style={{ display: "grid", gap: 8 }}>
+        <form
+          action="https://app.convertkit.com/forms/9125901/subscriptions"
+          method="post"
+          style={{ display: "grid", gap: 8 }}
+        >
           <label htmlFor="newsletter-email" className="muted" style={{ fontSize: 12 }}>
             Enter your email to subscribe
           </label>
@@ -97,8 +45,7 @@ export default function NewsletterSignupCard() {
             <input
               id="newsletter-email"
               type="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              name="email_address"
               placeholder="you@example.com"
               autoComplete="email"
               required
@@ -112,7 +59,6 @@ export default function NewsletterSignupCard() {
                 color: "#eaf4ff",
               }}
               aria-label="Email address"
-              disabled={disabled}
             />
             <button
               type="submit"
@@ -124,27 +70,11 @@ export default function NewsletterSignupCard() {
                 minWidth: 140,
                 boxShadow: "0 6px 16px rgba(91, 140, 255, 0.38)",
               }}
-              disabled={disabled}
             >
-              {status === "loading" ? "Subscribing..." : "Subscribe"}
+              Subscribe
             </button>
           </div>
         </form>
-        {message ? (
-          <div
-            role="status"
-            style={{
-              padding: "8px 12px",
-              borderRadius: 8,
-              border: message.type === "success" ? "1px solid rgba(34, 197, 94, 0.4)" : "1px solid rgba(248, 113, 113, 0.4)",
-              background: message.type === "success" ? "rgba(34, 197, 94, 0.1)" : "rgba(248, 113, 113, 0.1)",
-              color: message.type === "success" ? "#bbf7d0" : "#fecaca",
-              fontSize: 13,
-            }}
-          >
-            {message.text}
-          </div>
-        ) : null}
       </div>
     </div>
   );

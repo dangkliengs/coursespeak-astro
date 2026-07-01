@@ -1,3 +1,10 @@
+export async function GET() {
+  return new Response(JSON.stringify({ error: 'Method not allowed' }), {
+    status: 405,
+    headers: { 'Content-Type': 'application/json' }
+  });
+}
+
 export async function POST({ request }) {
   try {
     console.log('=== NEWSLETTER SIGNUP REQUEST ===');
@@ -5,10 +12,18 @@ export async function POST({ request }) {
     console.log('Request headers:', Object.fromEntries(request.headers));
     console.log('Request URL:', request.url);
 
-    const data = await request.formData();
-    console.log('Form data entries:', Array.from(data.entries()));
-    
-    const email = data.get('email');
+    const contentType = request.headers.get('content-type') || '';
+    let email;
+
+    if (contentType.includes('application/json')) {
+      const payload = await request.json();
+      email = payload.email ?? payload.email_address;
+    } else {
+      const data = await request.formData();
+      console.log('Form data entries:', Array.from(data.entries()));
+      email = data.get('email') ?? data.get('email_address');
+    }
+
     console.log('Extracted email:', email);
 
     // Validate email

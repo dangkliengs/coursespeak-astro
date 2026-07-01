@@ -163,15 +163,17 @@ const jsonLd = {
             fetchpriority="high"
           />
         </figure>
-        <h1 class="post-title" itemprop="headline">Top Udemy Coupons ({dateLabel})</h1>
-        <p class="post-meta">
-          <time itemprop="datePublished" datetime={`${date}T00:00:00Z`}>{dateLabel}</time>
-          · {totalCoupons} coupons · {catCount} categories
-          {isToday && <span class="meta-today"> · Updated today</span>}
-        </p>
-        <p class="post-desc" itemprop="description">
-          Verified Udemy coupon codes for {dateLabel}. Free courses in <strong>{topCats}</strong> and more. All tested for maximum savings at checkout.
-        </p>
+        <div class="post-header-content">
+          <h1 class="post-title" itemprop="headline">Top Udemy Coupons ({dateLabel})</h1>
+          <p class="post-meta">
+            <time itemprop="datePublished" datetime={`${date}T00:00:00Z`}>{dateLabel}</time>
+            · {totalCoupons} coupons · {catCount} categories
+            {isToday && <span class="meta-today"> · Updated today</span>}
+          </p>
+          <p class="post-desc" itemprop="description">
+            Verified Udemy coupon codes for {dateLabel}. Free courses in <strong>{topCats}</strong> and more. All tested for maximum savings at checkout.
+          </p>
+        </div>
       </header>
 
       <div class="filter-row">
@@ -402,27 +404,88 @@ const jsonLd = {
   .breadcrumb a { color: var(--brand); text-decoration: none; }
   .breadcrumb a:hover { text-decoration: underline; }
   .breadcrumb .sep { margin: 0 0.35rem; color: var(--muted); }
-  .post-header { margin-bottom: 1.5rem; }
+  .post-header {
+    display: flex;
+    align-items: center;
+    gap: 1.75rem;
+    margin-bottom: 2rem;
+    padding: 1.25rem;
+    background:
+      radial-gradient(circle at top left, rgba(14, 165, 233, 0.22), transparent 28%),
+      radial-gradient(circle at bottom right, rgba(168, 85, 247, 0.18), transparent 24%),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(37, 99, 235, 0.05)),
+      var(--card);
+    border: 1px solid rgba(99, 102, 241, 0.16);
+    border-radius: 24px;
+    box-shadow: 0 22px 50px -30px rgba(15, 23, 42, 0.45);
+  }
   .post-cover {
-    margin: 0 0 1.25rem;
-    border-radius: 14px;
+    flex: 0 0 320px;
+    width: 320px;
+    height: 190px;
+    margin: 0;
+    border-radius: 20px;
     overflow: hidden;
-    border: 1px solid var(--border);
+    border: 1px solid rgba(255, 255, 255, 0.35);
     line-height: 0;
-    background: var(--card);
+    background:
+      radial-gradient(circle at top left, #93c5fd, transparent 28%),
+      radial-gradient(circle at bottom right, #d8b4fe, transparent 30%),
+      linear-gradient(135deg, #eff6ff, #f5d0fe);
+    box-shadow:
+      0 0 0 8px rgba(255, 255, 255, 0.02),
+      0 18px 40px -24px rgba(15, 23, 42, 0.6);
+    position: relative;
+  }
+  .post-cover::after {
+    content: "";
+    position: absolute;
+    inset: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 14px;
+    pointer-events: none;
   }
   .post-cover-img {
     width: 100%;
-    height: auto;
+    height: 100%;
     display: block;
-    aspect-ratio: 1200 / 630;
     object-fit: cover;
+    transform: scale(1.01);
   }
-  .post-title { font-size: 1.75rem; font-weight: 800; color: var(--text); margin: 0 0 0.5rem; line-height: 1.25; }
+  .post-header-content {
+    flex: 1;
+    min-width: 0;
+  }
+  .post-title {
+    font-size: clamp(2rem, 3vw, 2.6rem);
+    font-weight: 800;
+    color: var(--text);
+    margin: 0 0 0.5rem;
+    line-height: 1.18;
+    letter-spacing: -0.02em;
+  }
   .post-meta { font-size: 0.875rem; color: var(--muted); margin: 0 0 0.5rem; }
   .meta-today { color: var(--destructive); font-weight: 600; }
-  .post-desc { font-size: 0.9375rem; color: var(--muted); line-height: 1.5; margin: 0 0 1.5rem; }
+  .post-desc { font-size: 0.9375rem; color: var(--muted); line-height: 1.6; margin: 0; }
   .post-desc strong { color: var(--text); }
+  @media (max-width: 768px) {
+    .post-header {
+      flex-direction: column;
+      align-items: stretch;
+      padding: 1rem;
+      gap: 1rem;
+    }
+    .post-cover {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      aspect-ratio: 1200 / 630;
+      flex-basis: auto;
+    }
+    .post-title {
+      font-size: 1.8rem;
+    }
+  }
   .filter-row { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; }
   .tab {
     padding: 0.5rem 1rem; border-radius: 999px; font-size: 0.8125rem; font-weight: 600;

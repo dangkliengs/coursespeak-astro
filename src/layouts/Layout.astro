@@ -743,8 +743,8 @@ const currentPath = Astro.url.pathname;
             Subscribe for daily Udemy coupon deals delivered to your inbox.
           </p>
           <form
-            action="/api/newsletter-signup"
-            method="POST"
+            action="https://app.convertkit.com/forms/9125901/subscriptions"
+            method="post"
             style={{
               display: "flex",
               gap: "0.75rem",
@@ -756,7 +756,7 @@ const currentPath = Astro.url.pathname;
           >
             <input
               type="email"
-              name="email"
+              name="email_address"
               placeholder="Enter your email"
               required
               autocomplete="email"
@@ -1130,7 +1130,7 @@ const currentPath = Astro.url.pathname;
               fontWeight: "700",
               margin: 0
             }}>
-              Trusted by 150,000+ Learners Worldwide
+              Trusted by 250,000+ Learners Worldwide
             </h4>
             <div style={{
               display: "flex",
