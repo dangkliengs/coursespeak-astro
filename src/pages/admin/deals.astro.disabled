@@ -272,7 +272,6 @@ const pageDescription = "View, edit, and delete course deals on CourseSpeak.";
             )}
           </div>
         </div>
-      </div>
 
       <!-- Hidden element to store deals data for JavaScript -->
       <div id="deals-data" style="display: none;">{JSON.stringify(allDeals)}</div>

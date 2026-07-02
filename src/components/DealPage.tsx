@@ -781,7 +781,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                             alignItems: "center",
                             justifyContent: "space-between",
                             padding: "1rem 1.25rem",
-                            background: "linear-gradient(135deg, #22c55e, #16a34a)",
+                            background: "linear-gradient(135deg, #073618, #154d29)",
                             borderRadius: "8px",
                             border: "1px solid rgba(34, 197, 94, 0.2)"
                         }}>
