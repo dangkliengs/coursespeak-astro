@@ -11,7 +11,8 @@
     "mode:prod": "node scripts/auto-switch.js prod",
     "mode:status": "node scripts/auto-switch.js status",
     "mode:backup": "node scripts/auto-switch.js backup",
-    "mode:restore": "node scripts/auto-switch.js restore"
+    "mode:restore": "node scripts/auto-switch.js restore",
+    "deploy": "git subtree push --prefix dist origin gh-pages"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",
