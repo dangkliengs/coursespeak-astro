@@ -23,6 +23,9 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
+    - name: Switch to Production Mode
+      run: npm run mode:prod
+
     - name: Build
       run: npm run build
       env:
