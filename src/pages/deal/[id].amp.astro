@@ -9,16 +9,16 @@ export async function getStaticPaths() {
   if (import.meta.env.PROD) {
     const allDeals = await readDeals();
     const paths = [];
+    const seen = new Set();
     for (const deal of allDeals) {
-      paths.push({
-        params: { id: deal.id },
-        props: { deal }
-      });
-      if (deal.slug && deal.slug !== deal.id) {
-        paths.push({
-          params: { id: deal.slug },
-          props: { deal }
-        });
+      for (const id of [deal.id, deal.slug].filter(Boolean)) {
+        if (!seen.has(id)) {
+          seen.add(id);
+          paths.push({
+            params: { id },
+            props: { deal }
+          });
+        }
       }
     }
     return paths;

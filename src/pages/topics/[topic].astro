@@ -22,9 +22,28 @@ export async function getStaticPaths() {
   // Get unique subcategories
   const subcategories = [...new Set(allDeals.map(deal => deal.subcategory).filter(sub => sub != null && typeof sub === 'string'))];
 
+  const seen = new Map();
   return subcategories.map(subcategory => {
     try {
-      const slug = subcategory.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
+      let slug = subcategory.toLowerCase()
+        .replace(/c\s*\+\+/g, 'cpp')
+        .replace(/#/g, 'sharp')
+        .replace(/\+/g, 'plus')
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-');
+
+      if (seen.has(slug)) {
+        let dedupSlug = slug;
+        let counter = 1;
+        while (seen.has(dedupSlug)) {
+          dedupSlug = `${slug}-${counter}`;
+          counter++;
+        }
+        slug = dedupSlug;
+      }
+      seen.set(slug, subcategory);
+
       return {
         params: { topic: slug },
         props: { originalTopic: subcategory }
@@ -55,8 +74,29 @@ let topic = originalTopic;
 if (!topic) {
   // Fallback for dev mode or missing props
   const allSubcategories = [...new Set(allDeals.map(deal => deal.subcategory).filter(sub => sub != null && typeof sub === 'string'))];
-  const matching = allSubcategories.find(sub => sub.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-') === topicSlug);
-  topic = matching || 'Unknown Topic';
+  const slugToName = new Map();
+  const seenSlugs = new Set();
+  for (const sub of allSubcategories) {
+    let slug = sub.toLowerCase()
+      .replace(/c\s*\+\+/g, 'cpp')
+      .replace(/#/g, 'sharp')
+      .replace(/\+/g, 'plus')
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-');
+    if (seenSlugs.has(slug)) {
+      let dedup = slug;
+      let counter = 1;
+      while (seenSlugs.has(dedup)) {
+        dedup = `${slug}-${counter}`;
+        counter++;
+      }
+      slug = dedup;
+    }
+    seenSlugs.add(slug);
+    slugToName.set(slug, sub);
+  }
+  topic = slugToName.get(topicSlug) || 'Unknown Topic';
 }
 
 // Filter deals for this topic (subcategory) - exact match

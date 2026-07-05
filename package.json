@@ -12,7 +12,7 @@
     "mode:status": "node scripts/auto-switch.js status",
     "mode:backup": "node scripts/auto-switch.js backup",
     "mode:restore": "node scripts/auto-switch.js restore",
-    "deploy": "git subtree push --prefix dist origin gh-pages"
+    "deploy": "node scripts/auto-switch.js prod && astro build"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",
