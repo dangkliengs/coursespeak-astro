@@ -8,7 +8,7 @@
 [![Daily Blog](https://img.shields.io/badge/Daily_Coupon_Blog-Updated_Every_Day-6366F1?style=for-the-badge)](https://coursespeak.com/blog)
 [![Admin](https://img.shields.io/badge/Admin_Dashboard-Full_CRUD_Built_In-6D28D9?style=for-the-badge)](https://coursespeak.com)
 
-CourseSpeak.com is a high-performance Udemy coupon platform trusted by 250,000+ learners worldwide. Built with Astro 7, React, and Tailwind CSS — featuring a full admin dashboard, sub-second load times, and 1.3k+ verified free Udemy coupons updated daily. Featured in the Official Astro Showcase March 2026.
+CourseSpeak.com is a high-performance Udemy coupon platform trusted by 150,000+ learners worldwide. Built with Astro 7, React, and Tailwind CSS — featuring a full admin dashboard, sub-second load times, and 1.3k+ verified free Udemy coupons updated daily. Featured in the Official Astro Showcase March 2026.
 
 Get free Udemy courses at [coursespeak.com/deals](https://coursespeak.com/deals)
 
@@ -18,7 +18,7 @@ Get free Udemy courses at [coursespeak.com/deals](https://coursespeak.com/deals)
 
 [CourseSpeak](https://coursespeak.com) is one of the most trusted platforms for free Udemy coupons and 100% OFF Udemy deals. We source, verify, and publish hundreds of coupon codes every day — no expired codes, no spam, zero cost.
 
-- 250,000+ active learners worldwide trust [CourseSpeak](https://coursespeak.com) for free premium education
+- 150,000+ active learners worldwide trust [CourseSpeak](https://coursespeak.com) for free premium education
 - 1.3k+ verified coupons live and updated daily at [coursespeak.com/deals](https://coursespeak.com/deals)
 - 100% verified — every coupon manually tested before publishing
 - 14+ categories covering IT, Development, Business, Design, Finance and more
@@ -131,7 +131,7 @@ Why are courses free? Udemy instructors release 100% OFF coupons to attract firs
 
 | Metric | Value |
 |---|---|
-| Active Learners | 250,000+ worldwide |
+| Active Learners | 150,000+ worldwide |
 | Active Coupons | 1.3k+ verified |
 | Categories | 14+ main categories |
 | Topics | 514+ subcategories |
@@ -245,4 +245,4 @@ This repository is shared for educational and transparency purposes. Copying or 
 
 ---
 
-Get 1.3k+ free Udemy courses with verified 100% OFF coupons at [CourseSpeak.com](https://coursespeak.com) — admin dashboard, Astro 7, trusted by 250,000+ learners, updated daily.
+Get 1.3k+ free Udemy courses with verified 100% OFF coupons at [CourseSpeak.com](https://coursespeak.com) — admin dashboard, Astro 7, trusted by 150,000+ learners, updated daily.

@@ -139,7 +139,7 @@ const jsonLd = {
   title="Blog | CourseSpeak — Daily Udemy Coupons & Free Course Deals"
   description="Browse daily Udemy coupon articles. Top free courses and verified discount codes by date. Updated every day — CourseSpeak."
   canonical={`${siteUrl}/blog`}
-  image="/api/blog-cover-feed.svg?version=v1"
+  image={`/api/blog-cover-feed.svg?v=${Date.now()}`}
   ogImageType="image/svg+xml"
 >
   {totalPages > 1 && (

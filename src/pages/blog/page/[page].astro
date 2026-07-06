@@ -107,7 +107,7 @@ const jsonLd = {
   title={`Blog — Page ${safePage} of ${totalPages} | CourseSpeak`}
   description={`Daily Udemy coupon articles, page ${safePage}. Browse top free courses and verified discount codes by date.`}
   canonical={canonicalUrl}
-  image="/api/blog-cover-feed.svg?version=v1"
+  image={`/api/blog-cover-feed.svg?v=${Date.now()}`}
   ogImageType="image/svg+xml"
 >
   <link rel="prev" href={safePage === 2 ? siteUrl + '/blog' : `${siteUrl}/blog/page/${safePage - 1}`} slot="head" />

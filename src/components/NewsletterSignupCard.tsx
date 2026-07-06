@@ -30,7 +30,7 @@ export default function NewsletterSignupCard() {
           </div>
           <h3 style={{ margin: "0 0 6px", fontSize: 20 }}>Get the freshest Udemy coupons</h3>
           <p className="muted" style={{ margin: 0 }}>
-            Join 250,000+ learners receiving weekly Udemy free coupons, 100% off deals, and handpicked guides from Coursespeak.
+            Join 150,000+ learners receiving weekly Udemy free coupons, 100% off deals, and handpicked guides from Coursespeak.
           </p>
         </div>
         <form

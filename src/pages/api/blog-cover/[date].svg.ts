@@ -19,7 +19,7 @@ export const GET: APIRoute = ({ params }) => {
     return new Response('Not found', { status: 404 });
   }
   const label = formatBlogDateLabel(date);
-  const svg = buildBlogCoverSvg({ dateIso: date, dateLabel: label });
+  const svg = buildBlogCoverSvg({ dateLabel: label });
   return new Response(svg, {
     headers: {
       'Content-Type': 'image/svg+xml; charset=utf-8',
