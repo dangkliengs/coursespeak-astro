@@ -338,6 +338,8 @@ const pageDescription = "View, edit, and delete course deals on CourseSpeak.";
 
           console.log('Found:', filteredDeals.length, 'deals');
 
+          const esc = (s: any) => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
           tableBody.innerHTML = '';
 
           filteredDeals.slice(0, 50).forEach(deal => {
@@ -347,15 +349,15 @@ const pageDescription = "View, edit, and delete course deals on CourseSpeak.";
             row.innerHTML = `
               <td style="padding: 1rem; color: #e2e8f0;">
                 <div style="max-width: 300px;">
-                  <div style="font-weight: 600; margin-bottom: 0.25rem;">${deal.title || 'Untitled'}</div>
-                  <div style="font-size: 0.875rem; color: #a9b0c0;">ID: ${deal.id || 'Unknown'}</div>
+                  <div style="font-weight: 600; margin-bottom: 0.25rem;">${esc(deal.title) || 'Untitled'}</div>
+                  <div style="font-size: 0.875rem; color: #a9b0c0;">ID: ${esc(deal.id) || 'Unknown'}</div>
                 </div>
               </td>
-              <td style="padding: 1rem; color: #e2e8f0;">${deal.provider || 'Unknown'}</td>
+              <td style="padding: 1rem; color: #e2e8f0;">${esc(deal.provider) || 'Unknown'}</td>
               <td style="padding: 1rem; color: #e2e8f0;">
                 <div>
-                  <div>${deal.category || 'Uncategorized'}</div>
-                  ${deal.subcategory ? `<div style="font-size: 0.875rem; color: #a9b0c0;">${deal.subcategory}</div>` : ''}
+                  <div>${esc(deal.category) || 'Uncategorized'}</div>
+                  ${deal.subcategory ? `<div style="font-size: 0.875rem; color: #a9b0c0;">${esc(deal.subcategory)}</div>` : ''}
                 </div>
               </td>
               <td style="padding: 1rem; color: #e2e8f0;">
@@ -376,7 +378,7 @@ const pageDescription = "View, edit, and delete course deals on CourseSpeak.";
                   border-radius: 0.25rem;
                   display: inline-block;
                 ">
-                  ${deal.coupon || 'N/A'}
+                  ${esc(deal.coupon) || 'N/A'}
                 </div>
               </td>
               <td style="padding: 1rem;">

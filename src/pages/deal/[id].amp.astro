@@ -8,20 +8,12 @@ export const prerender = import.meta.env.PROD;
 export async function getStaticPaths() {
   if (import.meta.env.PROD) {
     const allDeals = await readDeals();
-    const paths = [];
-    const seen = new Set();
-    for (const deal of allDeals) {
-      for (const id of [deal.id, deal.slug].filter(Boolean)) {
-        if (!seen.has(id)) {
-          seen.add(id);
-          paths.push({
-            params: { id },
-            props: { deal }
-          });
-        }
-      }
-    }
-    return paths;
+    return allDeals
+      .filter(deal => deal.id)
+      .map(deal => ({
+        params: { id: deal.id },
+        props: { deal }
+      }));
   }
   return [];
 }

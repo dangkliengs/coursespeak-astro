@@ -102,7 +102,7 @@ const pageDescription = "Read inspiring success stories from learners who transf
 
 <Layout title={pageTitle} description={pageDescription}>
   <div style={{ minHeight: "100vh", color: "var(--text)" }}>
-    <main>
+    <div>
       {/* Hero Section */}
       <section class="hero-gradient" style={{ padding: "6rem 1rem 4rem", textAlign: "center" }}>
         <div class="container">
@@ -239,6 +239,9 @@ const pageDescription = "Read inspiring success stories from learners who transf
                 <img 
                   src={story.avatar} 
                   alt={story.name}
+                  loading="lazy"
+                  width="60"
+                  height="60"
                   style={{
                     width: "60px",
                     height: "60px",
@@ -362,6 +365,6 @@ const pageDescription = "Read inspiring success stories from learners who transf
           </a>
         </div>
       </section>
-    </main>
+    </div>
   </div>
 </Layout>

@@ -19,7 +19,8 @@ export async function POST({ request }) {
     // Extract all form fields
     for (const [key, value] of formData.entries()) {
       if (key === 'price' || key === 'originalPrice' || key === 'rating' || key === 'students') {
-        updatedDeal[key] = value ? parseFloat(value) : null;
+        const parsed = value ? parseFloat(value) : null;
+        updatedDeal[key] = parsed !== null && isNaN(parsed) ? null : parsed;
       } else if (key === 'learn' || key === 'requirements') {
         // Handle arrays - split by newlines and filter empty lines
         updatedDeal[key] = value ? value.split('\n').filter(item => item.trim()) : [];
@@ -58,7 +59,7 @@ export async function POST({ request }) {
 
   } catch (error) {
     console.error('Error updating deal:', error);
-    return new Response(JSON.stringify({ error: error.message || 'Internal server error' }), {
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });

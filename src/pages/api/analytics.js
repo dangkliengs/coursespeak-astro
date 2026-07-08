@@ -86,7 +86,14 @@ async function fetchImpactData() {
 export async function POST({ request }) {
   try {
     const body = await request.json();
-    const { event, deal_id, deal_title, deal_category, deal_price, ...params } = body;
+    const { event, deal_id, deal_title, deal_category, deal_price } = body;
+
+    if (!event || !deal_id) {
+      return new Response(JSON.stringify({ error: 'event and deal_id are required' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
 
     // Read current analytics data
     let analyticsData = JSON.parse(fs.readFileSync(METRICS_FILE, 'utf8'));

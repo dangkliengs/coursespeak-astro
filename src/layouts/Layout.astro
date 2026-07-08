@@ -53,7 +53,6 @@ const currentPath = Astro.url.pathname;
     <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
     <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin />
     
     <!-- DNS prefetch for external domains -->
@@ -67,8 +66,10 @@ const currentPath = Astro.url.pathname;
     <meta name="generator" content={Astro.generator} />
     <meta name="google-site-verification" content="HISPISPt9Gk-zER-OUkGcPtm6cyiQ7snnKwzn7aDgTY" />
     <link rel="canonical" href={canonicalURL} />
+    <link rel="alternate" hreflang="en" href={canonicalURL} />
+    <link rel="alternate" hreflang="x-default" href={canonicalURL} />
     {canonicalURL.includes('/deal/') && !canonicalURL.includes('.amp') && (
-      <link rel="amphtml" href={canonicalURL.replace('/deal/', '/deal/') + '.amp'} />
+      <link rel="amphtml" href={canonicalURL.replace(/\/$/, '') + '.amp/'} />
     )}
 
     <title>{title}</title>
@@ -83,7 +84,6 @@ const currentPath = Astro.url.pathname;
     <meta name="language" content="English" />
     <meta name="distribution" content="global" />
     <meta name="rating" content="general" />
-    <meta name="keywords" content="udemy courses, online learning, course deals, udemy coupons, free courses, discounted courses, online education, skill development" />
     <meta name="classification" content="Education, Online Learning, Course Deals" />
     <meta name="category" content="Education" />
     <link rel="author" href="https://www.linkedin.com/in/anandayuda/" />
@@ -259,7 +259,7 @@ const currentPath = Astro.url.pathname;
     />
 
     <!-- ConvertKit Embed Script -->
-    <script src="https://f.convertkit.com/ckjs/ck.5.js"></script>
+    <script async src="https://f.convertkit.com/ckjs/ck.5.js"></script>
 
     <!-- AdSense Script -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8220442576502761"
@@ -303,6 +303,14 @@ const currentPath = Astro.url.pathname;
     <slot name="head" />
   </head>
   <body>
+    <a href="#main-content" style={{
+      position: "absolute", top: "-100px", left: "8px", zIndex: 9999,
+      background: "var(--brand)", color: "var(--bg)", padding: "8px 16px",
+      borderRadius: "0 0 8px 8px", fontWeight: 600, textDecoration: "none",
+      fontSize: "14px"
+    }} onFocus={(e) => e.target.style.top = "0"}
+       onBlur={(e) => e.target.style.top = "-100px"}
+    >Skip to main content</a>
     <header
       role="banner"
       class="site-header"
@@ -691,7 +699,7 @@ const currentPath = Astro.url.pathname;
       </nav>
     )}
 
-    <main style={{ minHeight: "calc(100vh - 300px)" }}>
+    <main id="main-content" style={{ minHeight: "calc(100vh - 300px)" }}>
       <slot />
     </main>
 

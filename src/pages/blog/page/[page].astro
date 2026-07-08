@@ -135,7 +135,7 @@ const jsonLd = {
       <section class="articles-section" aria-label="Daily coupon articles">
         <h2 class="sr-only">Daily Udemy Coupon Articles</h2>
         <div class="article-grid">
-          {articles.map((a) => (
+          {articles.map((a, i) => (
             <article class="article-card" itemscope itemtype="https://schema.org/BlogPosting">
               <a href={`/blog/top-udemy-coupons/${a.date}/`} class="article-card-thumb" aria-hidden="true" tabindex="-1">
                 <img
@@ -144,7 +144,7 @@ const jsonLd = {
                   height="630"
                   class="article-card-image"
                   alt={`Top Udemy Coupons — ${a.shortLabel} — featured cover`}
-                  loading="lazy"
+                  loading={i < 3 ? "eager" : "lazy"}
                   decoding="async"
                   itemprop="image"
                 />

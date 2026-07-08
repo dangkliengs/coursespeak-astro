@@ -1,0 +1,55 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Page Not Found - CourseSpeak" description="The page you are looking for does not exist or has been moved.">
+  <div style={{ minHeight: "calc(100vh - 300px)", display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
+    <div style={{ textAlign: "center", maxWidth: "500px" }}>
+      <div style={{
+        fontSize: "8rem",
+        fontWeight: 800,
+        background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)",
+        WebkitBackgroundClip: "text",
+        WebkitTextFillColor: "transparent",
+        backgroundClip: "text",
+        lineHeight: 1,
+        marginBottom: "0.5rem"
+      }}>404</div>
+      <h1 style={{ fontSize: "1.5rem", color: "var(--text)", marginBottom: "0.75rem" }}>Page Not Found</h1>
+      <p style={{ color: "var(--muted)", fontSize: "0.95rem", lineHeight: 1.6, marginBottom: "2rem" }}>
+        The page you are looking for doesn't exist, has been moved, or the link you followed might be broken.
+        Browse our latest course deals instead.
+      </p>
+      <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center", flexWrap: "wrap" }}>
+        <a href="/" style={{
+          display: "inline-flex", alignItems: "center", gap: "0.5rem",
+          padding: "0.75rem 1.5rem", background: "var(--brand)", color: "var(--bg)",
+          textDecoration: "none", borderRadius: "8px", fontWeight: 600, fontSize: "0.9rem"
+        }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+          Go Home
+        </a>
+        <a href="/deals" style={{
+          display: "inline-flex", alignItems: "center", gap: "0.5rem",
+          padding: "0.75rem 1.5rem", border: "1px solid var(--border)", color: "var(--text)",
+          textDecoration: "none", borderRadius: "8px", fontWeight: 600, fontSize: "0.9rem"
+        }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.41l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.41zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>
+          Browse Deals
+        </a>
+      </div>
+      <div style={{ marginTop: "3rem", color: "var(--muted)", fontSize: "0.8rem" }}>
+        <p>Popular categories:</p>
+        <div style={{ display: "flex", gap: "0.5rem", justifyContent: "center", flexWrap: "wrap", marginTop: "0.5rem" }}>
+          <a href="/categories/development" style={{ color: "var(--brand)", textDecoration: "none", fontWeight: 500 }}>Development</a>
+          <span style={{ color: "var(--border)" }}>·</span>
+          <a href="/categories/business" style={{ color: "var(--brand)", textDecoration: "none", fontWeight: 500 }}>Business</a>
+          <span style={{ color: "var(--border)" }}>·</span>
+          <a href="/categories/design" style={{ color: "var(--brand)", textDecoration: "none", fontWeight: 500 }}>Design</a>
+          <span style={{ color: "var(--border)" }}>·</span>
+          <a href="/categories/it-and-software" style={{ color: "var(--brand)", textDecoration: "none", fontWeight: 500 }}>IT & Software</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

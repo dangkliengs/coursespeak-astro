@@ -163,6 +163,10 @@ const structuredData = {
               { href: "/blog", label: "Blog", desc: "Daily coupon updates" },
               { href: "/popular", label: "Popular", desc: "Most viewed courses" },
               { href: "/how-to-redeem-coupon", label: "How to Redeem", desc: "Coupon redemption guide" },
+              { href: "/about", label: "About", desc: "About CourseSpeak" },
+              { href: "/affiliate-disclosure", label: "Affiliate Disclosure", desc: "Affiliate disclosure" },
+              { href: "/success-stories", label: "Success Stories", desc: "Student success stories" },
+              { href: "/search", label: "Search", desc: "Search courses" },
             ].map(page => (
               <a href={page.href} style={{
                 display: "block",
@@ -193,7 +197,7 @@ const structuredData = {
           </h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "0.75rem" }}>
             {categories.map(cat => (
-              <a href={`/category/${encodeURIComponent(cat.toLowerCase().replace(/\s+/g, "-"))}`} style={{
+              <a href={`/categories/${encodeURIComponent(cat.toLowerCase().replace(/\s+/g, "-"))}`} style={{
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "0.5rem",
@@ -225,7 +229,7 @@ const structuredData = {
           </h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "0.75rem" }}>
             {topics.slice(0, 50).map(topic => (
-              <a href={`/topic/${encodeURIComponent(topic.toLowerCase().replace(/\s+/g, "-"))}`} style={{
+              <a href={`/topics/${encodeURIComponent(topic.toLowerCase().replace(/\s+/g, "-"))}`} style={{
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "0.5rem",

@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { getBrand } from "@/lib/brand";
-import { buildDealLink } from "@/lib/links";
 
 function formatStudents(n: number) {
   if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, "") + "m";

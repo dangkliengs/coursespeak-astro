@@ -2,7 +2,7 @@
   --bg: hsl(222, 47%, 7%); 
   --card: hsl(222, 43%, 10%); 
   --text: hsl(210, 40%, 98%); 
-  --muted: hsl(215, 20%, 65%); 
+  --muted: hsl(215, 22%, 72%); 
   --brand: hsl(45, 95%, 58%); 
   --brand-soft: hsla(45, 95%, 58%, 0.26); 
   --brand-glow: hsla(35, 90%, 68%, 0.22);
@@ -13,6 +13,7 @@
   --destructive: hsl(0, 84%, 60%);
 }
 *{ box-sizing:border-box; }
+:focus-visible{ outline:2px solid var(--brand); outline-offset:2px; }
 html,body{ padding:0; margin:0; background:var(--bg); color:var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, Apple Color Emoji, Segoe UI Emoji; }
 .container{ max-width:1100px; margin:0 auto; padding:16px; }
 .site-header{ border-bottom:1px solid var(--border); position:sticky; top:0; background:hsla(222, 47%, 7%, 0.8); backdrop-filter:saturate(180%) blur(10px); }

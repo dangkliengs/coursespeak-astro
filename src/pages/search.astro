@@ -377,6 +377,10 @@ import Layout from '../layouts/Layout.astro';
 
   // ── helpers ──────────────────────────────────────────────────────────────
 
+  function esc(s: string): string {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+  }
+
   function renderCard(deal: Deal): string {
     const price        = deal.price ?? 0;
     const originalPrice = deal.originalPrice ?? 0;
@@ -388,9 +392,13 @@ import Layout from '../layouts/Layout.astro';
     const updatedLabel = deal.updatedAt
       ? new Date(deal.updatedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
       : 'Recently updated';
+    const safeTitle = esc(deal.title || '');
+    const safeDesc = esc(deal.description || '');
+    const safeInstructor = esc(deal.instructor || '');
+    const safeSubcat = esc(deal.subcategory || '');
 
     const imgHtml = deal.image
-      ? `<img src="${deal.image}" alt="${deal.title}" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:0.75rem 0.75rem 0 0;">`
+      ? `<img src="${esc(deal.image)}" alt="${safeTitle}" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:0.75rem 0.75rem 0 0;">`
       : `<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:3rem;opacity:0.3;">📚</div>`;
 
     const badgeHtml = isFree
@@ -399,9 +407,9 @@ import Layout from '../layouts/Layout.astro';
         ? `<div class="rc-badge rc-badge-hot">🔥 ${discount}% OFF</div>`
         : '';
 
+    const subcatSlug = safeSubcat.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-');
     const subcatHtml = deal.subcategory
-      ? `<a href="/topics/${deal.subcategory.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-')}"
-           class="rc-subcat">${deal.subcategory}</a>`
+      ? `<a href="/topics/${subcatSlug}" class="rc-subcat">${safeSubcat}</a>`
       : '';
 
     return `
@@ -409,24 +417,24 @@ import Layout from '../layouts/Layout.astro';
         <div class="rc-img-wrap">
           ${imgHtml}
           ${badgeHtml}
-          <span class="rc-date">${updatedLabel}</span>
+          <span class="rc-date">${esc(updatedLabel)}</span>
         </div>
         <div class="rc-body">
           <h2 class="rc-title">
-            <a href="/deal/${deal.id}" class="rc-title-link">${deal.title}</a>
+            <a href="/deal/${deal.id}" class="rc-title-link">${safeTitle}</a>
           </h2>
-          ${deal.instructor
-            ? `<p class="rc-instructor">By <strong>${deal.instructor}</strong></p>`
+          ${safeInstructor
+            ? `<p class="rc-instructor">By <strong>${safeInstructor}</strong></p>`
             : ''}
-          <p class="rc-desc">${deal.description ?? 'Master this in-demand skill with comprehensive training from industry experts.'}</p>
+          <p class="rc-desc">${safeDesc}</p>
           <div class="rc-meta">
             <span class="rc-rating">★ ${rating.toFixed(1)} · ${students.toLocaleString()} students</span>
             ${subcatHtml}
           </div>
           <div class="rc-actions">
             <a href="/deal/${deal.id}" class="rc-btn-primary">🎯 Get Coupon</a>
-            ${deal.instructor
-              ? `<a href="/search?q=${encodeURIComponent(deal.instructor + ' free')}" class="rc-btn-secondary">Free Only</a>`
+            ${safeInstructor
+              ? `<a href="/search?q=${encodeURIComponent(safeInstructor + ' free')}" class="rc-btn-secondary">Free Only</a>`
               : ''}
           </div>
         </div>
