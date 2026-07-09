@@ -4,10 +4,8 @@ import { getDealById, readDeals } from "../../lib/store";
 import DealPage from "../../components/DealPage";
 import type { Deal } from "../../types/deal";
 
-// Dynamic rendering in dev mode, static in production
 export const prerender = import.meta.env.PROD;
 
-// In production, pre-generate static paths
 export async function getStaticPaths() {
   if (import.meta.env.PROD) {
     const allDeals = await readDeals();
@@ -22,14 +20,13 @@ export async function getStaticPaths() {
             props: { deal, allDeals }
           });
         }
+ }
       }
-    }
     return paths;
   }
   return [];
 }
 
-// Get deal data - different logic for static vs server mode
 const { deal: propDeal, allDeals: propAllDeals } = Astro.props as {
   deal?: Deal;
   allDeals?: Deal[];
@@ -39,14 +36,12 @@ let deal: Deal;
 let allDeals: Deal[];
 
 if (import.meta.env.PROD) {
-  // Production: Use props from static generation
   if (!propDeal || !propAllDeals) {
     throw new Error('Missing props in production mode');
   }
   deal = propDeal;
   allDeals = propAllDeals;
 } else {
-  // Development: Dynamic loading
   const url = new URL(Astro.request.url);
   const slug = url.pathname.split('/').pop() || '';
   allDeals = await readDeals();
@@ -62,190 +57,195 @@ if (import.meta.env.PROD) {
   deal = foundDeal;
 }
 
-// Get related deals - prioritize subcategory matching for better relevance
 const relatedDeals = allDeals
   .filter((d) => {
-    // Exclude current deal
     if (d.id === deal.id) return false;
-
-    // If both deals have subcategories, match by subcategory
     if (deal.subcategory && d.subcategory) {
       return d.subcategory === deal.subcategory;
     }
-
-    // Fallback: match by category
     return d.category === deal.category;
   })
   .slice(0, 4);
 
-// Calculate discount percentage
 const discountPercentage = deal.originalPrice && deal.price && deal.originalPrice > deal.price
   ? Math.round(((deal.originalPrice - deal.price) / deal.originalPrice) * 100)
   : 0;
+
+const siteUrl = "https://coursespeak.com";
+const dealUrl = `${siteUrl}/deal/${deal.id}`;
+
+function parseDuration(duration: string | undefined): string | undefined {
+  if (!duration) return undefined;
+  const h = duration.match(/(\d+)h/);
+  const m = duration.match(/(\d+)m/);
+  let iso = "PT";
+  if (h) iso += `${h[1]}H`;
+  if (m) iso += `${m[1]}M`;
+  return iso === "PT" ? undefined : iso;
+}
+
+function extractSkills(deal: Deal): string {
+  const skills = new Set<string>();
+  if (deal.category) skills.add(deal.category);
+  if (deal.subcategory) skills.add(deal.subcategory);
+  if (deal.learn) {
+    deal.learn.slice(0, 5).forEach(item => {
+      const words = item.toLowerCase().split(' ');
+      if (words.includes('python')) skills.add('Python');
+      if (words.includes('javascript') || words.includes('js')) skills.add('JavaScript');
+      if (words.includes('react')) skills.add('React');
+      if (words.includes('html')) skills.add('HTML');
+      if (words.includes('css')) skills.add('CSS');
+      if (words.includes('data') && words.includes('analysis')) skills.add('Data Analysis');
+      if (words.includes('machine') && words.includes('learning')) skills.add('Machine Learning');
+      if (words.includes('web') && words.includes('development')) skills.add('Web Development');
+      if (words.includes('mobile') && words.includes('development')) skills.add('Mobile Development');
+    });
+  }
+  return Array.from(skills).slice(0, 10).join(", ");
+}
 ---
 
 <Layout
     title={`${deal.title} | ${discountPercentage}% Off Udemy Coupon`}
-    description={(deal.seoDescription || deal.description).slice(0, 155) + ((deal.seoDescription || deal.description).length > 155 ? '...' : '')}
+    description={deal.seoDescription || deal.description || ""}
     image={deal.seoOgImage || deal.image}
-    canonical={`https://coursespeak.com/deal/${deal.id}`}
+    canonical={dealUrl}
 >
-    <!-- Enhanced Structured Data for SEO -->
     <script type="application/ld+json" set:html={
         JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "Course",
-            "name": deal.title,
-            "description": deal.seoDescription || deal.description,
-            "image": deal.seoOgImage || deal.image,
-            "thumbnailUrl": deal.seoOgImage || deal.image,
-            "provider": {
-                "@type": "Organization",
-                "name": deal.provider,
-                "url": deal.provider === "Udemy" ? "https://www.udemy.com" : deal.provider === "Coursera" ? "https://www.coursera.org" : undefined
-            },
-            "offers": {
-                "@type": "Offer",
-                "price": deal.price.toString(),
-                "priceCurrency": "USD",
-                "availability": "https://schema.org/InStock",
-                "url": deal.url,
-                "priceValidUntil": deal.expiresAt ? new Date(deal.expiresAt).toISOString().split('T')[0] : undefined,
-                "seller": {
-                    "@type": "Organization",
-                    "name": deal.provider
-                }
-            },
-            "aggregateRating": deal.rating ? {
-                "@type": "AggregateRating",
-                "ratingValue": deal.rating.toString(),
-                "reviewCount": Math.max(1, Math.round(deal.students ?? 0)),
-                "bestRating": "5",
-                "worstRating": "1"
-            } : undefined,
-            "creator": deal.instructor ? {
-                "@type": "Person",
-                "name": deal.instructor
-            } : undefined,
-            "educationalLevel": deal.level || "All Levels",
-            "teaches": (() => {
-                if (deal.skills && deal.skills.length > 0) return deal.skills.join(", ");
-                const extractedSkills = new Set<string>();
-                if (deal.category) extractedSkills.add(deal.category);
-                if (deal.subcategory) extractedSkills.add(deal.subcategory);
-                if (deal.learn && deal.learn.length > 0) {
-                    deal.learn.slice(0, 5).forEach(item => {
-                        const words = item.toLowerCase().split(' ');
-                        if (words.includes('python')) extractedSkills.add('Python');
-                        if (words.includes('javascript') || words.includes('js')) extractedSkills.add('JavaScript');
-                        if (words.includes('react')) extractedSkills.add('React');
-                        if (words.includes('html')) extractedSkills.add('HTML');
-                        if (words.includes('css')) extractedSkills.add('CSS');
-                        if (words.includes('data') && words.includes('analysis')) extractedSkills.add('Data Analysis');
-                        if (words.includes('machine') && words.includes('learning')) extractedSkills.add('Machine Learning');
-                        if (words.includes('web') && words.includes('development')) extractedSkills.add('Web Development');
-                        if (words.includes('mobile') && words.includes('development')) extractedSkills.add('Mobile Development');
-                    });
-                }
-                return Array.from(extractedSkills).slice(0, 10).join(", ") || deal.learn?.join(", ") || "";
-            })(),
-            "inLanguage": deal.language || "English",
-            "url": `https://coursespeak.com/deal/${deal.id}`,
-            "datePublished": deal.createdAt ? new Date(deal.createdAt).toISOString().split('T')[0] : undefined,
-            "dateModified": deal.updatedAt ? new Date(deal.updatedAt).toISOString().split('T')[0] : undefined,
-            "timeRequired": deal.duration ? `PT${deal.duration.replace(/[^\d]/g, '')}H` : undefined,
-            "hasCourseInstance": {
-                "@type": "CourseInstance",
-                "courseMode": "online",
-                "instructor": deal.instructor ? {
-                    "@type": "Person",
-                    "name": deal.instructor
-                } : undefined
-            },
-            "about": [
-                deal.category ? {
-                    "@type": "Thing",
-                    "name": deal.category
-                } : null,
-                deal.subcategory ? {
-                    "@type": "Thing",
-                    "name": deal.subcategory
-                } : null
-            ].filter(Boolean),
-            "educationalCredentialAwarded": deal.category ? `${deal.category} Certificate` : undefined,
-            "occupationalCredentialAwarded": deal.category ? {
-                "@type": "EducationalOccupationalCredential",
-                "name": `${deal.category} Certification`,
-                "educationalLevel": "Professional Certificate"
-            } : undefined
-        })
-    } />
-
-    <!-- Breadcrumb Structured Data -->
-    <script type="application/ld+json" set:html={
-        JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            "itemListElement": [
+            "@graph": [
                 {
-                    "@type": "ListItem",
-                    "position": 1,
-                    "name": "Home",
-                    "item": "https://coursespeak.com"
+                    "@type": "WebPage",
+                    "@id": `${dealUrl}#webpage`,
+                    "url": dealUrl,
+                    "name": `${deal.title} — ${discountPercentage}% Off Udemy Coupon`,
+                    "description": (deal.seoDescription || deal.description || "").slice(0, 160),
+                    "inLanguage": "en-US",
+                    "isPartOf": {
+                        "@type": "WebSite",
+                        "name": "CourseSpeak",
+                        "url": siteUrl
+                    },
+                    "datePublished": deal.createdAt ? new Date(deal.createdAt).toISOString().split('T')[0] : undefined,
+                    "dateModified": deal.updatedAt ? new Date(deal.updatedAt).toISOString().split('T')[0] : undefined,
+                    "publisher": {
+                        "@type": "Organization",
+                        "name": "CourseSpeak",
+                        "url": siteUrl,
+                        "logo": {
+                            "@type": "ImageObject",
+                            "url": `${siteUrl}/logo.svg`
+                        },
+                        "sameAs": [
+                            "https://www.facebook.com/CourseSpeakOfficial/",
+                            "https://x.com/courses_peak"
+                        ]
+                    },
+                    "about": { "@type": "Course", "@id": `${dealUrl}#course` },
+                    "mainEntity": { "@type": "Course", "@id": `${dealUrl}#course` }
                 },
                 {
-                    "@type": "ListItem",
-                    "position": 2,
-                    "name": "Deals",
-                    "item": "https://coursespeak.com/deals"
-                },
-                deal.category ? {
-                    "@type": "ListItem",
-                    "position": 3,
-                    "name": deal.category,
-                    "item": `https://coursespeak.com/categories/${deal.category.toLowerCase().replace(/\s+/g, '-')}`
-                } : null,
-                {
-                    "@type": "ListItem",
-                    "position": deal.category ? 4 : 3,
-                    "name": deal.title,
-                    "item": `https://coursespeak.com/deal/${deal.id}`
-                }
-            ].filter(Boolean)
-        })
-    } />
-
-    <!-- Enhanced FAQ Structured Data for Featured Snippets -->
-    {(deal.faqs && deal.faqs.length > 0) && (
-        <script type="application/ld+json" set:html={
-            JSON.stringify({
-                "@context": "https://schema.org",
-                "@type": "FAQPage",
-                "mainEntity": deal.faqs.slice(0, 8).map((faq: any) => ({
-                    "@type": "Question",
-                    "name": faq.q,
-                    "acceptedAnswer": {
-                        "@type": "Answer",
-                        "text": faq.a.replace(/<[^>]*>/g, '').trim()
-                    }
-                })),
-                "publisher": {
-                    "@type": "Organization",
-                    "name": "CourseSpeak",
-                    "url": "https://coursespeak.com"
-                },
-                "about": {
                     "@type": "Course",
+                    "@id": `${dealUrl}#course`,
                     "name": deal.title,
-                    "url": `https://coursespeak.com/deal/${deal.id}`
+                    "description": deal.seoDescription || deal.description || "",
+                    "image": deal.seoOgImage || deal.image,
+                    "thumbnailUrl": deal.seoOgImage || deal.image,
+                    "url": dealUrl,
+                    "provider": {
+                        "@type": "Organization",
+                        "name": deal.provider || "Udemy",
+                        "url": deal.provider === "Udemy" ? "https://www.udemy.com" : undefined
+                    },
+                    "instructor": deal.instructor ? {
+                        "@type": "Person",
+                        "name": deal.instructor
+                    } : undefined,
+                    "offers": {
+                        "@type": "Offer",
+                        "price": (deal.price ?? 0).toString(),
+                        "priceCurrency": "USD",
+                        "availability": "https://schema.org/InStock",
+                        "url": deal.url || dealUrl,
+                        "priceValidUntil": deal.expiresAt ? new Date(deal.expiresAt).toISOString().split('T')[0] : undefined,
+                        "seller": {
+                            "@type": "Organization",
+                            "name": deal.provider || "Udemy"
+                        }
+                    },
+                    "aggregateRating": deal.rating ? {
+                        "@type": "AggregateRating",
+                        "ratingValue": deal.rating.toString(),
+                        "reviewCount": Math.max(1, Math.round(deal.students ?? 0)),
+                        "bestRating": "5",
+                        "worstRating": "1"
+                    } : undefined,
+                    "educationalLevel": "All Levels",
+                    "teaches": extractSkills(deal),
+                    "inLanguage": deal.language || "English",
+                    "timeRequired": parseDuration(deal.duration),
+                    "datePublished": deal.createdAt ? new Date(deal.createdAt).toISOString().split('T')[0] : undefined,
+                    "dateModified": deal.updatedAt ? new Date(deal.updatedAt).toISOString().split('T')[0] : undefined,
+                    "hasCourseInstance": {
+                        "@type": "CourseInstance",
+                        "courseMode": "online",
+                        "instructor": deal.instructor ? {
+                            "@type": "Person",
+                            "name": deal.instructor
+                        } : undefined
+                    }
+                },
+                {
+                    "@type": "BreadcrumbList",
+                    "@id": `${dealUrl}#breadcrumb`,
+                    "itemListElement": [
+                        { "@type": "ListItem", "position": 1, "name": "Home", "item": siteUrl },
+                        { "@type": "ListItem", "position": 2, "name": "Deals", "item": `${siteUrl}/deals` },
+                        ...(deal.category ? [{
+                            "@type": "ListItem" as const,
+                            "position": 3,
+                            "name": deal.category,
+                            "item": `${siteUrl}/categories/${deal.category.toLowerCase().replace(/\s+/g, '-')}`
+                        }] : []),
+                        { "@type": "ListItem", "position": deal.category ? 4 : 3, "name": deal.title, "item": dealUrl }
+                    ]
+                },
+                ...(deal.faqs && deal.faqs.length > 0 ? [{
+                    "@type": "FAQPage",
+                    "@id": `${dealUrl}#faq`,
+                    "mainEntity": deal.faqs.slice(0, 8).map((faq: any) => ({
+                        "@type": "Question",
+                        "name": faq.q,
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": (faq.a || "").replace(/<[^>]*>/g, "").trim()
+                        }
+                    }))
+                }] : []),
+                {
+                    "@type": "Organization",
+                    "@id": `${siteUrl}#organization`,
+                    "name": "CourseSpeak",
+                    "url": siteUrl,
+                    "logo": `${siteUrl}/logo.svg`,
+                    "description": "CourseSpeak provides verified Udemy coupons and discount codes for premium online courses.",
+                    "foundingDate": "2024",
+                    "sameAs": [
+                        "https://www.facebook.com/CourseSpeakOfficial/",
+                        "https://x.com/courses_peak"
+                    ],
+                    "contactPoint": {
+                        "@type": "ContactPoint",
+                        "contactType": "customer service",
+                        "availableLanguage": "English"
+                    }
                 }
-            })
-        } />
-    )}
+            ]
+        })
+    } />
 
-    {
-        /* We pass client:load to ensure interactivity (tabs, hydration) works immediately */
-    }
     <DealPage client:load deal={deal} relatedDeals={relatedDeals} />
 
 </Layout>

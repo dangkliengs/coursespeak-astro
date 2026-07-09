@@ -24,8 +24,6 @@ const {
 const siteUrl = import.meta.env.SITE || "https://coursespeak.com";
 const canonicalURL = canonical || new URL(Astro.url.pathname, siteUrl).href;
 
-// Dynamic copyright year
-const currentYear = new Date().getFullYear();
 const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(image, siteUrl).href) : null;
 
 // Get current path for navigation active states
@@ -36,9 +34,16 @@ const currentPath = Astro.url.pathname;
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="alternate" hreflang="en" href={canonicalURL} />
+    <link rel="alternate" hreflang="x-default" href={canonicalURL} />
+    {canonicalURL.includes('/deal/') && !canonicalURL.includes('.amp') && (
+      <link rel="amphtml" href={canonicalURL.replace(/\/$/, '') + '.amp/'} />
+    )}
     
     <!-- Performance & SEO Meta Tags -->
     <meta name="theme-color" content="#1a1a2e" />
@@ -62,17 +67,8 @@ const currentPath = Astro.url.pathname;
     
     <!-- Resource hints -->
     <link rel="preload" href="/favicon.svg" as="image" type="image/svg+xml" />
-    
     <meta name="generator" content={Astro.generator} />
     <meta name="google-site-verification" content="HISPISPt9Gk-zER-OUkGcPtm6cyiQ7snnKwzn7aDgTY" />
-    <link rel="canonical" href={canonicalURL} />
-    <link rel="alternate" hreflang="en" href={canonicalURL} />
-    <link rel="alternate" hreflang="x-default" href={canonicalURL} />
-    {canonicalURL.includes('/deal/') && !canonicalURL.includes('.amp') && (
-      <link rel="amphtml" href={canonicalURL.replace(/\/$/, '') + '.amp/'} />
-    )}
-
-    <title>{title}</title>
 
     <!-- Comprehensive SEO Meta Tags -->
     <meta name="author" content="Josh Smith" />
@@ -299,18 +295,28 @@ const currentPath = Astro.url.pathname;
       .nav-link:active {
         transform: translateY(0);
       }
+
+      .skip-link {
+        position: absolute;
+        top: -100px;
+        left: 8px;
+        z-index: 9999;
+        background: var(--brand);
+        color: var(--bg);
+        padding: 8px 16px;
+        border-radius: 0 0 8px 8px;
+        font-weight: 600;
+        text-decoration: none;
+        font-size: 14px;
+      }
+      .skip-link:focus {
+        top: 0;
+      }
     </style>
     <slot name="head" />
   </head>
   <body>
-    <a href="#main-content" style={{
-      position: "absolute", top: "-100px", left: "8px", zIndex: 9999,
-      background: "var(--brand)", color: "var(--bg)", padding: "8px 16px",
-      borderRadius: "0 0 8px 8px", fontWeight: 600, textDecoration: "none",
-      fontSize: "14px"
-    }} onFocus={(e) => e.target.style.top = "0"}
-       onBlur={(e) => e.target.style.top = "-100px"}
-    >Skip to main content</a>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <header
       role="banner"
       class="site-header"

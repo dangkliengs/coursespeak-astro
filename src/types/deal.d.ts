@@ -29,4 +29,5 @@ export interface Deal {
   expiresAt?: string;
   createdAt?: string;
   updatedAt?: string;
+  curriculum?: { section: string; lectures: { title: string; duration: string }[] }[];
 }
