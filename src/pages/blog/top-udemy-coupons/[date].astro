@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import Layout from '../../../layouts/Layout.astro';
 import { getDeals, getAvailableDates } from '../../../lib/store.js';
 
@@ -51,9 +52,9 @@ function slugifyCat(cat: string) {
 }
 
 const catColors: Record<string, string> = {
-  'Development': '#2563eb', 'Design': '#7c3aed', 'Business': '#0891b2', 'Marketing': '#d97706',
+  'Development': '#2563eb', 'Design': '#f59e0b', 'Business': '#0891b2', 'Marketing': '#d97706',
   'IT & Software': '#059669', 'Finance': '#16a34a', 'Personal Development': '#dc2626',
-  'Photography': '#9333ea', 'Music': '#db2777', 'Health & Fitness': '#ea580c',
+  'Photography': '#ea580c', 'Music': '#e11d48', 'Health & Fitness': '#ea580c',
   'Office Productivity': '#0284c7', 'Teaching': '#65a30d',
 };
 const getCatColor = (cat: string) => catColors[cat] || '#374151';
@@ -196,7 +197,7 @@ const jsonLd = {
               {deals.slice(0, 6).map(deal => (
                 <div class="course-card">
                   <div class="card-image">
-                    <img src={deal.image} alt={deal.title} loading="lazy" onerror="this.style.display='none'" />
+                    <Image src={deal.image} alt={deal.title} loading="lazy" width={400} height={225} />
                   </div>
                   <div class="card-content">
                     <a href={`/deal/${deal.id}`} class="card-title-link">
@@ -239,7 +240,7 @@ const jsonLd = {
                   {deals.slice(6).map(deal => (
                     <div class="course-card">
                       <div class="card-image">
-                        <img src={deal.image} alt={deal.title} loading="lazy" onerror="this.style.display='none'" />
+                        <Image src={deal.image} alt={deal.title} loading="lazy" width={400} height={225} />
                       </div>
                       <div class="card-content">
                         <h3 class="card-title">{deal.title}</h3>
@@ -429,9 +430,9 @@ const jsonLd = {
     border: 1px solid rgba(255, 255, 255, 0.35);
     line-height: 0;
     background:
-      radial-gradient(circle at top left, #93c5fd, transparent 28%),
-      radial-gradient(circle at bottom right, #d8b4fe, transparent 30%),
-      linear-gradient(135deg, #eff6ff, #f5d0fe);
+      radial-gradient(circle at top left, #fcd34d, transparent 28%),
+      radial-gradient(circle at bottom right, #f59e0b, transparent 30%),
+      linear-gradient(135deg, #fef3c7, #fde68a);
     box-shadow:
       0 0 0 8px rgba(255, 255, 255, 0.02),
       0 18px 40px -24px rgba(15, 23, 42, 0.6);
@@ -773,6 +774,16 @@ const jsonLd = {
     color: var(--bg);
     box-shadow: 0 8px 24px rgba(0,0,0,0.12);
     transform: translateY(-2px);
+  }
+  .nav-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 0.75rem 1.5rem; border: 1px solid var(--border); border-radius: 12px;
+    background: var(--card); color: var(--text); font-size: 0.875rem; font-weight: 600;
+    text-decoration: none; transition: all 0.2s ease;
+  }
+  .nav-btn:hover {
+    border-color: var(--brand); background: var(--brand); color: var(--bg);
+    transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.12);
   }
   .nav-mid { background: var(--brand); color: var(--bg); border-color: var(--brand); }
   .nav-mid:hover { filter: brightness(1.1); }

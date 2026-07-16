@@ -32,17 +32,17 @@ export function buildBlogCoverSvg(opts: {
       <stop offset="100%" stop-color="#020617"/>
     </linearGradient>
     <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#6366f1"/>
-      <stop offset="50%" stop-color="#a855f7"/>
-      <stop offset="100%" stop-color="#ec4899"/>
+      <stop offset="0%" stop-color="#f5c842"/>
+      <stop offset="50%" stop-color="#e8a317"/>
+      <stop offset="100%" stop-color="#d48f00"/>
     </linearGradient>
     <linearGradient id="warm" x1="0" y1="1" x2="1" y2="0">
       <stop offset="0%" stop-color="#f59e0b"/>
-      <stop offset="100%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#d97706"/>
     </linearGradient>
     <linearGradient id="cool" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#06b6d4"/>
-      <stop offset="100%" stop-color="#3b82f6"/>
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
     </linearGradient>
     <filter id="blur1"><feGaussianBlur stdDeviation="50"/></filter>
     <filter id="blur2"><feGaussianBlur stdDeviation="30"/></filter>
@@ -54,10 +54,9 @@ export function buildBlogCoverSvg(opts: {
   <circle cx="1000" cy="480" r="240" fill="url(#warm)" opacity="0.08" filter="url(#blur1)"/>
   <circle cx="600" cy="540" r="200" fill="url(#cool)" opacity="0.07" filter="url(#blur1)"/>
 
-  <g transform="translate(96, 145)">
-    <circle cx="40" cy="40" r="40" fill="rgba(99, 102, 241, 0.2)"/>
-    <circle cx="40" cy="40" r="28" fill="none" stroke="url(#accent)" stroke-width="5"/>
-    <text x="40" y="48" text-anchor="middle" fill="#f8fafc" font-family="system-ui, Segoe UI, sans-serif" font-size="32" font-weight="800">%</text>
+  <g transform="translate(96, 173)">
+    <rect x="0" y="-20" width="80" height="40" rx="20" fill="url(#accent)"/>
+    <text x="40" y="6" text-anchor="middle" fill="#0f172a" font-family="system-ui, Segoe UI, sans-serif" font-size="18" font-weight="800" letter-spacing="0.08em">FREE</text>
   </g>
   
   <text x="200" y="210" fill="#f8fafc" font-family="system-ui, Segoe UI, sans-serif" font-size="72" font-weight="800" letter-spacing="-0.02em">Udemy Coupons Today</text>
@@ -84,17 +83,17 @@ export function buildBlogFeedCoverSvg(): string {
       <stop offset="100%" stop-color="#020617"/>
     </linearGradient>
     <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#6366f1"/>
-      <stop offset="50%" stop-color="#a855f7"/>
-      <stop offset="100%" stop-color="#ec4899"/>
+      <stop offset="0%" stop-color="#f5c842"/>
+      <stop offset="50%" stop-color="#e8a317"/>
+      <stop offset="100%" stop-color="#d48f00"/>
     </linearGradient>
     <linearGradient id="warm" x1="0" y1="1" x2="1" y2="0">
       <stop offset="0%" stop-color="#f59e0b"/>
-      <stop offset="100%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#d97706"/>
     </linearGradient>
     <linearGradient id="cool" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#06b6d4"/>
-      <stop offset="100%" stop-color="#3b82f6"/>
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
     </linearGradient>
     <filter id="blur1"><feGaussianBlur stdDeviation="50"/></filter>
   </defs>
@@ -105,10 +104,9 @@ export function buildBlogFeedCoverSvg(): string {
   <circle cx="1000" cy="480" r="240" fill="url(#warm)" opacity="0.08" filter="url(#blur1)"/>
   <circle cx="600" cy="540" r="200" fill="url(#cool)" opacity="0.07" filter="url(#blur1)"/>
 
-  <g transform="translate(96, 145)">
-    <circle cx="40" cy="40" r="40" fill="rgba(99, 102, 241, 0.2)"/>
-    <circle cx="40" cy="40" r="28" fill="none" stroke="url(#accent)" stroke-width="5"/>
-    <text x="40" y="48" text-anchor="middle" fill="#f8fafc" font-family="system-ui, Segoe UI, sans-serif" font-size="32" font-weight="800">%</text>
+  <g transform="translate(96, 173)">
+    <rect x="0" y="-20" width="80" height="40" rx="20" fill="url(#accent)"/>
+    <text x="40" y="6" text-anchor="middle" fill="#0f172a" font-family="system-ui, Segoe UI, sans-serif" font-size="18" font-weight="800" letter-spacing="0.08em">FREE</text>
   </g>
   
   <text x="200" y="210" fill="#f8fafc" font-family="system-ui, Segoe UI, sans-serif" font-size="72" font-weight="800" letter-spacing="-0.02em">Udemy Coupons Today</text>
