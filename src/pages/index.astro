@@ -98,7 +98,6 @@ const topCategories = (() => {
 })();
 
 // ─── Stats for Trust Indicators ─────────────────────────────────────────
-const totalStudents = allDeals.reduce((sum, d) => sum + (typeof d.students === "number" && isFinite(d.students) ? d.students : 0), 0);
 const uniqueInstructors = new Set(allDeals.map(d => d.instructor).filter(Boolean)).size;
 const now_ts = Date.now();
 const todayDeals = allDeals.filter(d => {
@@ -828,8 +827,8 @@ const jsonLd = {
         </form>
       </div>
 
-      <p style={{ fontSize: "0.82rem", color: "var(--text-secondary)", marginTop: "0.5rem" }}>
-        Trusted by {Math.round(totalStudents / 1000)}K+ learners &middot; {uniqueInstructors} expert instructors &middot; {allDeals.length.toLocaleString()} active deals
+        <p style={{ fontSize: "0.82rem", color: "var(--text-secondary)", marginTop: "0.5rem" }}>
+        {allDeals.length.toLocaleString()} coupons verified &middot; {uniqueInstructors} expert instructors &middot; {todayDeals.length} added today
       </p>
 
       <!-- CTA Buttons -->
@@ -874,10 +873,10 @@ const jsonLd = {
         </div>
         <div class="stat-box">
           <div class="stat-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            <span class="stat-value">{Math.round(totalStudents / 1000)}K+</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <span class="stat-value">{allDeals.length.toLocaleString()}</span>
           </div>
-          <div class="stat-label">Total Students</div>
+          <div class="stat-label">Coupons Verified</div>
         </div>
       </div>
     </div>
