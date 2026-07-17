@@ -8,7 +8,7 @@
 [![Daily Blog](https://img.shields.io/badge/Daily_Coupon_Blog-Updated_Every_Day-6366F1?style=for-the-badge)](https://coursespeak.com/blog)
 [![Admin](https://img.shields.io/badge/Admin_Dashboard-Full_CRUD_Built_In-6D28D9?style=for-the-badge)](https://coursespeak.com)
 
-CourseSpeak.com is a high-performance Udemy coupon platform trusted by 150,000+ learners worldwide. Built with Astro 7, React, and Tailwind CSS — featuring a full admin dashboard, sub-second load times, and 1.3k+ verified free Udemy coupons updated daily. Featured in the Official Astro Showcase March 2026.
+CourseSpeak.com is a high-performance Udemy coupon platform trusted by 150,000+ learners worldwide. Built with Astro 7.1, React, and Tailwind CSS — featuring a full admin dashboard, sub-second load times, and 1.3k+ verified free Udemy coupons updated daily. Featured in the Official Astro Showcase March 2026.
 
 Get free Udemy courses at [coursespeak.com/deals](https://coursespeak.com/deals)
 
@@ -29,12 +29,12 @@ Get free Udemy courses at [coursespeak.com/deals](https://coursespeak.com/deals)
 
 ## What Makes CourseSpeak Different
 
-Most Udemy coupon sites are basic static pages. [CourseSpeak](https://coursespeak.com) ships a complete admin dashboard built into the Astro 7 static architecture — full CRUD management of 1.3k+ courses via a browser UI, with zero backend server and sub-second page loads.
+Most Udemy coupon sites are basic static pages. [CourseSpeak](https://coursespeak.com) ships a complete admin dashboard built into the Astro 7.1 static architecture — full CRUD management of 1.3k+ courses via a browser UI, with zero backend server and sub-second page loads.
 
 - Built-in admin dashboard with add, edit, delete for all course deals
 - GitHub API integration — admin changes commit directly to the repository
 - WYSIWYG rich text editor for course descriptions
-- Astro 6.4 static generation — 74+ pages built in under 25 seconds
+- Astro 7.1 static generation — 74+ pages built in under 25 seconds
 - Sub-second page loads with zero backend server
 - Schema.org structured data on every page for rich search results
 - Mobile-first responsive design with Tailwind CSS
@@ -145,7 +145,7 @@ Why are courses free? Udemy instructors release 100% OFF coupons to attract firs
 
 | Layer | Technology |
 |---|---|
-| Framework | [Astro 6.4](https://astro.build/), static site generation |
+| Framework | [Astro 7.1](https://astro.build/), static site generation |
 | UI Components | [React](https://react.dev)|
 | Styling | [Tailwind CSS](https://tailwindcss.com)|
 | Deployment | [GitHub Pages](https://github.com)|
@@ -160,7 +160,7 @@ Performance: 74+ static pages, sub-second load times, mobile-first, all Core Web
 
 ## Admin Dashboard
 
-[CourseSpeak](https://coursespeak.com) includes a production-ready admin panel built into the Astro 7 static architecture — a rare capability for a fully static site.
+[CourseSpeak](https://coursespeak.com) includes a production-ready admin panel built into the Astro 7.1 static architecture — a rare capability for a fully static site.
 
 - Add, edit, and delete Udemy course deals via browser UI
 - Rich text WYSIWYG editor for course descriptions
@@ -245,4 +245,4 @@ This repository is shared for educational and transparency purposes. Copying or 
 
 ---
 
-Get 1.3k+ free Udemy courses with verified 100% OFF coupons at [CourseSpeak.com](https://coursespeak.com) — admin dashboard, Astro 7, trusted by 150,000+ learners, updated daily.
+Get 1.3k+ free Udemy courses with verified 100% OFF coupons at [CourseSpeak.com](https://coursespeak.com) — admin dashboard, Astro 7.1, trusted by 150,000+ learners, updated daily.
