@@ -98,6 +98,8 @@ const topCategories = (() => {
 })();
 
 // ─── Stats for Trust Indicators ─────────────────────────────────────────
+const dealsWithPrice = allDeals.filter(d => d.originalPrice && d.price && d.originalPrice > d.price);
+const avgDiscount = dealsWithPrice.length > 0 ? Math.round(dealsWithPrice.reduce((sum, d) => sum + (1 - (d.price ?? 0) / (d.originalPrice ?? 1)) * 100, 0) / dealsWithPrice.length) : 0;
 const uniqueInstructors = new Set(allDeals.map(d => d.instructor).filter(Boolean)).size;
 const now_ts = Date.now();
 const todayDeals = allDeals.filter(d => {
@@ -828,7 +830,7 @@ const jsonLd = {
       </div>
 
         <p style={{ fontSize: "0.82rem", color: "var(--text-secondary)", marginTop: "0.5rem" }}>
-        {allDeals.length.toLocaleString()} coupons verified &middot; {uniqueInstructors} expert instructors &middot; {todayDeals.length} added today
+        {allDeals.length.toLocaleString()} active coupons &middot; avg {avgDiscount}% OFF &middot; {uniqueInstructors} expert instructors
       </p>
 
       <!-- CTA Buttons -->
@@ -873,17 +875,51 @@ const jsonLd = {
         </div>
         <div class="stat-box">
           <div class="stat-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            <span class="stat-value">{allDeals.length.toLocaleString()}</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+            <span class="stat-value">{avgDiscount}%</span>
           </div>
-          <div class="stat-label">Coupons Verified</div>
+          <div class="stat-label">Avg Discount</div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- ══════════════════════════════════════════════════════════════════════
-       2. FEATURED COURSE
+       2. LATEST DEALS
+       ══════════════════════════════════════════════════════════════════════ -->
+  <section class="section" aria-label="Latest free Udemy course coupons" style="padding-top:0;padding-bottom:0">
+    <div class="container">
+      <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: "0.5rem", flexWrap: "wrap", gap: "0.5rem" }}>
+        <div>
+          <span class="section-title">Fresh Deals</span>
+          <h2 class="section-heading" style={{ marginBottom: "0.25rem" }}>Latest coupon codes</h2>
+          <p style={{ color: "var(--text-secondary)", fontSize: "0.85rem", lineHeight: 1.5, margin: 0, maxWidth: "480px" }}>
+            Manually verified Udemy coupons updated {currentMonth}. Click any deal to enroll for free.
+          </p>
+        </div>
+        <a href="/deals" style={{
+          color: "#D4AF37", textDecoration: "none", fontWeight: 600, fontSize: "0.95rem",
+          display: "flex", alignItems: "center", gap: "0.5rem",
+          padding: "0.75rem 1.5rem", background: "rgba(212,167,55,0.1)",
+          borderRadius: "12px", border: "1px solid rgba(212,167,55,0.3)"
+        }}>
+          View All {allDeals.length.toLocaleString()} Deals
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+          </svg>
+        </a>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "2rem" }}>
+        {initialItems.map((deal) => (
+          <DealCard deal={deal} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       3. FEATURED COURSE
        ══════════════════════════════════════════════════════════════════════ -->
   {featuredDeals.length > 0 && (
     <section class="section-wrapper" aria-label="Top-rated free Udemy course">
@@ -1063,42 +1099,6 @@ const jsonLd = {
       </div>
     </section>
   )}
-
-
-
-  <!-- ══════════════════════════════════════════════════════════════════════
-       3. LATEST DEALS
-       ══════════════════════════════════════════════════════════════════════ -->
-  <section class="section" aria-label="Latest free Udemy course coupons" style="padding-top:0;padding-bottom:0">
-    <div class="container">
-      <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: "0.5rem", flexWrap: "wrap", gap: "0.5rem" }}>
-        <div>
-          <span class="section-title">Fresh Deals</span>
-          <h2 class="section-heading" style={{ marginBottom: "0.25rem" }}>Latest coupon codes</h2>
-          <p style={{ color: "var(--text-secondary)", fontSize: "0.85rem", lineHeight: 1.5, margin: 0, maxWidth: "480px" }}>
-            Manually verified Udemy coupons updated {currentMonth}. Click any deal to enroll for free.
-          </p>
-        </div>
-        <a href="/deals" style={{
-          color: "#D4AF37", textDecoration: "none", fontWeight: 600, fontSize: "0.95rem",
-          display: "flex", alignItems: "center", gap: "0.5rem",
-          padding: "0.75rem 1.5rem", background: "rgba(212,167,55,0.1)",
-          borderRadius: "12px", border: "1px solid rgba(212,167,55,0.3)"
-        }}>
-          View All {allDeals.length.toLocaleString()} Deals
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
-          </svg>
-        </a>
-      </div>
-
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "2rem" }}>
-        {initialItems.map((deal) => (
-          <DealCard deal={deal} />
-        ))}
-      </div>
-    </div>
-  </section>
 
   <!-- ══════════════════════════════════════════════════════════════════════
        4. WHY CHOOSE COURSESPEAK
