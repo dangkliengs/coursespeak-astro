@@ -829,20 +829,20 @@ import Layout from "../layouts/Layout.astro";
                     </div>
 
                     <div style={{ display: "flex", alignItems: "center", gap: "1.5rem", flexWrap: "wrap", maxWidth: "900px", margin: "0 auto", background: "var(--card)", padding: "1.5rem", borderRadius: "12px", border: "1px solid var(--border)" }}>
-                        <div style={{ width: "80px", height: "80px", borderRadius: "50%", background: "#1f2330", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, overflow: "hidden", border: "3px solid #FBBF24" }}>
+                        <div style={{ width: "80px", height: "80px", borderRadius: "50%", background: "var(--card-hover)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, overflow: "hidden", border: "3px solid #FBBF24" }}>
                             <img src="/images/author.jpg" alt="Josh Smith - Udemy Coupon Expert" style={{ width: "100%", height: "100%", objectFit: "cover" }} loading="lazy" />
                         </div>
                         <div style={{ flex: 1, minWidth: "280px", color: "var(--text)" }}>
                             <h3 style={{ fontSize: "1.25rem", fontWeight: 700, color: "#fff", margin: "0 0 0.5rem 0" }}>Josh Smith</h3>
-                            <p style={{ fontSize: "0.9375rem", color: "#cbd5e1", lineHeight: 1.6, margin: "0 0 0.75rem 0" }}>Udemy coupon specialist with 8+ years of experience finding and verifying the best deals. I've helped thousands of students save thousands of dollars on premium courses through carefully curated coupon codes and exclusive discount offers. My mission is making high-quality education accessible and affordable for everyone.</p>
-                            <div style={{ display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap", color: "#cbd5e1" }}>
+                            <p style={{ fontSize: "0.9375rem", color: "var(--muted)", lineHeight: 1.6, margin: "0 0 0.75rem 0" }}>Udemy coupon specialist with 8+ years of experience finding and verifying the best deals. I've helped thousands of students save thousands of dollars on premium courses through carefully curated coupon codes and exclusive discount offers. My mission is making high-quality education accessible and affordable for everyone.</p>
+                            <div style={{ display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap", color: "var(--muted)" }}>
                                 <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="#FBBF24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-                                    <span style={{ fontSize: "0.8125rem", color: "#cbd5e1", fontWeight: 600 }}>4.8/5 Average Rating</span>
+                                    <span style={{ fontSize: "0.8125rem", color: "var(--muted)", fontWeight: 600 }}>4.8/5 Average Rating</span>
                                 </div>
                                 <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="#FBBF24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    <span style={{ fontSize: "0.8125rem", color: "#cbd5e1", fontWeight: 600 }}>Trusted by 2M+ Students</span>
+                                    <span style={{ fontSize: "0.8125rem", color: "var(--muted)", fontWeight: 600 }}>Trusted by 2M+ Students</span>
                                 </div>
                             </div>
                         </div>
@@ -860,9 +860,9 @@ import Layout from "../layouts/Layout.astro";
                     </div>
 
                     <div style={{ marginTop: "1.5rem", padding: "1rem", background: "linear-gradient(135deg, rgba(251,191,36,0.1) 0%, rgba(251,191,36,0.05) 100%)", border: "1px solid rgba(251,191,36,0.2)", borderRadius: "8px", textAlign: "center", maxWidth: "900px", margin: "1.5rem auto 0" }}>
-                        <p style={{ fontSize: "0.95rem", color: "#cbd5e1", marginBottom: "0.75rem" }}><strong style={{ color: "#FBBF24" }}>Follow Us for Daily Coupon Updates</strong></p>
+                        <p style={{ fontSize: "0.95rem", color: "var(--muted)", marginBottom: "0.75rem" }}><strong style={{ color: "#FBBF24" }}>Follow Us for Daily Coupon Updates</strong></p>
                         <p style={{ fontSize: "0.85rem", color: "#94a3b8", marginBottom: "1rem" }}>Get notified when we publish new coupon deals and exclusive discount codes.</p>
-                        <a href="/blog" style={{ display: "inline-block", padding: "0.75rem 1.5rem", background: "linear-gradient(135deg,#FBBF24,#F59E0B)", color: "#1f2330", textDecoration: "none", borderRadius: "6px", fontSize: "0.9rem", fontWeight: 600, transition: "all .2s", boxShadow: "0 2px 8px rgba(251,191,36,0.3)" }}>📖 Visit Our Blog →</a>
+                        <a href="/blog" style={{ display: "inline-block", padding: "0.75rem 1.5rem", background: "linear-gradient(135deg,#FBBF24,#F59E0B)", color: "var(--card-hover)", textDecoration: "none", borderRadius: "6px", fontSize: "0.9rem", fontWeight: 600, transition: "all .2s", boxShadow: "0 2px 8px rgba(251,191,36,0.3)" }}>📖 Visit Our Blog →</a>
                     </div>
                 </div>
             </section>
@@ -1551,7 +1551,7 @@ import Layout from "../layouts/Layout.astro";
         }
 
         .hero-gradient {
-            background: linear-gradient(135deg, hsl(222, 47%, 7%) 0%, hsl(222, 43%, 10%) 100%);
+            background: linear-gradient(135deg, #0f0e0c 0%, #1a1814 100%);
         }
 
         .card-gradient {

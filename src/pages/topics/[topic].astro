@@ -120,9 +120,6 @@ const totalPages = Math.ceil(topicDeals.length / PAGE_SIZE);
 const displayName = topic.replace(/\b\w/g, l => l.toUpperCase());
 const topicName = displayName;
 
-// Get category for this topic (assuming all deals in topic have same category)
-const category = topicDeals.length > 0 && topicDeals[0].category ? topicDeals[0].category : 'Development';
-
 // Generate related searches
 const generateRelatedSearches = (topic: string) => {
   const baseSearches = [
@@ -152,9 +149,6 @@ const relatedSearches = generateRelatedSearches(topicName);
 
 // SEO description
 const topicDescription = `Discover the best Udemy courses for ${topicName} in 2026. Our comprehensive collection features expert-led tutorials covering ${topicName.toLowerCase()} fundamentals to advanced techniques. Whether you're a complete beginner looking to start your ${topicName.toLowerCase()} journey or an experienced professional seeking to deepen your expertise, you'll find high-quality courses with massive discounts. Learn from industry-leading instructors, gain practical skills through hands-on projects, and earn certificates to boost your career. From basic concepts to cutting-edge applications, our curated ${topicName.toLowerCase()} courses include interactive exercises, real-world examples, and lifetime access. Perfect for students, professionals, and anyone passionate about ${topicName.toLowerCase()}. Explore beginner-friendly introductions, intermediate skill-building courses, and advanced masterclasses. Get started today and transform your knowledge with the top-rated ${topicName.toLowerCase()} courses available on Udemy.`;
-
-// Get all topics for sidebar
-const topics = [...new Set(allDeals.map(deal => deal.subcategory).filter(sub => sub != null))];
 
 ---
 
@@ -198,7 +192,7 @@ const topics = [...new Set(allDeals.map(deal => deal.subcategory).filter(sub => 
         fontSize: "2.5rem",
         fontWeight: "800",
         marginBottom: "1rem",
-        background: "linear-gradient(135deg, #FFC107 0%, #FFD54F 100%)",
+        background: "linear-gradient(135deg, #D4AF37 0%, #FFD54F 100%)",
         WebkitBackgroundClip: "text",
         WebkitTextFillColor: "transparent",
         backgroundClip: "text"
@@ -215,7 +209,7 @@ const topics = [...new Set(allDeals.map(deal => deal.subcategory).filter(sub => 
         Discover {topicDeals.length}+ verified {topicName.toLowerCase()} courses with massive discounts. Learn from industry experts and advance your career today.
       </p>
       <a href="/deals" style={{
-        color: "#FFC107",
+        color: "#D4AF37",
         textDecoration: "none",
         fontWeight: "600",
         display: "inline-block",
@@ -253,8 +247,8 @@ const topics = [...new Set(allDeals.map(deal => deal.subcategory).filter(sub => 
           </p>
           <a href="/deals" style={{
             padding: "12px 24px",
-            background: "linear-gradient(135deg, #FFC107 0%, #FFD54F 100%)",
-            border: "2px solid #FFC107",
+            background: "linear-gradient(135deg, #D4AF37 0%, #FFD54F 100%)",
+            border: "2px solid #D4AF37",
             borderRadius: "8px",
             color: "white",
             textDecoration: "none",
@@ -323,10 +317,10 @@ const topics = [...new Set(allDeals.map(deal => deal.subcategory).filter(sub => 
                 style={{
                   padding: "8px 12px",
                   background: pageNum === currentPage
-                    ? "linear-gradient(135deg, #FFC107 0%, #FFD54F 100%)"
+                    ? "linear-gradient(135deg, #D4AF37 0%, #FFD54F 100%)"
                     : "var(--card)",
                   border: pageNum === currentPage
-                    ? "2px solid #FFC107"
+                    ? "2px solid #D4AF37"
                     : "1px solid var(--border)",
                   borderRadius: "6px",
                   color: pageNum === currentPage ? "white" : "var(--text)",

@@ -2,11 +2,8 @@
 import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 import DealCard from "../components/DealCard.astro";
-import FeaturedDealCard from "../components/FeaturedDealCard.astro";
-import DealsList from "../components/DealsList";
-import HeaderSearch from "../components/HeaderSearch";
+import { CATEGORY_ICONS } from "../lib/categories";
 import { readDeals } from "../lib/store";
-import { uniqueProviders } from "../lib/mockData";
 
 // ─── Date helpers (WIB/Asia-Jakarta) ─────────────────────────────────────────
 const TIMEZONE = 'Asia/Jakarta';
@@ -44,7 +41,6 @@ const pageDescription = `Get verified 100% off Udemy coupons updated daily for $
 const allDeals     = await readDeals();
 const PAGE_SIZE    = 6;
 const initialItems = allDeals.slice(0, PAGE_SIZE);
-const totalPages   = Math.ceil(allDeals.length / PAGE_SIZE);
 
 // ─── Categories ──────────────────────────────────────────────────────────────
 function normName(raw?: string | null) {
@@ -81,9 +77,36 @@ function getCategoryDescription(category: string) {
   return "Explore premium courses with exclusive coupons and deals";
 }
 
-const categories = [
-  ...new Set(allDeals.map((d) => d.category).filter(Boolean).map(normName).filter(Boolean)),
-] as string[];
+const topCategories = (() => {
+  const map = new Map<string, { slug: string; name: string; count: number; subs: Map<string, number>; description: string }>();
+  for (const deal of allDeals) {
+    if (!deal.category) continue;
+    const name = normName(deal.category);
+    if (!name) continue;
+    const slug = slugifyCategory(name);
+    if (!map.has(slug)) {
+      map.set(slug, { slug, name, count: 0, subs: new Map(), description: getCategoryDescription(name) });
+    }
+    const entry = map.get(slug)!;
+    entry.count++;
+    if (deal.subcategory) {
+      const sub = normName(deal.subcategory);
+      if (sub) entry.subs.set(sub, (entry.subs.get(sub) || 0) + 1);
+    }
+  }
+  return [...map.values()].sort((a, b) => b.count - a.count).filter(c => c.name.toLowerCase() !== "programming").slice(0, 8);
+})();
+
+// ─── Stats for Trust Indicators ─────────────────────────────────────────
+const totalStudents = allDeals.reduce((sum, d) => sum + (typeof d.students === "number" && isFinite(d.students) ? d.students : 0), 0);
+const uniqueInstructors = new Set(allDeals.map(d => d.instructor).filter(Boolean)).size;
+const now_ts = Date.now();
+const todayDeals = allDeals.filter(d => {
+  const dt = d.updatedAt || d.createdAt || d.expiresAt;
+  if (!dt) return false;
+  const t = new Date(dt).getTime();
+  return isFinite(t) && (now_ts - t) < 86400000;
+});
 
 // ─── Featured Deal ────────────────────────────────────────────────────────────
 const featuredDeals = allDeals
@@ -637,10 +660,10 @@ const jsonLd = {
     width: 100%;
     padding: 4rem 1rem;
   }
-  .section-wrapper--card {
-    background: linear-gradient(135deg, var(--card) 0%, rgba(255,193,7,0.02) 100%);
-    border-radius: 24px;
-    border: 1px solid rgba(255,193,7,0.08);
+  .section-wrapper {
+    background: transparent;
+    border: none;
+    border-radius: 0;
   }
   .container {
     max-width: 1200px;
@@ -660,20 +683,10 @@ const jsonLd = {
   }
   .pill:hover, .pill.active {
     background: var(--brand);
-    color: var(--bg);
+    color: #1a1814;
     border-color: var(--brand);
     transform: translateY(-1px);
   }
-  .category-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
-    border-color: var(--brand);
-    background: #2d3348 !important;
-  }
-  .category-card svg { transition: transform 0.2s ease; }
-  .category-card:hover svg { transform: scale(1.1); }
-  .category-card:hover div:last-child { color: var(--accent); }
-
   /* ─── Prose content section ─────────────────────────────────────────────── */
   .prose-section h2 {
     font-size: clamp(1.4rem, 2.5vw, 1.8rem);
@@ -699,26 +712,23 @@ const jsonLd = {
     text-underline-offset: 3px;
   }
 
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
   @media (max-width: 768px) {
     h1 { font-size: 2.5rem !important; }
     .section-wrapper { padding: 3rem 1rem; }
     .featured-grid { grid-template-columns: 1fr !important; }
+    .stat-grid { grid-template-columns: repeat(2, 1fr) !important; }
   }
   @media (max-width: 480px) {
     h1 { font-size: 2rem !important; }
     h2 { font-size: 1.5rem !important; }
-    .category-card { padding: 1rem !important; }
     .faq-grid { grid-template-columns: 1fr !important; }
+    .stat-grid { grid-template-columns: repeat(2, 1fr) !important; }
   }
   html { scroll-behavior: smooth; }
   .community-btn:hover {
     border-color: var(--brand) !important;
     background: var(--brand) !important;
-    color: var(--bg) !important;
+    color: #1a1814 !important;
     transform: translateY(-2px);
     box-shadow: 0 8px 24px -4px hsla(45,95%,58%,0.25);
   }
@@ -761,122 +771,115 @@ const jsonLd = {
   <!-- ══════════════════════════════════════════════════════════════════════
        1. HERO
        ══════════════════════════════════════════════════════════════════════ -->
-  <section
-    class="hero-gradient section-wrapper"
-    style={{ textAlign: "center", overflow: "hidden", position: "relative" }}
-    aria-label="Hero — Free Udemy Coupons"
-  >
-    <div class="container" style={{ position: "relative", zIndex: 10 }}>
+  <section class="hero" aria-label="Hero — Free Udemy Coupons">
+    <div class="container">
+      <div class="hero-content anim-up">
 
       <div style={{
-        display: "inline-flex", alignItems: "center", gap: "0.5rem",
-        background: "var(--brand-soft)", padding: "0.5rem 1rem",
-        borderRadius: "9999px", marginBottom: "2rem",
-        fontSize: "0.9rem", color: "var(--brand)", fontWeight: 600
+        display: "inline-flex", alignItems: "center", gap: "0.4rem",
+        padding: "0.35rem 1rem", borderRadius: "9999px",
+        fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em",
+        background: "var(--brand-soft)", color: "var(--brand)", border: "1px solid rgba(212,167,55,0.3)",
+        marginBottom: "1rem"
       }}>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
         </svg>
         Trusted by 150,000+ Learners Worldwide
       </div>
 
-      <!-- [SEO H1] -->
-      <h1 style={{
-        fontSize: "clamp(2.5rem, 5vw, 4rem)", fontWeight: 800,
-        lineHeight: 1.1, maxWidth: "900px", margin: "0 auto 1.5rem"
-      }}>
-        <span style={{
-          background: "linear-gradient(135deg, var(--brand) 0%, hsl(35,90%,68%) 100%)",
-          WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text"
-        }}>
-          {`100% Off Udemy Coupons ${currentMonth} ${currentYear}`}
-        </span>
-        <br/>
-        <span style={{
-          background: "linear-gradient(135deg, var(--text) 0%, var(--muted) 100%)",
-          WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text"
-        }}>
-          Get Premium Udemy Courses for FREE
-        </span>
+      <h1>
+        <span style="display:block">{`100% Off Udemy Coupons`}</span>
+        <span class="hero-gradient-text" style="display:block;font-size:clamp(2.5rem,6vw,4.5rem)">{`${currentMonth} ${currentYear}`}</span>
+        <span style="display:block">Get Premium Udemy Courses for FREE</span>
       </h1>
 
-      <!-- Hero subheading -->
-      <p style={{
-        fontSize: "clamp(1.1rem, 2.5vw, 1.3rem)", color: "var(--muted)",
-        maxWidth: "680px", margin: "0 auto 2.5rem", lineHeight: 1.7, fontWeight: 400
-      }}>
-        Verified 100% off Udemy coupons updated every day for {`${currentMonth} ${currentYear}`}.
-        Find free courses in programming, web development, data science, artificial intelligence (AI), design, marketing,
-        and more — no credit card needed.
-      </p>
+      <p>Verified 100% off Udemy coupons updated every day for {`${currentMonth} ${currentYear}`}.
+      Find free courses in programming, web development, data science, artificial intelligence (AI), design, marketing,
+      and more — no credit card needed.</p>
 
       <!-- Search Bar -->
-      <div style={{ display: "flex", justifyContent: "center", marginBottom: "2.5rem" }}>
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: "2rem" }}>
         <form action="/search" method="GET" role="search" aria-label="Search free Udemy courses"
           style={{ position: "relative", width: "100%", maxWidth: "700px" }}>
           <div style={{
-            display: "flex", alignItems: "center", background: "var(--card)",
-            borderRadius: "16px", border: "2px solid var(--border)", padding: "0.25rem",
-            boxShadow: "0 8px 32px rgba(0,0,0,0.15)", height: "60px"
+            display: "flex", alignItems: "center",
+            borderRadius: "9999px", border: "2px solid var(--border)", padding: "0.25rem 0.25rem 0.25rem 1.25rem",
+            boxShadow: "0 8px 32px rgba(0,0,0,0.15)", height: "56px", background: "var(--card)"
           }}>
-            <div style={{ padding: "0 1.25rem", color: "#9ca3af" }}>
-              <svg style={{ width: "1.4rem", height: "1.4rem" }} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-              </svg>
-            </div>
+            <svg style={{ width: "1.2rem", height: "1.2rem", flexShrink: 0, color: "#9ca3af" }} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
             <input
               type="search"
               name="q"
               style={{
                 flex: 1, background: "transparent", border: "none", outline: "none",
-                color: "var(--text)", fontSize: "1rem", height: "100%", fontWeight: 500
+                color: "var(--text)", fontSize: "0.95rem", height: "100%", fontWeight: 500, padding: "0 0.75rem"
               }}
               placeholder="Search courses — Python, React, Excel, AWS..."
               autocomplete="off"
               aria-label="Search free Udemy courses"
             />
-            <button type="submit" style={{
-              padding: "0.75rem 1.75rem", background: "var(--brand)", color: "var(--bg)",
-              border: "none", borderRadius: "12px", fontSize: "1rem", fontWeight: 600,
-              cursor: "pointer", marginLeft: "0.5rem", display: "flex",
-              alignItems: "center", gap: "0.5rem",
-              boxShadow: "0 4px 12px hsla(45,95%,58%,0.3)"
-            }}>
+            <button type="submit" class="btn btn-primary" style={{ borderRadius: "9999px", padding: "0.6rem 1.5rem", fontSize: "0.9rem" }}>
               Search
             </button>
           </div>
         </form>
       </div>
 
+      <p style={{ fontSize: "0.82rem", color: "var(--text-secondary)", marginTop: "0.5rem" }}>
+        Trusted by {Math.round(totalStudents / 1000)}K+ learners &middot; {uniqueInstructors} expert instructors &middot; {allDeals.length.toLocaleString()} active deals
+      </p>
+
       <!-- CTA Buttons -->
-      <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap", marginBottom: "3rem" }}>
-        <a href="/deals" class="btn accent-gradient" style={{
-          padding: "1rem 2rem", fontSize: "1.1rem", fontWeight: 600,
-          textDecoration: "none", borderRadius: "12px",
-          display: "inline-flex", alignItems: "center", gap: "0.5rem",
-          boxShadow: "0 8px 30px -4px hsla(45,95%,58%,0.3)"
-        }}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-          </svg>
-          Browse All Free Courses
+      <div class="hero-cta">
+        <a href="/deals" class="btn btn-primary btn-lg" style={{ borderRadius: "999px", padding: "1rem 2.5rem", fontSize: "1.05rem" }}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          Browse Coupons
         </a>
-        <a href="/blog" style={{
-          padding: "1rem 2rem", fontSize: "1.1rem", fontWeight: 600,
-          textDecoration: "none", borderRadius: "12px", background: "transparent",
-          color: "var(--text)", border: "2px solid var(--border)",
-          display: "inline-flex", alignItems: "center", gap: "0.5rem"
-        }}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
-          </svg>
-          List Top Udemy Coupons Today
+        <a href="https://trk.udemy.com/c/6564357/3775958/39854" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-lg" style={{ borderRadius: "999px", padding: "1rem 2.5rem", color: "var(--brand)", borderColor: "var(--brand)" }}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7z"/><path d="M3 20h18"/></svg>
+          Unlock Coupon Access
         </a>
       </div>
+      </div>
+    </div>
+  </section>
 
-      {/* Decorative blobs */}
-      <div aria-hidden="true" style={{ position: "absolute", top: "20%", left: "10%", width: "300px", height: "300px", background: "var(--brand)", filter: "blur(120px)", opacity: 0.08, borderRadius: "50%", pointerEvents: "none" }} />
-      <div aria-hidden="true" style={{ position: "absolute", bottom: "10%", right: "10%", width: "250px", height: "250px", background: "var(--accent)", filter: "blur(100px)", opacity: 0.08, borderRadius: "50%", pointerEvents: "none" }} />
+  <!-- STATS -->
+  <section style={{ paddingBottom: "2rem" }}>
+    <div class="container">
+      <div class="stat-grid" style={{ gridTemplateColumns: "repeat(4, 1fr)" }}>
+        <div class="stat-box">
+          <div class="stat-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>
+            <span class="stat-value">{allDeals.length.toLocaleString()}</span>
+          </div>
+          <div class="stat-label">Active Coupons</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7h6v6"/><path d="m22 7-8.5 8.5-5-5L2 17"/></svg>
+            <span class="stat-value">{todayDeals.length.toLocaleString()}</span>
+          </div>
+          <div class="stat-label">Added Today</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+            <span class="stat-value">{uniqueInstructors}</span>
+          </div>
+          <div class="stat-label">Expert Instructors</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <span class="stat-value">{Math.round(totalStudents / 1000)}K+</span>
+          </div>
+          <div class="stat-label">Total Students</div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -884,7 +887,7 @@ const jsonLd = {
        2. FEATURED COURSE
        ══════════════════════════════════════════════════════════════════════ -->
   {featuredDeals.length > 0 && (
-    <section class="section-wrapper section-wrapper--card" aria-label="Top-rated free Udemy course">
+    <section class="section-wrapper" aria-label="Top-rated free Udemy course">
       <div class="container">
         <div style={{
           display: "flex", justifyContent: "space-between", alignItems: "center",
@@ -893,9 +896,9 @@ const jsonLd = {
           <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
             <div style={{
               width: "48px", height: "48px",
-              background: "linear-gradient(135deg, #FFD700 0%, #FFA500 100%)",
+              background: "linear-gradient(135deg, #D4AF37 0%, #C5A028 100%)",
               borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center",
-              boxShadow: "0 8px 20px -4px rgba(255,215,0,0.4)"
+              boxShadow: "0 8px 20px -4px rgba(212,167,55,0.4)"
             }}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="white" aria-hidden="true">
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
@@ -904,7 +907,7 @@ const jsonLd = {
             <div>
               <h2 style={{
                 fontSize: "1.8rem", fontWeight: 800, marginBottom: "0.25rem",
-                background: "linear-gradient(135deg, #FFD700 0%, #FFA500 100%)",
+                background: "linear-gradient(135deg, #D4AF37 0%, #C5A028 100%)",
                 WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text"
               }}>Featured Course</h2>
               <div style={{ fontSize: "0.9rem", color: "var(--muted)" }}>
@@ -913,10 +916,10 @@ const jsonLd = {
             </div>
           </div>
           <a href="/popular" style={{
-            color: "#FFD700", textDecoration: "none", fontWeight: 600, fontSize: "0.95rem",
+            color: "#D4AF37", textDecoration: "none", fontWeight: 600, fontSize: "0.95rem",
             display: "flex", alignItems: "center", gap: "0.5rem",
-            padding: "0.75rem 1.5rem", background: "rgba(255,215,0,0.1)",
-            borderRadius: "12px", border: "1px solid rgba(255,215,0,0.3)"
+            padding: "0.75rem 1.5rem", background: "rgba(212,167,55,0.1)",
+            borderRadius: "12px", border: "1px solid rgba(212,167,55,0.3)"
           }}>
             View All Top Courses
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -936,8 +939,8 @@ const jsonLd = {
                 <div>
                   <div style={{
                     display: "inline-flex", alignItems: "center", gap: "0.5rem",
-                    background: "linear-gradient(135deg, #FFD700 0%, #FFA500 100%)",
-                    color: "var(--bg)", padding: "0.4rem 1rem", borderRadius: "20px",
+                    background: "linear-gradient(135deg, #D4AF37 0%, #C5A028 100%)",
+                    color: "#1a1814", padding: "0.4rem 1rem", borderRadius: "20px",
                     fontSize: "0.75rem", fontWeight: 800, textTransform: "uppercase",
                     marginBottom: "1rem"
                   }}>
@@ -953,12 +956,12 @@ const jsonLd = {
                     <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
                       <div style={{ display: "flex", gap: "1px" }} aria-label={`Rating: ${r.toFixed(1)} out of 5`}>
                         {[...Array(5)].map((_, i) => (
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill={i < Math.floor(r) ? "#FFD700" : "rgba(255,215,0,0.3)"} aria-hidden="true">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill={i < Math.floor(r) ? "#D4AF37" : "rgba(212,167,55,0.3)"} aria-hidden="true">
                             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                           </svg>
                         ))}
                       </div>
-                      <span style={{ color: "#D97706", fontSize: "1rem", fontWeight: 700 }}>{r.toFixed(1)}</span>
+                      <span style={{ color: "#B8860B", fontSize: "1rem", fontWeight: 700 }}>{r.toFixed(1)}</span>
                     </div>
                     <span style={{ color: "var(--muted)" }}>·</span>
                     <span style={{ color: "var(--muted)", fontSize: "0.9rem" }}>{formatStudents(s)} students enrolled</span>
@@ -966,7 +969,7 @@ const jsonLd = {
                       <>
                         <span style={{ color: "var(--muted)" }}>·</span>
                         <a href={`/categories/${slugifyCategory(deal.category)}`} style={{
-                          color: "#D97706", fontSize: "0.9rem", textDecoration: "none", fontWeight: 600
+                          color: "#B8860B", fontSize: "0.9rem", textDecoration: "none", fontWeight: 600
                         }}>{deal.category}</a>
                       </>
                     )}
@@ -978,7 +981,7 @@ const jsonLd = {
 
                   <div style={{ display: "flex", alignItems: "center", gap: "1.5rem", flexWrap: "wrap" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                      <span style={{ fontSize: "2rem", fontWeight: 800, color: deal.price === 0 ? "#16A34A" : "var(--brand)" }}>
+                      <span style={{ fontSize: "2rem", fontWeight: 800, color: deal.price === 0 ? "var(--brand)" : "var(--brand)" }}>
                         {deal.price === 0 ? "FREE" : `$${deal.price?.toFixed(2)}`}
                       </span>
                       {hasDiscount && (
@@ -995,11 +998,11 @@ const jsonLd = {
                       target="_blank" rel="noopener noreferrer"
                       style={{
                         padding: "0.9rem 1.75rem",
-                        background: "linear-gradient(135deg, #FFD700 0%, #FFA500 100%)",
-                        color: "var(--bg)", textDecoration: "none", borderRadius: "12px",
+                        background: "linear-gradient(135deg, #D4AF37 0%, #C5A028 100%)",
+                        color: "#1a1814", textDecoration: "none", borderRadius: "12px",
                         fontSize: "1rem", fontWeight: 700,
                         display: "inline-flex", alignItems: "center", gap: "0.5rem",
-                        boxShadow: "0 4px 16px -4px rgba(255,215,0,0.4)"
+                        boxShadow: "0 4px 16px -4px rgba(212,167,55,0.4)"
                       }}
                     >
                       {deal.price === 0 ? "Enroll Free Now" : "Enroll Now"}
@@ -1015,7 +1018,7 @@ const jsonLd = {
 
           <div style={{
             position: "relative", borderRadius: "16px", overflow: "hidden",
-            boxShadow: "0 20px 40px -8px rgba(255,215,0,0.2)"
+            boxShadow: "0 20px 40px -8px rgba(212,167,55,0.2)"
           }}>
             {featuredDeals.map((deal) => (
               deal.image ? (
@@ -1032,7 +1035,7 @@ const jsonLd = {
                   {deal.price === 0 && (
                     <div style={{
                       position: "absolute", top: "16px", left: "16px",
-                      background: "linear-gradient(135deg, #22C55E 0%, #16A34A 100%)",
+                      background: "linear-gradient(135deg, #D4AF37 0%, #B8860B 100%)",
                       color: "white", padding: "6px 14px", borderRadius: "20px",
                       fontSize: "0.85rem", fontWeight: 800, textTransform: "uppercase"
                     }}>100% FREE</div>
@@ -1040,7 +1043,7 @@ const jsonLd = {
                   {deal.duration && (
                     <div style={{
                       position: "absolute", bottom: "16px", right: "16px",
-                      background: "rgba(255,215,0,0.95)", color: "var(--bg)",
+                      background: "rgba(212,167,55,0.95)", color: "#1a1814",
                       padding: "5px 12px", borderRadius: "16px", fontSize: "0.8rem", fontWeight: 700,
                       display: "flex", alignItems: "center", gap: "4px"
                     }}>
@@ -1067,50 +1070,23 @@ const jsonLd = {
   <!-- ══════════════════════════════════════════════════════════════════════
        3. LATEST DEALS
        ══════════════════════════════════════════════════════════════════════ -->
-  <section class="section-wrapper section-wrapper--card" aria-label="Latest free Udemy course coupons">
+  <section class="section" aria-label="Latest free Udemy course coupons" style="padding-top:0;padding-bottom:0">
     <div class="container">
-      <div style={{ textAlign: "center", marginBottom: "3rem" }}>
-        <div style={{
-          display: "inline-flex", alignItems: "center", gap: "0.75rem",
-          background: "linear-gradient(135deg, rgba(255,193,7,0.1) 0%, rgba(255,165,0,0.08) 100%)",
-          padding: "0.5rem 1rem", borderRadius: "20px",
-          border: "1px solid rgba(255,193,7,0.2)", marginBottom: "1.5rem"
-        }}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style={{ color: "#D97706" }} aria-hidden="true">
-            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
-          </svg>
-          <span style={{ color: "#92400E", fontWeight: 600, fontSize: "0.85rem" }}>
-            {`Updated ${currentMonth} ${currentYear}`}
-          </span>
-        </div>
-        <h2 style={{ fontSize: "clamp(1.8rem, 4vw, 2.5rem)", fontWeight: 700, color: "var(--text)", marginBottom: "0.75rem" }}>
-          Latest Free Udemy <span style={{ color: "var(--brand)" }}>Coupons</span> — {`${currentMonth} ${currentYear}`}
-        </h2>
-        <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "650px", margin: "0 auto", lineHeight: 1.65 }}>
-          Hand-picked free Udemy courses with 100% off coupons, verified and published today.
-          Enroll before slots run out — most coupons expire within 7 days.
-        </p>
-      </div>
-
-      <div style={{
-        display: "flex", justifyContent: "space-between", alignItems: "center",
-        marginBottom: "2rem", flexWrap: "wrap", gap: "1rem"
-      }}>
+      <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: "0.5rem", flexWrap: "wrap", gap: "0.5rem" }}>
         <div>
-          <h3 style={{ fontSize: "1.4rem", fontWeight: 700, marginBottom: "0.25rem", color: "var(--brand)" }}>
-            Newest Courses Coupons
-          </h3>
-          <p style={{ fontSize: "0.9rem", color: "var(--muted)", margin: 0 }}>
-            {allDeals.length} coupons available · Sorted by date added
+          <span class="section-title">Fresh Deals</span>
+          <h2 class="section-heading" style={{ marginBottom: "0.25rem" }}>Latest coupon codes</h2>
+          <p style={{ color: "var(--text-secondary)", fontSize: "0.85rem", lineHeight: 1.5, margin: 0, maxWidth: "480px" }}>
+            Manually verified Udemy coupons updated {currentMonth}. Click any deal to enroll for free.
           </p>
         </div>
         <a href="/deals" style={{
-          color: "var(--brand)", textDecoration: "none", fontWeight: 600, fontSize: "0.95rem",
+          color: "#D4AF37", textDecoration: "none", fontWeight: 600, fontSize: "0.95rem",
           display: "flex", alignItems: "center", gap: "0.5rem",
-          padding: "0.75rem 1.5rem", background: "rgba(59,130,246,0.1)",
-          borderRadius: "12px", border: "1px solid rgba(59,130,246,0.3)"
+          padding: "0.75rem 1.5rem", background: "rgba(212,167,55,0.1)",
+          borderRadius: "12px", border: "1px solid rgba(212,167,55,0.3)"
         }}>
-          View All {allDeals.length}+ Coupons
+          View All {allDeals.length.toLocaleString()} Deals
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
           </svg>
@@ -1122,29 +1098,13 @@ const jsonLd = {
           <DealCard deal={deal} />
         ))}
       </div>
-
-      {totalPages > 1 && (
-        <div style={{ textAlign: "center", marginTop: "3rem" }}>
-          <a href="/deals" style={{
-            padding: "1rem 2.5rem", borderRadius: "12px", background: "var(--brand)",
-            color: "var(--bg)", textDecoration: "none", fontSize: "1rem", fontWeight: 700,
-            display: "inline-flex", alignItems: "center", gap: "0.5rem",
-            boxShadow: "0 4px 20px -4px hsla(45,95%,58%,0.4)"
-          }}>
-            View All Free Udemy Coupons
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
-            </svg>
-          </a>
-        </div>
-      )}
     </div>
   </section>
 
   <!-- ══════════════════════════════════════════════════════════════════════
        4. WHY CHOOSE COURSESPEAK
        ══════════════════════════════════════════════════════════════════════ -->
-  <section class="section-wrapper" style={{ background: "var(--bg)" }} aria-label="Why choose CourseSpeak">
+  <section class="section-wrapper" aria-label="Why choose CourseSpeak">
     <div class="container">
       <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
         <h2 style={{
@@ -1163,19 +1123,19 @@ const jsonLd = {
       <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: "1.5rem", justifyContent: "center" }}>
         {[
           {
-            gradient: "linear-gradient(135deg, #FFD700 0%, #FFA500 100%)",
+            gradient: "linear-gradient(135deg, #D4AF37 0%, #C5A028 100%)",
             icon: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>`,
             title: "Save Up to $200 Per Course",
             desc: "Premium Udemy courses cost $12–$200. Our verified coupons let you enroll for free and save hundreds on your yearly learning budget."
           },
           {
-            gradient: "linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%)",
+            gradient: "linear-gradient(135deg, #D4AF37 0%, #C5A028 100%)",
             icon: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
             title: "No Account Required to Browse",
             desc: "Browse all free Udemy coupons without signing up. You only need a free Udemy account to enroll — no CourseSpeak registration needed."
           },
           {
-            gradient: "linear-gradient(135deg, #10B981 0%, #06B6D4 100%)",
+            gradient: "linear-gradient(135deg, #6B1D1A 0%, #8A2A26 100%)",
             icon: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
             title: "Career-Boosting Skills",
             desc: "From beginner to advanced — find courses that help you get hired, earn promotions, or launch a freelance career with in-demand skills."
@@ -1204,19 +1164,20 @@ const jsonLd = {
   <!-- ══════════════════════════════════════════════════════════════════════
        5. STATISTICS
        ══════════════════════════════════════════════════════════════════════ -->
-  <section class="section-wrapper section-wrapper--card" aria-label="CourseSpeak statistics">
+  <section class="section-wrapper section-wrapper" aria-label="CourseSpeak statistics">
     <div class="container">
       <div style={{ textAlign: "center", marginBottom: "3rem" }}>
         <div style={{
           display: "inline-flex", alignItems: "center", gap: "0.75rem",
-          background: "linear-gradient(135deg, rgba(255,193,7,0.1) 0%, rgba(255,165,0,0.08) 100%)",
+          background: "linear-gradient(135deg, rgba(212,167,55,0.1) 0%, rgba(197,160,40,0.08) 100%)",
           padding: "0.5rem 1rem", borderRadius: "20px",
-          border: "1px solid rgba(255,193,7,0.2)", marginBottom: "1.5rem"
+          border: "1px solid rgba(212,167,55,0.2)", marginBottom: "1.5rem"
         }}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style={{ color: "#D97706" }} aria-hidden="true">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style={{ color: "#B8860B" }} aria-hidden="true">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            <path d="M12 0v1.5M12 22.5V24M3.5 3.5l1.06 1.06M19.44 19.44l1.06 1.06"/>
           </svg>
-          <span style={{ color: "#92400E", fontWeight: 600, fontSize: "0.85rem" }}>By the Numbers</span>
+          <span style={{ color: "#8a7e6a", fontWeight: 600, fontSize: "0.85rem" }}>Premium Insights</span>
         </div>
         <h2 style={{ fontSize: "clamp(1.8rem, 4vw, 2.5rem)", fontWeight: 700, color: "var(--text)", marginBottom: "0.75rem" }}>
           Join <span style={{ color: "var(--brand)" }}>150,000+</span> Learners Saving on Education
@@ -1229,10 +1190,10 @@ const jsonLd = {
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1.5rem" }}>
         {[
-          { value: "150K+", label: "Active Learners", sub: "Students enrolled via our coupons", color: "#D97706", border: "rgba(255,193,7,0.15)", iconPath: "M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z", bg: "linear-gradient(135deg,#FEF3C7 0%,#FDE68A 100%)" },
-          { value: `${allDeals.length}+`, label: "Free Courses Available", sub: "Verified Udemy coupons live now", color: "var(--brand)", border: "rgba(59,130,246,0.15)", iconPath: "M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.41l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.41zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z", bg: "linear-gradient(135deg,#DBEAFE 0%,#BFDBFE 100%)" },
-          { value: "100%", label: "Coupons Verified", sub: "Every code tested before publishing", color: "#16A34A", border: "rgba(34,197,94,0.15)", iconPath: "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z", bg: "linear-gradient(135deg,#DCFCE7 0%,#BBF7D0 100%)" },
-          { value: "Daily", label: "Fresh Deals Added", sub: "New coupons published every day", color: "#DC2626", border: "rgba(239,68,68,0.15)", iconPath: "M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z", bg: "linear-gradient(135deg,#FEF2F2 0%,#FEE2E2 100%)" }
+          { value: "150K+", label: "Active Learners", sub: "Students enrolled via our coupons", color: "#B8860B", border: "rgba(212,167,55,0.15)", iconPath: "M12 2l2.4 7.2H22l-6 4.8 2.4 7.2L12 16.8l-6.4 4.8L8 14l-6-4.8h7.6L12 2z", bg: "linear-gradient(135deg,rgba(212,167,55,0.12) 0%,rgba(184,134,11,0.08) 100%)" },
+          { value: `${allDeals.length}+`, label: "Free Courses Available", sub: "Verified Udemy coupons live now", color: "var(--brand)", border: "rgba(212,167,55,0.15)", iconPath: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z", bg: "linear-gradient(135deg,rgba(212,167,55,0.12) 0%,rgba(184,134,11,0.08) 100%)" },
+          { value: "100%", label: "Coupons Verified", sub: "Every code tested before publishing", color: "#D4AF37", border: "rgba(212,167,55,0.15)", iconPath: "M21.58 16.09l-1.09-1.09c-.57-.57-1.5-.91-2.07-.91h-.01c-.26 0-.52.05-.78.15l-2.57-2.57c.68-1.11 1.08-2.42 1.08-3.82 0-3.87-3.13-7-7-7S2 3.13 2 7s3.13 7 7 7c1.39 0 2.68-.39 3.79-1.06l2.57 2.57c-.1.25-.15.5-.15.76v.01c0 .57.34 1.5.91 2.07l1.09 1.09c.79.79 2.07.79 2.86 0l.79-.79c.79-.79.79-2.07 0-2.86zM9 11c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z", bg: "linear-gradient(135deg,rgba(212,167,55,0.12) 0%,rgba(184,134,11,0.08) 100%)" },
+          { value: "Daily", label: "Fresh Deals Added", sub: "New coupons published every day", color: "#D4AF37", border: "rgba(212,167,55,0.15)", iconPath: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c.55 0 1 .45 1 1v5l4.09 2.26c.5.28.67.9.39 1.39-.28.5-.9.67-1.39.39L11 13.5V7c0-.55.45-1 1-1z", bg: "linear-gradient(135deg,rgba(212,167,55,0.12) 0%,rgba(184,134,11,0.08) 100%)" }
         ].map((stat) => (
           <div style={{
             background: "var(--card)", padding: "2rem 1.5rem", borderRadius: "16px",
@@ -1258,73 +1219,56 @@ const jsonLd = {
 
 
   <!-- ══════════════════════════════════════════════════════════════════════
-       6. CATEGORIES
+       6. CATEGORIES — adv-cards style
        ══════════════════════════════════════════════════════════════════════ -->
-  <section class="section-wrapper section-wrapper--card" aria-label="Browse courses by category">
+  <section class="section" aria-label="Browse courses by category">
     <div class="container">
-      <div style={{ textAlign: "center", marginBottom: "3rem" }}>
-        <div style={{
-          display: "inline-flex", alignItems: "center", gap: "0.75rem",
-          background: "linear-gradient(135deg, rgba(255,193,7,0.1) 0%, rgba(255,165,0,0.08) 100%)",
-          padding: "0.5rem 1rem", borderRadius: "20px",
-          border: "1px solid rgba(255,193,7,0.2)", marginBottom: "1.5rem"
-        }}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style={{ color: "#D97706" }} aria-hidden="true">
-            <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
-          </svg>
-          <span style={{ color: "#92400E", fontWeight: 600, fontSize: "0.85rem" }}>Browse by Topic</span>
-        </div>
-        <h2 style={{ fontSize: "clamp(1.8rem, 4vw, 2.5rem)", fontWeight: 700, color: "var(--text)", marginBottom: "0.75rem" }}>
-          Find Free Courses by <span style={{ color: "var(--brand)" }}>Category</span>
-        </h2>
-        {/* [SEO FIX] Deskripsi relevan — bukan teks FAQ */}
-        <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "650px", margin: "0 auto", lineHeight: 1.65 }}>
-          Explore free Udemy courses organised by topic. Whether you want to learn coding, design,
-          marketing, or business — we have verified 100% off coupons waiting for you.
+      <div style={{ textAlign: "center", maxWidth: "600px", margin: "0 auto 2.5rem" }}>
+        <span class="section-title">Categories</span>
+        <h2 class="section-heading">Browse by Category</h2>
+        <p style={{ color: "var(--text-secondary)", fontSize: "0.92rem", lineHeight: 1.6, margin: "0.5rem auto 0" }}>
+          Find verified Udemy coupons in your field — from AI and coding to design and cloud computing.
         </p>
       </div>
 
       <nav aria-label="Course categories">
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1.5rem" }}>
-          {categories.map((category, index) => (
-            <a
-              href={`/categories/${slugifyCategory(category)}`}
-              style={{
-                background: "var(--card)", padding: "2rem 1.5rem", borderRadius: "16px",
-                textDecoration: "none", color: "var(--text)",
-                border: "1px solid rgba(255,193,7,0.15)",
-                transition: "all 0.3s cubic-bezier(0.4,0,0.2,1)",
-                display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center",
-                boxShadow: "0 4px 12px -2px rgba(255,193,7,0.08)",
-                animation: `fadeInUp 0.6s ease-out ${index * 0.08}s both`
-              }}
-              class="category-card"
-            >
-              <h3 style={{ fontSize: "1.15rem", marginBottom: "0.5rem", color: "var(--text)", fontWeight: 700, lineHeight: 1.3 }}>
-                {category}
-              </h3>
-              <p style={{ color: "var(--muted)", fontSize: "0.9rem", lineHeight: 1.45, marginBottom: "1rem", flex: 1 }}>
-                {getCategoryDescription(category)}
-              </p>
-              <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", color: "#D97706", fontSize: "0.85rem", fontWeight: 600 }}>
-                Browse free courses →
+        <div class="adv-cards">
+          {topCategories.map((cat) => (
+            <a href={`/categories/${cat.slug}`}
+               title={`Browse ${cat.count} ${cat.name} courses with Udemy coupons`}
+               class="adv-card">
+              <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
+                <div style={{ width: "44px", height: "44px", borderRadius: "10px",
+                    background: "linear-gradient(135deg,var(--brand),#C5A028)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    color: "#1a1814", flexShrink: 0 }}
+                     set:html={CATEGORY_ICONS[cat.slug] || `<span style="font-weight:800;font-size:1rem;">${cat.name.charAt(0).toUpperCase()}</span>`}>
+                </div>
+                <div>
+                  <h3 style={{ margin: 0, fontSize: "1rem", fontWeight: 700, color: "var(--text)", lineHeight: 1.2 }}>{cat.name}</h3>
+                  <p style={{ margin: "2px 0 0", fontSize: "0.82rem", color: "var(--brand)", fontWeight: 600 }}>{cat.count} coupons</p>
+                </div>
               </div>
+              <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", lineHeight: 1.55, margin: "0 0 12px" }}>
+                {cat.description}
+              </p>
+              {cat.subs.size > 0 && (
+                <div style={{ display: "flex", gap: "4px", flexWrap: "wrap" }}>
+                  {Array.from(cat.subs.entries()).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([sub]) => (
+                    <span style={{ display: "inline-block", padding: "2px 8px", borderRadius: "999px",
+                        fontSize: "0.7rem", background: "var(--bg-secondary)",
+                        border: "1px solid var(--border)", color: "var(--text-secondary)", fontWeight: 500 }}>{sub}</span>
+                  ))}
+                  {cat.subs.size > 3 && <span style={{ fontSize: "0.7rem", color: "var(--muted)", padding: "2px 4px" }}>+{cat.subs.size - 3}</span>}
+                </div>
+              )}
             </a>
           ))}
         </div>
       </nav>
 
-      <div style={{ textAlign: "center", marginTop: "3rem" }}>
-        <a href="/categories" style={{
-          display: "inline-flex", alignItems: "center", gap: "0.75rem",
-          padding: "1rem 2rem",
-          background: "linear-gradient(135deg, rgba(255,193,7,0.1) 0%, rgba(255,165,0,0.08) 100%)",
-          color: "#D97706", textDecoration: "none", borderRadius: "12px",
-          border: "1px solid rgba(255,193,7,0.2)", fontSize: "1rem", fontWeight: 600
-        }}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
-          </svg>
+      <div style={{ textAlign: "center", marginTop: "2rem" }}>
+        <a href="/categories" class="btn btn-ghost" style={{ borderRadius: "999px", padding: "0.75rem 2rem" }}>
           View All Course Categories
         </a>
       </div>
@@ -1334,16 +1278,16 @@ const jsonLd = {
   <!-- ══════════════════════════════════════════════════════════════════════
        7. LANGUAGES
        ══════════════════════════════════════════════════════════════════════ -->
-  <section class="section-wrapper section-wrapper--card" aria-label="Available course languages" id="languages-section">
+  <section class="section-wrapper section-wrapper" aria-label="Available course languages" id="languages-section">
     <div class="container">
       <div style={{ textAlign: "center", marginBottom: "3rem" }}>
         <div style={{
           display: "inline-flex", alignItems: "center", gap: "0.75rem",
-          background: "linear-gradient(135deg, rgba(255,193,7,0.1) 0%, rgba(255,165,0,0.08) 100%)",
+          background: "linear-gradient(135deg, rgba(212,167,55,0.1) 0%, rgba(197,160,40,0.08) 100%)",
           padding: "0.5rem 1rem", borderRadius: "20px",
-          border: "1px solid rgba(255,193,7,0.2)", marginBottom: "1.5rem"
+          border: "1px solid rgba(212,167,55,0.2)", marginBottom: "1.5rem"
         }}>
-          <span style={{ color: "#92400E", fontWeight: 600, fontSize: "0.85rem" }}>Global Access</span>
+          <span style={{ color: "#8a7e6a", fontWeight: 600, fontSize: "0.85rem" }}>Global Access</span>
         </div>
         <h2 id="languages-heading" style={{ fontSize: "clamp(1.8rem, 4vw, 2.5rem)", fontWeight: 700, color: "var(--text)", marginBottom: "0.75rem" }}>
           Free Online Courses in <span style={{ color: "var(--brand)" }}>Multiple Languages</span>
@@ -1362,10 +1306,10 @@ const jsonLd = {
             style={{
               background: "var(--card)", padding: "1rem 0.75rem", borderRadius: "12px",
               textDecoration: "none", color: "var(--text)",
-              border: "1px solid rgba(255,193,7,0.15)",
+              border: "1px solid rgba(212,167,55,0.15)",
               transition: "all 0.3s cubic-bezier(0.4,0,0.2,1)",
               display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center",
-              boxShadow: "0 2px 8px -2px rgba(255,193,7,0.08)"
+              boxShadow: "0 2px 8px -2px rgba(212,167,55,0.08)"
             }}
             class="language-card"
           >
@@ -1390,21 +1334,21 @@ const jsonLd = {
   <!-- ══════════════════════════════════════════════════════════════════════
        8. SEO PROSE — complete guide
        ══════════════════════════════════════════════════════════════════════ -->
-  <section class="section-wrapper prose-section" style={{ background: "var(--bg)" }} aria-label="About free Udemy coupons">
+  <section class="section-wrapper prose-section" aria-label="About free Udemy coupons">
     <div class="container">
 
       {/* Section header — jelas dan informatif untuk user maupun Google */}
       <div style={{ textAlign: "center", marginBottom: "3rem" }}>
         <div style={{
           display: "inline-flex", alignItems: "center", gap: "0.75rem",
-          background: "linear-gradient(135deg, rgba(255,193,7,0.1) 0%, rgba(255,165,0,0.08) 100%)",
+          background: "linear-gradient(135deg, rgba(212,167,55,0.1) 0%, rgba(197,160,40,0.08) 100%)",
           padding: "0.5rem 1rem", borderRadius: "20px",
-          border: "1px solid rgba(255,193,7,0.2)", marginBottom: "1.5rem"
+          border: "1px solid rgba(212,167,55,0.2)", marginBottom: "1.5rem"
         }}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style={{ color: "#D97706" }} aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style={{ color: "#B8860B" }} aria-hidden="true">
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-6h2v6zm0-8h-2V7h2v4z"/>
           </svg>
-          <span style={{ color: "#92400E", fontWeight: 600, fontSize: "0.85rem" }}>Complete Guide</span>
+          <span style={{ color: "#8a7e6a", fontWeight: 600, fontSize: "0.85rem" }}>Complete Guide</span>
         </div>
         <h2 style={{ fontSize: "clamp(1.8rem, 4vw, 2.5rem)", fontWeight: 700, color: "var(--text)", marginBottom: "0.75rem" }}>
           How to Get <span style={{ color: "var(--brand)" }}>Free Udemy Courses</span>
@@ -1481,20 +1425,20 @@ const jsonLd = {
   <!-- ══════════════════════════════════════════════════════════════════════
        9. POPULAR ONLINE COURSES PLATFORMS
        ══════════════════════════════════════════════════════════════════════ -->
-  <section class="section-wrapper section-wrapper--card" aria-label="Best online learning platforms comparison" id="platforms-section" itemscope itemtype="https://schema.org/ItemList">
+  <section class="section-wrapper section-wrapper" aria-label="Best online learning platforms comparison" id="platforms-section" itemscope itemtype="https://schema.org/ItemList">
     <meta itemprop="name" content="Best Online Course Platforms for Free Learning 2025" />
     <div class="container">
       <div style={{ textAlign: "center", marginBottom: "3rem" }}>
         <div style={{
           display: "inline-flex", alignItems: "center", gap: "0.75rem",
-          background: "linear-gradient(135deg, rgba(255,193,7,0.1) 0%, rgba(255,165,0,0.08) 100%)",
+          background: "linear-gradient(135deg, rgba(212,167,55,0.1) 0%, rgba(197,160,40,0.08) 100%)",
           padding: "0.5rem 1rem", borderRadius: "20px",
-          border: "1px solid rgba(255,193,7,0.2)", marginBottom: "1.5rem"
+          border: "1px solid rgba(212,167,55,0.2)", marginBottom: "1.5rem"
         }}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style={{ color: "#D97706" }} aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style={{ color: "#B8860B" }} aria-hidden="true">
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
           </svg>
-          <span style={{ color: "#92400E", fontWeight: 600, fontSize: "0.85rem" }}>Best E-Learning Platforms 2026</span>
+          <span style={{ color: "#8a7e6a", fontWeight: 600, fontSize: "0.85rem" }}>Best E-Learning Platforms 2026</span>
         </div>
         <h2 id="platforms-heading" style={{ fontSize: "clamp(1.8rem, 4vw, 2.5rem)", fontWeight: 700, color: "var(--text)", marginBottom: "0.75rem" }}>
           Top <span style={{ color: "var(--brand)" }}>Free Online Course Platforms</span> Compared
@@ -1529,13 +1473,13 @@ const jsonLd = {
                   </h3>
                   {platform.freeCourses && (
                     <span style={{
-                      background: "rgba(34,197,94,0.15)",
-                      color: "#22c55e",
+                      background: "rgba(212,167,55,0.15)",
+                      color: "var(--brand)",
                       fontSize: "0.7rem",
                       fontWeight: 700,
                       padding: "2px 8px",
                       borderRadius: "9999px",
-                      border: "1px solid rgba(34,197,94,0.3)",
+                      border: "1px solid rgba(212,167,55,0.3)",
                       whiteSpace: "nowrap"
                     }}>FREE</span>
                   )}
@@ -1545,7 +1489,7 @@ const jsonLd = {
                 </p>
                 <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "0.75rem", flexWrap: "wrap" }}>
                   <span style={{ display: "flex", alignItems: "center", gap: "0.3rem", color: "var(--muted)", fontSize: "0.8rem" }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style={{ color: "#D97706" }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style={{ color: "#B8860B" }}>
                       <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                     </svg>
                     {platform.rating}/5
@@ -1581,16 +1525,16 @@ const jsonLd = {
   <!-- ══════════════════════════════════════════════════════════════════════
        10. TRUST INDICATORS
        ══════════════════════════════════════════════════════════════════════ -->
-  <section class="section-wrapper section-wrapper--card" aria-label="Why CourseSpeak is trusted">
+  <section class="section-wrapper section-wrapper" aria-label="Why CourseSpeak is trusted">
     <div class="container">
       <div style={{ textAlign: "center", marginBottom: "3rem" }}>
         <div style={{
           display: "inline-flex", alignItems: "center", gap: "0.75rem",
-          background: "linear-gradient(135deg, rgba(255,193,7,0.1) 0%, rgba(255,165,0,0.08) 100%)",
+          background: "linear-gradient(135deg, rgba(212,167,55,0.1) 0%, rgba(197,160,40,0.08) 100%)",
           padding: "0.5rem 1rem", borderRadius: "20px",
-          border: "1px solid rgba(255,193,7,0.2)", marginBottom: "1.5rem"
+          border: "1px solid rgba(212,167,55,0.2)", marginBottom: "1.5rem"
         }}>
-          <span style={{ color: "#92400E", fontWeight: 600, fontSize: "0.85rem" }}>Trusted Platform</span>
+          <span style={{ color: "#8a7e6a", fontWeight: 600, fontSize: "0.85rem" }}>Trusted Platform</span>
         </div>
         <h2 style={{ fontSize: "clamp(1.8rem, 4vw, 2.5rem)", fontWeight: 700, color: "var(--text)", marginBottom: "0.75rem" }}>
           Trusted by <span style={{ color: "var(--brand)" }}>Millions</span> of Students Worldwide
@@ -1606,18 +1550,18 @@ const jsonLd = {
         {trustIndicators.map((indicator) => (
           <div style={{
             background: "var(--card)", padding: "2rem", borderRadius: "20px",
-            border: "1px solid rgba(255,193,7,0.15)", position: "relative",
+            border: "1px solid rgba(212,167,55,0.15)", position: "relative",
             overflow: "hidden", transition: "all 0.3s ease", textAlign: "left",
-            boxShadow: "0 4px 12px -2px rgba(255,193,7,0.08)"
+            boxShadow: "0 4px 12px -2px rgba(212,167,55,0.08)"
           }}>
             <div style={{
               position: "absolute", top: "1rem", left: "1rem",
               width: "50px", height: "50px",
-              background: "linear-gradient(135deg, rgba(255,193,7,0.1) 0%, rgba(255,165,0,0.08) 100%)",
+              background: "linear-gradient(135deg, rgba(212,167,55,0.1) 0%, rgba(197,160,40,0.08) 100%)",
               borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center",
-              border: "1px solid rgba(255,193,7,0.2)"
+              border: "1px solid rgba(212,167,55,0.2)"
             }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style={{ color: "#D97706" }} aria-hidden="true" set:html={indicator.icon} />
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style={{ color: "#B8860B" }} aria-hidden="true" set:html={indicator.icon} />
             </div>
             <h3 style={{ color: "var(--text)", fontSize: "1.2rem", marginBottom: "0.75rem", marginLeft: "4rem", fontWeight: 700 }}>
               {indicator.title}
@@ -1632,7 +1576,7 @@ const jsonLd = {
       <div style={{ textAlign: "center", marginTop: "3rem" }}>
         <a href="/deals" style={{
           padding: "1rem 2.5rem", borderRadius: "12px", background: "var(--brand)",
-          color: "var(--bg)", textDecoration: "none", fontSize: "1rem", fontWeight: 700,
+          color: "#1a1814", textDecoration: "none", fontSize: "1rem", fontWeight: 700,
           display: "inline-flex", alignItems: "center", gap: "0.5rem",
           boxShadow: "0 4px 20px -4px hsla(45,95%,58%,0.4)"
         }}>
@@ -1648,19 +1592,19 @@ const jsonLd = {
   <!-- ══════════════════════════════════════════════════════════════════════
        11. FAQ — rich snippet ready
        ══════════════════════════════════════════════════════════════════════ -->
-  <section class="section-wrapper section-wrapper--card" aria-label="Frequently asked questions">
+  <section class="section-wrapper section-wrapper" aria-label="Frequently asked questions">
     <div class="container">
       <div style={{ textAlign: "center", marginBottom: "3rem" }}>
         <div style={{
           display: "inline-flex", alignItems: "center", gap: "0.75rem",
-          background: "linear-gradient(135deg, rgba(255,193,7,0.1) 0%, rgba(255,165,0,0.08) 100%)",
+          background: "linear-gradient(135deg, rgba(212,167,55,0.1) 0%, rgba(197,160,40,0.08) 100%)",
           padding: "0.5rem 1rem", borderRadius: "20px",
-          border: "1px solid rgba(255,193,7,0.2)", marginBottom: "1.5rem"
+          border: "1px solid rgba(212,167,55,0.2)", marginBottom: "1.5rem"
         }}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style={{ color: "#D97706" }} aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style={{ color: "#B8860B" }} aria-hidden="true">
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-6h2v6zm0-8h-2V7h2v4z"/>
           </svg>
-          <span style={{ color: "#92400E", fontWeight: 600, fontSize: "0.85rem" }}>FAQ</span>
+          <span style={{ color: "#8a7e6a", fontWeight: 600, fontSize: "0.85rem" }}>FAQ</span>
         </div>
         <h2 style={{ fontSize: "clamp(1.8rem, 4vw, 2.5rem)", fontWeight: 700, color: "var(--text)", marginBottom: "0.75rem" }}>
           Frequently Asked Questions About <span style={{ color: "var(--brand)" }}>Free Udemy Courses</span>
@@ -1677,18 +1621,18 @@ const jsonLd = {
             itemscope itemtype="https://schema.org/Question"
             style={{
               background: "var(--card)", padding: "1.75rem 2rem", borderRadius: "20px",
-              border: "1px solid rgba(255,193,7,0.15)", position: "relative",
-              overflow: "hidden", boxShadow: "0 4px 12px -2px rgba(255,193,7,0.08)"
+              border: "1px solid rgba(212,167,55,0.15)", position: "relative",
+              overflow: "hidden", boxShadow: "0 4px 12px -2px rgba(212,167,55,0.08)"
             }}
           >
             <div style={{
               position: "absolute", top: "1rem", left: "1rem",
               width: "44px", height: "44px",
-              background: "linear-gradient(135deg, rgba(255,193,7,0.12) 0%, rgba(255,165,0,0.08) 100%)",
+              background: "linear-gradient(135deg, rgba(212,167,55,0.12) 0%, rgba(197,160,40,0.08) 100%)",
               borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center",
-              border: "1px solid rgba(255,193,7,0.2)"
+              border: "1px solid rgba(212,167,55,0.2)"
             }}>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style={{ color: "#D97706" }} aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style={{ color: "#B8860B" }} aria-hidden="true">
                 <path d={faq.icon} />
               </svg>
             </div>
@@ -1710,9 +1654,9 @@ const jsonLd = {
         <a href="/deals" style={{
           display: "inline-flex", alignItems: "center", gap: "0.5rem",
           padding: "0.875rem 2rem", borderRadius: "12px",
-          background: "rgba(59,130,246,0.1)", color: "var(--brand)",
+          background: "rgba(212,167,55,0.1)", color: "var(--brand)",
           textDecoration: "none", fontWeight: 600, fontSize: "1rem",
-          border: "1px solid rgba(59,130,246,0.3)"
+          border: "1px solid rgba(212,167,55,0.3)"
         }}>
           Browse Free Udemy Courses
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -1726,18 +1670,18 @@ const jsonLd = {
   <!-- ══════════════════════════════════════════════════════════════════════
        12. COMMUNITY CTA
        ══════════════════════════════════════════════════════════════════════ -->
-  <section class="section-wrapper" style={{ background: "linear-gradient(135deg, rgba(255,193,7,0.04) 0%, rgba(255,165,0,0.02) 100%)" }} aria-label="Join our community">
+  <section class="section-wrapper" aria-label="Join our community">
     <div class="container" style={{ textAlign: "center", maxWidth: "650px" }}>
       <div style={{
         display: "inline-flex", alignItems: "center", gap: "0.75rem",
-        background: "linear-gradient(135deg, rgba(255,193,7,0.1) 0%, rgba(255,165,0,0.08) 100%)",
+        background: "linear-gradient(135deg, rgba(212,167,55,0.1) 0%, rgba(197,160,40,0.08) 100%)",
         padding: "0.5rem 1rem", borderRadius: "20px",
-        border: "1px solid rgba(255,193,7,0.2)", marginBottom: "1.5rem"
+        border: "1px solid rgba(212,167,55,0.2)", marginBottom: "1.5rem"
       }}>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style={{ color: "#D97706" }} aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style={{ color: "#B8860B" }} aria-hidden="true">
           <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
         </svg>
-        <span style={{ color: "#92400E", fontWeight: 600, fontSize: "0.85rem" }}>Join Our Community</span>
+        <span style={{ color: "#8a7e6a", fontWeight: 600, fontSize: "0.85rem" }}>Join Our Community</span>
       </div>
 
       <h2 style={{
@@ -1769,7 +1713,7 @@ const jsonLd = {
           }}
           class="community-btn"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="#1877F2" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--brand)" aria-hidden="true">
             <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
           </svg>
           Join Facebook Group
@@ -1787,11 +1731,33 @@ const jsonLd = {
           }}
           class="community-btn"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="#0A66C2" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--brand)" aria-hidden="true">
             <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
           </svg>
           Follow on LinkedIn
         </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       10. UDEMY PERSONAL PLAN
+       ══════════════════════════════════════════════════════════════════════ -->
+  <section class="cta-section" aria-label="Udemy Personal Plan">
+    <div class="container">
+      <div class="cta-box">
+        <h2>Go Unlimited with Udemy Personal Plan<br />26,000+ Premium Courses, One Subscription</h2>
+        <div class="cta-actions">
+          <a href="https://trk.udemy.com/c/6564357/3775958/39854" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg" style="border-radius:999px;padding:1rem 2.5rem">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M5 21h14"/></svg>
+            Start Free Trial
+          </a>
+        </div>
+        <div class="cta-features">
+          <span><span class="cta-dot"></span>26,000+ courses</span>
+          <span><span class="cta-dot"></span>7-day free trial</span>
+          <span><span class="cta-dot"></span>From $20/month</span>
+        </div>
       </div>
     </div>
   </section>

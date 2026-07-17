@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useState, useEffect } from "react";
+import { useState } from "react";
 import DealCard from "@/components/DealCard";
 
 export default function DealsList({
@@ -15,15 +15,9 @@ export default function DealsList({
   baseParams: Record<string, string | undefined>;
   allDeals?: any[];
 }) {
-  const [isClient, setIsClient] = useState(false);
   const [items, setItems] = useState<any[]>(initialItems || []);
   const [page, setPage] = useState<number>(initialPage || 1);
   const [loading, setLoading] = useState(false);
-
-  // Detect client environment to prevent hydration mismatch
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   const canShowMore = page < totalPages;
 

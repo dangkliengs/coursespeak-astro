@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export default function ActionsPanel({ deal }: { deal: { id: string; title: string; url: string } }) {
   const [wishlisted, setWishlisted] = useState(false);

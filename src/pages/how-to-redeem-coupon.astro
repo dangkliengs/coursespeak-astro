@@ -124,7 +124,7 @@ const currentYear = new Date().getFullYear();
       <!-- Hero -->
       <section
         aria-labelledby="page-heading"
-        style="padding:4.5rem 1rem 3rem; text-align:center; background:linear-gradient(135deg, hsl(222,47%,7%) 0%, hsl(222,43%,10%) 100%); position:relative; overflow:hidden;"
+        style="padding:4.5rem 1rem 3rem; text-align:center; background:linear-gradient(135deg, #0f0e0c 0%, #1a1814 100%); position:relative; overflow:hidden;"
       >
         <div aria-hidden="true" style="position:absolute; top:15%; left:8%; width:260px; height:260px; background:var(--brand); filter:blur(120px); opacity:0.08; border-radius:50%; pointer-events:none;"></div>
         <div aria-hidden="true" style="position:absolute; bottom:10%; right:8%; width:200px; height:200px; background:#22c55e; filter:blur(100px); opacity:0.07; border-radius:50%; pointer-events:none;"></div>
@@ -288,10 +288,10 @@ const currentYear = new Date().getFullYear();
                 { icon: "❌", label: "Problem", text: "\"Coupon not found\" or \"Invalid coupon\" error — coupon has expired or hit its limit" },
                 { icon: "❌", label: "Problem", text: "\"You already own this course\" — you enrolled previously, no action needed" },
               ].map(row => (
-                <div style={`display:flex; gap:0.75rem; align-items:flex-start; padding:0.75rem 1rem; border-radius:8px; border:1px solid var(--border); background:${row.icon === '✅' ? 'rgba(34,197,94,0.05)' : 'rgba(239,68,68,0.05)'};`}>
+                <div style={`display:flex; gap:0.75rem; align-items:flex-start; padding:0.75rem 1rem; border-radius:8px; border:1px solid var(--border); background:${row.icon === '✅' ? 'rgba(212,167,55,0.08)' : 'rgba(107,29,26,0.08)'};`}>
                   <span style="font-size:0.9rem; flex-shrink:0; margin-top:1px;">{row.icon}</span>
                   <div>
-                    <span style={`font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.4px; color:${row.icon === '✅' ? '#22c55e' : '#ef4444'};`}>{row.label}</span>
+                    <span style={`font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.4px; color:${row.icon === '✅' ? '#D4AF37' : '#8A2A26'};`}>{row.label}</span>
                     <p style="margin:2px 0 0; font-size:0.875rem; color:var(--muted); line-height:1.5;">{row.text}</p>
                   </div>
                 </div>
@@ -474,12 +474,12 @@ const currentYear = new Date().getFullYear();
 
     .callout { border-radius: 10px; padding: 0.9rem 1.1rem; font-size: 0.875rem; line-height: 1.65; margin: 1.25rem 0; }
     .callout strong { }
-    .callout-info { background: rgba(59,130,246,0.07); border: 1px solid rgba(59,130,246,0.2); color: var(--muted); }
-    .callout-info strong { color: #60a5fa; }
-    .callout-warn { background: rgba(245,158,11,0.07); border: 1px solid rgba(245,158,11,0.2); color: var(--muted); }
-    .callout-warn strong { color: #f59e0b; }
-    .callout-success { background: rgba(34,197,94,0.07); border: 1px solid rgba(34,197,94,0.2); color: var(--muted); }
-    .callout-success strong { color: #22c55e; }
+    .callout-info { background: rgba(212,167,55,0.07); border: 1px solid rgba(212,167,55,0.2); color: var(--muted); }
+.callout-info strong { color: #D4AF37; }
+.callout-warn { background: rgba(197,160,40,0.07); border: 1px solid rgba(197,160,40,0.2); color: var(--muted); }
+.callout-warn strong { color: #C5A028; }
+.callout-success { background: rgba(212,167,55,0.07); border: 1px solid rgba(212,167,55,0.2); color: var(--muted); }
+.callout-success strong { color: #D4AF37; }
 
     .steps-list { list-style: none; padding: 0; margin: 1.5rem 0; display: flex; flex-direction: column; gap: 1rem; }
     .steps-list li { display: flex; gap: 1rem; align-items: flex-start; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.25rem; }

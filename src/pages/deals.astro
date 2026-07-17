@@ -43,7 +43,6 @@ const todayWIB     = currentDate.toLocaleDateString('en-CA', { timeZone: TIMEZON
 // Real stats from data (use filtered deals if filter is active)
 const displayDeals = filteredDeals;
 const totalDeals = displayDeals.length;
-const freeDeals = displayDeals.filter((d: any) => d.price === 0 || d.price === null).length;
 const avgSavings = (() => {
   const valid = displayDeals.filter((d: any) => d.originalPrice && d.price !== undefined && d.originalPrice > 0);
   if (valid.length === 0) return 90;
@@ -524,11 +523,11 @@ const structuredData = {
 
     {/* ── AFFILIATE DISCLOSURE — page 1 only ── */}
     {currentPage === 1 && (
-      <section style={{ padding: "3rem 1rem", background: "linear-gradient(135deg, rgba(255,193,7,0.05) 0%, rgba(255,165,0,0.03) 100%)" }}>
+      <section style={{ padding: "3rem 1rem", background: "linear-gradient(135deg, rgba(212,167,55,0.05) 0%, rgba(197,160,40,0.03) 100%)" }}>
         <div class="container" style={{ maxWidth: "1400px" }}>
           <div style={{
             background: "var(--card)",
-            border: "1px solid rgba(255,193,7,0.2)",
+            border: "1px solid rgba(212,167,55,0.2)",
             borderRadius: "12px",
             padding: "2rem",
             textAlign: "center",
@@ -539,7 +538,7 @@ const structuredData = {
               display: "inline-flex",
               alignItems: "center",
               gap: "0.5rem",
-              background: "rgba(255,193,7,0.1)",
+              background: "rgba(212,167,55,0.1)",
               padding: "0.5rem 1rem",
               borderRadius: "20px",
               marginBottom: "1rem"
@@ -675,7 +674,7 @@ const structuredData = {
   }
 
   .hero-gradient {
-    background: linear-gradient(135deg, hsl(222, 47%, 7%) 0%, hsl(222, 43%, 10%) 100%);
+    background: linear-gradient(135deg, #0f0e0c 0%, #1a1814 100%);
   }
 
   .card-gradient {

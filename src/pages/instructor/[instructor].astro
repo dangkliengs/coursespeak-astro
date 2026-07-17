@@ -249,15 +249,6 @@ const structuredData = {
   ]
 };
 
-// Calculate savings for display
-function getMaxDiscount(course: Deal): number {
-  if (!course.originalPrice || !course.price || course.price >= course.originalPrice) return 0;
-  return Math.round(100 - (course.price / course.originalPrice) * 100);
-}
-
-function hasFreeCourse(course: Deal): boolean {
-  return course.price === 0;
-}
 ---
 
 <Layout title={pageTitle} description={pageDescription} canonical={instructorUrl}>
@@ -271,7 +262,7 @@ function hasFreeCourse(course: Deal): boolean {
     <section style={{ 
       padding: "4rem 1rem 3rem", 
       textAlign: "center", 
-      background: "linear-gradient(135deg, hsl(222, 47%, 7%) 0%, hsl(222, 43%, 10%) 100%)",
+      background: "linear-gradient(135deg, #0f0e0c 0%, #1a1814 100%)",
       position: "relative",
       overflow: "hidden"
     }}>
@@ -511,7 +502,7 @@ function hasFreeCourse(course: Deal): boolean {
                 itemscope 
                 itemprop="acceptedAnswer" 
                 itemtype="https://schema.org/Answer"
-                style={{ padding: "1.25rem 1.5rem", background: "rgba(255,193,7,0.03)" }}
+                style={{ padding: "1.25rem 1.5rem", background: "rgba(212,167,55,0.03)" }}
               >
                 <p itemprop="text" style={{ margin: 0, color: "var(--muted)", lineHeight: 1.6, fontSize: "0.95rem" }}>
                   {faq.a}

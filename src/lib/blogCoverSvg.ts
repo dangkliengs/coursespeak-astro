@@ -28,21 +28,21 @@ export function buildBlogCoverSvg(opts: {
 <svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Udemy Coupons ${label}">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0f172a"/>
-      <stop offset="100%" stop-color="#020617"/>
+      <stop offset="0%" stop-color="#0f0e0c"/>
+      <stop offset="100%" stop-color="#1a1814"/>
     </linearGradient>
     <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#f5c842"/>
-      <stop offset="50%" stop-color="#e8a317"/>
-      <stop offset="100%" stop-color="#d48f00"/>
+      <stop offset="0%" stop-color="#D4AF37"/>
+      <stop offset="50%" stop-color="#E8C547"/>
+      <stop offset="100%" stop-color="#B8860B"/>
     </linearGradient>
     <linearGradient id="warm" x1="0" y1="1" x2="1" y2="0">
-      <stop offset="0%" stop-color="#f59e0b"/>
-      <stop offset="100%" stop-color="#d97706"/>
+      <stop offset="0%" stop-color="#8a7e6a"/>
+      <stop offset="100%" stop-color="#6b6050"/>
     </linearGradient>
     <linearGradient id="cool" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#fbbf24"/>
-      <stop offset="100%" stop-color="#f59e0b"/>
+      <stop offset="0%" stop-color="#a09888"/>
+      <stop offset="100%" stop-color="#8a7e6a"/>
     </linearGradient>
     <filter id="blur1"><feGaussianBlur stdDeviation="50"/></filter>
     <filter id="blur2"><feGaussianBlur stdDeviation="30"/></filter>
@@ -56,20 +56,20 @@ export function buildBlogCoverSvg(opts: {
 
   <g transform="translate(96, 173)">
     <rect x="0" y="-20" width="80" height="40" rx="20" fill="url(#accent)"/>
-    <text x="40" y="6" text-anchor="middle" fill="#0f172a" font-family="system-ui, Segoe UI, sans-serif" font-size="18" font-weight="800" letter-spacing="0.08em">FREE</text>
+    <text x="40" y="6" text-anchor="middle" fill="#1a1814" font-family="system-ui, Segoe UI, sans-serif" font-size="18" font-weight="800" letter-spacing="0.08em">FREE</text>
   </g>
   
-  <text x="200" y="210" fill="#f8fafc" font-family="system-ui, Segoe UI, sans-serif" font-size="72" font-weight="800" letter-spacing="-0.02em">Udemy Coupons Today</text>
+  <text x="200" y="210" fill="#f5f0e8" font-family="system-ui, Segoe UI, sans-serif" font-size="72" font-weight="800" letter-spacing="-0.02em">Udemy Coupons Today</text>
 
   <g transform="translate(200, 238)">
     <rect x="0" y="0" width="60" height="4" rx="2" fill="url(#accent)"/>
   </g>
 
-  <text x="200" y="290" fill="#94a3b8" font-family="system-ui, Segoe UI, sans-serif" font-size="30" font-weight="500">${label}</text>
+  <text x="200" y="290" fill="#a09888" font-family="system-ui, Segoe UI, sans-serif" font-size="30" font-weight="500">${label}</text>
 
-  <text x="200" y="340" fill="#64748b" font-family="system-ui, Segoe UI, sans-serif" font-size="20" font-weight="400">Free courses · Verified daily · 100% off</text>
+  <text x="200" y="340" fill="#8a7e6a" font-family="system-ui, Segoe UI, sans-serif" font-size="20" font-weight="400">Free courses · Verified daily · 100% off</text>
 
-  <text x="${W - 64}" y="${H - 48}" text-anchor="end" fill="#475569" font-family="system-ui, Segoe UI, sans-serif" font-size="14" font-weight="600">coursespeak.com</text>
+  <text x="${W - 64}" y="${H - 48}" text-anchor="end" fill="#6b6050" font-family="system-ui, Segoe UI, sans-serif" font-size="14" font-weight="600">coursespeak.com</text>
 </svg>`;
 }
 
@@ -79,21 +79,21 @@ export function buildBlogFeedCoverSvg(): string {
 <svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="CourseSpeak Blog — Daily Udemy Coupons">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0f172a"/>
-      <stop offset="100%" stop-color="#020617"/>
+      <stop offset="0%" stop-color="#0f0e0c"/>
+      <stop offset="100%" stop-color="#1a1814"/>
     </linearGradient>
     <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#f5c842"/>
-      <stop offset="50%" stop-color="#e8a317"/>
-      <stop offset="100%" stop-color="#d48f00"/>
+      <stop offset="0%" stop-color="#D4AF37"/>
+      <stop offset="50%" stop-color="#E8C547"/>
+      <stop offset="100%" stop-color="#B8860B"/>
     </linearGradient>
     <linearGradient id="warm" x1="0" y1="1" x2="1" y2="0">
-      <stop offset="0%" stop-color="#f59e0b"/>
-      <stop offset="100%" stop-color="#d97706"/>
+      <stop offset="0%" stop-color="#8a7e6a"/>
+      <stop offset="100%" stop-color="#6b6050"/>
     </linearGradient>
     <linearGradient id="cool" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#fbbf24"/>
-      <stop offset="100%" stop-color="#f59e0b"/>
+      <stop offset="0%" stop-color="#a09888"/>
+      <stop offset="100%" stop-color="#8a7e6a"/>
     </linearGradient>
     <filter id="blur1"><feGaussianBlur stdDeviation="50"/></filter>
   </defs>
@@ -106,19 +106,19 @@ export function buildBlogFeedCoverSvg(): string {
 
   <g transform="translate(96, 173)">
     <rect x="0" y="-20" width="80" height="40" rx="20" fill="url(#accent)"/>
-    <text x="40" y="6" text-anchor="middle" fill="#0f172a" font-family="system-ui, Segoe UI, sans-serif" font-size="18" font-weight="800" letter-spacing="0.08em">FREE</text>
+    <text x="40" y="6" text-anchor="middle" fill="#1a1814" font-family="system-ui, Segoe UI, sans-serif" font-size="18" font-weight="800" letter-spacing="0.08em">FREE</text>
   </g>
   
-  <text x="200" y="210" fill="#f8fafc" font-family="system-ui, Segoe UI, sans-serif" font-size="72" font-weight="800" letter-spacing="-0.02em">Udemy Coupons Today</text>
+  <text x="200" y="210" fill="#f5f0e8" font-family="system-ui, Segoe UI, sans-serif" font-size="72" font-weight="800" letter-spacing="-0.02em">Udemy Coupons Today</text>
 
   <g transform="translate(200, 238)">
     <rect x="0" y="0" width="60" height="4" rx="2" fill="url(#accent)"/>
   </g>
 
-  <text x="200" y="290" fill="#94a3b8" font-family="system-ui, Segoe UI, sans-serif" font-size="30" font-weight="500">Daily free courses &amp; verified codes</text>
+  <text x="200" y="290" fill="#a09888" font-family="system-ui, Segoe UI, sans-serif" font-size="30" font-weight="500">Daily free courses &amp; verified codes</text>
 
-  <text x="200" y="340" fill="#64748b" font-family="system-ui, Segoe UI, sans-serif" font-size="20" font-weight="400">Browse by date · Development · Design · Business</text>
+  <text x="200" y="340" fill="#8a7e6a" font-family="system-ui, Segoe UI, sans-serif" font-size="20" font-weight="400">Browse by date · Development · Design · Business</text>
 
-  <text x="${W - 64}" y="${H - 48}" text-anchor="end" fill="#475569" font-family="system-ui, Segoe UI, sans-serif" font-size="14" font-weight="600">coursespeak.com</text>
+  <text x="${W - 64}" y="${H - 48}" text-anchor="end" fill="#6b6050" font-family="system-ui, Segoe UI, sans-serif" font-size="14" font-weight="600">coursespeak.com</text>
 </svg>`;
 }

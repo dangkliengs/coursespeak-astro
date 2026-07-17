@@ -1,23 +1,13 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
-import sitemap from '@astrojs/sitemap';
+import node from '@astrojs/node';
 
 export default defineConfig({
-  output: 'static',
+  output: 'server',
   compressHTML: true,
-  integrations: [react(), sitemap({
-    filter: (page) => {
-      if (page.includes('/admin/') || page.includes('/api/')) return false;
-      if (page.includes('.amp')) return false;
-      const match = page.match(/\/deal\/([^\/]+)/);
-      if (match && !/^\d+$/.test(match[1])) return false;
-      return true;
-    },
-    changefreq: 'daily',
-    priority: 0.7,
-    lastmod: new Date(),
-  })],
+  adapter: node({ mode: 'standalone' }),
+  integrations: [react()],
   site: 'https://coursespeak.com',
   base: '/'
 });

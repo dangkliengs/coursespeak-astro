@@ -1,4 +1,3 @@
-import { slugifyCategory } from "./slug";
 import type { Deal } from "../types/deal";
 
 export const deals: Deal[] = [

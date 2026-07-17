@@ -28,7 +28,6 @@ function jakartaDateString(dateValue = new globalThis.Date()) {
 }
 
 const today = jakartaDateString();
-const yesterday = jakartaDateString(new globalThis.Date(globalThis.Date.now() - 86400000));
 const isToday = date === today;
 
 const prev = new globalThis.Date(dateObj.getTime() - 86400000);
@@ -52,12 +51,12 @@ function slugifyCat(cat: string) {
 }
 
 const catColors: Record<string, string> = {
-  'Development': '#2563eb', 'Design': '#f59e0b', 'Business': '#0891b2', 'Marketing': '#d97706',
-  'IT & Software': '#059669', 'Finance': '#16a34a', 'Personal Development': '#dc2626',
-  'Photography': '#ea580c', 'Music': '#e11d48', 'Health & Fitness': '#ea580c',
-  'Office Productivity': '#0284c7', 'Teaching': '#65a30d',
+  'Development': '#D4AF37', 'Design': '#D4AF37', 'Business': '#D4AF37', 'Marketing': '#D4AF37',
+  'IT & Software': '#D4AF37', 'Finance': '#D4AF37', 'Personal Development': '#D4AF37',
+  'Photography': '#D4AF37', 'Music': '#D4AF37', 'Health & Fitness': '#D4AF37',
+  'Office Productivity': '#D4AF37', 'Teaching': '#D4AF37',
 };
-const getCatColor = (cat: string) => catColors[cat] || '#374151';
+const getCatColor = (cat: string) => catColors[cat] || '#D4AF37';
 
 const faqs = [
   {
@@ -208,9 +207,9 @@ const jsonLd = {
                     <div class="card-meta">
                       {deal.provider && <span class="meta-item provider">{deal.provider}</span>}
                       {deal.rating != null && <span class="meta-item rating">⭐ {deal.rating} out of 5</span>}
-                      {deal.category && deal.subcategory && <a href={`/categories/${slugifyCat(deal.category)}/`} class="meta-item category-link">{deal.category} > {deal.subcategory}</a>}
-                      {deal.category && !deal.subcategory && <a href={`/categories/${slugifyCat(deal.category)}/`} class="meta-item category-link">{deal.category}</a>}
-                      {deal.duration && <span class="meta-item duration">{deal.duration}</span>}
+                      {deal.category && deal.subcategory && <a href={`/categories/${slugifyCat(deal.category)}/`} class="meta-item category-link"><span class="cat-dot" style={`background:${getCatColor(deal.category)}`}></span>{deal.category} &gt; {deal.subcategory}</a>}
+                      {deal.category && !deal.subcategory && <a href={`/categories/${slugifyCat(deal.category)}/`} class="meta-item category-link"><span class="cat-dot" style={`background:${getCatColor(deal.category)}`}></span>{deal.category}</a>}
+                      {deal.duration && <span class="meta-item duration">⏱ {deal.duration}</span>}
                       {deal.students != null && <span class="meta-item students">{deal.students.toLocaleString()} students</span>}
                       {deal.language && <span class="meta-item language">{deal.language}</span>}
                     </div>
@@ -249,9 +248,9 @@ const jsonLd = {
                         <div class="card-meta">
                           {deal.provider && <span class="meta-item provider">{deal.provider}</span>}
                           {deal.rating != null && <span class="meta-item rating">⭐ {deal.rating} out of 5</span>}
-                          {deal.category && deal.subcategory && <span class="meta-item category">{deal.category} > {deal.subcategory}</span>}
-                          {deal.category && !deal.subcategory && <span class="meta-item category">{deal.category}</span>}
-                          {deal.duration && <span class="meta-item duration">{deal.duration}</span>}
+                          {deal.category && deal.subcategory && <span class="meta-item category"><span class="cat-dot" style={`background:${getCatColor(deal.category)}`}></span>{deal.category} &gt; {deal.subcategory}</span>}
+                          {deal.category && !deal.subcategory && <span class="meta-item category"><span class="cat-dot" style={`background:${getCatColor(deal.category)}`}></span>{deal.category}</span>}
+                          {deal.duration && <span class="meta-item duration">⏱ {deal.duration}</span>}
                           {deal.students != null && <span class="meta-item students">{deal.students.toLocaleString()} students</span>}
                           {deal.language && <span class="meta-item language">{deal.language}</span>}
                         </div>
@@ -298,9 +297,9 @@ const jsonLd = {
                 <div class="card-meta">
                   {deal.provider && <span class="meta-item provider">{deal.provider}</span>}
                   {deal.rating != null && <span class="meta-item rating">⭐ {deal.rating}</span>}
-                  {deal.category && deal.subcategory && <span class="meta-item category">{deal.category} > {deal.subcategory}</span>}
-                  {deal.category && !deal.subcategory && <span class="meta-item category">{deal.category}</span>}
-                  {deal.duration && <span class="meta-item duration">{deal.duration}</span>}
+                  {deal.category && deal.subcategory && <span class="meta-item category"><span class="cat-dot" style={`background:${getCatColor(deal.category)}`}></span>{deal.category} &gt; {deal.subcategory}</span>}
+                  {deal.category && !deal.subcategory && <span class="meta-item category"><span class="cat-dot" style={`background:${getCatColor(deal.category)}`}></span>{deal.category}</span>}
+                  {deal.duration && <span class="meta-item duration">⏱ {deal.duration}</span>}
                   {deal.students != null && <span class="meta-item students">{deal.students.toLocaleString()} students</span>}
                   {deal.language && <span class="meta-item language">{deal.language}</span>}
                 </div>
@@ -411,14 +410,10 @@ const jsonLd = {
     gap: 1.75rem;
     margin-bottom: 2rem;
     padding: 1.25rem;
-    background:
-      radial-gradient(circle at top left, rgba(14, 165, 233, 0.22), transparent 28%),
-      radial-gradient(circle at bottom right, rgba(168, 85, 247, 0.18), transparent 24%),
-      linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(37, 99, 235, 0.05)),
-      var(--card);
-    border: 1px solid rgba(99, 102, 241, 0.16);
+    background: var(--card);
+    border: 1px solid rgba(212, 175, 55, 0.12);
     border-radius: 24px;
-    box-shadow: 0 22px 50px -30px rgba(15, 23, 42, 0.45);
+    box-shadow: 0 22px 50px -30px rgba(0, 0, 0, 0.45);
   }
   .post-cover {
     flex: 0 0 320px;
@@ -429,13 +424,10 @@ const jsonLd = {
     overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.35);
     line-height: 0;
-    background:
-      radial-gradient(circle at top left, #fcd34d, transparent 28%),
-      radial-gradient(circle at bottom right, #f59e0b, transparent 30%),
-      linear-gradient(135deg, #fef3c7, #fde68a);
+    background: var(--bg);
     box-shadow:
       0 0 0 8px rgba(255, 255, 255, 0.02),
-      0 18px 40px -24px rgba(15, 23, 42, 0.6);
+      0 18px 40px -24px rgba(0, 0, 0, 0.6);
     position: relative;
   }
   .post-cover::after {
@@ -593,6 +585,16 @@ const jsonLd = {
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
     border: 1px solid var(--border);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .cat-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
   }
   .card-pricing {
     display: flex;
@@ -621,8 +623,8 @@ const jsonLd = {
   .discount-price {
     font-size: 0.8125rem;
     font-weight: 600;
-    color: #22c55e;
-    background: rgba(34, 197, 94, 0.1);
+    color: var(--brand);
+    background: var(--brand-soft);
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
   }
@@ -633,12 +635,11 @@ const jsonLd = {
   }
   .verified-badge {
     font-size: 0.75rem;
-    font-weight: 600;
-    color: #16a34a;
-    background: rgba(22, 163, 74, 0.1);
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    border: 1px solid rgba(22, 163, 74, 0.2);
+    font-weight: 500;
+    color: var(--muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
   }
   .card-button {
     display: inline-flex;

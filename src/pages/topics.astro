@@ -28,8 +28,6 @@ const topicsData = (Object.entries(topicCounts) as [string, number][])
 
 const totalTopics = topicsData.length;
 const totalCourses = allDeals.length;
-const maxCoursesInTopic = Math.max(...topicsData.map(t => t.count));
-
 // SEO settings
 const title = `${totalTopics} Udemy Course Topics - Free Coupons & Deals | CourseSpeak`;
 const description = `Browse ${totalTopics} specialized Udemy course topics covering Python, web development, data science, AI, cybersecurity, and more. Find verified 100% off coupons updated daily.`;
@@ -150,9 +148,6 @@ const structuredData = {
 };
 
 // Use consistent theme colors
-const brandColor = "var(--brand)";
-const brandSoft = "rgba(255, 193, 7, 0.1)";
-const brandBorder = "rgba(255, 193, 7, 0.3)";
 ---
 
 <Layout title={title} description={description}>
@@ -170,7 +165,7 @@ const brandBorder = "rgba(255, 193, 7, 0.3)";
 
       {/* Hero Section */}
       <section
-        style="padding: 5rem 1rem 3.5rem; text-align:center; background: linear-gradient(135deg, hsl(222,47%,7%) 0%, hsl(222,43%,10%) 100%); position:relative; overflow:hidden;"
+        style="padding: 5rem 1rem 3.5rem; text-align:center; background: linear-gradient(135deg, #0f0e0c 0%, #1a1814 100%); position:relative; overflow:hidden;"
         aria-labelledby="hero-heading"
       >
         {/* decorative elements */}
@@ -302,7 +297,7 @@ const brandBorder = "rgba(255, 193, 7, 0.3)";
             style="display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:1.5rem;"
           >
             {topicsData.map((topicData, index) => {
-              const accent = brandColor;
+              const accent = "var(--brand)";
               const description = getTopicDescription(topicData.name);
 
               return (
@@ -314,7 +309,7 @@ const brandBorder = "rgba(255, 193, 7, 0.3)";
                   onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'; this.style.borderColor='var(--border)'"
                 >
                   {/* Gradient accent line */}
-                  <div style={`height:4px; background:linear-gradient(90deg, var(--brand), rgba(255,193,7,0.5)); position:absolute; top:0; left:0; right:0;`}></div>
+                  <div style={`height:4px; background:linear-gradient(90deg, var(--brand), rgba(212,167,55,0.5)); position:absolute; top:0; left:0; right:0;`}></div>
                   
                   <div style="padding:1.5rem;">
                     {/* Icon and Title */}
@@ -338,7 +333,7 @@ const brandBorder = "rgba(255, 193, 7, 0.3)";
                           <span style={`font-size:0.75rem; font-weight:600; color:${accent}; background:${accent}11; padding:0.2rem 0.5rem; border-radius:6px; border:1px solid ${accent}33;`}>
                             {topicData.count} courses
                           </span>
-                          <span style="font-size:0.75rem; font-weight:600; color:var(--brand); background:rgba(255,193,7,0.1); padding:0.2rem 0.5rem; border-radius:6px; border:1px solid rgba(255,193,7,0.3);">
+                          <span style="font-size:0.75rem; font-weight:600; color:var(--brand); background:rgba(212,167,55,0.1); padding:0.2rem 0.5rem; border-radius:6px; border:1px solid rgba(212,167,55,0.3);">
                             ★ 4.5
                           </span>
                         </div>
@@ -357,7 +352,7 @@ const brandBorder = "rgba(255, 193, 7, 0.3)";
                       <span style="font-size:0.8rem; font-weight:600; color:var(--brand); background:var(--brand)11; padding:0.3rem 0.6rem; border-radius:6px;">
                         {topicData.count} courses
                       </span>
-                      <span style="font-size:0.8rem; font-weight:600; color:var(--brand); background:rgba(255,193,7,0.1); padding:0.3rem 0.6rem; border-radius:6px;">
+                      <span style="font-size:0.8rem; font-weight:600; color:var(--brand); background:rgba(212,167,55,0.1); padding:0.3rem 0.6rem; border-radius:6px;">
                         ★ 4.5 rating
                       </span>
                       <span style="font-size:0.8rem; font-weight:600; color:var(--muted); background:var(--card); padding:0.3rem 0.6rem; border-radius:6px;">
@@ -373,7 +368,7 @@ const brandBorder = "rgba(255, 193, 7, 0.3)";
                       <span style="font-size:0.75rem; font-weight:600; color:var(--muted); background:var(--card); padding:0.3rem 0.8rem; border-radius:20px; border:1px solid var(--border);">
                         Daily updates
                       </span>
-                      <span style="font-size:0.75rem; font-weight:600; color:var(--brand); background:rgba(255,193,7,0.1); padding:0.3rem 0.8rem; border-radius:20px; border:1px solid rgba(255,193,7,0.3);">
+                      <span style="font-size:0.75rem; font-weight:600; color:var(--brand); background:rgba(212,167,55,0.1); padding:0.3rem 0.8rem; border-radius:20px; border:1px solid rgba(212,167,55,0.3);">
                         Popular
                       </span>
                     </div>
@@ -381,11 +376,11 @@ const brandBorder = "rgba(255, 193, 7, 0.3)";
                     {/* CTA Button */}
                     <a
                       href={`/topics/${topicData.slug}`}
-                      style="display:block; text-align:center; padding:0.8rem; background:linear-gradient(135deg, var(--brand), rgba(255,193,7,0.9)); color:var(--bg); text-decoration:none; border-radius:8px; font-weight:700; font-size:0.9rem; transition:all 0.2s; box-shadow:0 4px 12px rgba(255,193,7,0.2);"
+                      style="display:block; text-align:center; padding:0.8rem; background:linear-gradient(135deg, var(--brand), rgba(212,167,55,0.9)); color:var(--bg); text-decoration:none; border-radius:8px; font-weight:700; font-size:0.9rem; transition:all 0.2s; box-shadow:0 4px 12px rgba(212,167,55,0.2);"
                       aria-label={`Browse ${topicData.count} ${topicData.name} courses`}
                       onclick="event.stopPropagation()"
-                      onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 20px rgba(255,193,7,0.3)'"
-                      onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(255,193,7,0.2)'"
+                      onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 20px rgba(212,167,55,0.3)'"
+                      onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(212,167,55,0.2)'"
                     >
                       Explore {topicData.name} Courses
                     </a>
@@ -431,7 +426,7 @@ const brandBorder = "rgba(255, 193, 7, 0.3)";
                   itemprop="acceptedAnswer"
                   itemscope
                   itemtype="https://schema.org/Answer"
-                  style="padding:1.1rem 1.25rem; background:rgba(255,193,7,0.03);"
+                  style="padding:1.1rem 1.25rem; background:rgba(212,167,55,0.03);"
                 >
                   <p itemprop="text" style="margin:0; color:var(--muted); font-size:0.9rem; line-height:1.65;">{faq.a}</p>
                 </div>
@@ -443,7 +438,7 @@ const brandBorder = "rgba(255, 193, 7, 0.3)";
 
       {/* CTA Section */}
       <section
-        style="padding:3.5rem 1rem; text-align:center; background:linear-gradient(135deg, hsl(222,47%,7%) 0%, hsl(222,43%,10%) 100%); border-top:1px solid var(--border);"
+        style="padding:3.5rem 1rem; text-align:center; background:linear-gradient(135deg, #0f0e0c 0%, #1a1814 100%); border-top:1px solid var(--border);"
         aria-label="Explore more courses"
       >
         <div class="container" style="max-width:700px;">
@@ -695,7 +690,7 @@ const brandBorder = "rgba(255, 193, 7, 0.3)";
                     <span style="font-size:0.75rem; font-weight:600; color:${topic.accent}; background:${topic.accent}11; padding:0.2rem 0.5rem; border-radius:6px; border:1px solid ${topic.accent}33;">
                       ${topic.count} courses
                     </span>
-                    <span style="font-size:0.75rem; font-weight:600; color:#f59e0b; background:#f59e0b11; padding:0.2rem 0.5rem; border-radius:6px; border:1px solid #f59e0b33;">
+                    <span style="font-size:0.75rem; font-weight:600; color:var(--brand); background:#f59e0b11; padding:0.2rem 0.5rem; border-radius:6px; border:1px solid #f59e0b33;">
                       ¥ ${topic.avgRating}
                     </span>
                   </div>
@@ -712,7 +707,7 @@ const brandBorder = "rgba(255, 193, 7, 0.3)";
                 <span style="font-size:0.8rem; font-weight:600; color:var(--brand); background:var(--brand)11; padding:0.3rem 0.6rem; border-radius:6px;">
                   ${topic.count} courses
                 </span>
-                <span style="font-size:0.8rem; font-weight:600; color:#f59e0b; background:#f59e0b11; padding:0.3rem 0.6rem; border-radius:6px;">
+                <span style="font-size:0.8rem; font-weight:600; color:var(--brand); background:#f59e0b11; padding:0.3rem 0.6rem; border-radius:6px;">
                   ¥ ${topic.avgRating} rating
                 </span>
                 <span style="font-size:0.8rem; font-weight:600; color:#10b981; background:#10b98111; padding:0.3rem 0.6rem; border-radius:6px;">

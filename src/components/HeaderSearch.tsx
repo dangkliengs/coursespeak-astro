@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 export default function HeaderSearch() {
   const [currentPlaceholder, setCurrentPlaceholder] = useState(0);
@@ -38,15 +38,15 @@ export default function HeaderSearch() {
           padding: "6px 10px",
           borderRadius: 999,
           border: "1px solid var(--brand-soft)",
-          background: "rgba(15, 19, 32, 0.8)",
-          color: "#e6e9f2",
+          background: "rgba(15, 14, 12, 0.8)",
+          color: "var(--text)",
           minWidth: 180,
           transition: "all 0.3s ease",
           boxShadow: "0 0 0 0 transparent",
         }}
         onFocus={(e) => {
-          e.target.style.borderColor = "#3b82f6";
-          e.target.style.boxShadow = "0 0 0 2px rgba(59, 130, 246, 0.2)";
+          e.target.style.borderColor = "var(--brand)";
+          e.target.style.boxShadow = "0 0 0 2px var(--brand-soft)";
         }}
         onBlur={(e) => {
           e.target.style.borderColor = "var(--brand-soft)";
@@ -58,20 +58,20 @@ export default function HeaderSearch() {
         className="pill"
         style={{ 
           padding: "6px 14px",
-          background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
-          border: "1px solid #3b82f6",
+          background: "linear-gradient(135deg, var(--brand), var(--brand-hover))",
+          border: "1px solid var(--brand)",
           transition: "all 0.2s ease"
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.background = "linear-gradient(135deg, #2563eb, #1e40af)";
+          e.currentTarget.style.background = "linear-gradient(135deg, #C5A028, #B8860B)";
           e.currentTarget.style.transform = "translateY(-1px)";
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.background = "linear-gradient(135deg, #3b82f6, #1d4ed8)";
+          e.currentTarget.style.background = "linear-gradient(135deg, var(--brand), var(--brand-hover))";
           e.currentTarget.style.transform = "translateY(0)";
         }}
       >
-        <span style={{ color: "#ffffff", fontWeight: 500 }}>Search</span>
+        <span style={{ color: "var(--bg)", fontWeight: 600 }}>Search</span>
       </button>
     </form>
   );

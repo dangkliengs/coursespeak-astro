@@ -46,8 +46,8 @@ const currentPath = Astro.url.pathname;
     )}
     
     <!-- Performance & SEO Meta Tags -->
-    <meta name="theme-color" content="#1a1a2e" />
-    <meta name="msapplication-TileColor" content="#1a1a2e" />
+    <meta name="theme-color" content="#0f0e0c" />
+    <meta name="msapplication-TileColor" content="#0f0e0c" />
     <meta name="referrer" content="no-referrer-when-downgrade" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -262,38 +262,12 @@ const currentPath = Astro.url.pathname;
      crossorigin="anonymous"></script>
 
     <style>
-      /* Basic styles */
       body {
         margin: 0;
         padding: 0;
         background: var(--bg);
         color: var(--text);
         font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, Apple Color Emoji, Segoe UI Emoji;
-      }
-      
-      /* Optimized social media hover effects */
-      .facebook-hover:hover,
-      .x-hover:hover,
-      .linkedin-hover:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 2px 8px rgba(255, 193, 7, 0.15);
-        border-color: var(--brand);
-      }
-
-      .facebook-hover:hover span,
-      .x-hover:hover span,
-      .linkedin-hover:hover span {
-        color: var(--brand);
-      }
-
-      /* Navigation link hover effects */
-      .nav-link:hover {
-        background: rgba(255, 193, 7, 0.08) !important;
-        transform: translateY(-1px);
-      }
-
-      .nav-link:active {
-        transform: translateY(0);
       }
 
       .skip-link {
@@ -302,7 +276,7 @@ const currentPath = Astro.url.pathname;
         left: 8px;
         z-index: 9999;
         background: var(--brand);
-        color: var(--bg);
+        color: #1a1814;
         padding: 8px 16px;
         border-radius: 0 0 8px 8px;
         font-weight: 600;
@@ -312,22 +286,161 @@ const currentPath = Astro.url.pathname;
       .skip-link:focus {
         top: 0;
       }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        flex-shrink: 0;
+      }
+      .brand-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #B8860B 0%, #D4AF37 40%, #E8C547 60%, #D4AF37 100%);
+        color: #1a1814;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        box-shadow: 0 0 16px rgba(212,167,55,0.25), inset 0 1px 0 rgba(255,255,255,0.15);
+        position: relative;
+      }
+      .brand-icon::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.12);
+        pointer-events: none;
+      }
+      .brand-text {
+        display: flex;
+        flex-direction: column;
+      }
+      .brand-name {
+        font-size: 1.1rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        color: #f5f0e8;
+        line-height: 1.2;
+      }
+      .brand-tagline {
+        font-size: 0.62rem;
+        color: #8a7e6a;
+        font-weight: 500;
+        letter-spacing: 0.03em;
+        line-height: 1.2;
+        text-transform: uppercase;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 2px;
+        align-items: center;
+        flex: 1;
+        justify-content: center;
+      }
+      .nav-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: #f5f0e8;
+        text-decoration: none;
+        border: 1px solid rgba(212,167,55,0.15);
+        background: rgba(212,167,55,0.04);
+        transition: all 0.25s ease;
+        white-space: nowrap;
+        position: relative;
+      }
+      .nav-item::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #B8860B, #D4AF37, #E8C547);
+        border-radius: 1px;
+        transition: all 0.3s ease;
+      }
+      .nav-item:hover {
+        background: rgba(212, 167, 55, 0.12);
+        border-color: rgba(212, 167, 55, 0.3);
+      }
+      .nav-item:hover::after {
+        width: 60%;
+      }
+      .nav-item.active {
+        background: rgba(212, 167, 55, 0.18);
+        border-color: rgba(212, 167, 55, 0.4);
+      }
+      .nav-item.active::after {
+        width: 60%;
+      }
+
+      .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-shrink: 0;
+      }
+      .search-form {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(212,167,55,0.05);
+        border: 1px solid rgba(212, 167, 55, 0.25);
+        border-radius: 10px;
+        padding: 7px 14px;
+        width: 190px;
+        transition: all 0.3s ease;
+        cursor: text;
+        backdrop-filter: blur(4px);
+        position: relative;
+      }
+      .search-form:hover {
+        border-color: rgba(212, 167, 55, 0.4);
+        background: rgba(212, 167, 55, 0.08);
+      }
+      .search-form:focus-within {
+        border-color: rgba(212, 167, 55, 0.6);
+        background: rgba(212, 167, 55, 0.12);
+        box-shadow: 0 0 28px -6px rgba(212,167,55,0.3);
+      }
+      .nav-count {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #8a7e6a;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .nav-count::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #D4AF37;
+        display: inline-block;
+        animation: pulse 2s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.4; }
+      }
     </style>
     <slot name="head" />
   </head>
   <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    <header
-      role="banner"
-      class="site-header"
-      style={{
-        position: "sticky",
-        top: 0,
-        zIndex: 1000,
-        background: "var(--bg)",
-        borderBottom: "1px solid var(--border)"
-      }}
-    >
+    <header role="banner" class="site-header">
       <nav
         itemscope
         itemtype="https://schema.org/SiteNavigationElement"
@@ -337,241 +450,76 @@ const currentPath = Astro.url.pathname;
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          padding: "10px 16px",
+          padding: "0 1.5rem",
           maxWidth: "1400px",
-          margin: "0 auto"
+          margin: "0 auto",
+          height: "70px"
         }}
       >
-        {/* Logo on left */}
-        <a href="/" class="logo" style={{ flexShrink: 0 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <div style={{ 
-              width: "40px", 
-              height: "40px", 
-              background: "linear-gradient(135deg, hsl(45,95%,35%) 0%, hsl(35,90%,45%) 100%)",
-              borderRadius: "10px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              position: "relative",
-              boxShadow: "0 4px 12px -2px hsla(45,95%,35%,0.4)"
-            }}>
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
-              </svg>
-            </div>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <span
-                style={{ 
-                  fontSize: "1.6rem", 
-                  fontWeight: 800, 
-                  lineHeight: "1.2"
-                }}
-              >
-                <span style={{
-                  background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text"
-                }}>Course</span>
-                <span style={{
-                  background: "linear-gradient(135deg, var(--text) 0%, var(--muted) 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text"
-                }}>Speak</span>
-              </span>
-              <span
-                style={{ 
-                  fontSize: "0.75rem", 
-                  color: "var(--muted)",
-                  fontWeight: 600,
-                  letterSpacing: "0.1em"
-                }}
-              >FREE UDEMY COURSES</span>
-            </div>
+        <a href="/" class="brand" aria-label="CourseSpeak Home">
+          <span class="brand-icon" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 48 48" fill="currentColor">
+              <path d="M24 5L4 16l20 11 16-8.8V33h4V16L24 5zm0 8.5c1.38 0 2.5 1.12 2.5 2.5s-1.12 2.5-2.5 2.5-2.5-1.12-2.5-2.5 1.12-2.5 2.5-2.5zM12.5 25.5L24 32l11.5-6.5V28L24 34.5 12.5 28v-2.5z"/>
+            </svg>
+          </span>
+          <div class="brand-text">
+            <span class="brand-name">CourseSpeak</span>
+            <span class="brand-tagline">Free Udemy Courses Daily</span>
           </div>
         </a>
 
-        {/* Navigation: All Links on Left - Search on Right */}
-        <div style={{ display: "flex", gap: "4px", alignItems: "center", flex: 1, justifyContent: "space-between", minWidth: 0 }}>
-          
-          {/* LEFT SIDE: All Menu Links */}
-          <div style={{ display: "flex", gap: "4px", alignItems: "center" }}>
-            <a
-              itemprop="url"
-              href="/deals"
-              style={{
-                color: currentPath === '/deals' ? 'var(--brand)' : 'var(--text)',
-                textDecoration: "none",
-                fontSize: "0.8rem",
-                fontWeight: 600,
-                padding: "5px 8px",
-                borderRadius: "4px",
-                transition: "all 0.2s ease",
-                display: "flex",
-                alignItems: "center",
-                gap: "4px",
-                whiteSpace: "nowrap",
-                background: currentPath === '/deals' ? 'rgba(255, 193, 7, 0.1)' : 'transparent'
-              }}
-              class={currentPath === '/deals' ? 'active' : 'nav-link'}
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.41l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.41zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/>
-              </svg>
-              <span itemprop="name">Latest Coupons</span>
-            </a>
-            
-            <a
-              itemprop="url"
-              href="/categories"
-              style={{
-                color: currentPath === '/categories' ? 'var(--brand)' : 'var(--text)',
-                textDecoration: "none",
-                fontSize: "0.8rem",
-                fontWeight: 600,
-                padding: "5px 8px",
-                borderRadius: "4px",
-                transition: "all 0.2s ease",
-                display: "flex",
-                alignItems: "center",
-                gap: "4px",
-                whiteSpace: "nowrap",
-                background: currentPath === '/categories' ? 'rgba(255, 193, 7, 0.1)' : 'transparent'
-              }}
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2l-5.5 9h11z"/>
-                <circle cx="17.5" cy="17.5" r="4.5"/>
-                <path d="M3 13.5h8v8H3z"/>
-              </svg>
-              <span itemprop="name">Course Categories</span>
-            </a>
-            
-            <a
-              itemprop="url"
-              href="/instructors"
-              style={{
-                color: currentPath === '/instructors' ? 'var(--brand)' : 'var(--text)',
-                textDecoration: "none",
-                fontSize: "0.8rem",
-                fontWeight: 600,
-                padding: "5px 8px",
-                borderRadius: "4px",
-                transition: "all 0.2s ease",
-                display: "flex",
-                alignItems: "center",
-                gap: "4px",
-                whiteSpace: "nowrap",
-                background: currentPath === '/instructors' ? 'rgba(255, 193, 7, 0.1)' : 'transparent'
-              }}
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-              </svg>
-              <span itemprop="name">Top Instructors</span>
-            </a>
-            
-            <a
-              itemprop="url"
-              href="/topics"
-              style={{
-                color: currentPath === '/topics' ? 'var(--brand)' : 'var(--text)',
-                textDecoration: "none",
-                fontSize: "0.8rem",
-                fontWeight: 600,
-                padding: "5px 8px",
-                borderRadius: "4px",
-                transition: "all 0.2s ease",
-                display: "flex",
-                alignItems: "center",
-                gap: "4px",
-                whiteSpace: "nowrap",
-                background: currentPath === '/topics' ? 'rgba(255, 193, 7, 0.1)' : 'transparent'
-              }}
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
-              </svg>
-              <span itemprop="name">Learning Topics</span>
-            </a>
-            
-            <a
-              itemprop="url"
-              href="/blog"
-              style={{
-                color: currentPath === '/blog' || currentPath.startsWith('/blog/') ? 'var(--brand)' : 'var(--text)',
-                textDecoration: "none",
-                fontSize: "0.8rem",
-                fontWeight: 600,
-                padding: "5px 8px",
-                borderRadius: "4px",
-                transition: "all 0.2s ease",
-                display: "flex",
-                alignItems: "center",
-                gap: "4px",
-                whiteSpace: "nowrap",
-                background: currentPath === '/blog' || currentPath.startsWith('/blog/') ? 'rgba(255, 193, 7, 0.1)' : 'transparent'
-              }}
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
-                <path d="M14 17H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-              </svg>
-              <span itemprop="name">Top Udemy Coupons</span>
-            </a>
-          </div>
+        <div class="nav-links">
+          <a href="/deals" itemprop="url"
+            class:list={['nav-item', { active: currentPath === '/deals' }]}
+            aria-current={currentPath === '/deals' ? 'page' : undefined}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12l4 4v14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6l4-4z"/><path d="M2 6h20"/><path d="M16 2v4H8V2"/><rect x="8" y="10" width="8" height="6"/></svg>
+            <span itemprop="name">Latest Coupons</span>
+          </a>
+          <a href="/categories" itemprop="url"
+            class:list={['nav-item', { active: currentPath === '/categories' || currentPath.startsWith('/categories/') }]}
+            aria-current={currentPath === '/categories' || currentPath.startsWith('/categories/') ? 'page' : undefined}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            <span itemprop="name">Course Categories</span>
+          </a>
+          <a href="/instructors" itemprop="url"
+            class:list={['nav-item', { active: currentPath === '/instructors' }]}
+            aria-current={currentPath === '/instructors' ? 'page' : undefined}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <span itemprop="name">Top Instructors</span>
+          </a>
+          <a href="/topics" itemprop="url"
+            class:list={['nav-item', { active: currentPath === '/topics' || currentPath.startsWith('/topics/') }]}
+            aria-current={currentPath === '/topics' || currentPath.startsWith('/topics/') ? 'page' : undefined}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            <span itemprop="name">Learning Topics</span>
+          </a>
+          <a href="/blog" itemprop="url"
+            class:list={['nav-item', { active: currentPath === '/blog' || currentPath.startsWith('/blog/') }]}
+            aria-current={currentPath === '/blog' || currentPath.startsWith('/blog/') ? 'page' : undefined}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <span itemprop="name">Top Udemy Coupons</span>
+          </a>
+        </div>
 
-          {/* RIGHT SIDE: Search Bar */}
-          <form action="/search" method="get" style={{ 
-            display: "flex", 
-            gap: "0",
-            background: "var(--card)",
-            borderRadius: "8px",
-            border: "1px solid var(--border)",
-            overflow: "hidden",
-            width: "280px",
-            flexShrink: 0,
-            marginRight: "8px"
-          }}>
-            <input 
-              type="text" 
-              name="q" 
-              placeholder="Search courses..." 
+        <div class="nav-right">
+          <form action="/search" method="get" class="search-form" role="search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style={{ flexShrink: 0, opacity: 0.9 }}>
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input
+              type="text"
+              name="q"
+              placeholder="Search courses..."
               style={{
                 background: 'transparent',
-                color: 'var(--text)',
+                color: '#f5f0e8',
                 border: 'none',
-                padding: '6px 10px',
-                fontSize: '0.8rem',
+                fontSize: '0.82rem',
                 width: '100%',
-                outline: 'none'
+                outline: 'none',
+                padding: 0
               }}
             />
-            <button 
-              type="submit" 
-              style={{
-                background: 'var(--brand)',
-                color: 'var(--bg)',
-                border: 'none',
-                padding: '6px 10px',
-                fontSize: '0.8rem',
-                cursor: 'pointer',
-                fontWeight: '600',
-                display: 'flex',
-                alignItems: 'center'
-              }}
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-              </svg>
-            </button>
           </form>
         </div>
       </nav>
@@ -585,10 +533,11 @@ const currentPath = Astro.url.pathname;
         style={{ 
           padding: "12px 0", 
           fontSize: "0.85rem",
-          borderBottom: "1px solid var(--border)"
+          borderBottom: "1px solid var(--border)",
+          textAlign: "center"
         }}
       >
-        <ol style={{ display: "flex", gap: "8px", listStyle: "none", margin: 0, padding: 0, alignItems: "center", flexWrap: "wrap" }}>
+        <ol style={{ display: "inline-flex", gap: "8px", listStyle: "none", margin: "0 auto", padding: 0, alignItems: "center", flexWrap: "wrap" }}>
           <li style={{ display: "flex", alignItems: "center" }}>
             <a href="/" style={{ color: "var(--muted)", textDecoration: "none", display: "flex", alignItems: "center", gap: "4px" }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -714,12 +663,12 @@ const currentPath = Astro.url.pathname;
       itemscope
       itemtype="https://schema.org/WPFooter"
       style={{
-        color: "hsl(215, 20%, 65%)",
+        color: "#8a7e6a",
         padding: "80px 0 40px",
         marginTop: "auto",
         position: "relative",
         overflow: "hidden",
-        background: "linear-gradient(135deg, hsl(222, 47%, 7%) 0%, hsl(222, 43%, 10%) 100%)"
+        background: "linear-gradient(135deg, #0f0e0c 0%, #1a1814 100%)"
       }}
     >
       <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "0 1rem" }}>
@@ -739,7 +688,7 @@ const currentPath = Astro.url.pathname;
             fontSize: "1.25rem",
             fontWeight: 700,
             marginBottom: "0.75rem",
-            background: "linear-gradient(135deg, #FFC107 0%, #FFD54F 100%)",
+            background: "linear-gradient(135deg, #D4AF37 0%, #E8C547 100%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             backgroundClip: "text"
@@ -791,8 +740,8 @@ const currentPath = Astro.url.pathname;
               style={{
                 padding: "0.75rem 1.5rem",
                 borderRadius: "8px",
-                background: "linear-gradient(135deg, #FFC107 0%, #FFD54F 100%)",
-                color: "var(--bg)",
+                background: "linear-gradient(135deg, #D4AF37 0%, #E8C547 100%)",
+                color: "#1a1814",
                 border: "none",
                 fontSize: "0.9rem",
                 fontWeight: 600,
@@ -824,7 +773,7 @@ const currentPath = Astro.url.pathname;
             >
               <span style={{
                 display: "inline-block",
-                background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)",
+                background: "linear-gradient(135deg, var(--brand) 0%, var(--brand-hover) 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -847,7 +796,7 @@ const currentPath = Astro.url.pathname;
             <p style={{ 
               fontSize: "0.9rem", 
               lineHeight: "1.5",
-              color: "hsl(215, 20%, 65%)",
+              color: "#8a7e6a",
               marginBottom: "16px"
             }}>
               Find the best online course deals and coupons. Daily updated
@@ -884,7 +833,7 @@ const currentPath = Astro.url.pathname;
                   borderRadius: "8px",
                   background: "linear-gradient(135deg, var(--brand-soft) 0%, var(--brand-glow) 100%)",
                   border: "1px solid var(--brand-soft)",
-                  boxShadow: "0 2px 8px rgba(255, 193, 7, 0.12)",
+                  boxShadow: "0 2px 8px rgba(212, 167, 55, 0.12)",
                   color: "var(--text)"
                 }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -925,7 +874,7 @@ const currentPath = Astro.url.pathname;
                   borderRadius: "8px",
                   background: "linear-gradient(135deg, var(--brand-soft) 0%, var(--brand-glow) 100%)",
                   border: "1px solid var(--brand-soft)",
-                  boxShadow: "0 2px 8px rgba(255, 193, 7, 0.12)",
+                  boxShadow: "0 2px 8px rgba(212, 167, 55, 0.12)",
                   color: "var(--text)"
                 }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -966,7 +915,7 @@ const currentPath = Astro.url.pathname;
                   borderRadius: "8px",
                   background: "linear-gradient(135deg, var(--brand-soft) 0%, var(--brand-glow) 100%)",
                   border: "1px solid var(--brand-soft)",
-                  boxShadow: "0 2px 8px rgba(255, 193, 7, 0.12)",
+                  boxShadow: "0 2px 8px rgba(212, 167, 55, 0.12)",
                   color: "var(--text)"
                 }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -987,7 +936,7 @@ const currentPath = Astro.url.pathname;
           </div>
           <div>
             <h4 style={{ 
-              background: "linear-gradient(135deg, #FFC107 0%, #FFD54F 100%)",
+              background: "linear-gradient(135deg, #D4AF37 0%, #E8C547 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
@@ -998,7 +947,7 @@ const currentPath = Astro.url.pathname;
             <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
               <li style={{ marginBottom: "12px" }}>
                 <a href="/" style={{ 
-                  color: "hsl(215, 20%, 85%)", 
+                  color: "#a09888", 
                   textDecoration: "none",
                   fontSize: "0.9rem",
                   fontWeight: "500",
@@ -1007,7 +956,7 @@ const currentPath = Astro.url.pathname;
               </li>
               <li style={{ marginBottom: "12px" }}>
                 <a href="/deals" style={{ 
-                  color: "hsl(215, 20%, 85%)", 
+                  color: "#a09888", 
                   textDecoration: "none",
                   fontSize: "0.9rem",
                   fontWeight: "500",
@@ -1016,7 +965,7 @@ const currentPath = Astro.url.pathname;
               </li>
               <li style={{ marginBottom: "12px" }}>
                 <a href="/popular" style={{ 
-                  color: "hsl(215, 20%, 85%)", 
+                  color: "#a09888", 
                   textDecoration: "none",
                   fontSize: "0.9rem",
                   fontWeight: "500",
@@ -1025,7 +974,7 @@ const currentPath = Astro.url.pathname;
               </li>
               <li style={{ marginBottom: "12px" }}>
                 <a href="/about" style={{ 
-                  color: "hsl(215, 20%, 85%)", 
+                  color: "#a09888", 
                   textDecoration: "none",
                   fontSize: "0.9rem",
                   fontWeight: "500",
@@ -1034,7 +983,7 @@ const currentPath = Astro.url.pathname;
               </li>
               <li style={{ marginBottom: "12px" }}>
                 <a href="/udemy-coupons-guide" style={{ 
-                  color: "hsl(215, 20%, 85%)", 
+                  color: "#a09888", 
                   textDecoration: "none",
                   fontSize: "0.9rem",
                   fontWeight: "500",
@@ -1043,7 +992,7 @@ const currentPath = Astro.url.pathname;
               </li>
               <li style={{ marginBottom: "12px" }}>
                 <a href="/how-to-redeem-coupon" style={{ 
-                  color: "hsl(215, 20%, 85%)", 
+                  color: "#a09888", 
                   textDecoration: "none",
                   fontSize: "0.9rem",
                   fontWeight: "500",
@@ -1054,7 +1003,7 @@ const currentPath = Astro.url.pathname;
           </div>
           <div>
             <h4 style={{ 
-              background: "linear-gradient(135deg, #FFC107 0%, #FFD54F 100%)",
+              background: "linear-gradient(135deg, #D4AF37 0%, #E8C547 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
@@ -1065,7 +1014,7 @@ const currentPath = Astro.url.pathname;
             <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
               <li style={{ marginBottom: "12px" }}>
                 <a href="/privacy" style={{ 
-                  color: "hsl(215, 20%, 85%)", 
+                  color: "#a09888", 
                   textDecoration: "none",
                   fontSize: "0.9rem",
                   fontWeight: "500",
@@ -1074,7 +1023,7 @@ const currentPath = Astro.url.pathname;
               </li>
               <li style={{ marginBottom: "12px" }}>
                 <a href="/terms" style={{ 
-                  color: "hsl(215, 20%, 85%)", 
+                  color: "#a09888", 
                   textDecoration: "none",
                   fontSize: "0.9rem",
                   fontWeight: "500",
@@ -1083,7 +1032,7 @@ const currentPath = Astro.url.pathname;
               </li>
               <li style={{ marginBottom: "12px" }}>
                 <a href="/affiliate-disclosure" style={{ 
-                  color: "hsl(215, 20%, 85%)", 
+                  color: "#a09888", 
                   textDecoration: "none",
                   fontSize: "0.9rem",
                   fontWeight: "500",
@@ -1092,7 +1041,7 @@ const currentPath = Astro.url.pathname;
               </li>
               <li style={{ marginBottom: "12px" }}>
                 <a href="/contact" style={{ 
-                  color: "hsl(215, 20%, 85%)", 
+                  color: "#a09888", 
                   textDecoration: "none",
                   fontSize: "0.9rem",
                   fontWeight: "500",
@@ -1101,7 +1050,7 @@ const currentPath = Astro.url.pathname;
               </li>
               <li style={{ marginBottom: "12px" }}>
                 <a href="/success-stories" style={{ 
-                  color: "hsl(215, 20%, 85%)", 
+                  color: "#a09888", 
                   textDecoration: "none",
                   fontSize: "0.9rem",
                   fontWeight: "500",
@@ -1110,7 +1059,7 @@ const currentPath = Astro.url.pathname;
               </li>
               <li style={{ marginBottom: "12px" }}>
                 <a href="/sitemap" style={{ 
-                  color: "hsl(215, 20%, 85%)", 
+                  color: "#a09888", 
                   textDecoration: "none",
                   fontSize: "0.9rem",
                   fontWeight: "500",
@@ -1136,7 +1085,7 @@ const currentPath = Astro.url.pathname;
           }}
         >
           <div>
-            <p style={{ margin: 0, color: "hsl(215, 20%, 65%)", fontSize: "0.9rem" }}>
+            <p style={{ margin: 0, color: "#8a7e6a", fontSize: "0.9rem" }}>
               &copy; <span itemprop="copyrightYear">{new Date().getFullYear()}</span> <span itemprop="copyrightHolder" itemscope itemtype="https://schema.org/Organization">
                 <span itemprop="name">CourseSpeak</span>
               </span>. All rights reserved.
@@ -1156,8 +1105,8 @@ const currentPath = Astro.url.pathname;
                 display: "inline-flex", alignItems: "center", gap: "0.4rem",
                 padding: "0.35rem 0.85rem",
                 borderRadius: "9999px",
-                background: "rgba(255,193,7,0.08)",
-                border: "1px solid rgba(255,193,7,0.15)",
+                background: "rgba(212,167,55,0.08)",
+                border: "1px solid rgba(212,167,55,0.15)",
                 color: "var(--brand)",
                 fontSize: "0.75rem",
                 fontWeight: 600,
@@ -1181,14 +1130,14 @@ const currentPath = Astro.url.pathname;
         width: "40px",
         height: "40px",
         borderRadius: "50%",
-        background: "linear-gradient(135deg, #FFC107 0%, #FFD54F 100%)",
-        color: "var(--bg)",
+        background: "linear-gradient(135deg, #D4AF37 0%, #E8C547 100%)",
+        color: "#1a1814",
         border: "none",
         cursor: "pointer",
         display: "none",
         alignItems: "center",
         justifyContent: "center",
-        boxShadow: "0 4px 12px rgba(255, 193, 7, 0.3)",
+        boxShadow: "0 4px 12px rgba(212, 167, 55, 0.3)",
         transition: "all 0.3s ease",
         zIndex: 1000
       }}
