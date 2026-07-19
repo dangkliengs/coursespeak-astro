@@ -6,17 +6,10 @@ const pageTitle = "How to Redeem Udemy Coupons in 2026 — Step-by-Step Guide | 
 const pageDescription = "Learn exactly how to redeem a Udemy coupon code in 5 steps. Includes what to do when a coupon doesn't work, common errors, and tips to always get the best price.";
 const lastModified = new Date().toISOString().split('T')[0];
 const currentYear = new Date().getFullYear();
+const monthYear = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
 ---
 
-<Layout title={pageTitle} description={pageDescription}>
-  <link rel="canonical" href={canonicalUrl} slot="head" />
-  <meta property="og:title" content={pageTitle} slot="head" />
-  <meta property="og:description" content={pageDescription} slot="head" />
-  <meta property="og:url" content={canonicalUrl} slot="head" />
-  <meta property="og:type" content="article" slot="head" />
-  <meta name="twitter:card" content="summary_large_image" slot="head" />
-  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" slot="head" />
-  <meta name="author" content="Josh Smith" slot="head" />
+<Layout title={pageTitle} description={pageDescription} type="article" canonical={canonicalUrl}>
 
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
@@ -61,7 +54,7 @@ const currentYear = new Date().getFullYear();
         "inLanguage": "en-US",
         "datePublished": "2024-01-01",
         "dateModified": lastModified,
-        "author": { "@type": "Organization", "name": "CourseSpeak", "url": "https://coursespeak.com" },
+        "author": { "@type": "Person", "name": "Josh Smith", "url": "https://coursespeak.com/about" },
         "breadcrumb": {
           "@type": "BreadcrumbList",
           "itemListElement": [
@@ -118,72 +111,69 @@ const currentYear = new Date().getFullYear();
     ]
   })} />
 
-  <div style="background: var(--bg); color: var(--text); min-height: 100vh;">
-    <div>
+  <div style={{ minHeight: "100vh", color: "var(--text)" }}>
 
-      <!-- Hero -->
-      <section
-        aria-labelledby="page-heading"
-        style="padding:4.5rem 1rem 3rem; text-align:center; background:linear-gradient(135deg, #0f0e0c 0%, #1a1814 100%); position:relative; overflow:hidden;"
-      >
-        <div aria-hidden="true" style="position:absolute; top:15%; left:8%; width:260px; height:260px; background:var(--brand); filter:blur(120px); opacity:0.08; border-radius:50%; pointer-events:none;"></div>
-        <div aria-hidden="true" style="position:absolute; bottom:10%; right:8%; width:200px; height:200px; background:#22c55e; filter:blur(100px); opacity:0.07; border-radius:50%; pointer-events:none;"></div>
-
-        <div class="container" style="position:relative; z-index:1; max-width:820px;">
-          <div style="display:inline-flex; align-items:center; gap:0.4rem; background:rgba(255,255,255,0.06); border:1px solid var(--border); padding:0.45rem 0.9rem; border-radius:9999px; font-size:0.78rem; color:var(--muted); margin-bottom:1.5rem;">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="color:var(--brand);"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-            Step-by-Step Guide · Updated {currentYear}
-          </div>
-
-          <h1
-            id="page-heading"
-            style="font-size:clamp(1.8rem, 4vw, 2.8rem); font-weight:800; line-height:1.2; margin-bottom:1rem; color:var(--text);"
-          >
-            How to Redeem a Udemy Coupon
-            <span style="display:block; font-size:0.55em; font-weight:500; color:var(--muted); margin-top:0.35rem;">
-              5 Steps · Takes Under 3 Minutes · Works Every Time
-            </span>
-          </h1>
-
-          <p style="font-size:clamp(0.95rem, 2vw, 1.1rem); color:var(--muted); line-height:1.7; margin-bottom:2rem; max-width:660px; margin-left:auto; margin-right:auto;">
-            How to claim a free or discounted Udemy course using a CourseSpeak coupon —
-            including what to do when the coupon doesn't work.
-          </p>
-
-          <!-- Article meta -->
-          <div style="display:flex; justify-content:center; align-items:center; gap:1.25rem; flex-wrap:wrap; font-size:0.8rem; color:var(--muted);">
-            <span>✍️ By <strong style="color:var(--text);">CourseSpeak</strong></span>
-            <span>📅 Updated <time datetime={lastModified}>{new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})}</time></span>
-            <span>⏱️ 4 min read</span>
-          </div>
+    {/* ── HERO ── */}
+    <section style={{ padding: "4rem 1rem 2rem", textAlign: "center" }}>
+      <div style={{ maxWidth: "900px", margin: "0 auto" }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+          Step-by-Step Guide — Updated {monthYear}
         </div>
-      </section>
-
-      <!-- Table of Contents -->
-      <nav aria-labelledby="toc-heading" style="background:var(--card); border-bottom:1px solid var(--border); padding:1.25rem 0;">
-        <div class="container" style="max-width:820px;">
-          <h2 id="toc-heading" style="font-size:1.5 rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:0.6rem;">
-            On this page
-          </h2>
-          <ol style="list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:0.4rem 1.25rem;">
-            {[
-              ["#steps","5-step redemption guide"],
-              ["#verify","How to verify the coupon worked"],
-              ["#troubleshooting","Troubleshooting: when coupons fail"],
-              ["#after-enrollment","What you get after enrolling"],
-              ["#faq","FAQ"],
-            ].map(([href,label])=>(
-              <li>
-                <a href={href as string} style="font-size:0.82rem; color:var(--brand); text-decoration:none;">{label as string}</a>
-              </li>
-            ))}
-          </ol>
+        <h1 style={{ fontSize: "clamp(1.8rem, 4.5vw, 2.8rem)", fontWeight: 800, lineHeight: 1.2, margin: "0 auto 0.75rem" }}>
+          <span style={{ background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>How to Redeem a Udemy Coupon</span>
+          <br />
+          <span style={{ color: "var(--text)" }}>5 Steps · Under 3 Minutes · Works Every Time</span>
+        </h1>
+        <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "650px", margin: "0 auto 1.5rem", lineHeight: 1.6 }}>
+          How to claim a free or discounted Udemy course using a CourseSpeak coupon — including what to do when the coupon doesn't work.
+        </p>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "1rem", flexWrap: "wrap", fontSize: "0.8rem", color: "var(--muted)" }}>
+          <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            By <strong style={{ color: "var(--text)" }}>Josh Smith</strong>
+          </span>
+          <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+            Updated <time datetime={lastModified}>{new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})}</time>
+          </span>
+          <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+            4 min read
+          </span>
         </div>
-      </nav>
+      </div>
+    </section>
+
+    {/* ── TABLE OF CONTENTS ── */}
+    <nav style={{ background: "var(--card)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)", padding: "1.5rem 1rem" }}>
+      <div class="container" style={{ maxWidth: "900px" }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.3rem 0.75rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.68rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+          On this page
+        </div>
+        <ol style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "0.3rem" }}>
+          {[
+            ["#steps","5-step redemption guide"],
+            ["#verify","How to verify the coupon worked"],
+            ["#troubleshooting","Troubleshooting: when coupons fail"],
+            ["#after-enrollment","What you get after enrolling"],
+            ["#faq","FAQ"],
+          ].map(([href,label], i) => (
+            <li>
+              <a href={href as string} style={{ fontSize: "0.875rem", color: "var(--brand)", textDecoration: "none", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <span style={{ fontSize: "0.7rem", color: "var(--muted)", width: "18px", fontWeight: 600 }}>{i+1}.</span>
+                {label as string}
+              </a>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </nav>
 
       <!-- Article body -->
       <article style="padding:3rem 1rem 4rem;">
-        <div class="container article-body" style="max-width:820px;">
+        <div class="container article-body" style={{ maxWidth: "900px" }}>
 
           <!-- ── Step-by-step ── -->
           <section aria-labelledby="steps-heading" style="margin-bottom:3rem;">
@@ -281,18 +271,23 @@ const currentYear = new Date().getFullYear();
 
             <div style="display:flex; flex-direction:column; gap:0.75rem; margin:1.25rem 0;">
               {[
-                { icon: "✅", label: "Good sign", text: "Price shows $0.00 or the expected discounted amount (e.g., $9.99)" },
-                { icon: "✅", label: "Good sign", text: "A strikethrough on the original price (e.g., ~~$99.99~~ $0.00)" },
-                { icon: "✅", label: "Good sign", text: "\"Coupon applied\" message appears near the price box" },
-                { icon: "❌", label: "Problem", text: "Original full price appears with no strikethrough — coupon has expired" },
-                { icon: "❌", label: "Problem", text: "\"Coupon not found\" or \"Invalid coupon\" error — coupon has expired or hit its limit" },
-                { icon: "❌", label: "Problem", text: "\"You already own this course\" — you enrolled previously, no action needed" },
+                { ok: true, label: "Good sign", text: "Price shows $0.00 or the expected discounted amount (e.g., $9.99)" },
+                { ok: true, label: "Good sign", text: "A strikethrough on the original price (e.g., ~~$99.99~~ $0.00)" },
+                { ok: true, label: "Good sign", text: "\"Coupon applied\" message appears near the price box" },
+                { ok: false, label: "Problem", text: "Original full price appears with no strikethrough — coupon has expired" },
+                { ok: false, label: "Problem", text: "\"Coupon not found\" or \"Invalid coupon\" error — coupon has expired or hit its limit" },
+                { ok: false, label: "Problem", text: "\"You already own this course\" — you enrolled previously, no action needed" },
               ].map(row => (
-                <div style={`display:flex; gap:0.75rem; align-items:flex-start; padding:0.75rem 1rem; border-radius:8px; border:1px solid var(--border); background:${row.icon === '✅' ? 'rgba(212,167,55,0.08)' : 'rgba(107,29,26,0.08)'};`}>
-                  <span style="font-size:0.9rem; flex-shrink:0; margin-top:1px;">{row.icon}</span>
+                <div style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start", padding: "0.75rem 1rem", borderRadius: "8px", border: "1px solid var(--border)", background: row.ok ? "rgba(212,167,55,0.08)" : "rgba(107,29,26,0.08)" }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill={row.ok ? "var(--brand)" : "#8A2A26"} style={{ flexShrink: 0, marginTop: "1px" }}>
+                    {row.ok
+                      ? <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                      : <><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></>
+                    }
+                  </svg>
                   <div>
-                    <span style={`font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.4px; color:${row.icon === '✅' ? '#D4AF37' : '#8A2A26'};`}>{row.label}</span>
-                    <p style="margin:2px 0 0; font-size:0.875rem; color:var(--muted); line-height:1.5;">{row.text}</p>
+                    <span style={{ fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.4px", color: row.ok ? "var(--brand)" : "#8A2A26" }}>{row.label}</span>
+                    <p style={{ margin: "2px 0 0", fontSize: "0.875rem", color: "var(--muted)", lineHeight: 1.5 }}>{row.text}</p>
                   </div>
                 </div>
               ))}
@@ -339,7 +334,10 @@ const currentYear = new Date().getFullYear();
               ].map((item, i) => (
                 <details style="background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden;">
                   <summary style="padding:0.9rem 1.25rem; font-weight:600; color:var(--text); font-size:0.9rem; cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; gap:1rem;">
-                    <span>🔧 {item.problem}</span>
+                    <span style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--brand)" style={{ flexShrink: 0 }}><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zm0-2v-8m0-6v2"/></svg>
+                      {item.problem}
+                    </span>
                     <span aria-hidden="true" style="color:var(--muted); flex-shrink:0;">+</span>
                   </summary>
                   <div style="padding:0 1.25rem 1rem; border-top:1px solid var(--border);">
@@ -373,17 +371,19 @@ const currentYear = new Date().getFullYear();
 
             <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:1rem; margin:1.5rem 0;">
               {[
-                { icon: "♾️", title: "Lifetime access", desc: "Course content never expires. Return to rewatch lessons anytime — even years later." },
-                { icon: "📱", title: "Mobile & TV app", desc: "Watch via the Udemy mobile app on iOS or Android, or on your TV with the Udemy app." },
-                { icon: "⬇️", title: "Downloadable resources", desc: "Source code, PDFs, exercises, and supplementary files the instructor provides." },
-                { icon: "❓", title: "Q&A and community", desc: "Ask questions directly to the instructor and interact with other students in the discussion section." },
-                { icon: "🏆", title: "Certificate of completion", desc: "Shareable PDF certificate awarded when you complete the required content. Add it to LinkedIn." },
-                { icon: "🔄", title: "Course updates", desc: "Instructors sometimes update course content. You receive all future updates to courses you own at no extra cost." },
+                { svg: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>', title: "Lifetime access", desc: "Course content never expires. Return to rewatch lessons anytime — even years later." },
+                { svg: '<path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/>', title: "Mobile & TV app", desc: "Watch via the Udemy mobile app on iOS or Android, or on your TV with the Udemy app." },
+                { svg: '<path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM19 18H6c-2.21 0-4-1.79-4-4s1.79-4 4-4h.71C7.37 7.69 9.48 6 12 6c3.04 0 5.5 2.46 5.5 5.5v.5H19c1.66 0 3 1.34 3 3s-1.34 3-3 3z"/>', title: "Downloadable resources", desc: "Source code, PDFs, exercises, and supplementary files the instructor provides." },
+                { svg: '<path d="M21 6h-2v2h-2V6h-2V4h2V2h2v2h2v2zm-10 3c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm0 4c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/>', title: "Q&A and community", desc: "Ask questions directly to the instructor and interact with other students in the discussion section." },
+                { svg: '<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>', title: "Certificate of completion", desc: "Shareable PDF certificate awarded when you complete the required content. Add it to LinkedIn." },
+                { svg: '<path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>', title: "Course updates", desc: "Instructors sometimes update course content. You receive all future updates at no extra cost." },
               ].map(item => (
-                <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.1rem;">
-                  <div style="font-size:1.4rem; margin-bottom:0.5rem;">{item.icon}</div>
-                  <h3 style="font-size:0.9rem; font-weight:700; color:var(--text); margin-bottom:0.35rem;">{item.title}</h3>
-                  <p style="font-size:0.82rem; color:var(--muted); line-height:1.6; margin:0;">{item.desc}</p>
+                <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.25rem;">
+                  <h3 style="font-size:0.95rem; font-weight:700; color:var(--text); margin-bottom:0.5rem; display:flex; align-items:center; gap:0.5rem;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--brand)" style="flex-shrink:0;" set:html={item.svg} />
+                    {item.title}
+                  </h3>
+                  <p style="font-size:0.83rem; color:var(--muted); line-height:1.6; margin:0;">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -396,53 +396,37 @@ const currentYear = new Date().getFullYear();
             </h2>
             <div style="display:flex; flex-direction:column; gap:0.75rem;">
               {[
-                {
-                  q: "Why is my Udemy coupon not working?",
-                  a: "The most common reason is expiry or hitting the 1,000-use cap. Other causes: you went to Udemy directly instead of via the CourseSpeak link, you're already enrolled, or the instructor removed the coupon. Solution: click the CourseSpeak button again in a fresh tab. If still broken, the coupon is gone — check for a newer listing."
-                },
-                {
-                  q: "Why does Udemy still show the full price after I clicked the link?",
-                  a: "The coupon is likely expired. Try refreshing the page or opening the link in a private window. If the full price persists, return to CourseSpeak — instructors sometimes re-issue coupons periodically."
-                },
-                {
-                  q: "Do I need to type the coupon code manually?",
-                  a: "No. The CourseSpeak redemption link has the coupon embedded in the URL. Clicking the button takes you directly to Udemy with the discount already applied. You can also find the full coupon code on the deal page if you want to enter it manually."
-                },
-                {
-                  q: "Can I use a coupon if I already own the course?",
-                  a: "No — Udemy won't apply a coupon to a course you already own. Check your Udemy library (My Learning) — if you enrolled previously, you already have full access. Nothing more to do."
-                },
-                {
-                  q: "What do I get with a free coupon vs buying the course?",
-                  a: "Identical access: same videos, same resources, same Q&A, same certificate of completion. There is no practical difference between a free-coupon enrollment and a paid enrollment."
-                },
+                { q: "Why is my Udemy coupon not working?", a: "The most common reason is expiry or hitting the 1,000-use cap. Other causes: you went to Udemy directly instead of via the CourseSpeak link, you're already enrolled, or the instructor removed the coupon. Solution: click the CourseSpeak button again in a fresh tab. If still broken, the coupon is gone — check for a newer listing." },
+                { q: "Why does Udemy still show the full price after I clicked the link?", a: "The coupon is likely expired. Try refreshing the page or opening the link in a private window. If the full price persists, return to CourseSpeak — instructors sometimes re-issue coupons periodically." },
+                { q: "Do I need to type the coupon code manually?", a: "No. The CourseSpeak redemption link has the coupon embedded in the URL. Clicking the button takes you directly to Udemy with the discount already applied. You can also find the full coupon code on the deal page if you want to enter it manually." },
+                { q: "Can I use a coupon if I already own the course?", a: "No — Udemy won't apply a coupon to a course you already own. Check your Udemy library (My Learning) — if you enrolled previously, you already have full access." },
+                { q: "What do I get with a free coupon vs buying the course?", a: "Identical access: same videos, same resources, same Q&A, same certificate of completion. There is no practical difference between a free-coupon enrollment and a paid enrollment." },
               ].map(faq => (
-                <details style="background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden;">
-                  <summary style="padding:0.9rem 1.25rem; font-weight:600; color:var(--text); font-size:0.875rem; cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; gap:1rem;">
+                <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.25rem 1.5rem;">
+                  <h3 style="font-size:0.95rem; font-weight:700; color:var(--text); margin:0 0 0.5rem; display:flex; align-items:center; gap:0.5rem;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
                     {faq.q}
-                    <span aria-hidden="true" style="color:var(--muted); flex-shrink:0;">+</span>
-                  </summary>
-                  <div style="padding:0 1.25rem 1rem; color:var(--muted); font-size:0.875rem; line-height:1.7;">
-                    <p style="margin:0.75rem 0 0;">{faq.a}</p>
-                  </div>
-                </details>
+                  </h3>
+                  <p style="font-size:0.85rem; color:var(--muted); line-height:1.7; margin:0;">{faq.a}</p>
+                </div>
               ))}
             </div>
           </section>
 
           <!-- CTA -->
-          <div style="background:linear-gradient(135deg, var(--brand) 0%, hsl(35,90%,55%) 100%); border-radius:16px; padding:2rem; text-align:center; margin-top:2rem;">
-            <h2 style="color:#000; font-size:1.3rem; font-weight:800; margin-bottom:0.5rem;">
+          <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:2rem; text-align:center; margin-top:2rem;">
+            <h2 style="font-size:1.3rem; font-weight:800; color:var(--text); margin-bottom:0.5rem;">
               Ready to Redeem Your First Free Course?
             </h2>
-            <p style="color:rgba(0,0,0,0.7); font-size:0.9rem; margin-bottom:1.5rem; max-width:440px; margin-left:auto; margin-right:auto; line-height:1.6;">
+            <p style="color:var(--muted); font-size:0.9rem; margin-bottom:1.5rem; max-width:440px; margin-left:auto; margin-right:auto; line-height:1.6;">
               Browse verified 100% off Udemy coupons — updated daily across 100+ topics.
             </p>
             <div style="display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
-              <a href="/deals" style="display:inline-block; padding:0.7rem 1.6rem; background:#000; color:#fff; text-decoration:none; border-radius:8px; font-weight:700; font-size:0.9rem;">
-                Browse Free Deals →
+              <a href="/deals" style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.7rem 1.6rem; background:var(--brand); color:var(--bg); text-decoration:none; border-radius:8px; font-weight:700; font-size:0.9rem;">
+                Browse Free Deals
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
               </a>
-              <a href="/udemy-coupons-guide" style="display:inline-block; padding:0.7rem 1.6rem; background:rgba(0,0,0,0.15); color:#000; text-decoration:none; border-radius:8px; font-weight:700; font-size:0.9rem; border:1px solid rgba(0,0,0,0.2);">
+              <a href="/udemy-coupons-guide" style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.7rem 1.6rem; color:var(--text); text-decoration:none; border-radius:8px; font-weight:700; font-size:0.9rem; border:2px solid var(--border);">
                 Udemy Coupons Guide
               </a>
             </div>
@@ -450,9 +434,7 @@ const currentYear = new Date().getFullYear();
 
         </div>
       </article>
-
     </div>
-  </div>
 
   <style>
     .container { max-width: 1200px; margin: 0 auto; }

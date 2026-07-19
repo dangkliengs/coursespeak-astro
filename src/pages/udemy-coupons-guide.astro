@@ -7,17 +7,11 @@ const pageDescription = "The complete guide to finding and using Udemy coupon co
 
 const currentYear = new Date().getFullYear();
 const lastModified = new Date().toISOString().split('T')[0];
+
+const monthYear = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
 ---
 
-<Layout title={pageTitle} description={pageDescription}>
-  <link rel="canonical" href={canonicalUrl} slot="head" />
-  <meta property="og:title" content={pageTitle} slot="head" />
-  <meta property="og:description" content={pageDescription} slot="head" />
-  <meta property="og:url" content={canonicalUrl} slot="head" />
-  <meta property="og:type" content="article" slot="head" />
-  <meta name="twitter:card" content="summary_large_image" slot="head" />
-  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" slot="head" />
-  <meta name="author" content="Josh Smith" slot="head" />
+<Layout title={pageTitle} description={pageDescription} type="article" canonical={canonicalUrl}>
 
   <!-- Structured Data: Article + HowTo + FAQ + BreadcrumbList -->
   <script type="application/ld+json" set:html={JSON.stringify({
@@ -27,15 +21,15 @@ const lastModified = new Date().toISOString().split('T')[0];
         "@type": "Article",
         "@id": `${canonicalUrl}#article`,
         "url": canonicalUrl,
-        "headline": "Udemy Coupons Guide 2025 — How to Get 100% Off Udemy Courses",
+        "headline": "Udemy Coupons Guide 2026 — How to Get 100% Off Udemy Courses",
         "description": pageDescription,
         "datePublished": "2024-01-01",
         "dateModified": lastModified,
         "inLanguage": "en-US",
         "author": {
-          "@type": "Organization",
-          "name": "CourseSpeak",
-          "url": "https://coursespeak.com"
+          "@type": "Person",
+          "name": "Josh Smith",
+          "url": "https://coursespeak.com/about"
         },
         "publisher": {
           "@type": "Organization",
@@ -151,78 +145,70 @@ const lastModified = new Date().toISOString().split('T')[0];
     ]
   })} />
 
-  <div style="background: var(--bg); color: var(--text); min-height: 100vh;">
-    <div>
+  <div style="min-height: 100vh; color: var(--text);">
 
-      <!-- Hero -->
-      <section
-        aria-labelledby="guide-heading"
-        style="padding:4.5rem 1rem 3rem; text-align:center; background:linear-gradient(135deg, #0f0e0c 0%, #1a1814 100%); position:relative; overflow:hidden;"
-      >
-        <div aria-hidden="true" style="position:absolute; top:15%; left:8%; width:280px; height:280px; background:var(--brand); filter:blur(120px); opacity:0.08; border-radius:50%; pointer-events:none;"></div>
-        <div aria-hidden="true" style="position:absolute; bottom:10%; right:8%; width:220px; height:220px; background:var(--brand); filter:blur(100px); opacity:0.07; border-radius:50%; pointer-events:none;"></div>
-
-        <div class="container" style="position:relative; z-index:1; max-width:860px;">
-          <!-- Article label -->
-          <div style="display:inline-flex; align-items:center; gap:0.4rem; background:rgba(255,255,255,0.06); border:1px solid var(--border); padding:0.45rem 0.9rem; border-radius:9999px; font-size:0.78rem; color:var(--muted); margin-bottom:1.5rem;">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="color:var(--brand);"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
-            Complete Guide · Updated {currentYear}
-          </div>
-
-          <!-- H1 — keyword-first -->
-          <h1
-            id="guide-heading"
-            style="font-size:clamp(1.8rem, 4vw, 2.8rem); font-weight:800; line-height:1.2; margin-bottom:1.1rem; color:var(--text);"
-          >
-            Udemy Coupons Guide {currentYear}
-            <span style="display:block; font-size:0.55em; font-weight:500; color:var(--muted); margin-top:0.35rem;">
-              How to Get 100% Off Udemy Courses — Step by Step
-            </span>
-          </h1>
-
-          <p style="font-size:clamp(0.95rem, 2vw, 1.15rem); color:var(--muted); line-height:1.7; margin-bottom:2rem;">
-            Everything you need to know about Udemy coupons: where to find them, how they work,
-            how to redeem them, and how to avoid expired codes — explained clearly and honestly.
-          </p>
-
-          <!-- Article meta -->
-          <div style="display:flex; justify-content:center; align-items:center; gap:1.25rem; flex-wrap:wrap; font-size:0.8rem; color:var(--muted);">
-            <span>✍️ By <strong style="color:var(--text);">CourseSpeak</strong></span>
-            <span>📅 Updated <time datetime={lastModified}>{new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' })}</time></span>
-            <span>⏱️ 6 min read</span>
-          </div>
+    {/* ── HERO ── */}
+    <section style={{ padding: "4rem 1rem 2rem", textAlign: "center" }}>
+      <div style={{ maxWidth: "900px", margin: "0 auto" }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+          Complete Guide — Updated {monthYear}
         </div>
-      </section>
-
-      <!-- Table of Contents -->
-      <nav aria-labelledby="toc-heading" style="background:var(--card); border-bottom:1px solid var(--border); padding:1.5rem 0;">
-        <div class="container" style="max-width:860px;">
-          <h2 id="toc-heading" style="font-size:1.5rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:0.75rem;">
-            Table of Contents
-          </h2>
-          <ol style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0.35rem;">
-            {[
-              ["#what-are-udemy-coupons", "What are Udemy coupons?"],
-              ["#types-of-coupons", "Types of Udemy coupons"],
-              ["#how-to-find", "Where to find valid Udemy coupons"],
-              ["#how-to-redeem", "How to redeem a Udemy coupon (step by step)"],
-              ["#tips", "Pro tips to maximize savings"],
-              ["#faq", "Frequently asked questions"],
-            ].map(([href, label], i) => (
-              <li>
-                <a href={href as string} style="font-size:0.875rem; color:var(--brand); text-decoration:none; display:flex; align-items:center; gap:0.5rem;">
-                  <span style="font-size:0.75rem; color:var(--muted); width:18px;">{i+1}.</span>
-                  {label as string}
-                </a>
-              </li>
-            ))}
-          </ol>
+        <h1 style={{ fontSize: "clamp(1.8rem, 4.5vw, 2.8rem)", fontWeight: 800, lineHeight: 1.2, margin: "0 auto 0.75rem" }}>
+          <span style={{ background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Udemy Coupons Guide {currentYear}</span>
+          <br />
+          <span style={{ color: "var(--text)" }}>How to Get 100% Off Udemy Courses</span>
+        </h1>
+        <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "650px", margin: "0 auto 1.5rem", lineHeight: 1.6 }}>
+          Everything you need to know about Udemy coupons: where to find them, how they work, how to redeem them, and how to avoid expired codes — explained clearly and honestly.
+        </p>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "1rem", flexWrap: "wrap", fontSize: "0.8rem", color: "var(--muted)" }}>
+          <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            By <strong style={{ color: "var(--text)" }}>Josh Smith</strong>
+          </span>
+          <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+            Updated <time datetime={lastModified}>{new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' })}</time>
+          </span>
+          <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+            6 min read
+          </span>
         </div>
-      </nav>
+      </div>
+    </section>
+
+    {/* ── TABLE OF CONTENTS ── */}
+    <nav style={{ background: "var(--card)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)", padding: "1.5rem 1rem" }}>
+      <div class="container" style={{ maxWidth: "900px" }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.3rem 0.75rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.68rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+          On this page
+        </div>
+        <ol style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "0.3rem" }}>
+          {[
+            ["#what-are-udemy-coupons", "What are Udemy coupons?"],
+            ["#types-of-coupons", "Types of Udemy coupons"],
+            ["#how-to-find", "Where to find valid Udemy coupons"],
+            ["#how-to-redeem", "How to redeem a Udemy coupon (step by step)"],
+            ["#tips", "Pro tips to maximize savings"],
+            ["#faq", "Frequently asked questions"],
+          ].map(([href, label], i) => (
+            <li>
+              <a href={href as string} style={{ fontSize: "0.875rem", color: "var(--brand)", textDecoration: "none", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <span style={{ fontSize: "0.7rem", color: "var(--muted)", width: "18px", fontWeight: 600 }}>{i+1}.</span>
+                {label as string}
+              </a>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </nav>
 
       <!-- Article Body -->
       <article aria-label="Udemy Coupons Guide" style="padding:3rem 1rem 4rem;">
-        <div class="container article-body" style="max-width:860px;">
+        <div class="container article-body" style={{ maxWidth: "900px" }}>
 
           <!-- ── Section 1: What Are Udemy Coupons ── -->
           <section aria-labelledby="what-are-udemy-coupons" style="margin-bottom:3rem;">
@@ -442,40 +428,18 @@ const lastModified = new Date().toISOString().split('T')[0];
 
             <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(340px, 1fr)); gap:1rem;">
               {[
-                {
-                  icon: "⚡",
-                  title: "Act within hours, not days",
-                  tip: "100% off coupons are capped at 1,000 uses. Popular courses can burn through that in under 6 hours after a coupon is shared. Check CourseSpeak daily and redeem immediately when you spot a course you want."
-                },
-                {
-                  icon: "📋",
-                  title: "Wishlist first, filter later",
-                  tip: "Don't enroll in every free course you see — your Udemy library gets overwhelming fast. Only enroll if you genuinely plan to start the course within 30 days. Quality matters more than quantity."
-                },
-                {
-                  icon: "🔔",
-                  title: "Subscribe to category alerts",
-                  tip: "Sign up for CourseSpeak's newsletter to get notified when new coupons drop in your category — Python, data science, web dev, cybersecurity, and more."
-                },
-                {
-                  icon: "💳",
-                  title: "Use Udemy's 30-day refund",
-                  tip: "If you purchase a course at a low sale price (not free via coupon) and aren't satisfied, Udemy offers a 30-day money-back guarantee with no questions asked."
-                },
-                {
-                  icon: "🔍",
-                  title: "Check the syllabus before enrolling",
-                  tip: "Even free courses take time. Review the curriculum on the Udemy course page to confirm the content matches what you need before clicking 'Enroll Now'."
-                },
-                {
-                  icon: "📅",
-                  title: "Note the 'Last Updated' date",
-                  tip: "Udemy shows when each course was last updated. For fast-changing topics like cloud computing, AI, or web frameworks, prefer courses updated within the last 12 months."
-                },
+                { title: "Act within hours, not days", tip: "100% off coupons are capped at 1,000 uses. Popular courses can burn through that in under 6 hours after a coupon is shared. Check CourseSpeak daily and redeem immediately when you spot a course you want." },
+                { title: "Wishlist first, filter later", tip: "Don't enroll in every free course you see — your Udemy library gets overwhelming fast. Only enroll if you genuinely plan to start the course within 30 days. Quality matters more than quantity." },
+                { title: "Subscribe to category alerts", tip: "Sign up for CourseSpeak's newsletter to get notified when new coupons drop in your category — Python, data science, web dev, cybersecurity, and more." },
+                { title: "Use Udemy's 30-day refund", tip: "If you purchase a course at a low sale price (not free via coupon) and aren't satisfied, Udemy offers a 30-day money-back guarantee with no questions asked." },
+                { title: "Check the syllabus before enrolling", tip: "Even free courses take time. Review the curriculum on the Udemy course page to confirm the content matches what you need before clicking 'Enroll Now'." },
+                { title: "Note the 'Last Updated' date", tip: "Udemy shows when each course was last updated. For fast-changing topics like cloud computing, AI, or web frameworks, prefer courses updated within the last 12 months." },
               ].map(tip => (
                 <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.25rem;">
-                  <div style="font-size:1.5rem; margin-bottom:0.6rem;">{tip.icon}</div>
-                  <h3 style="font-size:0.95rem; font-weight:700; color:var(--text); margin-bottom:0.5rem;">{tip.title}</h3>
+                  <h3 style="font-size:0.95rem; font-weight:700; color:var(--text); margin-bottom:0.5rem; display:flex; align-items:center; gap:0.5rem;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--brand)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    {tip.title}
+                  </h3>
                   <p style="font-size:0.85rem; color:var(--muted); line-height:1.65; margin:0;">{tip.tip}</p>
                 </div>
               ))}
@@ -490,57 +454,38 @@ const lastModified = new Date().toISOString().split('T')[0];
 
             <div style="display:flex; flex-direction:column; gap:0.75rem;">
               {[
-                {
-                  q: "Are Udemy coupons legitimate and safe to use?",
-                  a: "Yes. Udemy coupons are official promotional codes issued by Udemy or instructors. They're standard marketing tools — not hacks or exploits. CourseSpeak only lists coupons from verified Udemy instructor and affiliate sources."
-                },
-                {
-                  q: "How long do Udemy coupons last?",
-                  a: "100% off coupons are valid for 3–7 days and are limited to ~1,000 uses. Whichever limit is hit first ends the coupon. High-discount coupons (80–95% off) can last several weeks. Always redeem as soon as you find one you want."
-                },
-                {
-                  q: "Do free Udemy courses include a completion certificate?",
-                  a: "Yes. All Udemy courses — enrolled via coupon or purchased — include a certificate of completion. You can download it as a PDF or share it to LinkedIn directly from your Udemy dashboard."
-                },
-                {
-                  q: "Can I use more than one coupon per course?",
-                  a: "No. Udemy allows only one coupon per course enrollment. If multiple coupons exist for the same course, choose the one with the highest discount (ideally 100% off)."
-                },
-                {
-                  q: "What if the coupon has expired by the time I try to use it?",
-                  a: "If the coupon is expired, Udemy redirects you to the full-price page. Return to CourseSpeak to check if a newer coupon has been listed. Instructors often re-issue coupons periodically. Alternatively, Udemy's regular sales often price courses at $9.99–$14.99."
-                },
-                {
-                  q: "Is there a limit to how many free Udemy courses I can get?",
-                  a: "Udemy does not officially cap the number of coupon enrollments per account. You can enroll in as many courses as you find valid coupons for. However, Udemy may restrict accounts showing suspicious activity (e.g., mass enrollment with no course progress)."
-                },
+                { q: "Are Udemy coupons legitimate and safe to use?", a: "Yes. Udemy coupons are official promotional codes issued by Udemy or instructors. They're standard marketing tools — not hacks or exploits. CourseSpeak only lists coupons from verified Udemy instructor and affiliate sources." },
+                { q: "How long do Udemy coupons last?", a: "100% off coupons are valid for 3–7 days and are limited to ~1,000 uses. Whichever limit is hit first ends the coupon. High-discount coupons (80–95% off) can last several weeks. Always redeem as soon as you find one you want." },
+                { q: "Do free Udemy courses include a completion certificate?", a: "Yes. All Udemy courses — enrolled via coupon or purchased — include a certificate of completion. You can download it as a PDF or share it to LinkedIn directly from your Udemy dashboard." },
+                { q: "Can I use more than one coupon per course?", a: "No. Udemy allows only one coupon per course enrollment. If multiple coupons exist for the same course, choose the one with the highest discount (ideally 100% off)." },
+                { q: "What if the coupon has expired by the time I try to use it?", a: "If the coupon is expired, Udemy redirects you to the full-price page. Return to CourseSpeak to check if a newer coupon has been listed. Instructors often re-issue coupons periodically. Alternatively, Udemy's regular sales often price courses at $9.99–$14.99." },
+                { q: "Is there a limit to how many free Udemy courses I can get?", a: "Udemy does not officially cap the number of coupon enrollments per account. You can enroll in as many courses as you find valid coupons for. However, Udemy may restrict accounts showing suspicious activity (e.g., mass enrollment with no course progress)." },
               ].map(faq => (
-                <details style="background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden;">
-                  <summary style="padding:1rem 1.25rem; font-weight:600; color:var(--text); font-size:0.9rem; cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; gap:1rem;">
+                <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.25rem 1.5rem;">
+                  <h3 style="font-size:0.95rem; font-weight:700; color:var(--text); margin:0 0 0.5rem; display:flex; align-items:center; gap:0.5rem;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
                     {faq.q}
-                    <span aria-hidden="true" style="color:var(--muted); flex-shrink:0; font-size:1rem;">+</span>
-                  </summary>
-                  <div style="padding:0 1.25rem 1rem; color:var(--muted); font-size:0.875rem; line-height:1.7;">
-                    <p style="margin:0;">{faq.a}</p>
-                  </div>
-                </details>
+                  </h3>
+                  <p style="font-size:0.85rem; color:var(--muted); line-height:1.7; margin:0;">{faq.a}</p>
+                </div>
               ))}
             </div>
           </section>
 
           <!-- Article footer / CTA -->
-          <div style="background:linear-gradient(135deg, var(--brand) 0%, hsl(35,90%,55%) 100%); border-radius:16px; padding:2rem; text-align:center; margin-top:3rem;">
-            <h2 style="color:#000; font-size:1.4rem; font-weight:800; margin-bottom:0.5rem;">
+          <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:2rem; text-align:center; margin-top:3rem;">
+            <h2 style="font-size:1.3rem; font-weight:800; color:var(--text); margin-bottom:0.5rem;">
               Ready to Find Your First Free Udemy Course?
             </h2>
-            <p style="color:rgba(0,0,0,0.7); font-size:0.95rem; margin-bottom:1.5rem; max-width:480px; margin-left:auto; margin-right:auto; line-height:1.6;">
+            <p style="color:var(--muted); font-size:0.9rem; margin-bottom:1.5rem; max-width:480px; margin-left:auto; margin-right:auto; line-height:1.6;">
               Browse verified 100% off Udemy coupons updated daily across 100+ topics and categories.
             </p>
             <div style="display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
-              <a href="/deals" style="display:inline-block; padding:0.75rem 1.75rem; background:#000; color:#fff; text-decoration:none; border-radius:8px; font-weight:700; font-size:0.95rem;">
-                Browse Free Deals →
+              <a href="/deals" style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.75rem 1.75rem; background:var(--brand); color:var(--bg); text-decoration:none; border-radius:8px; font-weight:700; font-size:0.9rem;">
+                Browse Free Deals
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
               </a>
-              <a href="/how-to-redeem-coupon" style="display:inline-block; padding:0.75rem 1.75rem; background:rgba(0,0,0,0.15); color:#000; text-decoration:none; border-radius:8px; font-weight:700; font-size:0.95rem; border:1px solid rgba(0,0,0,0.2);">
+              <a href="/how-to-redeem-coupon" style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.75rem 1.75rem; color:var(--text); text-decoration:none; border-radius:8px; font-weight:700; font-size:0.9rem; border:2px solid var(--border);">
                 How to Redeem
               </a>
             </div>
@@ -548,9 +493,7 @@ const lastModified = new Date().toISOString().split('T')[0];
 
         </div>
       </article>
-
     </div>
-  </div>
 
   <style>
     .container { max-width: 1200px; margin: 0 auto; }

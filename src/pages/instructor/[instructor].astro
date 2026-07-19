@@ -125,6 +125,20 @@ const instructorData: InstructorData = {
   providers
 };
 
+const provider = providers[0] || 'Udemy';
+
+function getMaxDiscount(courses: Deal[]): number {
+  return Math.max(
+    0,
+    ...courses.map((c) => {
+      if (!c.originalPrice || !c.price || c.price >= c.originalPrice) return 0;
+      return Math.round(100 - (c.price / c.originalPrice) * 100);
+    })
+  );
+}
+const maxDisc = getMaxDiscount(instructorCourses);
+const hasFree = instructorCourses.some((c) => c.price === 0);
+
 // SEO Data
 const currentDate = new Date();
 const monthNames = ["January","February","March","April","May","June",
@@ -135,391 +149,187 @@ const currentYear = currentDate.getFullYear();
 const siteUrl = "https://coursespeak.com";
 const instructorUrl = `${siteUrl}/instructor/${instructorSlug}`;
 
-const pageTitle = `${instructorName} | ${instructorData.courseCount} Free Udemy Courses ${currentMonth} ${currentYear}`;
-const pageDescription = `Access ${instructorData.courseCount} free Udemy courses by ${instructorName}. ${instructorData.totalStudents.toLocaleString()}+ students enrolled. Average rating ${instructorData.avgRating}★. Browse programming, development, and more free courses with 100% off coupons.`;
+const cleanName = instructorName.replace(/[^\x20-\x7E]/g, '').trim();
+
+const pageTitle = `${instructorName} — ${instructorData.courseCount} Free Udemy Courses ${currentMonth} ${currentYear} | CourseSpeak`;
+const pageDescription = `Access ${instructorData.courseCount} free courses by ${instructorName}. ${instructorData.totalStudents.toLocaleString()}+ students enrolled. Average rating ${instructorData.avgRating}★. Browse programming, development, and more free courses with 100% off coupons.`;
 
 // FAQ Data
 const faqs = [
   {
-    q: `Who is ${instructorName}?`,
-    a: `${instructorName} is a top Udemy instructor with ${instructorData.courseCount} courses and ${instructorData.totalStudents.toLocaleString()}+ students. They teach in ${categories.join(", ")}.`
-  },
-  {
-    q: `How many free courses does ${instructorName} offer?`,
-    a: `${instructorName} currently offers ${instructorData.courseCount} courses on CourseSpeak, many with 100% off coupons making them completely free.`
+    q: `How many courses does ${instructorName} have on CourseSpeak?`,
+    a: `${instructorName} currently has ${instructorData.courseCount} verified course${instructorData.courseCount === 1 ? '' : 's'} on CourseSpeak across ${providers[0] || 'Udemy'}.`
   },
   {
     q: `What is the average rating of ${instructorName}'s courses?`,
     a: `The average rating for ${instructorName}'s courses is ${instructorData.avgRating} out of 5 stars, based on student reviews.`
   },
   {
-    q: `What topics does ${instructorName} teach?`,
-    a: `${instructorName} teaches courses in ${categories.slice(0, 3).join(", ")}${categories.length > 3 ? " and more" : ""}. Their expertise covers multiple areas in technology and professional development.`
+    q: `How do I get ${instructorName}'s courses for free?`,
+    a: `Browse ${instructorName}'s courses on CourseSpeak and click any deal that interests you. Free courses are clearly marked with 100% off coupons — just enroll directly on Udemy.`
   },
   {
-    q: `Are ${instructorName}'s courses worth it?`,
-    a: `With ${instructorData.totalStudents.toLocaleString()}+ students and an average rating of ${instructorData.avgRating}★, ${instructorName}'s courses are highly rated. Many are available free with coupons on CourseSpeak.`
+    q: `What topics does ${instructorName} teach?`,
+    a: `${instructorName} teaches courses in ${categories.slice(0, 3).join(', ')}${categories.length > 3 ? ' and more' : ''}. Their expertise covers multiple areas in technology and professional development.`
   }
 ];
-
-// Structured Data
-const structuredData = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "WebPage",
-      "@id": `${instructorUrl}#webpage`,
-      "url": instructorUrl,
-      "name": pageTitle,
-      "description": pageDescription,
-      "isPartOf": { "@id": `${siteUrl}/#website` },
-      "breadcrumb": { "@id": `${instructorUrl}#breadcrumb` },
-      "inLanguage": "en-US",
-      "dateModified": currentDate.toISOString().split('T')[0]
-    },
-    {
-      "@type": "BreadcrumbList",
-      "@id": `${instructorUrl}#breadcrumb`,
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Home", "item": siteUrl },
-        { "@type": "ListItem", "position": 2, "name": "Instructors", "item": `${siteUrl}/instructors` },
-        { "@type": "ListItem", "position": 3, "name": instructorName, "item": instructorUrl }
-      ]
-    },
-    {
-      "@type": "Person",
-      "@id": `${instructorUrl}#person`,
-      "name": instructorName,
-      "description": `Udemy instructor with ${instructorData.courseCount} courses and ${instructorData.totalStudents.toLocaleString()}+ students`,
-      "worksFor": {
-        "@type": "Organization",
-        "name": providers[0] || "Udemy",
-        "url": "https://www.udemy.com"
-      },
-      "aggregateRating": instructorData.avgRating > 0 ? {
-        "@type": "AggregateRating",
-        "ratingValue": instructorData.avgRating.toString(),
-        "bestRating": "5",
-        "ratingCount": instructorData.totalReviews.toString()
-      } : undefined,
-      "teaches": categories
-    },
-    {
-      "@type": "ItemList",
-      "@id": `${instructorUrl}#courses`,
-      "name": `Courses by ${instructorName}`,
-      "numberOfItems": instructorData.courseCount,
-      "itemListElement": instructorCourses.map((course, index) => ({
-        "@type": "ListItem",
-        "position": index + 1,
-        "item": {
-          "@type": "Course",
-          "name": course.title,
-          "description": course.description,
-          "url": `${siteUrl}/deal/${course.id}`,
-          "provider": {
-            "@type": "Organization",
-            "name": course.provider || "Udemy",
-            "url": "https://www.udemy.com"
-          },
-          "author": { "@id": `${instructorUrl}#person` },
-          "offers": {
-            "@type": "Offer",
-            "price": String(course.price ?? "0"),
-            "priceCurrency": "USD",
-            "availability": "https://schema.org/InStock"
-          },
-          "aggregateRating": course.rating ? {
-            "@type": "AggregateRating",
-            "ratingValue": course.rating.toString(),
-            "ratingCount": String(course.students || 0)
-          } : undefined
-        }
-      }))
-    },
-    {
-      "@type": "FAQPage",
-      "@id": `${instructorUrl}#faq`,
-      "mainEntity": faqs.map(faq => ({
-        "@type": "Question",
-        "name": faq.q,
-        "acceptedAnswer": { "@type": "Answer", "text": faq.a }
-      }))
-    }
-  ]
-};
 
 ---
 
 <Layout title={pageTitle} description={pageDescription} canonical={instructorUrl}>
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
+              { '@type': 'ListItem', position: 2, name: 'Instructors', item: `${siteUrl}/instructors` },
+              { '@type': 'ListItem', position: 3, name: cleanName, item: instructorUrl },
+            ],
+          },
+          {
+            '@type': 'CollectionPage',
+            url: instructorUrl,
+            name: pageTitle,
+            description: pageDescription,
+            mainEntity: {
+              '@type': 'ItemList',
+              numberOfItems: instructorData.courseCount,
+            },
+          },
+          {
+            '@type': 'FAQPage',
+            mainEntity: faqs.map((f) => ({
+              '@type': 'Question',
+              name: f.q,
+              acceptedAnswer: { '@type': 'Answer', text: f.a },
+            })),
+          },
+        ],
+      })}
+    />
     <link rel="preconnect" href="https://img-c.udemycdn.com" />
   </Fragment>
 
-  <div style={{ minHeight: "100vh", color: "var(--text)" }}>
-    {/* Hero Section */}
-    <section style={{ 
-      padding: "4rem 1rem 3rem", 
-      textAlign: "center", 
-      background: "linear-gradient(135deg, #0f0e0c 0%, #1a1814 100%)",
-      position: "relative",
-      overflow: "hidden"
-    }}>
-      {/* Background decoration */}
-      <div style={{ 
-        position: "absolute", 
-        top: "10%", 
-        left: "5%", 
-        width: "300px", 
-        height: "300px", 
-        background: "var(--brand)", 
-        filter: "blur(120px)", 
-        opacity: 0.05, 
-        borderRadius: "50%",
-        pointerEvents: "none"
-      }} />
-      
-      <div class="container" style={{ maxWidth: "900px", position: "relative", zIndex: 1 }}>
-        {/* Instructor Avatar */}
-        <div style={{
-          width: "100px",
-          height: "100px",
-          borderRadius: "50%",
-          background: "linear-gradient(135deg, var(--brand) 0%, #FFD54F 100%)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          margin: "0 auto 1.5rem",
-          fontSize: "2.5rem",
-          fontWeight: 700,
-          color: "var(--bg)"
-        }}>
-          {instructorName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content anim-up">
+          <h1>
+            <span style="display:block;font-size:1rem;font-weight:700;color:var(--brand);margin-bottom:0.5rem;">
+              {provider} &middot; {instructorData.courseCount} Course{instructorData.courseCount === 1 ? '' : 's'}
+            </span>
+            <span class="hero-gradient-text" style="display:block;font-size:clamp(2rem,5vw,3.5rem)">
+              {instructorName}
+            </span>
+          </h1>
+          <p>{pageDescription}</p>
         </div>
+      </div>
+    </section>
 
-        {/* Title */}
-        <h1 style={{ 
-          fontSize: "clamp(1.8rem, 4vw, 2.5rem)", 
-          fontWeight: 800, 
-          marginBottom: "0.75rem",
-          color: "var(--text)"
-        }}>
-          {instructorName}
-        </h1>
-        
-        <p style={{ 
-          color: "var(--muted)", 
-          fontSize: "1rem", 
-          maxWidth: "600px", 
-          margin: "0 auto 1.5rem", 
-          lineHeight: 1.6 
-        }}>
-          Top Udemy instructor with <strong style={{ color: "var(--brand)" }}>{instructorData.courseCount} courses</strong> and <strong style={{ color: "var(--brand)" }}>{instructorData.totalStudents.toLocaleString()}+ students</strong>
-        </p>
-
-        {/* Category Tags */}
-        <div style={{ 
-          display: "flex", 
-          justifyContent: "center", 
-          gap: "0.5rem", 
-          flexWrap: "wrap",
-          marginBottom: "2rem"
-        }}>
-          {categories.map(cat => (
-            <a 
-              href={`/categories/${cat.toLowerCase().replace(/\s+/g, '-')}`}
-              style={{
-                background: "var(--card)",
-                border: "1px solid var(--border)",
-                borderRadius: "20px",
-                padding: "0.4rem 0.875rem",
-                fontSize: "0.85rem",
-                color: "var(--text)",
-                textDecoration: "none",
-                transition: "all 0.2s ease"
-              }}
-            >
-              {cat}
-            </a>
-          ))}
-        </div>
-
-        {/* Stats Row */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))",
-          gap: "1rem",
-          maxWidth: "500px",
-          margin: "0 auto"
-        }}>
-          <div style={{
-            background: "var(--card)",
-            border: "1px solid var(--border)",
-            borderRadius: "12px",
-            padding: "1rem"
-          }}>
-            <div style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--brand)" }}>
-              {instructorData.courseCount}
+    <section style="padding-bottom:2rem;margin-top:-1rem">
+      <div class="container">
+        <div class="stat-grid">
+          <div class="stat-box">
+            <div class="stat-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              {instructorData.avgRating}
             </div>
-            <div style={{ fontSize: "0.8rem", color: "var(--muted)" }}>Courses</div>
+            <div class="stat-label">Avg Rating</div>
           </div>
-          
-          <div style={{
-            background: "var(--card)",
-            border: "1px solid var(--border)",
-            borderRadius: "12px",
-            padding: "1rem"
-          }}>
-            <div style={{ fontSize: "1.5rem", fontWeight: 700, color: "hsl(210, 100%, 65%)" }}>
+          <div class="stat-box">
+            <div class="stat-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
               {instructorData.totalStudents.toLocaleString()}
             </div>
-            <div style={{ fontSize: "0.8rem", color: "var(--muted)" }}>Students</div>
+            <div class="stat-label">Students</div>
           </div>
-          
-          <div style={{
-            background: "var(--card)",
-            border: "1px solid var(--border)",
-            borderRadius: "12px",
-            padding: "1rem"
-          }}>
-            <div style={{ fontSize: "1.5rem", fontWeight: 700, color: "hsl(35, 90%, 68%)" }}>
-              {instructorData.avgRating}★
+          <div class="stat-box">
+            <div class="stat-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+              Up to {maxDisc}%
             </div>
-            <div style={{ fontSize: "0.8rem", color: "var(--muted)" }}>Avg Rating</div>
+            <div class="stat-label">Max Discount</div>
           </div>
         </div>
       </div>
     </section>
 
-    {/* Courses Section */}
-    <section style={{ padding: "3rem 1rem" }}>
-      <div class="container" style={{ maxWidth: "1400px" }}>
-        <div style={{ 
-          display: "flex", 
-          justifyContent: "space-between", 
-          alignItems: "center", 
-          marginBottom: "2rem",
-          flexWrap: "wrap",
-          gap: "1rem"
-        }}>
+    <section class="section" style="padding-top:1rem;">
+      <div class="container">
+        <div class="adv-grid">
           <div>
-            <h2 style={{ 
-              fontSize: "1.5rem", 
-              fontWeight: 700, 
-              color: "var(--text)", 
-              margin: "0 0 0.25rem" 
-            }}>
-              <span style={{ color: "var(--brand)" }}>{instructorName}'s</span> Free Courses
-            </h2>
-            <p style={{ color: "var(--muted)", margin: 0, fontSize: "0.9rem" }}>
-              {instructorData.courseCount} courses with verified coupons
-            </p>
+            <span class="section-title">Why {instructorName}</span>
+            <h2 class="section-heading" style="max-width:450px">Learn from a trusted instructor.</h2>
           </div>
-          
-          <a href="/instructors" style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "0.4rem",
-            padding: "0.5rem 1rem",
-            background: "var(--card)",
-            border: "1px solid var(--border)",
-            borderRadius: "8px",
-            color: "var(--text)",
-            textDecoration: "none",
-            fontSize: "0.875rem",
-            fontWeight: 600
-          }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
-            </svg>
-            All Instructors
-          </a>
+          <p style="color:var(--text-secondary);font-size:1rem;line-height:1.7;margin:0">
+            {instructorName} offers <strong>{instructorData.courseCount} verified course{instructorData.courseCount === 1 ? '' : 's'}</strong> on CourseSpeak. Browse top-rated courses with discounts up to <strong>{maxDisc}% off</strong>{hasFree ? ', including free courses' : ''}.
+          </p>
         </div>
+        <div class="adv-cards">
+          <div class="adv-card">
+            <div class="adv-icon" style="color:var(--brand)">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <h3>Verified Coupons</h3>
+            <p>Every coupon from {instructorName} is manually checked before listing. No expired or fake deals.</p>
+          </div>
+          <div class="adv-card">
+            <div class="adv-icon" style="color:#059669">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+            </div>
+            <h3>Top-Rated Courses</h3>
+            <p>{instructorData.avgRating > 0 ? `${instructorName}'s courses average ${instructorData.avgRating} stars` : `${instructorName}'s courses are available at great discounts`}.</p>
+          </div>
+          <div class="adv-card">
+            <div class="adv-icon" style="color:var(--brand)">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+            </div>
+            <h3>Save up to {maxDisc}%</h3>
+            <p>Get the best deals on {instructorName}'s {provider} courses with discounts up to {maxDisc}% off.</p>
+          </div>
+          <div class="adv-card">
+            <div class="adv-icon" style="color:#7c3aed">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <h3>Updated Daily</h3>
+            <p>New coupons added regularly. Deals refresh daily so you never miss a discount from {instructorName}.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-        {/* Courses Grid */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
-          gap: "1.5rem",
-          marginBottom: "3rem"
-        }}>
+    <section class="section" style="padding-top:0;">
+      <div class="container">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.25rem;">
           {instructorCourses.map((course) => (
             <DealCard deal={course} />
           ))}
         </div>
-
-        {/* No Courses Fallback */}
-        {instructorCourses.length === 0 && (
-          <div style={{ 
-            textAlign: "center", 
-            padding: "4rem 2rem",
-            background: "var(--card)",
-            borderRadius: "16px",
-            border: "1px solid var(--border)"
-          }}>
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="var(--muted)" style={{ marginBottom: "1rem" }}>
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-            </svg>
-            <h3 style={{ color: "var(--text)", marginBottom: "0.5rem" }}>No courses available</h3>
-            <p style={{ color: "var(--muted)" }}>This instructor currently has no active deals.</p>
-          </div>
-        )}
       </div>
     </section>
 
-    {/* FAQ Section */}
-    <section style={{ padding: "3rem 1rem", background: "var(--bg)" }}>
-      <div class="container" style={{ maxWidth: "900px" }}>
-        <h2 style={{ 
-          fontSize: "1.5rem", 
-          fontWeight: 700, 
-          marginBottom: "2rem",
-          textAlign: "center"
-        }}>
-          Frequently Asked Questions about {instructorName}
-        </h2>
-        
-        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-          {faqs.map((faq, index) => (
-            <div 
-              itemscope 
-              itemprop="mainEntity" 
-              itemtype="https://schema.org/Question"
-              style={{
-                background: "var(--card)",
-                border: "1px solid var(--border)",
-                borderRadius: "12px",
-                overflow: "hidden"
-              }}
-            >
-              <div style={{ padding: "1.25rem 1.5rem", borderBottom: "1px solid var(--border)" }}>
-                <h3 itemprop="name" style={{ margin: 0, fontSize: "1rem", fontWeight: 600, color: "var(--text)" }}>
-                  {faq.q}
-                </h3>
-              </div>
-              <div 
-                itemscope 
-                itemprop="acceptedAnswer" 
-                itemtype="https://schema.org/Answer"
-                style={{ padding: "1.25rem 1.5rem", background: "rgba(212,167,55,0.03)" }}
-              >
-                <p itemprop="text" style={{ margin: 0, color: "var(--muted)", lineHeight: 1.6, fontSize: "0.95rem" }}>
-                  {faq.a}
-                </p>
-              </div>
-            </div>
+    <section class="section" style="padding-top:0;">
+      <div class="container" style="max-width:800px;">
+        <span class="section-title">FAQ</span>
+        <h2 class="section-heading" style="margin:0 0 2rem;">Common Questions</h2>
+        <div class="faq-grid">
+          {faqs.map((faq) => (
+            <details class="faq-item">
+              <summary>
+                {faq.q}
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="3" class="fi"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-answer">{faq.a}</div>
+            </details>
           ))}
         </div>
       </div>
     </section>
-  </div>
+  </main>
 </Layout>
-
-<style>
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1rem;
-  }
-</style>

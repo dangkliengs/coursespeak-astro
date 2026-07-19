@@ -558,7 +558,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 </div>
 
                                 {/* Verdict + Redeem link */}
-                                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem", padding: "0.75rem 1.25rem", background: "linear-gradient(135deg, #1a1814, #2a2824)", borderRadius: "10px", border: "1px solid rgba(212, 167, 55, 0.2)" }}>
+                                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem", padding: "0.75rem 1.25rem", background: "linear-gradient(135deg, #0f1420, #1a2233)", borderRadius: "10px", border: "1px solid rgba(212, 167, 55, 0.2)" }}>
                                     <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
                                         <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: "rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text)", fontSize: "1rem" }}>✓</div>
                                         <div>
@@ -809,7 +809,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
 
                 {/* ─── RIGHT COLUMN — Sticky Sidebar ─── */}
                 <aside aria-label="Course purchase options" style={{ position: "relative" }}>
-                    <div style={{ position: "sticky", top: "2rem", background: "linear-gradient(135deg, #1a1814 0%, #2a2824 100%)", border: "1px solid rgba(212,167,55,0.15)", borderRadius: "8px", overflow: "hidden", boxShadow: "0 8px 32px rgba(212,167,55,0.1)" }}>
+                    <div style={{ position: "sticky", top: "2rem", background: "linear-gradient(135deg, #0f1420 0%, #1a2233 100%)", border: "1px solid rgba(212,167,55,0.15)", borderRadius: "8px", overflow: "hidden", boxShadow: "0 8px 32px rgba(212,167,55,0.1)" }}>
                         {deal.image && (
                             <div style={{ position: "relative" }}>
                                 <img
@@ -817,8 +817,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                     alt={`${deal.title} — ${deal.provider || "Udemy"} course in ${deal.category || "Development"} — thumbnail`}
                                     width="400"
                                     height="190"
-                                    loading="eager"
-                                    fetchPriority="high"
+                                    loading="lazy"
                                     decoding="async"
                                     style={{ width: "100%", height: "190px", objectFit: "cover", display: "block" }}
                                 />
@@ -834,7 +833,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 {discountPct > 0 && (
                                     <>
                                         <span style={{ fontSize: "0.9rem", color: "#6b7280", textDecoration: "line-through" }}>${originalPrice}</span>
-                                        <span style={{ fontSize: "0.75rem", background: "var(--brand)", color: "#1a1814", padding: "2px 7px", borderRadius: "3px", fontWeight: 700 }}>{discountPct}% OFF</span>
+                                        <span style={{ fontSize: "0.75rem", background: "var(--brand)", color: "#080b12", padding: "2px 7px", borderRadius: "3px", fontWeight: 700 }}>{discountPct}% OFF</span>
                                     </>
                                 )}
                             </div>
@@ -893,7 +892,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                     width: "100%",
                                     padding: "0.75rem",
                                     background: "linear-gradient(135deg, #D4AF37 0%, #C5A028 100%)",
-                                    color: "#1a1814",
+                                    color: "#080b12",
                                     textDecoration: "none",
                                     borderRadius: "8px",
                                     textAlign: "center",
@@ -999,8 +998,8 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                         </p>
 
                         <div style={{ background: "linear-gradient(135deg, var(--brand), #C5A028)", padding: "1.25rem", borderRadius: "8px", marginBottom: "1.25rem", textAlign: "center" }}>
-                            <p style={{ color: "#1a1814", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "8px", fontWeight: 600 }}>Coupon Code</p>
-                            <code style={{ display: "block", fontSize: "1.15rem", fontWeight: 800, color: "#1a1814", letterSpacing: "1px", background: "rgba(255,255,255,0.3)", padding: "10px 16px", borderRadius: "6px", border: "1px dashed rgba(255,255,255,0.5)" }}>
+                            <p style={{ color: "#080b12", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "8px", fontWeight: 600 }}>Coupon Code</p>
+                            <code style={{ display: "block", fontSize: "1.15rem", fontWeight: 800, color: "#080b12", letterSpacing: "1px", background: "rgba(255,255,255,0.3)", padding: "10px 16px", borderRadius: "6px", border: "1px dashed rgba(255,255,255,0.5)" }}>
                                 {deal.coupon}
                             </code>
                         </div>
@@ -1016,7 +1015,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 href={deal.url}
                                 target="_blank"
                                 rel="noopener noreferrer nofollow"
-                                style={{ background: "var(--brand)", border: "1px solid var(--brand-hover)", color: "#1a1814", padding: "0.75rem", borderRadius: "6px", fontWeight: 700, textDecoration: "none", textAlign: "center", fontSize: "0.95rem" }}
+                                style={{ background: "var(--brand)", border: "1px solid var(--brand-hover)", color: "#080b12", padding: "0.75rem", borderRadius: "6px", fontWeight: 700, textDecoration: "none", textAlign: "center", fontSize: "0.95rem" }}
                             >
                                 Redeem Now on {deal.provider || "Udemy"} →
                             </a>

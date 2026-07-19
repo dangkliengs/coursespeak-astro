@@ -1,7 +1,11 @@
 ---
 import Layout from "../layouts/Layout.astro";
 
-// Success stories data
+const canonicalUrl = "https://coursespeak.com/success-stories";
+const pageTitle = "Success Stories | Real Career Transformations with Free Udemy Courses";
+const pageDescription = "Read inspiring success stories from learners who transformed their careers using free Udemy courses from CourseSpeak. Real people, real results, zero cost.";
+const lastModified = new Date().toISOString().split('T')[0];
+
 const successStories = [
   {
     name: "Sarah Johnson",
@@ -95,276 +99,202 @@ const successStories = [
   }
 ];
 
-// SEO metadata
-const pageTitle = "Success Stories | Real Career Transformations with Free Udemy Courses";
-const pageDescription = "Read inspiring success stories from learners who transformed their careers using free Udemy courses from CourseSpeak. Real people, real results, zero cost.";
+const storiesLd = successStories.map((s, i) => ({
+  "@type": "ListItem",
+  "position": i + 1,
+  "item": {
+    "@type": "Review",
+    "author": { "@type": "Person", "name": s.name },
+    "itemReviewed": { "@type": "Course", "name": s.course },
+    "reviewBody": s.review,
+    "reviewRating": { "@type": "Rating", "ratingValue": s.rating }
+  }
+}));
 ---
 
-<Layout title={pageTitle} description={pageDescription}>
+<Layout title={pageTitle} description={pageDescription} type="article" canonical={canonicalUrl}>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": canonicalUrl,
+        "url": canonicalUrl,
+        "name": pageTitle,
+        "description": pageDescription,
+        "isPartOf": { "@id": "https://coursespeak.com" },
+        "datePublished": "2023-01-01",
+        "dateModified": lastModified,
+        "inLanguage": "en-US",
+        "mainEntity": {
+          "@type": "ItemList",
+          "itemListElement": storiesLd
+        }
+      },
+      {
+        "@type": "Person",
+        "@id": "https://coursespeak.com/#author",
+        "name": "Josh Smith",
+        "sameAs": ["https://x.com/courses_peak"]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": canonicalUrl + "#faq",
+        "mainEntity": [
+          { "@type": "Question", "name": "Are these success stories real?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, these are real testimonials from learners who used CourseSpeak to find free Udemy courses. We verify each story before publishing to ensure authenticity." } },
+          { "@type": "Question", "name": "How can I share my own success story?", "acceptedAnswer": { "@type": "Answer", "text": "Contact us through our support page with your story, the course you took, and how it helped you. Selected stories may be featured." } },
+          { "@type": "Question", "name": "How do I get free Udemy courses?", "acceptedAnswer": { "@type": "Answer", "text": "Browse our deals page for verified 100% off Udemy coupons. No account or payment needed — just click, enroll, and start learning for free." } },
+          { "@type": "Question", "name": "Do I need to pay for anything?", "acceptedAnswer": { "@type": "Answer", "text": "No, all coupons listed on CourseSpeak are verified to give you 100% off the course price. There are no hidden fees or charges." } },
+          { "@type": "Question", "name": "How long does it take to see results?", "acceptedAnswer": { "@type": "Answer", "text": "Results vary by course and individual effort. Many learners report career changes within 3 to 6 months of completing a focused learning path." } }
+        ]
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://coursespeak.com/#organization",
+        "name": "CourseSpeak",
+        "url": "https://coursespeak.com",
+        "logo": "https://coursespeak.com/logo.svg",
+        "sameAs": [
+          "https://x.com/courses_peak",
+          "https://www.facebook.com/CourseSpeakOfficial/"
+        ]
+      }
+    ]
+  })} />
+
   <div style={{ minHeight: "100vh", color: "var(--text)" }}>
-    <div>
-      {/* Hero Section */}
-      <section class="hero-gradient" style={{ padding: "6rem 1rem 4rem", textAlign: "center" }}>
-        <div class="container">
-          <div style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "0.5rem",
-            background: "var(--brand-soft)",
-            padding: "0.5rem 1rem",
-            borderRadius: "9999px",
-            marginBottom: "2rem",
-            fontSize: "0.9rem",
-            color: "var(--brand)",
-            fontWeight: 600
-          }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-            </svg>
-            100K+ Success Stories Worldwide
-          </div>
-          
-          <h1 style={{
-            fontSize: "clamp(2.5rem, 5vw, 4rem)",
-            fontWeight: 800,
-            lineHeight: 1.1,
-            marginBottom: "1.5rem",
-            maxWidth: "1000px",
-            margin: "0 auto 1.5rem"
-          }}>
-            <span style={{
-              background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text"
-            }}>
-              Real Success Stories
-            </span>
-            <br/>
-            <span style={{
-              background: "linear-gradient(135deg, var(--text) 0%, var(--muted) 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text"
-            }}>
-              Career Transformations
-            </span>
-          </h1>
-          
-          <p style={{
-            fontSize: "clamp(1.1rem, 2.5vw, 1.4rem)",
-            color: "var(--muted)",
-            maxWidth: "700px",
-            margin: "0 auto 3rem",
-            lineHeight: 1.6,
-            fontWeight: 400
-          }}>
-            Discover how real learners transformed their careers using free Udemy courses from CourseSpeak. 
-            From zero to hero, these stories prove that quality education doesn't have to cost a fortune.
-          </p>
 
-          <div style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: "2rem",
-            flexWrap: "wrap",
-            marginBottom: "3rem"
-          }}>
-            <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: "3rem", fontWeight: 800, color: "var(--brand)", marginBottom: "0.5rem" }}>
-                100K+
-              </div>
-              <div style={{ color: "var(--muted)", fontSize: "0.9rem" }}>
-                Success Stories
-              </div>
-            </div>
-            <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: "3rem", fontWeight: 800, color: "var(--accent)", marginBottom: "0.5rem" }}>
-                85%
-              </div>
-              <div style={{ color: "var(--muted)", fontSize: "0.9rem" }}>
-                Career Growth
-              </div>
-            </div>
-            <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: "3rem", fontWeight: 800, color: "hsl(180, 50%, 40%)", marginBottom: "0.5rem" }}>
-                $0
-              </div>
-              <div style={{ color: "var(--muted)", fontSize: "0.9rem" }}>
-                Course Cost
-              </div>
-            </div>
-          </div>
+    {/* ── HERO ── */}
+    <section style={{ padding: "4rem 1rem 2rem", textAlign: "center" }}>
+      <div style={{ maxWidth: "900px", margin: "0 auto" }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Real Results
         </div>
-      </section>
+        <h1 style={{ fontSize: "clamp(1.8rem, 4.5vw, 2.8rem)", fontWeight: 800, lineHeight: 1.2, margin: "0 auto 0.75rem" }}>
+          <span style={{ background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Success Stories</span>
+        </h1>
+        <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "650px", margin: "0 auto 1.5rem", lineHeight: 1.6 }}>
+          Discover how real learners transformed their careers using free Udemy courses from CourseSpeak. From zero to hero, these stories prove that quality education doesn't have to cost a fortune.
+        </p>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "1rem", flexWrap: "wrap", fontSize: "0.8rem", color: "var(--muted)" }}>
+          <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            By <a href="https://x.com/courses_peak" target="_blank" rel="noopener noreferrer" style="color:var(--text); text-decoration:none;"><strong>Josh Smith</strong></a>
+          </span>
+          <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+            Updated <time datetime={lastModified}>{new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})}</time>
+          </span>
+          <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+            3 min read
+          </span>
+        </div>
+      </div>
+    </section>
 
-      {/* Success Stories Grid */}
-      <section class="container" style={{ padding: "2rem 1rem 4rem" }}>
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))",
-          gap: "2rem",
-          marginBottom: "3rem"
-        }}>
-          {successStories.map((story, index) => (
-            <div style={{ 
-              background: "var(--card)", 
-              padding: "2rem", 
-              borderRadius: "20px", 
-              border: "1px solid var(--border)",
-              position: "relative",
-              overflow: "hidden",
-              transition: "all 0.3s ease"
-            }}>
+    {/* ── SUCCESS STORIES GRID ── */}
+    <article style={{ padding: "1rem 1rem 4rem" }}>
+      <div style={{ maxWidth: "900px", margin: "0 auto" }}>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:1rem;">
+          {successStories.map(story => (
+            <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.5rem; position:relative;">
               <div style={{
-                position: "absolute",
-                top: "1rem",
-                right: "1rem",
-                background: "var(--brand)",
-                color: "var(--bg)",
-                padding: "0.25rem 0.75rem",
-                borderRadius: "999px",
-                fontSize: "0.75rem",
-                fontWeight: 700
+                position: "absolute", top: "0.75rem", right: "0.75rem",
+                background: "var(--brand)", color: "var(--bg)",
+                padding: "0.2rem 0.6rem", borderRadius: "999px",
+                fontSize: "0.7rem", fontWeight: 700
               }}>
-                +{story.salaryIncrease} Salary
+                +{story.salaryIncrease}
               </div>
-              
-              <div style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "1rem",
-                marginBottom: "1.5rem"
-              }}>
-                <img 
-                  src={story.avatar} 
-                  alt={story.name}
-                  loading="lazy"
-                  width="60"
-                  height="60"
-                  style={{
-                    width: "60px",
-                    height: "60px",
-                    borderRadius: "50%",
-                    objectFit: "cover",
-                    border: "3px solid var(--brand)"
-                  }}
-                />
+
+              <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:1rem;">
+                <img src={story.avatar} alt={story.name} loading="lazy" width="48" height="48"
+                  style="width:48px; height:48px; border-radius:50%; object-fit:cover; border:2px solid var(--brand);" />
                 <div>
-                  <h4 style={{ 
-                    color: "var(--text)", 
-                    fontSize: "1.1rem", 
-                    fontWeight: 700, 
-                    marginBottom: "0.25rem" 
-                  }}>
-                    {story.name}
-                  </h4>
-                  <p style={{ 
-                    color: "var(--muted)", 
-                    fontSize: "0.9rem",
-                    marginBottom: "0.25rem"
-                  }}>
-                    {story.role}
-                  </p>
-                  <p style={{
-                    color: "var(--accent)",
-                    fontSize: "0.8rem",
-                    fontWeight: 600
-                  }}>
-                    {story.achievement}
-                  </p>
+                  <h4 style="color:var(--text); font-size:0.95rem; font-weight:700; margin:0 0 0.2rem;">{story.name}</h4>
+                  <p style="color:var(--muted); font-size:0.8rem; margin:0;">{story.role}</p>
                 </div>
               </div>
-              
-              <div style={{
-                display: "flex",
-                gap: "0.25rem",
-                marginBottom: "1rem"
-              }}>
+
+              <p style="color:var(--accent); font-size:0.75rem; font-weight:600; margin-bottom:0.75rem;">
+                {story.achievement}
+              </p>
+
+              <div style="display:flex; gap:0.15rem; margin-bottom:0.75rem;">
                 {[...Array(5)].map((_, i) => (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill={i < story.rating ? "var(--brand)" : "var(--border)"}>
+                  <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill={i < story.rating ? "var(--brand)" : "var(--border)"}>
                     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                   </svg>
                 ))}
               </div>
-              
-              <p style={{ 
-                color: "var(--muted)", 
-                lineHeight: 1.6, 
-                fontSize: "0.95rem",
-                marginBottom: "1rem"
-              }}>
-                "{story.review}"
+
+              <p style="color:var(--muted); font-size:0.85rem; line-height:1.6; margin-bottom:0.75rem; font-style:italic;">
+                &ldquo;{story.review}&rdquo;
               </p>
-              
-              <div style={{
-                background: "var(--input)",
-                padding: "0.75rem",
-                borderRadius: "8px",
-                fontSize: "0.85rem",
-                color: "var(--accent)",
-                fontWeight: 600,
-                textAlign: "center"
-              }}>
+
+              <div style="background:var(--input); padding:0.5rem; border-radius:8px; font-size:0.78rem; color:var(--accent); font-weight:600; text-align:center;">
                 {story.course}
               </div>
             </div>
           ))}
         </div>
-        
-        {/* CTA Section */}
-        <div style={{
-          textAlign: "center",
-          marginTop: "4rem",
-          padding: "3rem",
-          background: "var(--card)",
-          borderRadius: "20px",
-          border: "1px solid var(--border)"
-        }}>
-          <h2 style={{
-            fontSize: "2rem",
-            fontWeight: 800,
-            marginBottom: "1rem",
-            background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text"
-          }}>
+
+        {/* ── FAQ ── */}
+        <section aria-labelledby="faq-heading" style="margin-bottom:2rem; margin-top:2.5rem;">
+          <h2 id="faq" class="section-heading">Frequently Asked Questions</h2>
+          <div style="display:flex; flex-direction:column; gap:0.75rem;">
+            {[
+              { q: "Are these success stories real?", a: "Yes, these are real testimonials from learners who used CourseSpeak to find free Udemy courses. We verify each story before publishing to ensure authenticity." },
+              { q: "How can I share my own success story?", a: "We'd love to hear from you! Contact us through our support page with your story, the course you took, and how it helped you. Selected stories may be featured." },
+              { q: "How do I get free Udemy courses?", a: "Browse our deals page for verified 100% off Udemy coupons. No account or payment needed — just click, enroll, and start learning for free." },
+              { q: "Do I need to pay for anything?", a: "No, all coupons listed on CourseSpeak are verified to give you 100% off the course price. There are no hidden fees or charges." },
+              { q: "How long does it take to see results?", a: "Results vary by course and individual effort. Many learners report career changes within 3–6 months of completing a focused learning path." },
+            ].map(faq => (
+              <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.25rem 1.5rem;">
+                <h3 style="font-size:0.95rem; font-weight:700; color:var(--text); margin:0 0 0.5rem; display:flex; align-items:center; gap:0.5rem;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                  {faq.q}
+                </h3>
+                <p style="font-size:0.85rem; color:var(--muted); line-height:1.7; margin:0;">{faq.a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ── CTA ── */}
+        <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:2rem; text-align:center;">
+          <h2 style="font-size:1.3rem; font-weight:800; color:var(--text); margin-bottom:0.5rem;">
             Start Your Success Story
           </h2>
-          <p style={{
-            color: "var(--muted)",
-            fontSize: "1.1rem",
-            marginBottom: "2rem",
-            maxWidth: "600px",
-            margin: "0 auto 2rem"
-          }}>
+          <p style="color:var(--muted); font-size:0.9rem; margin-bottom:1.5rem; max-width:440px; margin-left:auto; margin-right:auto; line-height:1.6;">
             Join thousands of learners who transformed their careers with free Udemy courses. Your success story starts here.
           </p>
-          <a
-            href="/deals"
-            style={{
-              padding: "1rem 2.5rem",
-              borderRadius: "12px",
-              background: "var(--brand)",
-              color: "var(--bg)",
-              textDecoration: "none",
-              fontSize: "1rem",
-              fontWeight: 700,
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.5rem",
-              transition: "all 0.3s ease",
-              boxShadow: "0 4px 20px -4px hsla(45, 95%, 58%, 0.4)"
-            }}
-          >
-            Browse Free Courses
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
-            </svg>
-          </a>
+          <div style="display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
+            <a href="/deals" style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.7rem 1.6rem; background:var(--brand); color:var(--bg); text-decoration:none; border-radius:8px; font-weight:700; font-size:0.9rem;">
+              Browse Free Deals
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+            </a>
+            <a href="/udemy-coupons-guide" style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.7rem 1.6rem; color:var(--text); text-decoration:none; border-radius:8px; font-weight:700; font-size:0.9rem; border:2px solid var(--border);">
+              Udemy Coupons Guide
+            </a>
+          </div>
         </div>
-      </section>
-    </div>
+      </div>
+    </article>
+
   </div>
+
+  <style>
+    .section-heading {
+      font-size: clamp(1.15rem, 2.5vw, 1.45rem);
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 0.9rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--border);
+    }
+  </style>
 </Layout>

@@ -26,10 +26,13 @@ const currentItems = allDeals.slice(startIndex, endIndex);
 
 // Pagination URLs
 const siteUrl = "https://coursespeak.com";
-const baseDealsUrl = `${siteUrl}/deals`;
+const baseDealsPath = "/deals";
+const baseDealsUrl = `${siteUrl}${baseDealsPath}`;
 const currentUrl = `${baseDealsUrl}/${currentPage}`;
-const prevUrl = currentPage === 2 ? baseDealsUrl : `${baseDealsUrl}/${currentPage - 1}`;
-const nextUrl = currentPage < totalPages ? `${baseDealsUrl}/${currentPage + 1}` : null;
+const prevUrl = currentPage === 2 ? baseDealsPath : `${baseDealsPath}/${currentPage - 1}`;
+const nextUrl = currentPage < totalPages ? `${baseDealsPath}/${currentPage + 1}` : null;
+const prevUrlAbs = `${siteUrl}${prevUrl}`;
+const nextUrlAbs = nextUrl ? `${siteUrl}${nextUrl}` : null;
 
 // SEO (WIB/Asia-Jakarta)
 const TIMEZONE = 'Asia/Jakarta';
@@ -40,8 +43,65 @@ const todayWIB     = currentDate.toLocaleDateString('en-CA', { timeZone: TIMEZON
 
 const totalDeals = allDeals.length;
 
-const pageTitle = `Udemy Deals Page ${currentPage} of ${totalPages} — Free Coupons | CourseSpeak`;
-const pageDescription = `Page ${currentPage} of verified Udemy coupons. Browse ${totalDeals}+ free courses and 100% off deals updated daily — ${currentMonth} ${currentYear}.`;
+const todayAdded = allDeals.filter((d: any) => {
+  const dt = d.updatedAt || d.createdAt || '';
+  if (!dt) return false;
+  const wibDate = new Date(dt).toLocaleDateString('en-CA', { timeZone: TIMEZONE });
+  return wibDate === todayWIB;
+}).length;
+
+const catsSet = new Set<string>();
+allDeals.forEach((d: any) => { if (d.category) catsSet.add(d.category); });
+const categories = Array.from(catsSet).sort();
+
+const latestUpdate = allDeals.reduce((latest: number, d: any) => {
+  const t = new Date(d.updatedAt || d.createdAt || 0).getTime();
+  return t > latest ? t : latest;
+}, 0);
+const diffMs = currentDate.getTime() - latestUpdate;
+const diffMin = Math.floor(diffMs / 60000);
+let lastVerified;
+if (diffMin < 1) lastVerified = 'Just now';
+else if (diffMin < 60) lastVerified = `${diffMin}m ago`;
+else {
+  const diffHr = Math.floor(diffMin / 60);
+  lastVerified = diffHr < 24 ? `${diffHr}h ago` : `${Math.floor(diffHr / 24)}d ago`;
+}
+
+function slugifyCategory(cat: string): string {
+  return cat.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+}
+
+const pageTitle = `Free Udemy Coupons ${currentMonth} ${currentYear} — Page ${currentPage} | CourseSpeak`;
+const pageDescription = `Page ${currentPage}: Browse more verified free Udemy coupons and 100% off deals. ${totalDeals}+ free courses updated daily — ${currentMonth} ${currentYear}.`;
+
+// FAQ data — identical between schema and visible HTML (Google requirement)
+const faqs = [
+  {
+    q: "Are Udemy deals on CourseSpeak legitimate?",
+    a: "Yes! All deals on CourseSpeak are verified and sourced directly from Udemy or authorized partners. We regularly check and update our listings to ensure every coupon is active and working."
+  },
+  {
+    q: "How often are new Udemy coupons added?",
+    a: "CourseSpeak adds new Udemy coupons daily. We continuously monitor and verify deals from instructors worldwide to bring you the latest free and discounted courses."
+  },
+  {
+    q: "Do I need to pay for 100% off Udemy courses?",
+    a: "No. 100% off coupons give you full, lifetime access to the course without any payment. Simply click the deal link, enroll, and start learning immediately."
+  },
+  {
+    q: "Can I get a certificate from free Udemy courses?",
+    a: "Yes. You receive the same certificate of completion for free courses as you would for paid ones — provided you complete the course requirements."
+  },
+  {
+    q: "How do I apply a Udemy coupon code?",
+    a: "Click any deal on CourseSpeak. You will be taken directly to the Udemy course page where the discount is automatically applied. In most cases, no coupon code entry is needed."
+  },
+  {
+    q: "How does CourseSpeak verify Udemy coupons?",
+    a: "CourseSpeak runs automated checks against Udemy's servers to verify each coupon is valid and active. Expired deals are removed automatically, ensuring you only see working coupons."
+  }
+];
 
 // Build page number list — no key prop, no >= operator
 type PageItem = { type: 'page'; value: number } | { type: 'ellipsis'; id: string };
@@ -120,6 +180,15 @@ const structuredData = {
           }
         }))
       }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${currentUrl}#faq`,
+      "mainEntity": faqs.map((faq) => ({
+        "@type": "Question",
+        "name": faq.q,
+        "acceptedAnswer": { "@type": "Answer", "text": faq.a }
+      }))
     }
   ]
 };
@@ -131,69 +200,108 @@ const structuredData = {
   canonical={currentUrl}
 >
   <Fragment slot="head">
-    <link rel="prev" href={prevUrl} />
-    {nextUrl && <link rel="next" href={nextUrl} />}
+    <link rel="prev" href={prevUrlAbs} />
+    {nextUrlAbs && <link rel="next" href={nextUrlAbs} />}
   </Fragment>
 
   <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 
   <div style={{ minHeight: "100vh", color: "var(--text)" }}>
 
-    {/* ── PAGE HEADER ── */}
-    <div style={{ background: "var(--card)", borderBottom: "1px solid var(--border)", padding: "1.5rem 0", textAlign: "center" }}>
-      <div class="container">
-        <h1 style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--text)", margin: "0 0 0.25rem" }}>
-          <span style={{ color: "var(--brand)" }}>Udemy Deals</span> & Free Coupons — Page {currentPage}
+    {/* ── HERO — page 2+ ── */}
+    <section style={{ padding: "3rem 1rem 1.5rem", textAlign: "center" }}>
+      <div style={{ maxWidth: "900px", margin: "0 auto" }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          Updated Daily — {currentMonth} {currentYear}
+        </div>
+        <h1 style={{ fontSize: "clamp(1.5rem, 4vw, 2.2rem)", fontWeight: 800, lineHeight: 1.2, margin: "0 auto 0.75rem" }}>
+          <span style={{ background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Free Udemy Coupons</span>
+          <br />
+          <span style={{ background: "linear-gradient(135deg, var(--text) 0%, var(--muted) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Page {currentPage}</span>
         </h1>
-        <p style={{ color: "var(--muted)", margin: 0, fontSize: "0.9rem" }}>
-          Showing {startIndex + 1}–{Math.min(endIndex, allDeals.length)} of {allDeals.length} verified courses
-          · Page {currentPage} of {totalPages}
+        <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "600px", margin: "0 auto", lineHeight: 1.6 }}>
+          Browse more verified Udemy deals — showing {startIndex + 1}–{Math.min(endIndex, allDeals.length)} of {allDeals.length} free courses and 100% off coupons.
         </p>
       </div>
-    </div>
+    </section>
 
-    {/* ── DEALS GRID ── */}
-    <section style={{ padding: "3rem 1rem 4rem" }}>
-      <div class="container" style={{ maxWidth: "1400px" }}>
-
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem", flexWrap: "wrap", gap: "1rem" }}>
-          <div>
-            <h2 style={{ fontSize: "1.25rem", fontWeight: 700, color: "var(--text)", margin: "0 0 0.2rem" }}>
-              <span style={{ color: "var(--brand)" }}>Latest</span> Udemy Coupons
-            </h2>
-            <p style={{ color: "var(--muted)", margin: 0, fontSize: "0.85rem" }}>
-              {startIndex + 1}–{Math.min(endIndex, allDeals.length)} of {allDeals.length} courses · Page {currentPage} of {totalPages}
-            </p>
+    {/* ── STATS GRID ── */}
+    <section style={{ paddingBottom: "2rem", marginTop: "0.5rem" }}>
+      <div class="container">
+        <div class="stat-grid" style={{ gridTemplateColumns: "repeat(4,1fr)", maxWidth: "850px" }}>
+          <div class="stat-box">
+            <div class="stat-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+              {todayAdded}
+            </div>
+            <div class="stat-label">Added Today</div>
           </div>
-          <div style={{ display: "flex", gap: "0.5rem" }}>
-            <a href={baseDealsUrl} style={{
-              display: "inline-flex", alignItems: "center", gap: "0.4rem",
-              padding: "0.5rem 1rem", background: "var(--card)",
-              border: "1px solid var(--border)", borderRadius: "8px",
-              color: "var(--muted)", textDecoration: "none", fontSize: "0.8rem", fontWeight: 600
-            }}>
-              ← All Deals
-            </a>
-            <a href="/categories" style={{
-              display: "inline-flex", alignItems: "center", gap: "0.4rem",
-              padding: "0.5rem 1rem", background: "var(--card)",
-              border: "1px solid var(--border)", borderRadius: "8px",
-              color: "var(--text)", textDecoration: "none", fontSize: "0.8rem", fontWeight: 600
-            }}>
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
-              </svg>
-              Categories
-            </a>
+          <div class="stat-box">
+            <div class="stat-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+              {totalDeals}
+            </div>
+            <div class="stat-label">Total Coupons</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              {categories.length}
+            </div>
+            <div class="stat-label">Categories</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              {lastVerified}
+            </div>
+            <div class="stat-label">Verified</div>
           </div>
         </div>
+      </div>
+    </section>
 
-        {/* Deals grid */}
+    {/* ── CATEGORIES ── */}
+    <section style={{ background: "var(--card)", borderTop: "1px solid var(--border)", padding: "2rem 1.5rem", textAlign: "center" }}>
+      <div class="container" style={{ maxWidth: "1280px" }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Browse by Topic
+        </div>
+        <h2 style={{ fontSize: "1.1rem", fontWeight: 800, color: "var(--text)", margin: "0 0 0.35rem" }}>
+          Course Categories
+        </h2>
+        <p style={{ fontSize: "0.85rem", color: "var(--muted)", margin: "0 auto 1rem", maxWidth: "550px", lineHeight: 1.6 }}>
+          Find free Udemy coupons in {categories.length} categories — from programming and data science to design, marketing, and more.
+        </p>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", justifyContent: "center" }}>
+          <a href="/deals" style={{ fontSize: "0.78rem", fontWeight: 600, color: "white", textDecoration: "none", padding: "3px 10px", borderRadius: "100px", border: "1px solid var(--brand)", background: "var(--brand)" }}>All</a>
+          {categories.slice(0, 15).map((cat: string) => (
+            <a href={`/categories/${slugifyCategory(cat)}`} style={{ fontSize: "0.78rem", fontWeight: 600, color: "var(--muted)", textDecoration: "none", padding: "3px 10px", borderRadius: "100px", border: "1px solid var(--border)", background: "var(--bg)" }}>{cat}</a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* ── DEALS SECTION ── */}
+    <section style={{ padding: "3rem 1.5rem 4rem", maxWidth: "1280px", margin: "0 auto" }}>
+        <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            Page {currentPage} — Continued
+          </div>
+          <h2 style={{ fontSize: "1.3rem", fontWeight: 800, color: "var(--text)", margin: "0 0 0.3rem" }}>
+            More Free Udemy Coupons
+          </h2>
+          <p style={{ fontSize: "0.9rem", color: "var(--muted)", maxWidth: "650px", margin: "0 auto", lineHeight: 1.6 }}>
+            Browse {currentItems.length} more verified free Udemy coupon{currentItems.length !== 1 ? 's' : ''} with 100% off discounts. Find courses in programming, web development, data science, and more — all updated {currentMonth} {currentYear}.
+          </p>
+        </div>
         <div style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
-          gap: "1.5rem",
-          marginBottom: "3rem"
+          gridTemplateColumns: "repeat(3, 1fr)",
+          gap: "1.25rem"
         }}>
           {currentItems.map((deal: any) => (
             <DealCard deal={deal} />
@@ -201,104 +309,204 @@ const structuredData = {
         </div>
 
         {/* ── PAGINATION ── */}
-        <nav aria-label="Deal pages pagination" style={{ marginTop: "2rem" }}>
-          <div style={{
-            display: "flex", justifyContent: "center",
-            alignItems: "center", gap: "0.75rem", flexWrap: "wrap"
-          }}>
-
-            {/* Previous */}
-            <a href={prevUrl} rel="prev" style={{
-              display: "inline-flex", alignItems: "center", gap: "0.4rem",
-              padding: "0.75rem 1.5rem", background: "var(--card)",
-              border: "2px solid var(--brand)", borderRadius: "10px",
-              color: "var(--brand)", textDecoration: "none",
-              fontSize: "0.95rem", fontWeight: 600
-            }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
-              </svg>
-              Previous
-            </a>
-
-            {/* Page numbers */}
+        <nav aria-label="Pagination" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.75rem", padding: "1.5rem 0", marginTop: "1.5rem", borderTop: "1px solid var(--border)" }}>
+          <a href={prevUrl} style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--brand)", textDecoration: "none", padding: "0.4rem 0.85rem", borderRadius: "6px", border: "1px solid var(--border)" }}>← Prev</a>
+          <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
             {pageItems.map((item) => {
               if (item.type === 'ellipsis') {
-                return <span style={{ color: "var(--muted)", padding: "0 0.25rem" }}>…</span>;
+                return <span style={{ fontSize: "0.85rem", color: "var(--muted)", width: "34px", textAlign: "center" }}>...</span>;
               }
               const p = item.value;
               const isActive = p === currentPage;
-              const href = p === 1 ? baseDealsUrl : `${baseDealsUrl}/${p}`;
-              return (
-                <a
-                  href={href}
-                  aria-current={isActive ? "page" : undefined}
-                  style={{
-                    display: "inline-flex", alignItems: "center", justifyContent: "center",
-                    width: "40px", height: "40px", borderRadius: "8px",
-                    textDecoration: "none", fontSize: "0.9rem", fontWeight: 600,
-                    background: isActive ? "var(--brand)" : "var(--card)",
-                    color: isActive ? "var(--bg)" : "var(--text)",
-                    border: isActive ? "2px solid var(--brand)" : "1px solid var(--border)"
-                  }}
-                >
-                  {p}
-                </a>
-              );
+              const href = p === 1 ? baseDealsPath : `${baseDealsPath}/${p}`;
+              return isActive
+                ? <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "white", width: "34px", height: "34px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "6px", border: "1px solid var(--brand)", background: "var(--brand)" }}>{p}</span>
+                : <a href={href} style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--text)", textDecoration: "none", width: "34px", height: "34px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "6px", border: "1px solid var(--border)" }}>{p}</a>;
             })}
-
-            {/* Next */}
-            {nextUrl ? (
-              <a href={nextUrl} rel="next" style={{
-                display: "inline-flex", alignItems: "center", gap: "0.4rem",
-                padding: "0.75rem 1.5rem", background: "var(--card)",
-                border: "2px solid var(--brand)", borderRadius: "10px",
-                color: "var(--brand)", textDecoration: "none",
-                fontSize: "0.95rem", fontWeight: 600
-              }}>
-                Next
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
-                </svg>
-              </a>
-            ) : (
-              <span style={{ padding: "0.75rem 1.5rem", opacity: 0.3, fontSize: "0.95rem", fontWeight: 600 }}>Next</span>
-            )}
           </div>
-
-          <p style={{ textAlign: "center", color: "var(--muted)", fontSize: "0.85rem", marginTop: "1rem" }}>
-            Page {currentPage} of {totalPages} — {allDeals.length} total courses
-          </p>
+          {nextUrl ? (
+            <a href={nextUrl} style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--brand)", textDecoration: "none", padding: "0.4rem 0.85rem", borderRadius: "6px", border: "1px solid var(--border)" }}>Next →</a>
+          ) : (
+            <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--muted)", opacity: 0.4, padding: "0.4rem 0.85rem" }}>Next →</span>
+          )}
         </nav>
 
+    </section>
+
+    {/* ── HOW COURSEPEAK VERIFIES — SEO ── */}
+    <section style={{ padding: "4rem 1rem", background: "linear-gradient(135deg, rgba(212,167,55,0.03) 0%, transparent 100%)" }}>
+      <div class="container" style={{ maxWidth: "1280px" }}>
+        <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "1rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            Real-Time Verification
+          </div>
+          <h2 style={{ fontSize: "clamp(1.5rem, 4vw, 2rem)", fontWeight: 800, color: "var(--text)", marginBottom: "0.75rem" }}>
+            How CourseSpeak verifies Udemy coupons
+          </h2>
+          <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "700px", margin: "0 auto", lineHeight: 1.6 }}>
+            Every coupon on CourseSpeak is checked against Udemy automatically. Expired coupons disappear, new ones appear — all in near real time.
+          </p>
+        </div>
+
+        <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "12px", padding: "2rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.5rem" }}>
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.5rem" }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--brand)"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14" stroke="white" stroke-width="1.5"/></svg>
+                <span style={{ fontWeight: 700, fontSize: "0.95rem", color: "var(--text)" }}>Live Coupon Checking</span>
+              </div>
+              <p style={{ color: "var(--muted)", fontSize: "0.9rem", lineHeight: 1.6, margin: 0 }}>
+                CourseSpeak checks every coupon against Udemy in near real time. When a coupon runs out, it disappears from this list automatically. New coupons are added throughout the day.
+              </p>
+            </div>
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.5rem" }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--brand)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                <span style={{ fontWeight: 700, fontSize: "0.95rem", color: "var(--text)" }}>Trusted & Transparent</span>
+              </div>
+              <p style={{ color: "var(--muted)", fontSize: "0.9rem", lineHeight: 1.6, margin: "0 0 0.75rem" }}>
+                CourseSpeak is committed to full transparency. Every coupon is verified against Udemy before listing, and we clearly disclose our affiliate relationships. Our recommendations are based on real-time availability, not commissions — so you always get working coupons you can trust.
+              </p>
+              <p style={{ color: "var(--muted)", fontSize: "0.9rem", lineHeight: 1.6, margin: "0 0 0.75rem" }}>
+                Browse <a href="/categories" style={{ color: "var(--brand)", textDecoration: "none", fontWeight: 600 }}>categories</a> or view <a href="/deals" style={{ color: "var(--brand)", textDecoration: "none", fontWeight: 600 }}>all deals</a>.
+              </p>
+              <p style={{ color: "var(--muted)", fontSize: "0.9rem", lineHeight: 1.6, margin: 0 }}>
+                Learn how <a href="https://teach.udemy.com/update-for-instructors-improving-free-coupons-better-targeting-higher-quality-learning/" target="_blank" rel="noopener noreferrer" style={{ color: "var(--brand)", textDecoration: "none", fontWeight: 600 }}>Udemy improves free coupons</a> for better targeting and learning quality.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
-    {/* ── CTA ── */}
-    <section class="hero-gradient" style={{ padding: "3rem 1rem" }}>
-      <div class="container" style={{ maxWidth: "700px", textAlign: "center" }}>
-        <p style={{ color: "var(--muted)", margin: "0 0 1.5rem", lineHeight: 1.6 }}>
-          Looking for a specific subject? Browse {totalDeals}+ free Udemy coupons by category.
-        </p>
-        <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
-          <a href={baseDealsUrl} style={{
-            display: "inline-flex", alignItems: "center", gap: "0.5rem",
-            padding: "0.75rem 1.5rem", background: "var(--card)",
-            color: "var(--text)", border: "2px solid var(--border)",
-            borderRadius: "10px", textDecoration: "none",
-            fontSize: "0.95rem", fontWeight: 600
+    {/* ── ABOUT UDEMY COUPONS — SEO Content ── */}
+    <section style={{ padding: "4rem 1rem", background: "var(--card)" }}>
+      <div class="container" style={{ maxWidth: "1400px" }}>
+        <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "1rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            Learn More
+          </div>
+          <h2 style={{ fontSize: "clamp(1.5rem, 4vw, 2rem)", fontWeight: 800, color: "var(--text)", marginBottom: "0.75rem" }}>
+            About Udemy Coupons & Free Courses
+          </h2>
+          <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "700px", margin: "0 auto", lineHeight: 1.6 }}>
+            Everything you need to know about finding and using verified Udemy coupon codes for online learning
+          </p>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.5rem" }}>
+          <div style={{ background: "var(--card)", padding: "1.5rem", borderRadius: "12px", border: "1px solid var(--border)", transition: "all 0.3s", position: "relative", overflow: "hidden" }}>
+            <div style={{ width: "40px", height: "40px", borderRadius: "10px", background: "rgba(212,167,55,0.12)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--brand)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--text)", marginBottom: "0.5rem" }}>What Are Udemy Coupons?</h3>
+            <p style={{ color: "var(--muted)", fontSize: "0.85rem", lineHeight: 1.7, margin: 0 }}>
+              Udemy coupons are promotional codes that allow you to access premium courses at significantly reduced prices or completely free. CourseSpeak curates and verifies these coupons daily, ensuring you get access to legitimate deals from instructors and Udemy itself. These coupons can offer discounts ranging from 50% to 100% off, making professional education accessible to learners worldwide.
+            </p>
+          </div>
+
+          <div style={{ background: "var(--card)", padding: "1.5rem", borderRadius: "12px", border: "1px solid var(--border)", transition: "all 0.3s", position: "relative", overflow: "hidden" }}>
+            <div style={{ width: "40px", height: "40px", borderRadius: "10px", background: "rgba(34,197,94,0.12)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="hsl(120, 70%, 45%)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            </div>
+            <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--text)", marginBottom: "0.5rem" }}>How to Use Udemy Coupon Codes</h3>
+            <p style={{ color: "var(--muted)", fontSize: "0.85rem", lineHeight: 1.7, margin: 0 }}>
+              Using Udemy coupons from CourseSpeak is simple. Click on any deal on this page, and you will be redirected to the official Udemy course page with the discount automatically applied. For 100% off coupons, simply click "Enroll Now" and complete checkout without any payment. For percentage discounts, the reduced price will be shown at checkout. All coupons include full course benefits: lifetime access, completion certificates, and all course materials.
+            </p>
+          </div>
+
+          <div style={{ background: "var(--card)", padding: "1.5rem", borderRadius: "12px", border: "1px solid var(--border)", transition: "all 0.3s", position: "relative", overflow: "hidden" }}>
+            <div style={{ width: "40px", height: "40px", borderRadius: "10px", background: "rgba(59,130,246,0.12)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="hsl(210, 100%, 60%)"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+            </div>
+            <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--text)", marginBottom: "0.5rem" }}>Why Choose CourseSpeak?</h3>
+            <p style={{ color: "var(--muted)", fontSize: "0.85rem", lineHeight: 1.7, margin: 0 }}>
+              CourseSpeak offers the most comprehensive collection of verified Udemy coupons. Our team manually verifies each coupon to ensure it works and provides real value. We update our database daily with new free courses and discounts from top instructors worldwide. Whether you are in the United States, United Kingdom, India, Canada, Australia, or any other country, our coupons work globally.
+            </p>
+          </div>
+
+          <div style={{ background: "var(--card)", padding: "1.5rem", borderRadius: "12px", border: "1px solid var(--border)", transition: "all 0.3s", position: "relative", overflow: "hidden" }}>
+            <div style={{ width: "40px", height: "40px", borderRadius: "10px", background: "rgba(234,179,8,0.12)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="hsl(35, 90%, 68%)"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            </div>
+            <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--text)", marginBottom: "0.5rem" }}>Global Access to Free Education</h3>
+            <p style={{ color: "var(--muted)", fontSize: "0.85rem", lineHeight: 1.7, margin: 0 }}>
+              Our Udemy coupons work globally, serving learners in the US, UK, India, Canada, Australia, Germany, France, Brazil, Japan, and 150+ other countries. All courses support multiple languages including English, Spanish, Portuguese, French, German, Japanese, Chinese, and more. This global accessibility breaks down geographical and financial barriers to learning.
+            </p>
+          </div>
+
+          <div style={{ background: "var(--card)", padding: "1.5rem", borderRadius: "12px", border: "1px solid var(--border)", transition: "all 0.3s", position: "relative", overflow: "hidden" }}>
+            <div style={{ width: "40px", height: "40px", borderRadius: "10px", background: "rgba(168,85,247,0.12)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="hsl(280, 70%, 60%)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            </div>
+            <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--text)", marginBottom: "0.5rem" }}>Benefits of Free Udemy Courses</h3>
+            <p style={{ color: "var(--muted)", fontSize: "0.85rem", lineHeight: 1.7, margin: 0 }}>
+              Free Udemy courses obtained through CourseSpeak offer the same benefits as paid courses: lifetime access to course materials, downloadable resources, completion certificates, and instructor support. You can learn at your own pace, revisit lessons anytime, and showcase your new skills with verified certificates on your LinkedIn profile and resume.
+            </p>
+          </div>
+
+          <div style={{ background: "var(--card)", padding: "1.5rem", borderRadius: "12px", border: "1px solid var(--border)", transition: "all 0.3s", position: "relative", overflow: "hidden" }}>
+            <div style={{ width: "40px", height: "40px", borderRadius: "10px", background: "rgba(59,130,246,0.12)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="hsl(200, 70%, 60%)"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+            </div>
+            <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--text)", marginBottom: "0.5rem" }}>Course Categories Available</h3>
+            <p style={{ color: "var(--muted)", fontSize: "0.85rem", lineHeight: 1.7, margin: 0 }}>
+              CourseSpeak offers free Udemy coupons across all major categories: programming and web development, data science and machine learning, digital marketing, business and entrepreneurship, design and creative arts, personal development, and more. Whether you want to learn Python, JavaScript, React, digital marketing strategies, or graphic design, we have verified coupons for courses that match your learning goals.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* ── AFFILIATE DISCLOSURE ── */}
+    <section style={{ padding: "3rem 1rem", background: "linear-gradient(135deg, rgba(212,167,55,0.05) 0%, rgba(197,160,40,0.03) 100%)" }}>
+      <div class="container" style={{ maxWidth: "1400px" }}>
+        <div style={{
+          background: "var(--card)",
+          border: "1px solid rgba(212,167,55,0.2)",
+          borderRadius: "12px",
+          padding: "2rem",
+          textAlign: "center",
+          maxWidth: "900px",
+          margin: "0 auto"
+        }}>
+          <div style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.5rem",
+            background: "rgba(212,167,55,0.1)",
+            padding: "0.5rem 1rem",
+            borderRadius: "20px",
+            marginBottom: "1rem"
           }}>
-            ← Back to All Deals
-          </a>
-          <a href="/categories" style={{
-            display: "inline-flex", alignItems: "center", gap: "0.5rem",
-            padding: "0.75rem 1.5rem", background: "var(--brand)",
-            color: "var(--bg)", borderRadius: "10px", textDecoration: "none",
-            fontSize: "0.95rem", fontWeight: 700,
-            boxShadow: "0 4px 20px -4px hsla(45, 95%, 58%, 0.4)"
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--brand)">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0 2h-2v2h2v-2z"/>
+            </svg>
+            <span style={{ color: "#92400E", fontWeight: 600, fontSize: "0.85rem" }}>Transparency First</span>
+          </div>
+          <h3 style={{ fontSize: "1.25rem", fontWeight: 700, color: "var(--text)", marginBottom: "0.75rem" }}>
+            Affiliate Disclosure
+          </h3>
+          <p style={{ color: "var(--muted)", fontSize: "0.95rem", lineHeight: 1.6, marginBottom: "1.5rem", maxWidth: "650px", margin: "0 auto 1.5rem" }}>
+            CourseSpeak is an affiliate marketing platform. We earn small commissions from qualifying purchases made through our links. This helps us maintain and improve CourseSpeak at no cost to you. Our affiliate relationships do not influence which courses we recommend.
+          </p>
+          <a href="/affiliate-disclosure" style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.5rem",
+            padding: "0.75rem 1.5rem",
+            background: "var(--brand)",
+            color: "var(--bg)",
+            textDecoration: "none",
+            borderRadius: "8px",
+            fontSize: "0.9rem",
+            fontWeight: 600,
+            transition: "all 0.2s ease"
           }}>
-            Browse Categories
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            Read Full Disclosure
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
             </svg>
           </a>
@@ -306,21 +514,39 @@ const structuredData = {
       </div>
     </section>
 
+    {/* ── FAQ ── */}
+    <section style={{ background: "var(--bg)", padding: "4rem 1.5rem", maxWidth: "1280px", margin: "0 auto" }}>
+      <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Got Questions?
+        </div>
+        <h2 style={{ fontSize: "clamp(1.3rem, 3vw, 1.8rem)", fontWeight: 800, color: "var(--text)", margin: "0 0 0.5rem" }}>
+          Frequently asked questions
+        </h2>
+        <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "600px", margin: "0 auto", lineHeight: 1.6 }}>
+          Quick answers to common questions about finding and using free Udemy coupons.
+        </p>
+      </div>
+      {faqs.map((faq) => (
+        <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "12px", padding: "1.25rem 1.5rem", marginBottom: "0.75rem", transition: "all 0.2s" }}>
+          <h3 style={{ fontSize: "0.95rem", fontWeight: 700, color: "var(--text)", margin: "0 0 0.5rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            {faq.q}
+          </h3>
+          <p style={{ fontSize: "0.85rem", color: "var(--muted)", lineHeight: 1.7, margin: 0 }}>{faq.a}</p>
+        </div>
+      ))}
+    </section>
+
   </div>
 </Layout>
 
 <style>
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1rem;
-  }
-
-  .hero-gradient {
-    background: linear-gradient(135deg, #0f0e0c 0%, #1a1814 100%);
-  }
-
   @media (max-width: 768px) {
-    h1 { font-size: 1.25rem !important; }
+    h1 { font-size: 1.4rem !important; }
+  }
+  @media (max-width: 480px) {
+    h1 { font-size: 1.2rem !important; }
   }
 </style>

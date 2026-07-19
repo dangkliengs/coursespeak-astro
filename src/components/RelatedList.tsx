@@ -40,10 +40,10 @@ export default function RelatedList({ items, initial = 4, step = 4 }: { items: I
                   />
                   <div style={{ position: "absolute", top: 8, left: 8, display: "flex", gap: 6, flexWrap: "wrap" }}>
                     {isNew(r.updatedAt) && (
-                      <span className="pill" style={{ background: "var(--brand)", color: "#1a1814", fontWeight: 800 }}>New</span>
+                      <span className="pill" style={{ background: "var(--brand)", color: "#080b12", fontWeight: 800 }}>New</span>
                     )}
                     {isBestSeller(r.price, r.originalPrice, r.students) && (
-                      <span className="pill" style={{ background: "var(--brand)", color: "#1a1814", fontWeight: 800 }}>Best Seller</span>
+                      <span className="pill" style={{ background: "var(--brand)", color: "#080b12", fontWeight: 800 }}>Best Seller</span>
                     )}
                   </div>
                 </div>
@@ -64,7 +64,7 @@ export default function RelatedList({ items, initial = 4, step = 4 }: { items: I
                   <span className="muted" style={{ textDecoration: "line-through", fontSize: 12 }}>{formatPrice(r.originalPrice)}</span>
                 )}
                 {r.originalPrice && r.price && r.originalPrice > r.price && (
-                  <span className="pill" style={{ background: "var(--brand)", color: "#1a1814", fontWeight: 800 }}>{discountPct(r.price, r.originalPrice)}% OFF</span>
+                  <span className="pill" style={{ background: "var(--brand)", color: "#080b12", fontWeight: 800 }}>{discountPct(r.price, r.originalPrice)}% OFF</span>
                 )}
               </div>
               {r.updatedAt && (

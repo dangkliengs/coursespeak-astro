@@ -46,8 +46,8 @@ const currentPath = Astro.url.pathname;
     )}
     
     <!-- Performance & SEO Meta Tags -->
-    <meta name="theme-color" content="#0f0e0c" />
-    <meta name="msapplication-TileColor" content="#0f0e0c" />
+    <meta name="theme-color" content="#080b12" />
+    <meta name="msapplication-TileColor" content="#080b12" />
     <meta name="referrer" content="no-referrer-when-downgrade" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -328,7 +328,7 @@ const currentPath = Astro.url.pathname;
       }
       .brand-tagline {
         font-size: 0.62rem;
-        color: #8a7e6a;
+        color: var(--muted);
         font-weight: 500;
         letter-spacing: 0.03em;
         line-height: 1.2;
@@ -350,7 +350,7 @@ const currentPath = Astro.url.pathname;
         border-radius: 8px;
         font-size: 0.82rem;
         font-weight: 600;
-        color: #f5f0e8;
+        color: var(--text);
         text-decoration: none;
         border: 1px solid rgba(212,167,55,0.15);
         background: rgba(212,167,55,0.04);
@@ -417,7 +417,7 @@ const currentPath = Astro.url.pathname;
       .nav-count {
         font-size: 0.75rem;
         font-weight: 600;
-        color: #8a7e6a;
+        color: var(--muted);
         display: flex;
         align-items: center;
         gap: 4px;
@@ -512,7 +512,7 @@ const currentPath = Astro.url.pathname;
               placeholder="Search courses..."
               style={{
                 background: 'transparent',
-                color: '#f5f0e8',
+                color: 'var(--text)',
                 border: 'none',
                 fontSize: '0.82rem',
                 width: '100%',
@@ -668,7 +668,7 @@ const currentPath = Astro.url.pathname;
         marginTop: "auto",
         position: "relative",
         overflow: "hidden",
-        background: "linear-gradient(135deg, #0f0e0c 0%, #1a1814 100%)"
+        background: "linear-gradient(135deg, #080b12 0%, #0f1420 100%)"
       }}
     >
       <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "0 1rem" }}>
@@ -741,7 +741,7 @@ const currentPath = Astro.url.pathname;
                 padding: "0.75rem 1.5rem",
                 borderRadius: "8px",
                 background: "linear-gradient(135deg, #D4AF37 0%, #E8C547 100%)",
-                color: "#1a1814",
+                color: "#080b12",
                 border: "none",
                 fontSize: "0.9rem",
                 fontWeight: 600,
@@ -755,6 +755,8 @@ const currentPath = Astro.url.pathname;
           </form>
         </div>
 
+        <hr style={{ border: "none", height: "3px", background: "linear-gradient(90deg, #B8860B 0%, #D4AF37 25%, #E8C547 50%, #D4AF37 75%, #B8860B 100%)", marginBottom: "32px", borderRadius: "2px" }} />
+
         {/* Footer Links */}
         <div style={{
           display: "grid",
@@ -765,33 +767,19 @@ const currentPath = Astro.url.pathname;
           <div>
             <h3
               style={{
-                marginBottom: "16px",
+                marginBottom: "12px",
                 fontSize: "1.2rem",
                 fontWeight: "700",
-                lineHeight: "1.1"
+                lineHeight: "1.1",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem"
               }}
             >
-              <span style={{
-                display: "inline-block",
-                background: "linear-gradient(135deg, var(--brand) 0%, var(--brand-hover) 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-                color: "transparent"
-              }}>
-                Course
-              </span>
-              <span style={{
-                display: "inline-block",
-                background: "linear-gradient(135deg, var(--text) 0%, var(--muted) 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-                color: "transparent",
-                marginLeft: "0.2rem"
-              }}>
-                Speak
-              </span>
+              <svg width="24" height="24" viewBox="0 0 48 48" fill="var(--brand)" style={{ flexShrink: 0 }}>
+                <path d="M24 5L4 16l20 11 16-8.8V33h4V16L24 5zm0 8.5c1.38 0 2.5 1.12 2.5 2.5s-1.12 2.5-2.5 2.5-2.5-1.12-2.5-2.5 1.12-2.5 2.5-2.5zM12.5 25.5L24 32l11.5-6.5V28L24 34.5 12.5 28v-2.5z"/>
+              </svg>
+              <span style="color:#fff;">CourseSpeak</span>
             </h3>
             <p style={{ 
               fontSize: "0.9rem", 
@@ -799,8 +787,7 @@ const currentPath = Astro.url.pathname;
               color: "#8a7e6a",
               marginBottom: "16px"
             }}>
-              Find the best online course deals and coupons. Daily updated
-              discounts for Udemy, Coursera, and more.
+              Free Udemy courses daily — verified 100% off coupons across 400+ topics. Learn without limits, zero cost.
             </p>
             
             {/* Social Media Widget */}
@@ -1091,7 +1078,7 @@ const currentPath = Astro.url.pathname;
               </span>. All rights reserved.
             </p>
             <p itemprop="description" style={{ margin: "0.25rem 0 0", fontSize: "0.8rem", opacity: 0.5 }}>
-              CourseSpeak provides curated Udemy coupon listings with verified discount codes for online learning.
+              Free Udemy course deals updated daily — 100% off coupons across 400+ topics.
             </p>
           </div>
           <div style={{
@@ -1125,26 +1112,32 @@ const currentPath = Astro.url.pathname;
       id="backToTop"
       style={{
         position: "fixed",
-        bottom: "20px",
-        right: "20px",
-        width: "40px",
-        height: "40px",
+        bottom: "24px",
+        right: "24px",
+        width: "44px",
+        height: "44px",
         borderRadius: "50%",
-        background: "linear-gradient(135deg, #D4AF37 0%, #E8C547 100%)",
-        color: "#1a1814",
+        background: "var(--brand)",
+        color: "#080b12",
         border: "none",
         cursor: "pointer",
-        display: "none",
+        display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        boxShadow: "0 4px 12px rgba(212, 167, 55, 0.3)",
-        transition: "all 0.3s ease",
-        zIndex: 1000
+        boxShadow: "0 4px 20px rgba(212,167,55,0.45)",
+        transition: "opacity 0.35s ease, transform 0.35s ease",
+        zIndex: 1000,
+        opacity: 0,
+        transform: "translateY(16px) scale(0.9)",
+        pointerEvents: "none"
       }}
       aria-label="Back to top"
+      onmouseenter="this.style.transform='translateY(0) scale(1.1)';this.style.boxShadow='0 8px 28px rgba(212,167,55,0.65)'"
+      onmouseleave="this.style.transform='translateY(0) scale(1)';this.style.boxShadow='0 4px 20px rgba(212,167,55,0.45)'"
     >
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 8v12"/>
+        <path d="M6 14l6-6 6 6"/>
       </svg>
     </button>
 
@@ -1213,20 +1206,17 @@ const currentPath = Astro.url.pathname;
       }
 
       // Back to top functionality
-      const backToTopButton = document.getElementById('backToTop');
-      
+      const backToTopBtn = document.getElementById('backToTop');
       window.addEventListener('scroll', () => {
-        if (backToTopButton) {
-          if (window.pageYOffset > 300) {
-            backToTopButton.style.display = 'flex';
-          } else {
-            backToTopButton.style.display = 'none';
-          }
-        }
+        if (!backToTopBtn) return;
+        const show = window.pageYOffset > 400;
+        backToTopBtn.style.opacity = show ? '1' : '0';
+        backToTopBtn.style.transform = show ? 'translateY(0) scale(1)' : 'translateY(16px) scale(0.9)';
+        backToTopBtn.style.pointerEvents = show ? 'auto' : 'none';
       });
       
-      if (backToTopButton) {
-        backToTopButton.addEventListener('click', () => {
+      if (backToTopBtn) {
+        backToTopBtn.addEventListener('click', () => {
           window.scrollTo({
             top: 0,
             behavior: 'smooth'

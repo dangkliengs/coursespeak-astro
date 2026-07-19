@@ -12,6 +12,13 @@ const popularCourses = allDeals
   .sort((a, b) => (b.rating || 0) - (a.rating || 0))
   .slice(0, 100);
 
+// ── Date ──────────────────────────────────────────────────────────────────────
+const TIMEZONE = 'Asia/Jakarta';
+const currentDate = new Date();
+const currentMonth = currentDate.toLocaleDateString('en-US', { timeZone: TIMEZONE, month: 'long' });
+const currentYear  = currentDate.toLocaleDateString('en-US', { timeZone: TIMEZONE, year: 'numeric' });
+const todayWIB     = currentDate.toLocaleDateString('en-CA', { timeZone: TIMEZONE });
+
 // ── Stats ─────────────────────────────────────────────────────────────────────
 const totalDeals = allDeals.length;
 const totalPopular = popularCourses.length;
@@ -19,25 +26,67 @@ const avgRating = popularCourses.length > 0
   ? (popularCourses.reduce((sum, c) => sum + (c.rating ?? 0), 0) / popularCourses.filter(c => c.rating).length).toFixed(1)
   : "5.0";
 
-// ── Categories ────────────────────────────────────────────────────────────────
-const categoryMap = new Map<string, number>();
+const latestUpdate = popularCourses.reduce((latest: number, d: any) => {
+  const t = new Date(d.updatedAt || d.createdAt || 0).getTime();
+  return t > latest ? t : latest;
+}, 0);
+const diffMs = currentDate.getTime() - latestUpdate;
+const diffMin = Math.floor(diffMs / 60000);
+let lastVerified;
+if (diffMin < 1) lastVerified = 'Just now';
+else if (diffMin < 60) lastVerified = `${diffMin}m ago`;
+else {
+  const diffHr = Math.floor(diffMin / 60);
+  lastVerified = diffHr < 24 ? `${diffHr}h ago` : `${Math.floor(diffHr / 24)}d ago`;
+}
+
+// ── Categories (from all deals for total count, from popular for listing) ─────
+const totalCatMap = new Map<string, number>();
 allDeals.forEach(deal => {
-  const name = normName(deal.category) || "Uncategorized";
-  categoryMap.set(name, (categoryMap.get(name) ?? 0) + 1);
+  if (deal.category) totalCatMap.set(deal.category, (totalCatMap.get(deal.category) ?? 0) + 1);
 });
-const categories = Array.from(categoryMap.entries())
+const totalCategoryCount = totalCatMap.size;
+
+const popularCategories = Array.from(totalCatMap.entries())
   .sort((a, b) => b[1] - a[1])
-  .slice(0, 9)
+  .slice(0, 15)
   .map(([name, count]) => ({ name, count }));
 
-// ── SEO — popular online courses keyword matching URL path ───────
-const pageTitle = `100+ Most Popular Online Courses 2026 — High-Rated Udemy Courses | CourseSpeak`;
-const pageDescription = `Browse 100+ popular online courses with 4.5-5.0★ ratings. Discover trending Udemy courses in programming, design, marketing & data science — with verified free coupons updated daily.`;
+// ── SEO ───────────────────────────────────────────────────────────────────────
+const pageTitle = `Most Popular Online Courses ${currentMonth} ${currentYear} — High-Rated Udemy Deals | CourseSpeak`;
+const pageDescription = `Browse ${totalPopular} popular online courses with 4.5-5.0★ ratings. Discover trending Udemy courses in programming, design, marketing & data science — with verified free coupons updated daily.`;
 const canonicalUrl = "https://coursespeak.com/popular";
+
+const faqs = [
+  {
+    q: "What are popular online courses on CourseSpeak?",
+    a: "CourseSpeak's Popular page showcases trending online courses with 4.5-5.0★ student ratings. These are the most sought-after Udemy courses — where students consistently give high scores and enroll in high numbers."
+  },
+  {
+    q: "Are popular online courses free on CourseSpeak?",
+    a: "Yes. CourseSpeak lists verified coupon codes for all featured courses. Many have 100% off coupons making them completely free. Click any course card to see the current coupon and discounted price before enrolling."
+  },
+  {
+    q: "How are popular online courses ranked?",
+    a: "Popular courses are ranked by a combination of student rating (4.5-5.0★), enrollment numbers, and recent engagement. This ensures you discover courses that are both high-quality and currently trending among learners."
+  },
+  {
+    q: "Do popular online courses include a completion certificate?",
+    a: "Yes. All Udemy courses listed on CourseSpeak include a certificate of completion you can share on LinkedIn or add to your resume — regardless of whether you enrolled using a free coupon."
+  }
+];
 
 const structuredData = {
   "@context": "https://schema.org",
   "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${canonicalUrl}#breadcrumb`,
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://coursespeak.com" },
+        { "@type": "ListItem", "position": 2, "name": "Popular Courses", "item": canonicalUrl }
+      ]
+    },
     {
       "@type": "CollectionPage",
       "@id": canonicalUrl,
@@ -45,15 +94,9 @@ const structuredData = {
       "name": pageTitle,
       "description": pageDescription,
       "inLanguage": "en-US",
-      "dateModified": new Date().toISOString().split('T')[0],
+      "dateModified": todayWIB,
       "isPartOf": { "@id": "https://coursespeak.com" },
-      "breadcrumb": {
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://coursespeak.com" },
-          { "@type": "ListItem", "position": 2, "name": "Popular Courses", "item": canonicalUrl }
-        ]
-      },
+      "breadcrumb": { "@id": `${canonicalUrl}#breadcrumb` },
       "mainEntity": {
         "@type": "ItemList",
         "name": "Popular Online Courses",
@@ -86,266 +129,273 @@ const structuredData = {
     },
     {
       "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "What are popular online courses on CourseSpeak?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "CourseSpeak's Popular page showcases trending online courses with 4.5-5.0★ student ratings. These are the most sought-after Udemy courses — where students consistently give high scores and enroll in high numbers."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Are top-rated Udemy courses free on CourseSpeak?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. CourseSpeak lists verified coupon codes for all featured courses. Many have 100% off coupons making them completely free. Click any course to see the current coupon and discounted price."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How are popular online courses ranked?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Popular courses are ranked by a combination of student rating (4.5-5.0★), enrollment numbers, and recent engagement. This ensures you discover courses that are both high-quality and currently trending among learners."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Do popular online courses include a completion certificate?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. All Udemy courses listed on CourseSpeak include a certificate of completion you can share on LinkedIn or add to your resume — regardless of whether you enrolled using a free coupon."
-          }
-        }
-      ]
+      "@id": `${canonicalUrl}#faq`,
+      "mainEntity": faqs.map(faq => ({
+        "@type": "Question",
+        "name": faq.q,
+        "acceptedAnswer": { "@type": "Answer", "text": faq.a }
+      }))
     }
   ]
 };
 ---
 
-<Layout title={pageTitle} description={pageDescription}>
-  <link rel="canonical" href={canonicalUrl} slot="head" />
-  <meta property="og:title" content={pageTitle} slot="head" />
-  <meta property="og:description" content={pageDescription} slot="head" />
-  <meta property="og:url" content={canonicalUrl} slot="head" />
-  <meta property="og:type" content="website" slot="head" />
-  <meta name="twitter:card" content="summary_large_image" slot="head" />
-  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" slot="head" />
+<Layout title={pageTitle} description={pageDescription} canonical={canonicalUrl}>
+  <Fragment slot="head">
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  </Fragment>
+
   <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 
-  <div style="background: var(--bg); color: var(--text); min-height: 100vh;">
-    <div>
+  <div style={{ minHeight: "100vh", color: "var(--text)" }}>
 
-      {/* ── Hero ── */}
-      <section
-        aria-labelledby="hero-heading"
-        style="padding:5rem 1rem 3.5rem; text-align:center; background:linear-gradient(135deg, #0f0e0c 0%, #1a1814 100%); position:relative; overflow:hidden;"
-      >
-        <div aria-hidden="true" style="position:absolute; top:15%; left:8%; width:280px; height:280px; background:var(--brand); filter:blur(120px); opacity:0.08; border-radius:50%; pointer-events:none;"></div>
-        <div aria-hidden="true" style="position:absolute; bottom:10%; right:8%; width:220px; height:220px; background:var(--brand); filter:blur(100px); opacity:0.07; border-radius:50%; pointer-events:none;"></div>
-
-        <div class="container" style="position:relative; z-index:1;">
-
-          {/* H1 — keyword-first, honest label */}
-          <h1
-            id="hero-heading"
-            style="font-size:clamp(1.9rem, 4vw, 3rem); font-weight:800; line-height:1.15; margin-bottom:1.25rem; color:var(--text);"
-          >
-            100+ Most <span style="background:linear-gradient(135deg,var(--brand),hsl(35,90%,68%));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Popular Online Courses</span>
-            <span style="display:block; font-size:0.55em; font-weight:500; color:var(--muted); margin-top:0.4rem;">
-              4.5-5.0★ Ratings · Trending Udemy Courses Updated Daily
-            </span>
-          </h1>
-
-          <p style="font-size:clamp(1rem, 2vw, 1.2rem); color:var(--muted); max-width:680px; margin:0 auto 2.5rem; line-height:1.65;">
-            Discover {totalPopular}+ trending online courses with exceptional student ratings.
-            Popular Udemy courses in programming, design, marketing & more — with verified free coupons.
-          </p>
-
-          {/* Rating explanation pill */}
-          <div style="display:inline-flex; align-items:center; gap:0.5rem; background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); padding:0.6rem 1.1rem; border-radius:9999px; font-size:0.82rem; color:var(--brand); margin-bottom:2rem; font-weight:600;">
-            <span aria-hidden="true">★</span>
-            Showing {avgRating}★ rated courses — trending on Udemy right now
-          </div>
-
-          {/* Stats */}
-          <div role="list" aria-label="Page statistics" style="display:flex; justify-content:center; gap:1rem; flex-wrap:wrap;">
-            {[
-              { value: `${totalPopular}+`, label: "Popular Courses" },
-              { value: `${avgRating}★`, label: "Avg Rating" },
-              { value: "100%", label: "Free Coupons" },
-              { value: "Daily", label: "Updates" },
-            ].map(stat => (
-              <div role="listitem" style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:0.65rem 1.25rem; display:flex; flex-direction:column; align-items:center; min-width:90px;">
-                <span style="font-size:1.25rem; font-weight:800; color:var(--brand);">{stat.value}</span>
-                <span style="font-size:0.78rem; color:var(--muted); margin-top:2px;">{stat.label}</span>
-              </div>
-            ))}
-          </div>
+    {/* ── HERO ── */}
+    <section style={{ padding: "4rem 1rem 2rem", textAlign: "center" }}>
+      <div style={{ maxWidth: "900px", margin: "0 auto" }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          Trending Courses — {currentMonth} {currentYear}
         </div>
-      </section>
+        <h1 style={{ fontSize: "clamp(1.8rem, 4.5vw, 2.8rem)", fontWeight: 800, lineHeight: 1.2, margin: "0 auto 0.75rem" }}>
+          <span style={{ background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Most Popular</span>
+          <br />
+          <span style={{ color: "var(--text)" }}>Online Courses</span>
+        </h1>
+        <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "650px", margin: "0 auto 0.5rem", lineHeight: 1.6 }}>
+          Discover {totalPopular} trending online courses with top student ratings averaging {avgRating}★.
+          Popular Udemy courses in programming, design, marketing & more — with verified free coupons.
+        </p>
+      </div>
+    </section>
 
-      {/* ── GEO AI Banner ── */}
-      <div id="geo-banner" style="display:none; background:linear-gradient(135deg, rgba(212,167,55,0.1), rgba(197,160,40,0.1)); border-bottom:1px solid rgba(212,167,55,0.2); padding:0.85rem 0;">
-        <div class="container" style="display:flex; align-items:center; justify-content:center; gap:0.5rem;">
-          <span id="geo-text" style="color:var(--text); font-size:0.85rem; font-weight:500;"></span>
+    {/* ── STATS GRID ── */}
+    <section style={{ paddingBottom: "2rem", marginTop: "0.5rem" }}>
+      <div class="container">
+        <div class="stat-grid" style={{ gridTemplateColumns: "repeat(4,1fr)", maxWidth: "850px" }}>
+          <div class="stat-box">
+            <div class="stat-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+              {totalPopular}+
+            </div>
+            <div class="stat-label">Popular Courses</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              {avgRating}★
+            </div>
+            <div class="stat-label">Avg Rating</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              {totalCategoryCount}
+            </div>
+            <div class="stat-label">Categories</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              {lastVerified}
+            </div>
+            <div class="stat-label">Verified</div>
+          </div>
         </div>
       </div>
+    </section>
 
-      {/* ── Context strip — E-E-A-T ── */}
-      <section
-        aria-labelledby="about-heading"
-        style="padding:1.75rem 1rem; background:var(--card); border-bottom:1px solid var(--border);"
-      >
-        <div class="container" style="max-width:860px; display:flex; gap:2rem; flex-wrap:wrap; align-items:center;">
-          <div style="flex:1; min-width:240px;">
-            <h2 id="about-heading" style="font-size:1.1rem; font-weight:700; color:var(--text); margin-bottom:0.5rem;">
-              Why these courses are popular
-            </h2>
-            <p style="font-size:0.95rem; color:var(--muted); line-height:1.65; margin:0;">
-              This page features <strong style="color:var(--text);">popular online courses</strong> with 4.5-5.0★ ratings —
-              trending Udemy courses that students love and enroll in daily. These courses combine high ratings
-              with strong engagement, making them excellent choices for your learning journey.
-              For the most-enrolled courses overall, visit our
-              <a href="/deals" style="color:var(--brand); text-decoration:underline;">All Deals</a> page.
-            </p>
-          </div>
-          <div style="display:flex; gap:1.5rem; flex-shrink:0; flex-wrap:wrap;">
-            {[
-              { icon: "⭐", label: "4.5-5.0★ Score", note: "High rated" },
-              { icon: "✅", label: "Verified", note: "Coupons checked" },
-              { icon: "🔄", label: "Daily", note: "Fresh updates" },
-            ].map(item => (
-              <div style="text-align:center; min-width:68px;">
-                <div style="font-size:1.3rem; margin-bottom:3px;">{item.icon}</div>
-                <div style="font-size:0.76rem; font-weight:700; color:var(--text);">{item.label}</div>
-                <div style="font-size:0.68rem; color:var(--muted);">{item.note}</div>
-              </div>
-            ))}
-          </div>
+    {/* ── CATEGORIES ── */}
+    <section style={{ background: "var(--card)", borderTop: "1px solid var(--border)", padding: "2.5rem 1.5rem 2rem", textAlign: "center" }}>
+      <div class="container" style={{ maxWidth: "1280px" }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Browse by Topic
         </div>
-      </section>
-
-      {/* ── Courses Grid ── */}
-      <section aria-labelledby="courses-heading" style="padding:3rem 1rem 4rem;">
-        <div class="container">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:1rem;">
-            <h2
-              id="courses-heading"
-              style="font-size:clamp(1.3rem, 3vw, 1.75rem); font-weight:800; color:var(--text); margin:0;"
-            >
-              {totalPopular} Popular Online Courses
-            </h2>
-            <span style="font-size:0.8rem; color:var(--muted); background:var(--card); border:1px solid var(--border); padding:0.35rem 0.85rem; border-radius:9999px;">
-              ★ Sorted by popularity & rating
-            </span>
-          </div>
-
-          <div
-            role="list"
-            aria-label="Popular online courses"
-            style="display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:1.5rem; margin-bottom:3rem;"
-          >
-            {popularCourses.map((course, index) => (
-              <DealCard deal={course} />
-            ))}
-          </div>
-
-          <div style="text-align:center;">
-            <a href="/deals" style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.85rem 2rem; background:var(--brand); color:var(--bg); text-decoration:none; border-radius:10px; font-weight:700; font-size:0.95rem;">
-              Browse All {totalDeals}+ Deals
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
-            </a>
-          </div>
+        <h2 style={{ fontSize: "1.1rem", fontWeight: 800, color: "var(--text)", margin: "0 0 0.35rem" }}>
+          Popular Course Categories
+        </h2>
+        <p style={{ fontSize: "0.85rem", color: "var(--muted)", margin: "0 auto 1rem", maxWidth: "550px", lineHeight: 1.6 }}>
+          Find top-rated free Udemy coupons in {totalCategoryCount} categories — from programming and data science to design, marketing, and more.
+        </p>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", justifyContent: "center" }}>
+          <a href="/deals" style={{ fontSize: "0.78rem", fontWeight: 600, color: "white", textDecoration: "none", padding: "3px 10px", borderRadius: "100px", border: "1px solid var(--brand)", background: "var(--brand)" }}>All</a>
+          {popularCategories.map(({ name }) => (
+            <a href={`/categories/${slugifyCategory(name)}`} style={{ fontSize: "0.78rem", fontWeight: 600, color: "var(--muted)", textDecoration: "none", padding: "3px 10px", borderRadius: "100px", border: "1px solid var(--border)", background: "var(--bg)" }}>{name}</a>
+          ))}
         </div>
-      </section>
+      </div>
+    </section>
 
-      {/* ── Categories ── */}
-      <section aria-labelledby="categories-heading" style="padding:3rem 1rem; background:var(--card); border-top:1px solid var(--border);">
-        <div class="container">
-          <h2 id="categories-heading" style="font-size:1.3rem; font-weight:800; color:var(--text); margin-bottom:1.25rem; text-align:center;">
-            Browse Popular Courses by Category
-          </h2>
-          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(140px, 1fr)); gap:0.75rem;">
-            {categories.map(cat => (
-              <a
-                href={`/categories/${slugifyCategory(cat.name)}`}
-                class="cat-link"
-                style="display:flex; flex-direction:column; align-items:center; padding:0.85rem 0.75rem; background:var(--bg); border:1px solid var(--border); border-radius:10px; color:var(--text); text-decoration:none; font-size:0.83rem; font-weight:600; text-align:center; gap:3px;"
-              >
-                {cat.name}
-                <span style="font-size:0.7rem; color:var(--muted); font-weight:400;">{cat.count} courses</span>
-              </a>
-            ))}
-          </div>
+    {/* ── COURSES GRID ── */}
+    <section style={{ padding: "3rem 1.5rem 4rem", maxWidth: "1280px", margin: "0 auto" }}>
+      <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Top Rated
         </div>
-      </section>
+        <h2 style={{ fontSize: "1.3rem", fontWeight: 800, color: "var(--text)", margin: "0 0 0.3rem" }}>
+          {totalPopular} Popular Online Courses {currentMonth} {currentYear}
+        </h2>
+        <p style={{ fontSize: "0.9rem", color: "var(--muted)", maxWidth: "650px", margin: "0 auto", lineHeight: 1.6 }}>
+          Browse {totalPopular} trending Udemy courses with {avgRating}★ average rating and verified 100% off coupons — all updated {currentMonth} {currentYear}.
+        </p>
+      </div>
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+        gap: "1.25rem"
+      }}>
+        {popularCourses.map((course) => (
+          <DealCard deal={course} />
+        ))}
+      </div>
+      <div style={{ textAlign: "center", marginTop: "2.5rem" }}>
+        <a href="/deals" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", padding: "0.85rem 2rem", background: "var(--brand)", color: "var(--bg)", textDecoration: "none", borderRadius: "10px", fontWeight: 700, fontSize: "0.95rem" }}>
+          Browse All {totalDeals}+ Deals
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+        </a>
+      </div>
+    </section>
 
-      {/* ── FAQ ── */}
-      <section aria-labelledby="faq-heading" style="padding:3.5rem 1rem; border-top:1px solid var(--border);">
-        <div class="container" style="max-width:860px;">
-          <h2 id="faq-heading" style="font-size:clamp(1.3rem, 3vw, 1.75rem); font-weight:800; color:var(--text); margin-bottom:0.75rem; text-align:center;">
-            Frequently Asked Questions
-          </h2>
-          <p style="color:var(--muted); font-size:0.9rem; text-align:center; margin-bottom:2rem; max-width:520px; margin-left:auto; margin-right:auto; line-height:1.6;">
-            About our popular course selection and how to get them free.
-          </p>
-          <div style="display:flex; flex-direction:column; gap:0.75rem;">
-            {[
-              {
-                q: "What are popular online courses on CourseSpeak?",
-                a: "CourseSpeak's Popular page showcases trending online courses with 4.5-5.0★ student ratings. These are the most sought-after Udemy courses — where students consistently give high scores and enroll in high numbers."
-              },
-              {
-                q: "Are popular online courses free on CourseSpeak?",
-                a: "Yes. CourseSpeak lists verified coupon codes for all featured courses. Many have 100% off coupons making them completely free. Click any course card to see the current coupon and discounted price before enrolling."
-              },
-              {
-                q: "How are popular online courses ranked?",
-                a: "Popular courses are ranked by a combination of student rating (4.5-5.0★), enrollment numbers, and recent engagement. This ensures you discover courses that are both high-quality and currently trending among learners."
-              },
-              {
-                q: "Do popular online courses include a completion certificate?",
-                a: "Yes. All Udemy courses listed on CourseSpeak include a certificate of completion you can share on LinkedIn or add to your resume — regardless of whether you enrolled using a free coupon."
-              }
-            ].map(faq => (
-              <details style="background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden;">
-                <summary style="padding:1rem 1.25rem; font-weight:600; color:var(--text); font-size:0.9rem; cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; gap:1rem;">
-                  {faq.q}
-                  <span aria-hidden="true" style="color:var(--muted); flex-shrink:0;">+</span>
-                </summary>
-                <div style="padding:0 1.25rem 1rem; color:var(--muted); font-size:0.875rem; line-height:1.65;">
-                  <p style="margin:0;">{faq.a}</p>
-                </div>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
-
+    {/* ── GEO AI Banner ── */}
+    <div id="geo-banner" style="display:none; background:linear-gradient(135deg, rgba(212,167,55,0.1), rgba(197,160,40,0.1)); border-bottom:1px solid rgba(212,167,55,0.2); padding:0.85rem 0;">
+      <div class="container" style="display:flex; align-items:center; justify-content:center; gap:0.5rem;">
+        <span id="geo-text" style="color:var(--text); font-size:0.85rem; font-weight:500;"></span>
+      </div>
     </div>
+
+    {/* ── HOW COURSEPEAK VERIFIES — SEO ── */}
+    <section style={{ padding: "4rem 1rem", background: "linear-gradient(135deg, rgba(212,167,55,0.03) 0%, transparent 100%)" }}>
+      <div class="container" style={{ maxWidth: "1280px" }}>
+        <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "1rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            Real-Time Verification
+          </div>
+          <h2 style={{ fontSize: "clamp(1.5rem, 4vw, 2rem)", fontWeight: 800, color: "var(--text)", marginBottom: "0.75rem" }}>
+            How CourseSpeak verifies popular courses
+          </h2>
+          <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "700px", margin: "0 auto", lineHeight: 1.6 }}>
+            Every popular course on CourseSpeak is checked against Udemy automatically. Expired coupons disappear, new ones appear — all in near real time.
+          </p>
+        </div>
+        <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "12px", padding: "2rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.5rem" }}>
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.5rem" }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--brand)"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14" stroke="white" stroke-width="1.5"/></svg>
+                <span style={{ fontWeight: 700, fontSize: "0.95rem", color: "var(--text)" }}>Live Coupon Checking</span>
+              </div>
+              <p style={{ color: "var(--muted)", fontSize: "0.9rem", lineHeight: 1.6, margin: 0 }}>
+                CourseSpeak checks every coupon against Udemy in near real time. When a coupon runs out, it disappears from this list automatically. New coupons are added throughout the day.
+              </p>
+            </div>
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.5rem" }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--brand)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                <span style={{ fontWeight: 700, fontSize: "0.95rem", color: "var(--text)" }}>Trusted & Transparent</span>
+              </div>
+              <p style={{ color: "var(--muted)", fontSize: "0.9rem", lineHeight: 1.6, margin: "0 0 0.75rem" }}>
+                CourseSpeak is committed to full transparency. Every coupon is verified against Udemy before listing, and we clearly disclose our affiliate relationships. Our recommendations are based on real-time availability, not commissions — so you always get working coupons you can trust.
+              </p>
+              <p style={{ color: "var(--muted)", fontSize: "0.9rem", lineHeight: 1.6, margin: 0 }}>
+                Learn how <a href="https://teach.udemy.com/update-for-instructors-improving-free-coupons-better-targeting-higher-quality-learning/" target="_blank" rel="noopener noreferrer" style={{ color: "var(--brand)", textDecoration: "none", fontWeight: 600 }}>Udemy improves free coupons</a> for better targeting and learning quality.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* ── FAQ ── */}
+    <section style={{ background: "var(--bg)", padding: "4rem 1.5rem", maxWidth: "1280px", margin: "0 auto" }}>
+      <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Got Questions?
+        </div>
+        <h2 style={{ fontSize: "clamp(1.3rem, 3vw, 1.8rem)", fontWeight: 800, color: "var(--text)", margin: "0 0 0.5rem" }}>
+          Frequently asked questions
+        </h2>
+        <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "600px", margin: "0 auto", lineHeight: 1.6 }}>
+          Quick answers about our popular course selection and how to get them free.
+        </p>
+      </div>
+      {faqs.map((faq) => (
+        <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "12px", padding: "1.25rem 1.5rem", marginBottom: "0.75rem", transition: "all 0.2s" }}>
+          <h3 style={{ fontSize: "0.95rem", fontWeight: 700, color: "var(--text)", margin: "0 0 0.5rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            {faq.q}
+          </h3>
+          <p style={{ fontSize: "0.85rem", color: "var(--muted)", lineHeight: 1.7, margin: 0 }}>{faq.a}</p>
+        </div>
+      ))}
+    </section>
+
+    {/* ── AFFILIATE DISCLOSURE ── */}
+    <section style={{ padding: "3rem 1rem", background: "linear-gradient(135deg, rgba(212,167,55,0.05) 0%, rgba(197,160,40,0.03) 100%)" }}>
+      <div class="container" style={{ maxWidth: "1400px" }}>
+        <div style={{
+          background: "var(--card)",
+          border: "1px solid rgba(212,167,55,0.2)",
+          borderRadius: "12px",
+          padding: "2rem",
+          textAlign: "center",
+          maxWidth: "900px",
+          margin: "0 auto"
+        }}>
+          <div style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.5rem",
+            background: "rgba(212,167,55,0.1)",
+            padding: "0.5rem 1rem",
+            borderRadius: "20px",
+            marginBottom: "1rem"
+          }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--brand)">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0 2h-2v2h2v-2z"/>
+            </svg>
+            <span style={{ color: "#92400E", fontWeight: 600, fontSize: "0.85rem" }}>Transparency First</span>
+          </div>
+          <h3 style={{ fontSize: "1.25rem", fontWeight: 700, color: "var(--text)", marginBottom: "0.75rem" }}>
+            Affiliate Disclosure
+          </h3>
+          <p style={{ color: "var(--muted)", fontSize: "0.95rem", lineHeight: 1.6, marginBottom: "1.5rem", maxWidth: "650px", margin: "0 auto 1.5rem" }}>
+            CourseSpeak is an affiliate marketing platform. We earn small commissions from qualifying purchases made through our links. This helps us maintain and improve CourseSpeak at no cost to you. Our affiliate relationships do not influence which courses we recommend.
+          </p>
+          <a href="/affiliate-disclosure" style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.5rem",
+            padding: "0.75rem 1.5rem",
+            background: "var(--brand)",
+            color: "var(--bg)",
+            textDecoration: "none",
+            borderRadius: "8px",
+            fontSize: "0.9rem",
+            fontWeight: 600,
+            transition: "all 0.2s ease"
+          }}>
+            Read Full Disclosure
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
   </div>
 
   <style>
-    .container { max-width: 1200px; margin: 0 auto; }
-    .course-card { transition: transform 0.2s, box-shadow 0.2s; }
-    .course-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.18); }
-    .cta-btn:hover { opacity: 0.88; }
-    .cat-link { transition: border-color 0.2s; }
-    .cat-link:hover { border-color: var(--brand); }
-    details > summary::-webkit-details-marker { display: none; }
     @media (max-width: 640px) { .container { padding: 0 0.75rem; } }
   </style>
 
   <script define:vars={{ totalPopular }}>
-    // ─────────────────────────────────────────────
-    // GEO AI PERSONALISATION
-    // Detects visitor country via ipapi.co (free tier, no key needed)
-    // and shows a localised banner + appends country hint to subtitle.
-    // Fails silently — no impact on page if API is unavailable.
-    // ─────────────────────────────────────────────
     const GEO_COPY = {
       US: '🇺🇸 Popular in the United States — Top Udemy courses with verified English-language coupons.',
       GB: '🇬🇧 Trending in the UK — Expert Udemy courses with exclusive discount codes for UK learners.',
@@ -375,7 +425,6 @@ const structuredData = {
       if (!banner || !geoText) return;
 
       try {
-        // Use session cache to avoid repeated API calls on navigation
         const cached = sessionStorage.getItem('cs_geo');
         let geo;
 
@@ -396,25 +445,11 @@ const structuredData = {
 
         geoText.textContent = msg;
         banner.style.display = 'block';
-
-        // Append country hint to the stats subtitle for soft personalisation
-        const sub = document.querySelector('[role="list"][aria-label="Page statistics"]');
-        if (sub && geo.country_name && !sub.textContent?.includes(geo.country_name)) {
-          const statItems = sub.querySelectorAll('div[role="listitem"]');
-          if (statItems.length > 0) {
-            const lastStat = statItems[statItems.length - 1];
-            const label = lastStat.querySelector('span:last-child');
-            if (label && !label.textContent?.includes(geo.country_name)) {
-              label.textContent = `${label.textContent?.trimEnd() || ''} · Popular in ${geo.country_name}`;
-            }
-          }
-        }
       } catch {
         // Geo is a progressive enhancement — never block page load
       }
     }
 
-    // Initialize GEO personalisation after page load
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', initGeo);
     } else {

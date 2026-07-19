@@ -68,7 +68,7 @@ export default function CourseComparison({ currentDeal, similarDeals }: CourseCo
               <span style={{ textDecoration: "line-through", color: "var(--muted)", fontSize: "0.8rem" }}>
                 {fmtPrice(d.originalPrice)}
               </span>
-              <span style={{ background: "var(--brand)", color: "#1a1814", padding: "1px 6px", borderRadius: "4px", fontSize: "0.7rem", fontWeight: 700 }}>
+              <span style={{ background: "var(--brand)", color: "#080b12", padding: "1px 6px", borderRadius: "4px", fontSize: "0.7rem", fontWeight: 700 }}>
                 -{discount(d.price, d.originalPrice)}%
               </span>
             </>
@@ -136,7 +136,7 @@ export default function CourseComparison({ currentDeal, similarDeals }: CourseCo
                     </a>
                   </div>
                   {i === 0 && (
-                    <span style={{ display: "inline-block", marginTop: "4px", background: "var(--brand)", color: "#1a1814", padding: "1px 8px", borderRadius: "10px", fontSize: "0.65rem", fontWeight: 700 }}>
+                    <span style={{ display: "inline-block", marginTop: "4px", background: "var(--brand)", color: "#080b12", padding: "1px 8px", borderRadius: "10px", fontSize: "0.65rem", fontWeight: 700 }}>
                       CURRENT
                     </span>
                   )}

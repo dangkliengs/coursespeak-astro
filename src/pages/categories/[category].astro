@@ -91,6 +91,40 @@ const allCategories = [...new Set(allDeals.map(deal => normName(deal.category)).
 // Create dynamic meta description with keywords
 const categoryKeywords = `${categoryName.toLowerCase()}, ${categoryName.toLowerCase()} courses, ${categoryName.toLowerCase()} certification, learn ${categoryName.toLowerCase()}, ${categoryName.toLowerCase()} tutorial`;
 const metaDescription = `Browse ${categoryDeals.length}+ verified ${categoryName.toLowerCase()} courses with massive discounts up to 90% off. Learn ${categoryKeywords} from industry experts. Udemy coupons updated daily.`;
+
+// Stats
+const TIMEZONE = 'Asia/Jakarta';
+const currentDate = new Date();
+const currentMonth = currentDate.toLocaleDateString('en-US', { timeZone: TIMEZONE, month: 'long' });
+const currentYear  = currentDate.toLocaleDateString('en-US', { timeZone: TIMEZONE, year: 'numeric' });
+const todayWIB = currentDate.toLocaleDateString('en-CA', { timeZone: TIMEZONE });
+const categoryTodayAdded = categoryDeals.filter((d: any) => {
+  const dt = d.updatedAt || d.createdAt || '';
+  if (!dt) return false;
+  const wibDate = new Date(dt).toLocaleDateString('en-CA', { timeZone: TIMEZONE });
+  return wibDate === todayWIB;
+}).length;
+const categoryAvgSavings = (() => {
+  const valid = categoryDeals.filter((d: any) => d.originalPrice && d.price !== undefined && d.originalPrice > 0);
+  if (valid.length === 0) return 90;
+  const total = valid.reduce((sum: number, d: any) =>
+    sum + ((d.originalPrice - (d.price ?? 0)) / d.originalPrice) * 100, 0);
+  return Math.round(total / valid.length);
+})();
+const categoryInstructors = [...new Set(categoryDeals.map((d: any) => d.instructor).filter(Boolean))].length;
+const latestUpdate = categoryDeals.reduce((latest: number, d: any) => {
+  const t = new Date(d.updatedAt || d.createdAt || 0).getTime();
+  return t > latest ? t : latest;
+}, 0);
+const diffMs = currentDate.getTime() - latestUpdate;
+const diffMin = Math.floor(diffMs / 60000);
+let categoryLastVerified;
+if (diffMin < 1) categoryLastVerified = 'Just now';
+else if (diffMin < 60) categoryLastVerified = `${diffMin}m ago`;
+else {
+  const diffHr = Math.floor(diffMin / 60);
+  categoryLastVerified = diffHr < 24 ? `${diffHr}h ago` : `${Math.floor(diffHr / 24)}d ago`;
+}
 ---
 
 <Layout title={`${categoryName} Courses - Free Udemy Coupons 2026 | CourseSpeak`} description={metaDescription}>
@@ -193,331 +227,193 @@ const metaDescription = `Browse ${categoryDeals.length}+ verified ${categoryName
       }
     ])
   } />
-  <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "2rem 1rem" }}>
-    {/* Page Header - Same as deals page */}
-    <div style={{ textAlign: "center", marginBottom: "3rem" }}>
-      <h1 style={{ 
-        fontSize: "2.5rem", 
-        fontWeight: "800", 
-        marginBottom: "1rem",
-        background: "linear-gradient(135deg, #D4AF37 0%, #FFD54F 100%)",
-        WebkitBackgroundClip: "text",
-        WebkitTextFillColor: "transparent",
-        backgroundClip: "text"
-      }}>
-        {categoryName} Courses
-      </h1>
-      <p style={{ 
-        fontSize: "1.1rem", 
-        color: "var(--muted)", 
-        maxWidth: "600px", 
-        margin: "0 auto",
-        lineHeight: "1.6"
-      }}>
-        Discover {categoryDeals.length}+ verified {categoryName.toLowerCase()} courses with massive discounts. Learn from industry experts and advance your career today.
-      </p>
-      <a href="/deals" style={{ 
-        color: "#D4AF37", 
-        textDecoration: "none",
-        fontWeight: "600",
-        display: "inline-block",
-        marginTop: "1rem"
-      }}>
-        ← Back to all deals
-      </a>
-    </div>
+  <div style={{ minHeight: "100vh", color: "var(--text)" }}>
 
-    {/* Deals Grid - Same as deals page */}
-    <div style={{ 
-      display: "grid",
-      gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-      gap: "2rem",
-      marginBottom: "3rem"
-    }}>
-      {currentItems.length > 0 ? (
-        currentItems.map((deal) => (
-          <DealCard deal={deal} />
-        ))
-      ) : (
-        <div style={{ 
-          gridColumn: "1 / -1",
-          textAlign: "center", 
-          padding: "3rem", 
-          background: "var(--card)", 
-          borderRadius: "20px",
-          border: "1px solid var(--border)"
-        }}>
-          <h3 style={{ color: "var(--text)", marginBottom: "1rem", fontSize: "1.5rem" }}>
-            No courses found in {categoryName}
-          </h3>
-          <p style={{ color: "var(--muted)", marginBottom: "1.5rem", lineHeight: "1.6" }}>
-            We couldn't find any courses in this category. Try browsing our other categories or check back later for new courses.
-          </p>
-          <a href="/deals" style={{ 
-            padding: "12px 24px",
-            background: "linear-gradient(135deg, #D4AF37 0%, #FFD54F 100%)",
-            border: "2px solid #D4AF37",
-            borderRadius: "8px",
-            color: "white",
-            textDecoration: "none",
-            fontWeight: "600",
-            display: "inline-block"
-          }}>
-            Browse All Courses
-          </a>
+    {/* ── HERO ── */}
+    <section style={{ padding: "4rem 1rem 3rem", textAlign: "center", position: "relative", overflow: "hidden" }}>
+      <div style={{ position: "absolute", top: "20%", left: "5%", width: "280px", height: "280px", background: "var(--brand)", filter: "blur(120px)", opacity: 0.07, borderRadius: "50%", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", bottom: "10%", right: "5%", width: "240px", height: "240px", background: "hsl(0, 84%, 60%)", filter: "blur(100px)", opacity: 0.07, borderRadius: "50%", pointerEvents: "none" }} />
+      <div style={{ position: "relative", zIndex: 1, maxWidth: "900px", margin: "0 auto" }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.5rem 1rem", borderRadius: "9999px", marginBottom: "1.5rem", fontSize: "0.875rem", color: "var(--brand)", fontWeight: 600 }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          {categoryDeals.length} Courses — {currentMonth} {currentYear}
         </div>
-      )}
-    </div>
+        <h1 style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)", fontWeight: 800, lineHeight: 1.1, maxWidth: "900px", margin: "0 auto 1.5rem" }}>
+          <span style={{ background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>{categoryName} Courses</span>
+          <br />
+          <span style={{ background: "linear-gradient(135deg, var(--text) 0%, var(--muted) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Free Udemy Coupons {currentYear}</span>
+        </h1>
+        <p style={{ fontSize: "clamp(1rem, 2.5vw, 1.25rem)", color: "var(--muted)", maxWidth: "650px", margin: "0 auto 2.5rem", lineHeight: 1.7 }}>
+          Browse <strong style={{ color: "var(--text)" }}>{categoryDeals.length}+ verified {categoryName.toLowerCase()} courses</strong> with <strong style={{ color: "var(--text)" }}>free coupons</strong>. Save up to <strong style={{ color: "var(--brand)" }}>{categoryAvgSavings}%</strong> — learn {categoryName.toLowerCase()} from industry experts. Updated daily.
+        </p>
+      </div>
+    </section>
 
-    {/* Pagination */}
-    {totalPages > 1 && (
-      <div style={{ textAlign: "center", marginTop: "3rem", padding: "2rem" }}>
-        <div style={{ display: "flex", justifyContent: "center", gap: "0.5rem", marginBottom: "1rem" }}>
-          {/* Previous Button */}
-          {currentPage > 1 && (
-            <a
-              href={`/categories/${category}?page=${currentPage - 1}`}
-              style={{
-                padding: "8px 12px",
-                background: "var(--card)",
-                border: "1px solid var(--border)",
-                borderRadius: "6px",
-                color: "var(--text)",
-                textDecoration: "none",
-                fontSize: "14px",
-                fontWeight: "600"
-              }}
-            >
-              ←
+    {/* ── STATS GRID ── */}
+    <section style={{ paddingBottom: "2rem", marginTop: "-1rem" }}>
+      <div class="container">
+        <div class="stat-grid" style={{ gridTemplateColumns: "repeat(4,1fr)", maxWidth: "850px" }}>
+          <div class="stat-box">
+            <div class="stat-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+              {categoryTodayAdded}
+            </div>
+            <div class="stat-label">Added Today</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+              {categoryDeals.length}
+            </div>
+            <div class="stat-label">Total Courses</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              {categoryInstructors}
+            </div>
+            <div class="stat-label">Instructors</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              {categoryLastVerified}
+            </div>
+            <div class="stat-label">Verified</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* ── DEALS GRID ── */}
+    <section style={{ padding: "2rem 1.5rem 4rem", maxWidth: "1280px", margin: "0 auto" }}>
+      <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          {currentItems.length} Available
+        </div>
+        <h2 style={{ fontSize: "1.3rem", fontWeight: 800, color: "var(--text)", margin: "0 0 0.3rem" }}>
+          {categoryName} Courses — {currentMonth} {currentYear}
+        </h2>
+        <p style={{ fontSize: "0.9rem", color: "var(--muted)", maxWidth: "650px", margin: "0 auto", lineHeight: 1.6 }}>
+          Browse {currentItems.length} verified free {categoryName.toLowerCase()} coupon{currentItems.length !== 1 ? 's' : ''} with 100% off discounts. Learn {categoryName.toLowerCase()} from top-rated instructors on Udemy.
+          {currentPage > 1 ? ` (Page ${currentPage} of ${totalPages})` : ''}
+        </p>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.25rem" }}>
+        {currentItems.length > 0 ? (
+          currentItems.map((deal) => (
+            <DealCard deal={deal} />
+          ))
+        ) : (
+          <div style={{ gridColumn: "1 / -1", textAlign: "center", padding: "3rem", background: "var(--card)", borderRadius: "16px", border: "1px solid var(--border)" }}>
+            <h3 style={{ color: "var(--text)", marginBottom: "1rem", fontSize: "1.5rem" }}>
+              No courses found in {categoryName}
+            </h3>
+            <p style={{ color: "var(--muted)", marginBottom: "1.5rem", lineHeight: 1.6 }}>
+              We couldn't find any courses in this category. Try browsing our other categories or check back later for new courses.
+            </p>
+            <a href="/deals" style={{ padding: "0.75rem 1.5rem", background: "var(--brand)", borderRadius: "8px", color: "var(--bg)", textDecoration: "none", fontWeight: 700, display: "inline-block" }}>
+              Browse All Courses
             </a>
+          </div>
+        )}
+      </div>
+
+      {/* ── PAGINATION ── */}
+      {totalPages > 1 && (
+        <nav aria-label="Pagination" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.75rem", padding: "1.5rem 0", marginTop: "1.5rem", borderTop: "1px solid var(--border)" }}>
+          {currentPage > 1 ? (
+            <a href={`/categories/${category}?page=${currentPage - 1}`} style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--brand)", textDecoration: "none", padding: "0.4rem 0.85rem", borderRadius: "6px", border: "1px solid var(--border)" }}>← Prev</a>
+          ) : (
+            <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--muted)", opacity: 0.4, padding: "0.4rem 0.85rem" }}>← Prev</span>
           )}
-          
-          {/* Page Numbers */}
-          {Array.from({ length: totalPages }, (_, i) => i + 1)
-            .filter(pageNum => 
-              pageNum === 1 || 
-              pageNum === totalPages || 
-              (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
-            )
-            .map((pageNum) => (
-              <a
-                href={`/categories/${category}?page=${pageNum}`}
-                style={{
-                  padding: "8px 12px",
-                  background: pageNum === currentPage 
-                    ? "linear-gradient(135deg, #D4AF37 0%, #FFD54F 100%)"
-                    : "var(--card)",
-                  border: pageNum === currentPage 
-                    ? "2px solid #D4AF37"
-                    : "1px solid var(--border)",
-                  borderRadius: "6px",
-                  color: pageNum === currentPage ? "white" : "var(--text)",
-                  textDecoration: "none",
-                  fontSize: "14px",
-                  fontWeight: pageNum === currentPage ? "bold" : "600"
-                }}
-              >
-                {pageNum}
+          <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+            {Array.from({ length: totalPages }, (_, i) => i + 1)
+              .filter(pageNum => pageNum === 1 || pageNum === totalPages || (pageNum >= currentPage - 1 && pageNum <= currentPage + 1))
+              .map((pageNum, idx, arr) => {
+                const items = [];
+                if (idx > 0 && pageNum - arr[idx - 1] > 1) {
+                  items.push(<span style={{ fontSize: "0.85rem", color: "var(--muted)", width: "34px", textAlign: "center" }}>...</span>);
+                }
+                const isActive = pageNum === currentPage;
+                const href = `/categories/${category}?page=${pageNum}`;
+                items.push(isActive
+                  ? <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "white", width: "34px", height: "34px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "6px", border: "1px solid var(--brand)", background: "var(--brand)" }}>{pageNum}</span>
+                  : <a href={href} style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--text)", textDecoration: "none", width: "34px", height: "34px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "6px", border: "1px solid var(--border)" }}>{pageNum}</a>
+                );
+                return items;
+              })}
+          </div>
+          {currentPage < totalPages ? (
+            <a href={`/categories/${category}?page=${currentPage + 1}`} style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--brand)", textDecoration: "none", padding: "0.4rem 0.85rem", borderRadius: "6px", border: "1px solid var(--border)" }}>Next →</a>
+          ) : (
+            <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--muted)", opacity: 0.4, padding: "0.4rem 0.85rem" }}>Next →</span>
+          )}
+        </nav>
+      )}
+    </section>
+
+    {/* ── RELATED CATEGORIES ── */}
+    {allCategories.length > 0 && (
+      <section style={{ background: "var(--card)", borderTop: "1px solid var(--border)", padding: "3rem 1.5rem", textAlign: "center" }}>
+        <div class="container" style={{ maxWidth: "1280px" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            More Topics
+          </div>
+          <h2 style={{ fontSize: "1.3rem", fontWeight: 800, color: "var(--text)", margin: "0 0 0.35rem" }}>
+            Explore Other Categories
+          </h2>
+          <p style={{ fontSize: "0.9rem", color: "var(--muted)", maxWidth: "550px", margin: "0 auto 1.5rem", lineHeight: 1.6 }}>
+            Find free Udemy coupons in {allCategories.length} other categories — from programming and data science to design, marketing, and more.
+          </p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", justifyContent: "center" }}>
+            {allCategories.slice(0, 8).map(cat => (
+              <a href={`/categories/${slugifyCategory(cat!)}`} style={{ padding: "0.6rem 1.25rem", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: "100px", textDecoration: "none", color: "var(--text)", fontWeight: 600, fontSize: "0.85rem", transition: "all 0.2s" }}>
+                {cat}
               </a>
             ))}
-          
-          {/* Next Button */}
-          {currentPage < totalPages && (
-            <a
-              href={`/categories/${category}?page=${currentPage + 1}`}
-              style={{
-                padding: "8px 12px",
-                background: "var(--card)",
-                border: "1px solid var(--border)",
-                borderRadius: "6px",
-                color: "var(--text)",
-                textDecoration: "none",
-                fontSize: "14px",
-                fontWeight: "600"
-              }}
-            >
-              →
+          </div>
+          <div style={{ marginTop: "1.25rem" }}>
+            <a href="/categories" style={{ color: "var(--brand)", textDecoration: "none", fontWeight: 700, fontSize: "0.9rem", display: "inline-flex", alignItems: "center", gap: "0.35rem" }}>
+              View All Categories
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
             </a>
-          )}
+          </div>
         </div>
-        
-        <div style={{ color: "var(--muted)", fontSize: "14px", marginTop: "10px" }}>
-          Showing {startIndex + 1}-{Math.min(endIndex, categoryDeals.length)} of {categoryDeals.length} courses
-        </div>
-      </div>
+      </section>
     )}
 
-    {/* Related Categories */}
-    {allCategories.length > 0 && (
-      <div style={{
-        marginTop: "4rem",
-        padding: "2rem",
-        background: "var(--card)",
-        borderRadius: "1rem",
-        border: "1px solid var(--border)"
-      }}>
-        <h2 style={{
-          fontSize: "1.5rem",
-          fontWeight: "700",
-          color: "var(--text)",
-          marginBottom: "1.5rem",
-          textAlign: "center"
-        }}>
-          Explore Other Categories
+    {/* ── FAQ ── */}
+    <section style={{ padding: "3rem 1.5rem", maxWidth: "1280px", margin: "0 auto" }}>
+      <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Got Questions?
+        </div>
+        <h2 style={{ fontSize: "clamp(1.3rem, 3vw, 1.8rem)", fontWeight: 800, color: "var(--text)", margin: "0 0 0.5rem" }}>
+          Frequently Asked Questions about {categoryName}
         </h2>
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-          gap: "1rem"
-        }}>
-          {allCategories.slice(0, 8).map(cat => (
-            <a
-              href={`/categories/${slugifyCategory(cat!)}`}
-              style={{
-                padding: "1rem",
-                background: "var(--bg)",
-                border: "1px solid var(--border)",
-                borderRadius: "0.5rem",
-                textDecoration: "none",
-                color: "var(--text)",
-                fontWeight: "600",
-                textAlign: "center",
-                transition: "all 0.2s ease",
-                display: "block"
-              }}
-              onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'"
-              onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
-            >
-              {cat}
-            </a>
-          ))}
-        </div>
-        <div style={{ textAlign: "center", marginTop: "1.5rem" }}>
-          <a href="/categories" style={{
-            color: "#D4AF37",
-            textDecoration: "none",
-            fontWeight: "600"
-          }}>
-            View All Categories →
-          </a>
-        </div>
+        <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "600px", margin: "0 auto", lineHeight: 1.6 }}>
+          Quick answers to common questions about free {categoryName.toLowerCase()} courses and Udemy coupons.
+        </p>
       </div>
-    )}
-
-    {/* FAQ Section for SEO */}
-    <div style={{
-      marginTop: "4rem",
-      padding: "2rem",
-      background: "var(--card)",
-      borderRadius: "1rem",
-      border: "1px solid var(--border)"
-    }}>
-      <h2 style={{
-        fontSize: "1.5rem",
-        fontWeight: "700",
-        color: "var(--text)",
-        marginBottom: "1.5rem",
-        textAlign: "center"
-      }}>
-        Frequently Asked Questions about {categoryName}
-      </h2>
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-        gap: "1.5rem"
-      }}>
-        <div style={{
-          background: "var(--bg)",
-          padding: "1.5rem",
-          borderRadius: "0.5rem",
-          border: "1px solid var(--border)"
-        }}>
-          <h3 style={{
-            color: "var(--text)",
-            fontSize: "1.1rem",
-            fontWeight: "600",
-            marginBottom: "0.75rem"
-          }}>
-            Are {categoryName.toLowerCase()} courses really free?
+      {[
+        { q: `Are ${categoryName.toLowerCase()} courses really free?`, a: `Yes! All ${categoryName.toLowerCase()} courses listed here are completely free with verified 100% off coupons. No hidden fees or charges.` },
+        { q: `What will I learn in ${categoryName.toLowerCase()} courses?`, a: `Our ${categoryName.toLowerCase()} courses cover everything from beginner fundamentals to advanced professional skills. You'll get hands-on experience with real-world projects and industry-standard tools.` },
+        { q: `Do I get certificates for ${categoryName.toLowerCase()} courses?`, a: `Absolutely! Free ${categoryName.toLowerCase()} courses include completion certificates, lifetime access, and all course materials — the same benefits as paid courses.` },
+        { q: `How long do ${categoryName.toLowerCase()} course coupons last?`, a: `Coupon validity varies, but we recommend using them as soon as possible. New deals are added daily, so check back regularly for fresh ${categoryName.toLowerCase()} course offers.` }
+      ].map((faq) => (
+        <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "12px", padding: "1.25rem 1.5rem", marginBottom: "0.75rem", transition: "all 0.2s" }}>
+          <h3 style={{ fontSize: "0.95rem", fontWeight: 700, color: "var(--text)", margin: "0 0 0.5rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            {faq.q}
           </h3>
-          <p style={{
-            color: "var(--muted)",
-            fontSize: "0.95rem",
-            lineHeight: 1.6
-          }}>
-            Yes! All {categoryName.toLowerCase()} courses listed here are completely free with verified 100% off coupons. No hidden fees or charges.
-          </p>
+          <p style={{ fontSize: "0.85rem", color: "var(--muted)", lineHeight: 1.7, margin: 0 }}>{faq.a}</p>
         </div>
-
-        <div style={{
-          background: "var(--bg)",
-          padding: "1.5rem",
-          borderRadius: "0.5rem",
-          border: "1px solid var(--border)"
-        }}>
-          <h3 style={{
-            color: "var(--text)",
-            fontSize: "1.1rem",
-            fontWeight: "600",
-            marginBottom: "0.75rem"
-          }}>
-            What will I learn in {categoryName.toLowerCase()} courses?
-          </h3>
-          <p style={{
-            color: "var(--muted)",
-            fontSize: "0.95rem",
-            lineHeight: 1.6
-          }}>
-            Our {categoryName.toLowerCase()} courses cover everything from beginner fundamentals to advanced professional skills. You'll get hands-on experience with real-world projects and industry-standard tools.
-          </p>
-        </div>
-
-        <div style={{
-          background: "var(--bg)",
-          padding: "1.5rem",
-          borderRadius: "0.5rem",
-          border: "1px solid var(--border)"
-        }}>
-          <h3 style={{
-            color: "var(--text)",
-            fontSize: "1.1rem",
-            fontWeight: "600",
-            marginBottom: "0.75rem"
-          }}>
-            Do I get certificates for {categoryName.toLowerCase()} courses?
-          </h3>
-          <p style={{
-            color: "var(--muted)",
-            fontSize: "0.95rem",
-            lineHeight: 1.6
-          }}>
-            Absolutely! Free {categoryName.toLowerCase()} courses include completion certificates, lifetime access, and all course materials - the same benefits as paid courses.
-          </p>
-        </div>
-
-        <div style={{
-          background: "var(--bg)",
-          padding: "1.5rem",
-          borderRadius: "0.5rem",
-          border: "1px solid var(--border)"
-        }}>
-          <h3 style={{
-            color: "var(--text)",
-            fontSize: "1.1rem",
-            fontWeight: "600",
-            marginBottom: "0.75rem"
-          }}>
-            How long do {categoryName.toLowerCase()} course coupons last?
-          </h3>
-          <p style={{
-            color: "var(--muted)",
-            fontSize: "0.95rem",
-            lineHeight: 1.6
-          }}>
-            Coupon validity varies, but we recommend using them as soon as possible. New deals are added daily, so check back regularly for fresh {categoryName.toLowerCase()} course offers.
-          </p>
-        </div>
-      </div>
-    </div>
+      ))}
+    </section>
   </div>
 </Layout>
