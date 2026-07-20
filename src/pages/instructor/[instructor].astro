@@ -151,8 +151,8 @@ const instructorUrl = `${siteUrl}/instructor/${instructorSlug}`;
 
 const cleanName = instructorName.replace(/[^\x20-\x7E]/g, '').trim();
 
-const pageTitle = `${instructorName} — ${instructorData.courseCount} Free Udemy Courses ${currentMonth} ${currentYear} | CourseSpeak`;
-const pageDescription = `Access ${instructorData.courseCount} free courses by ${instructorName}. ${instructorData.totalStudents.toLocaleString()}+ students enrolled. Average rating ${instructorData.avgRating}★. Browse programming, development, and more free courses with 100% off coupons.`;
+const pageTitle = `${instructorName}'s — Udemy Coupon Codes ${currentMonth} ${currentYear} | CourseSpeak`;
+const pageDescription = `Access ${instructorData.courseCount} Udemy Coupon Codes by ${instructorName}. ${instructorData.totalStudents.toLocaleString()}+ students enrolled. Average rating ${instructorData.avgRating}★. Browse free online courses with 100% off coupons.`;
 
 // FAQ Data
 const faqs = [
@@ -221,7 +221,7 @@ const faqs = [
         <div class="hero-content anim-up">
           <h1>
             <span style="display:block;font-size:1rem;font-weight:700;color:var(--brand);margin-bottom:0.5rem;">
-              {provider} &middot; {instructorData.courseCount} Course{instructorData.courseCount === 1 ? '' : 's'}
+             {instructorData.courseCount} Coupon Code {instructorData.courseCount === 1 ? '' : 's'} in {provider}  
             </span>
             <span class="hero-gradient-text" style="display:block;font-size:clamp(2rem,5vw,3.5rem)">
               {instructorName}
