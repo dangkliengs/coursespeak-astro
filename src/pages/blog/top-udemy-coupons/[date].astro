@@ -39,7 +39,11 @@ const totalCoupons = allDeals.length;
 const catCount = categories.length;
 const topCats = categories.slice(0, 3).map(([c]) => c).join(', ');
 const pageUrl = `${siteUrl}/blog/top-udemy-coupons/${date}/`;
-const coverImageUrl = `${siteUrl}/api/blog-cover/${date}.svg?version=${date}`;
+const svgCoverUrl = `${siteUrl}/api/blog-cover/${date}.svg?version=${date}`;
+const hasUdemyImage = allDeals.length > 0 && !!allDeals[0].image;
+const coverImageUrl = hasUdemyImage ? allDeals[0].image! : svgCoverUrl;
+const imageWidth = hasUdemyImage ? 480 : 1200;
+const imageHeight = hasUdemyImage ? 270 : 630;
 
 // @ts-ignore - Astro frontmatter variables
 const pageTitle = `Udemy Coupons ${dateLabel} - Daily Discount Deals | CourseSpeak`;
@@ -98,8 +102,8 @@ const jsonLd = {
       "image": {
         "@type": "ImageObject",
         "url": coverImageUrl,
-        "width": 1200,
-        "height": 630,
+        "width": imageWidth,
+        "height": imageHeight,
       },
       "mainEntityOfPage": { "@type": "WebPage", "@id": pageUrl },
     },
@@ -142,7 +146,6 @@ const jsonLd = {
   canonical={pageUrl}
   type="article"
   image={coverImageUrl}
-  ogImageType="image/svg+xml"
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
@@ -156,9 +159,9 @@ const jsonLd = {
           <meta itemprop="height" content="630" />
           <img
             class="post-cover-img"
-            src={`/api/blog-cover/${date}.svg?v=${Date.now()}`}
-            width="1200"
-            height="630"
+            src={coverImageUrl}
+            width="480"
+            height="270"
             alt={`Top Udemy Coupons ${dateLabel} — featured cover image`}
             fetchpriority="high"
           />
@@ -418,7 +421,7 @@ const jsonLd = {
   .post-cover {
     flex: 0 0 320px;
     width: 320px;
-    height: 190px;
+    height: 180px;
     margin: 0;
     border-radius: 20px;
     overflow: hidden;
@@ -472,7 +475,7 @@ const jsonLd = {
       width: 100%;
       max-width: 100%;
       height: auto;
-      aspect-ratio: 1200 / 630;
+      aspect-ratio: 16 / 9;
       flex-basis: auto;
     }
     .post-title {

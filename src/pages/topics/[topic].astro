@@ -3,25 +3,17 @@ import Layout from '../../layouts/Layout.astro';
 import { readDeals } from '../../lib/store';
 import DealCard from '../../components/DealCard.astro';
 
-// Function to decode HTML entities
 const decodeHtml = (str: string) => str.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'");
 
 export async function getStaticPaths() {
-  // Function to decode HTML entities
   const decodeHtml = (str: string) => str.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'");
-
   const allDeals = await readDeals();
-
-  // Decode subcategories
   allDeals.forEach(deal => {
     if (deal.subcategory) {
       deal.subcategory = decodeHtml(deal.subcategory);
     }
   });
-
-  // Get unique subcategories
   const subcategories = [...new Set(allDeals.map(deal => deal.subcategory).filter(sub => sub != null && typeof sub === 'string'))];
-
   const seen = new Map();
   return subcategories.map(subcategory => {
     try {
@@ -32,7 +24,6 @@ export async function getStaticPaths() {
         .replace(/[^a-z0-9\s-]/g, '')
         .replace(/\s+/g, '-')
         .replace(/-+/g, '-');
-
       if (seen.has(slug)) {
         let dedupSlug = slug;
         let counter = 1;
@@ -43,7 +34,6 @@ export async function getStaticPaths() {
         slug = dedupSlug;
       }
       seen.set(slug, subcategory);
-
       return {
         params: { topic: slug },
         props: { originalTopic: subcategory }
@@ -54,25 +44,40 @@ export async function getStaticPaths() {
   }).filter(p => p != null);
 }
 
+function normName(raw?: string | null) {
+  if (!raw) return undefined;
+  let v = String(raw).trim();
+  v = v.replace(/&amp;/gi, "&");
+  v = v.replace(/\s+/g, " ");
+  return v || undefined;
+}
+
+function slugifyCategory(name: string) {
+  if (name === "Uncategorized") return "uncategorized";
+  let v = name.toLowerCase();
+  v = v.replace(/&amp;/gi, "&");
+  v = v.replace(/&/g, " and ");
+  v = v.replace(/[^\w\s-]/g, "");
+  v = v.trim();
+  v = v.replace(/\s+/g, "-");
+  v = v.replace(/-+/g, "-");
+  return v;
+}
+
 const { topic: topicSlug } = Astro.params;
 const { originalTopic } = Astro.props;
 const urlParams = new URLSearchParams(Astro.url.search);
 const page = urlParams.get('page');
 
-// Read all deals
 const allDeals = await readDeals();
-
-// Decode subcategories in deals
 allDeals.forEach(deal => {
   if (deal.subcategory && typeof deal.subcategory === 'string') {
     deal.subcategory = decodeHtml(deal.subcategory);
   }
 });
 
-// Use originalTopic for exact matching, with fallback for dev mode
 let topic = originalTopic;
 if (!topic) {
-  // Fallback for dev mode or missing props
   const allSubcategories = [...new Set(allDeals.map(deal => deal.subcategory).filter(sub => sub != null && typeof sub === 'string'))];
   const slugToName = new Map();
   const seenSlugs = new Set();
@@ -99,7 +104,6 @@ if (!topic) {
   topic = slugToName.get(topicSlug) || 'Unknown Topic';
 }
 
-// Filter deals for this topic (subcategory) - exact match
 const topicDeals = allDeals.filter(deal => {
   try {
     if (!deal.subcategory || typeof deal.subcategory !== 'string') return false;
@@ -109,7 +113,6 @@ const topicDeals = allDeals.filter(deal => {
   }
 });
 
-// Pagination
 const PAGE_SIZE = 12;
 const currentPage = parseInt(page || '1') || 1;
 const startIndex = (currentPage - 1) * PAGE_SIZE;
@@ -120,243 +123,314 @@ const totalPages = Math.ceil(topicDeals.length / PAGE_SIZE);
 const displayName = topic.replace(/\b\w/g, l => l.toUpperCase());
 const topicName = displayName;
 
-// Generate related searches
+// Get related subcategories (same category)
+const topicCategory = topicDeals.length > 0 ? normName(topicDeals[0].category) : null;
+const relatedTopics = [...new Set(
+  allDeals
+    .filter(deal => {
+      if (!topicCategory) return false;
+      const cat = normName(deal.category);
+      return cat === topicCategory && deal.subcategory && deal.subcategory !== topic;
+    })
+    .map(deal => deal.subcategory!)
+)].slice(0, 12);
+
+// Stats
+const TIMEZONE = 'Asia/Jakarta';
+const currentDate = new Date();
+const currentMonth = currentDate.toLocaleDateString('en-US', { timeZone: TIMEZONE, month: 'long' });
+const currentYear  = currentDate.toLocaleDateString('en-US', { timeZone: TIMEZONE, year: 'numeric' });
+const todayWIB = currentDate.toLocaleDateString('en-CA', { timeZone: TIMEZONE });
+const topicTodayAdded = topicDeals.filter((d: any) => {
+  const dt = d.updatedAt || d.createdAt || '';
+  if (!dt) return false;
+  const wibDate = new Date(dt).toLocaleDateString('en-CA', { timeZone: TIMEZONE });
+  return wibDate === todayWIB;
+}).length;
+const topicAvgSavings = (() => {
+  const valid = topicDeals.filter((d: any) => d.originalPrice && d.price !== undefined && d.originalPrice > 0);
+  if (valid.length === 0) return 90;
+  const total = valid.reduce((sum: number, d: any) =>
+    sum + ((d.originalPrice - (d.price ?? 0)) / d.originalPrice) * 100, 0);
+  return Math.round(total / valid.length);
+})();
+const topicInstructors = [...new Set(topicDeals.map((d: any) => d.instructor).filter(Boolean))].length;
+const latestUpdate = topicDeals.reduce((latest: number, d: any) => {
+  const t = new Date(d.updatedAt || d.createdAt || 0).getTime();
+  return t > latest ? t : latest;
+}, 0);
+const diffMs = currentDate.getTime() - latestUpdate;
+const diffMin = Math.floor(diffMs / 60000);
+let topicLastVerified;
+if (diffMin < 1) topicLastVerified = 'Just now';
+else if (diffMin < 60) topicLastVerified = `${diffMin}m ago`;
+else {
+  const diffHr = Math.floor(diffMin / 60);
+  topicLastVerified = diffHr < 24 ? `${diffHr}h ago` : `${Math.floor(diffHr / 24)}d ago`;
+}
+
+const topicDescription = `Discover the best Udemy courses for ${topicName} in ${currentYear}. Our curated collection features expert-led tutorials covering ${topicName.toLowerCase()} fundamentals to advanced techniques. Whether you're a complete beginner or an experienced professional, you'll find high-quality courses with massive discounts. Learn from industry-leading instructors, gain practical skills through hands-on projects, and earn certificates to boost your career.`;
+
+// Related searches
 const generateRelatedSearches = (topic: string) => {
   const baseSearches = [
-    `${topic} Free Course`,
-    `${topic} Course Free`,
-    `${topic} PDF`,
-    `${topic} For Beginners`,
-    `${topic} Course for Beginners`,
-    `${topic} Course Udemy`,
-    `${topic} Course Youtube`,
-    `${topic} Course Free with certificate`,
-    `Free ${topic} Course with certificate`,
-    `${topic} online`,
-    `${topic} Course online`,
-    `${topic} Course Coupon Code`,
-    `${topic} Free`,
-    `${topic} Tutorial`,
-    `${topic} App`,
-    `${topic} download`,
-    `Learn ${topic}`,
-    `${topic} Mooc`
+    `${topic} Free Course`, `${topic} Course Free`, `${topic} For Beginners`,
+    `${topic} Course Udemy`, `${topic} Tutorial`, `Learn ${topic}`,
+    `${topic} online`, `${topic} Course Coupon Code`, `${topic} Mooc`
   ];
   return baseSearches;
 };
-
 const relatedSearches = generateRelatedSearches(topicName);
 
-// SEO description
-const topicDescription = `Discover the best Udemy courses for ${topicName} in 2026. Our comprehensive collection features expert-led tutorials covering ${topicName.toLowerCase()} fundamentals to advanced techniques. Whether you're a complete beginner looking to start your ${topicName.toLowerCase()} journey or an experienced professional seeking to deepen your expertise, you'll find high-quality courses with massive discounts. Learn from industry-leading instructors, gain practical skills through hands-on projects, and earn certificates to boost your career. From basic concepts to cutting-edge applications, our curated ${topicName.toLowerCase()} courses include interactive exercises, real-world examples, and lifetime access. Perfect for students, professionals, and anyone passionate about ${topicName.toLowerCase()}. Explore beginner-friendly introductions, intermediate skill-building courses, and advanced masterclasses. Get started today and transform your knowledge with the top-rated ${topicName.toLowerCase()} courses available on Udemy.`;
-
+// FAQ
+const faqs = [
+  { q: `Are ${topicName.toLowerCase()} courses really free?`, a: `Yes! All ${topicName.toLowerCase()} courses listed here are completely free with verified 100% off coupons. No hidden fees or charges.` },
+  { q: `What will I learn in ${topicName.toLowerCase()} courses?`, a: `Our ${topicName.toLowerCase()} courses cover everything from beginner fundamentals to advanced professional skills. You'll get hands-on experience with real-world projects and industry-standard tools.` },
+  { q: `Do I get certificates for ${topicName.toLowerCase()} courses?`, a: `Absolutely! Free ${topicName.toLowerCase()} courses include completion certificates, lifetime access, and all course materials — the same benefits as paid courses.` },
+  { q: `How long do ${topicName.toLowerCase()} course coupons last?`, a: `Coupon validity varies, but we recommend using them as soon as possible. New deals are added daily, so check back regularly for fresh ${topicName.toLowerCase()} course offers.` }
+];
 ---
 
-<Layout title={`Best Udemy Courses for ${topicName} in 2026`} description={topicDescription} canonical={`https://coursespeak.com/topics/${topicSlug}`}>
-  <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "2rem 1rem" }}>
-    {/* Page Header */}
-    <div style={{ textAlign: "center", marginBottom: "3rem" }}>
-      <div style={{ marginBottom: "1.5rem", display: "inline-flex", gap: "0.75rem", alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
-        <span style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: "0.5rem",
-          padding: "0.75rem 1rem",
-          borderRadius: "999px",
-          background: "rgba(56, 189, 248, 0.12)",
-          color: "#0369A1",
-          fontWeight: 700,
-          fontSize: "0.95rem",
-          border: "1px solid rgba(56, 189, 248, 0.2)"
-        }}>
-          <span aria-hidden="true">🏷️</span>
-          {topicName}
-        </span>
-        <span style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: "0.4rem",
-          padding: "0.75rem 1rem",
-          borderRadius: "999px",
-          background: "rgba(16, 185, 129, 0.12)",
-          color: "#047857",
-          fontWeight: 600,
-          fontSize: "0.95rem",
-          border: "1px solid rgba(16, 185, 129, 0.2)"
-        }}>
-          <span aria-hidden="true">✨</span>
-          {topicDeals.length}+ courses
-        </span>
-      </div>
-      <h1 style={{
-        fontSize: "2.5rem",
-        fontWeight: "800",
-        marginBottom: "1rem",
-        background: "linear-gradient(135deg, #D4AF37 0%, #FFD54F 100%)",
-        WebkitBackgroundClip: "text",
-        WebkitTextFillColor: "transparent",
-        backgroundClip: "text"
-      }}>
-        Best Udemy Courses for {topicName} in 2026
-      </h1>
-      <p style={{
-        fontSize: "1.1rem",
-        color: "var(--muted)",
-        maxWidth: "600px",
-        margin: "0 auto",
-        lineHeight: "1.6"
-      }}>
-        Discover {topicDeals.length}+ verified {topicName.toLowerCase()} courses with massive discounts. Learn from industry experts and advance your career today.
-      </p>
-      <a href="/deals" style={{
-        color: "#D4AF37",
-        textDecoration: "none",
-        fontWeight: "600",
-        display: "inline-block",
-        marginTop: "1rem"
-      }}>
-        ← Back to all deals
-      </a>
-    </div>
+<Layout title={`${topicName} Courses - Free Udemy Coupons ${currentYear} | CourseSpeak`} description={topicDescription} canonical={`https://coursespeak.com/topics/${topicSlug}`}>
 
-    {/* Deals Grid */}
-    <div style={{
-      display: "grid",
-      gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-      gap: "2rem",
-      marginBottom: "3rem"
-    }}>
-      {currentItems.length > 0 ? (
-        currentItems.map((deal) => (
-          <DealCard deal={deal} />
-        ))
-      ) : (
-        <div style={{
-          gridColumn: "1 / -1",
-          textAlign: "center",
-          padding: "3rem",
-          background: "var(--card)",
-          borderRadius: "20px",
-          border: "1px solid var(--border)"
-        }}>
-          <h3 style={{ color: "var(--text)", marginBottom: "1rem", fontSize: "1.5rem" }}>
-            No courses found in {topicName}
-          </h3>
-          <p style={{ color: "var(--muted)", marginBottom: "1.5rem", lineHeight: "1.6" }}>
-            We couldn't find any courses in this topic. Try browsing our other topics or check back later for new courses.
-          </p>
-          <a href="/deals" style={{
-            padding: "12px 24px",
-            background: "linear-gradient(135deg, #D4AF37 0%, #FFD54F 100%)",
-            border: "2px solid #D4AF37",
-            borderRadius: "8px",
-            color: "white",
-            textDecoration: "none",
-            fontWeight: "600",
-            display: "inline-block"
-          }}>
-            Browse All Courses
-          </a>
+  <script type="application/ld+json" set:html={
+    JSON.stringify([
+      {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": `${topicName} Courses`,
+        "description": topicDescription,
+        "url": `https://coursespeak.com/topics/${topicSlug}`,
+        "mainEntity": {
+          "@type": "ItemList",
+          "name": `${topicName} Course Collection`,
+          "numberOfItems": topicDeals.length,
+          "itemListElement": topicDeals.slice(0, 10).map((deal, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "item": {
+              "@type": "Course",
+              "name": deal.title,
+              "url": `https://coursespeak.com/deal/${deal.id}`,
+              "image": deal.image,
+              "provider": { "@type": "Organization", "name": deal.provider },
+              "offers": {
+                "@type": "Offer",
+                "price": deal.price.toString(),
+                "priceCurrency": "USD",
+                "availability": "https://schema.org/InStock"
+              }
+            }
+          }))
+        },
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://coursespeak.com" },
+            { "@type": "ListItem", "position": 2, "name": "Topics", "item": "https://coursespeak.com/topics" },
+            { "@type": "ListItem", "position": 3, "name": topicName, "item": `https://coursespeak.com/topics/${topicSlug}` }
+          ]
+        }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": faqs.map(f => ({
+          "@type": "Question",
+          "name": f.q,
+          "acceptedAnswer": { "@type": "Answer", "text": f.a }
+        }))
+      }
+    ])
+  } />
+
+  <div style={{ minHeight: "100vh", color: "var(--text)" }}>
+
+    <!-- HERO -->
+    <section style={{ padding: "4rem 1rem 3rem", textAlign: "center", position: "relative", overflow: "hidden" }}>
+      <div style={{ position: "absolute", top: "20%", left: "5%", width: "280px", height: "280px", background: "var(--brand)", filter: "blur(120px)", opacity: 0.07, borderRadius: "50%", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", bottom: "10%", right: "5%", width: "240px", height: "240px", background: "hsl(0, 84%, 60%)", filter: "blur(100px)", opacity: 0.07, borderRadius: "50%", pointerEvents: "none" }} />
+      <div style={{ position: "relative", zIndex: 1, maxWidth: "900px", margin: "0 auto" }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.5rem 1rem", borderRadius: "9999px", marginBottom: "1.5rem", fontSize: "0.875rem", color: "var(--brand)", fontWeight: 600 }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          {topicDeals.length} Courses — {currentMonth} {currentYear}
         </div>
+        <h1 style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)", fontWeight: 800, lineHeight: 1.1, maxWidth: "900px", margin: "0 auto 1.5rem" }}>
+          <span style={{ background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>{topicName} Courses</span>
+          <br />
+          <span style={{ background: "linear-gradient(135deg, var(--text) 0%, var(--muted) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Free Udemy Coupons {currentYear}</span>
+        </h1>
+        <p style={{ fontSize: "clamp(1rem, 2.5vw, 1.25rem)", color: "var(--muted)", maxWidth: "650px", margin: "0 auto 2.5rem", lineHeight: 1.7 }}>
+          Browse <strong style={{ color: "var(--text)" }}>{topicDeals.length}+ verified {topicName.toLowerCase()} courses</strong> with <strong style={{ color: "var(--text)" }}>free coupons</strong>. Save up to <strong style={{ color: "var(--brand)" }}>{topicAvgSavings}%</strong> — learn {topicName.toLowerCase()} from industry experts. Updated daily.
+        </p>
+      </div>
+    </section>
+
+    <!-- STATS GRID -->
+    <section style={{ paddingBottom: "2rem", marginTop: "-1rem" }}>
+      <div class="container">
+        <div class="stat-grid" style={{ gridTemplateColumns: "repeat(4,1fr)", maxWidth: "850px" }}>
+          <div class="stat-box">
+            <div class="stat-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+              {topicTodayAdded}
+            </div>
+            <div class="stat-label">Added Today</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+              {topicDeals.length}
+            </div>
+            <div class="stat-label">Total Courses</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              {topicInstructors}
+            </div>
+            <div class="stat-label">Instructors</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              {topicLastVerified}
+            </div>
+            <div class="stat-label">Verified</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DEALS GRID -->
+    <section style={{ padding: "2rem 1.5rem 4rem", maxWidth: "1280px", margin: "0 auto" }}>
+      <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          {currentItems.length} Available
+        </div>
+        <h2 style={{ fontSize: "1.3rem", fontWeight: 800, color: "var(--text)", margin: "0 0 0.3rem" }}>
+          {topicName} Courses — {currentMonth} {currentYear}
+        </h2>
+        <p style={{ fontSize: "0.9rem", color: "var(--muted)", maxWidth: "650px", margin: "0 auto", lineHeight: 1.6 }}>
+          Browse {currentItems.length} verified free {topicName.toLowerCase()} course{currentItems.length !== 1 ? 's' : ''} with 100% off discounts. Learn {topicName.toLowerCase()} from top-rated instructors on Udemy.
+          {currentPage > 1 ? ` (Page ${currentPage} of ${totalPages})` : ''}
+        </p>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.25rem" }}>
+        {currentItems.length > 0 ? (
+          currentItems.map((deal) => (
+            <DealCard deal={deal} />
+          ))
+        ) : (
+          <div style={{ gridColumn: "1 / -1", textAlign: "center", padding: "3rem", background: "var(--card)", borderRadius: "16px", border: "1px solid var(--border)" }}>
+            <h3 style={{ color: "var(--text)", marginBottom: "1rem", fontSize: "1.5rem" }}>
+              No courses found in {topicName}
+            </h3>
+            <p style={{ color: "var(--muted)", marginBottom: "1.5rem", lineHeight: 1.6 }}>
+              We couldn't find any courses in this topic. Try browsing our other topics or check back later for new courses.
+            </p>
+            <a href="/deals" style={{ padding: "0.75rem 1.5rem", background: "var(--brand)", borderRadius: "8px", color: "var(--bg)", textDecoration: "none", fontWeight: 700, display: "inline-block" }}>
+              Browse All Courses
+            </a>
+          </div>
+        )}
+      </div>
+
+      <!-- PAGINATION -->
+      {totalPages > 1 && (
+        <nav aria-label="Pagination" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.75rem", padding: "1.5rem 0", marginTop: "1.5rem", borderTop: "1px solid var(--border)" }}>
+          {currentPage > 1 ? (
+            <a href={`/topics/${topicSlug}?page=${currentPage - 1}`} style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--brand)", textDecoration: "none", padding: "0.4rem 0.85rem", borderRadius: "6px", border: "1px solid var(--border)" }}>← Prev</a>
+          ) : (
+            <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--muted)", opacity: 0.4, padding: "0.4rem 0.85rem" }}>← Prev</span>
+          )}
+          <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+            {Array.from({ length: totalPages }, (_, i) => i + 1)
+              .filter(pageNum => pageNum === 1 || pageNum === totalPages || (pageNum >= currentPage - 1 && pageNum <= currentPage + 1))
+              .map((pageNum, idx, arr) => {
+                const items = [];
+                if (idx > 0 && pageNum - arr[idx - 1] > 1) {
+                  items.push(<span style={{ fontSize: "0.85rem", color: "var(--muted)", width: "34px", textAlign: "center" }}>...</span>);
+                }
+                const isActive = pageNum === currentPage;
+                const href = `/topics/${topicSlug}?page=${pageNum}`;
+                items.push(isActive
+                  ? <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "white", width: "34px", height: "34px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "6px", border: "1px solid var(--brand)", background: "var(--brand)" }}>{pageNum}</span>
+                  : <a href={href} style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--text)", textDecoration: "none", width: "34px", height: "34px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "6px", border: "1px solid var(--border)" }}>{pageNum}</a>
+                );
+                return items;
+              })}
+          </div>
+          {currentPage < totalPages ? (
+            <a href={`/topics/${topicSlug}?page=${currentPage + 1}`} style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--brand)", textDecoration: "none", padding: "0.4rem 0.85rem", borderRadius: "6px", border: "1px solid var(--border)" }}>Next →</a>
+          ) : (
+            <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--muted)", opacity: 0.4, padding: "0.4rem 0.85rem" }}>Next →</span>
+          )}
+        </nav>
       )}
-    </div>
+    </section>
 
-    {/* Related Searches */}
-    <div style={{ marginTop: "3rem", padding: "2rem", background: "var(--card)", borderRadius: "12px", border: "1px solid var(--border)" }}>
-      <h2 style={{ color: "var(--text)", marginBottom: "1rem", fontSize: "1.5rem" }}>
-        Related Searches for {topicName}
-      </h2>
-      <p style={{ color: "var(--muted)", lineHeight: "1.6", fontSize: "1rem" }}>
-        {relatedSearches.join(', ')}
-      </p>
-    </div>
-
-    {/* Topic Description */}
-    <div style={{ marginTop: "2rem", padding: "2rem", background: "var(--card)", borderRadius: "12px", border: "1px solid var(--border)" }}>
-      <h2 style={{ color: "var(--text)", marginBottom: "1rem", fontSize: "1.5rem" }}>
-        About {topicName} Courses
-      </h2>
-      <p style={{ color: "var(--muted)", lineHeight: "1.6", fontSize: "1rem" }}>
-        {topicDescription}
-      </p>
-    </div>
-
-    {/* Pagination */}
-    {totalPages > 1 && (
-      <div style={{ textAlign: "center", marginTop: "3rem", padding: "2rem" }}>
-        <div style={{ display: "flex", justifyContent: "center", gap: "0.5rem", marginBottom: "1rem" }}>
-          {/* Previous Button */}
-          {currentPage > 1 && (
-            <a
-              href={`/topics/${topicSlug}?page=${currentPage - 1}`}
-              style={{
-                padding: "8px 12px",
-                background: "var(--card)",
-                border: "1px solid var(--border)",
-                borderRadius: "6px",
-                color: "var(--text)",
-                textDecoration: "none",
-                fontSize: "14px",
-                fontWeight: "600"
-              }}
-            >
-              ←
+    <!-- RELATED TOPICS -->
+    {relatedTopics.length > 0 && (
+      <section style={{ background: "var(--card)", borderTop: "1px solid var(--border)", padding: "3rem 1.5rem", textAlign: "center" }}>
+        <div class="container" style={{ maxWidth: "1280px" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            Related Topics
+          </div>
+          <h2 style={{ fontSize: "1.3rem", fontWeight: 800, color: "var(--text)", margin: "0 0 0.35rem" }}>
+            Explore Related Topics
+          </h2>
+          <p style={{ fontSize: "0.9rem", color: "var(--muted)", maxWidth: "550px", margin: "0 auto 1.5rem", lineHeight: 1.6 }}>
+            Find free Udemy coupons in {relatedTopics.length} related topics within the same category.
+          </p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", justifyContent: "center" }}>
+            {relatedTopics.map(t => {
+              const tSlug = t.toLowerCase()
+                .replace(/c\s*\+\+/g, 'cpp').replace(/#/g, 'sharp').replace(/\+/g, 'plus')
+                .replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
+              return (
+                <a href={`/topics/${tSlug}`} style={{ padding: "0.6rem 1.25rem", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: "100px", textDecoration: "none", color: "var(--text)", fontWeight: 600, fontSize: "0.85rem", transition: "all 0.2s" }}>
+                  {t}
+                </a>
+              );
+            })}
+          </div>
+          <div style={{ marginTop: "1.25rem" }}>
+            <a href="/topics" style={{ color: "var(--brand)", textDecoration: "none", fontWeight: 700, fontSize: "0.9rem", display: "inline-flex", alignItems: "center", gap: "0.35rem" }}>
+              View All Topics
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
             </a>
-          )}
-
-          {/* Page Numbers */}
-          {Array.from({ length: totalPages }, (_, i) => i + 1)
-            .filter(pageNum =>
-              pageNum === 1 ||
-              pageNum === totalPages ||
-              (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
-            )
-            .map((pageNum) => (
-              <a
-                href={`/topics/${topicSlug}?page=${pageNum}`}
-                style={{
-                  padding: "8px 12px",
-                  background: pageNum === currentPage
-                    ? "linear-gradient(135deg, #D4AF37 0%, #FFD54F 100%)"
-                    : "var(--card)",
-                  border: pageNum === currentPage
-                    ? "2px solid #D4AF37"
-                    : "1px solid var(--border)",
-                  borderRadius: "6px",
-                  color: pageNum === currentPage ? "white" : "var(--text)",
-                  textDecoration: "none",
-                  fontSize: "14px",
-                  fontWeight: pageNum === currentPage ? "bold" : "600"
-                }}
-              >
-                {pageNum}
-              </a>
-            ))}
-
-          {/* Next Button */}
-          {currentPage < totalPages && (
-            <a
-              href={`/topics/${topicSlug}?page=${currentPage + 1}`}
-              style={{
-                padding: "8px 12px",
-                background: "var(--card)",
-                border: "1px solid var(--border)",
-                borderRadius: "6px",
-                color: "var(--text)",
-                textDecoration: "none",
-                fontSize: "14px",
-                fontWeight: "600"
-              }}
-            >
-              →
-            </a>
-          )}
+          </div>
         </div>
-
-        <div style={{ color: "var(--muted)", fontSize: "14px", marginTop: "10px" }}>
-          Showing {startIndex + 1}-{Math.min(endIndex, topicDeals.length)} of {topicDeals.length} courses
-        </div>
-      </div>
+      </section>
     )}
+
+    <!-- FAQ -->
+    <section style={{ padding: "3rem 1.5rem", maxWidth: "1280px", margin: "0 auto" }}>
+      <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Got Questions?
+        </div>
+        <h2 style={{ fontSize: "clamp(1.3rem, 3vw, 1.8rem)", fontWeight: 800, color: "var(--text)", margin: "0 0 0.5rem" }}>
+          Frequently Asked Questions about {topicName}
+        </h2>
+        <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "600px", margin: "0 auto", lineHeight: 1.6 }}>
+          Quick answers to common questions about free {topicName.toLowerCase()} courses and Udemy coupons.
+        </p>
+      </div>
+      {faqs.map((faq) => (
+        <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "12px", padding: "1.25rem 1.5rem", marginBottom: "0.75rem", transition: "all 0.2s" }}>
+          <h3 style={{ fontSize: "0.95rem", fontWeight: 700, color: "var(--text)", margin: "0 0 0.5rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            {faq.q}
+          </h3>
+          <p style={{ fontSize: "0.85rem", color: "var(--muted)", lineHeight: 1.7, margin: 0 }}>{faq.a}</p>
+        </div>
+      ))}
+    </section>
   </div>
 </Layout>
