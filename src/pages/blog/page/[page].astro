@@ -73,7 +73,7 @@ const articles = pageDates.map((date, index) => {
     title: `Top Udemy Coupons — ${shortLabel}`,
     url: `${siteUrl}/blog/top-udemy-coupons/${date}/`,
     excerpt,
-    coverImage: dateImageMap[date] || `${siteUrl}/api/blog-cover/${date}.svg?version=${date}`,
+    coverImage: dateImageMap[date] || `/api/blog-cover/${date}.svg?version=${date}`,
     imageWidth: hasUdemyImg ? 480 : 1200,
     imageHeight: hasUdemyImg ? 270 : 630,
   };
@@ -157,7 +157,7 @@ const jsonLd = {
                   width={480}
                   height={270}
                   class="article-card-image"
-                  alt={`Top Udemy Coupons — ${a.shortLabel} — featured cover`}
+                  alt={`Top Udemy Coupons — ${a.shortLabel}`}
                   loading={i < 3 ? "eager" : "lazy"}
                   decoding="async"
                 />
@@ -246,7 +246,7 @@ const jsonLd = {
     z-index: 2;
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);
   }
-  .article-card-image { width: 100%; height: auto;     aspect-ratio: 16 / 9; object-fit: cover; display: block; }
+  .article-card-image { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; display: block; background: var(--card); }
   .article-card-body { padding: 1.25rem; display: flex; flex-direction: column; flex: 1; }
   .article-card:hover { border-color: var(--brand); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
   .article-date { font-size: 0.8125rem; color: var(--brand); font-weight: 600; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.03em; }

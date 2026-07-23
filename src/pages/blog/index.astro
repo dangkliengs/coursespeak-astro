@@ -58,7 +58,7 @@ const articles = page1Dates.map((date, index) => {
     title: `Top Udemy Coupons — ${shortLabel}`,
     url: `${siteUrl}/blog/top-udemy-coupons/${date}/`,
     excerpt,
-    coverImage: dateImageMap[date] || `${siteUrl}/api/blog-cover/${date}.svg?version=${date}`,
+    coverImage: dateImageMap[date] || `/api/blog-cover/${date}.svg?version=${date}`,
     imageWidth: hasUdemyImg ? 480 : 1200,
     imageHeight: hasUdemyImg ? 270 : 630,
   };
@@ -224,7 +224,7 @@ const jsonLd = {
                   src={a.coverImage}
                   width={480}
                   height={270}
-                  style={{ width: "100%", height: "auto", aspectRatio: "16 / 9", objectFit: "cover", display: "block", borderRadius: "8px", marginBottom: "12px" }}
+                  style={{ width: "100%", height: "auto", aspectRatio: "16 / 9", objectFit: "cover", display: "block", borderRadius: "8px", marginBottom: "12px", backgroundColor: "var(--card)" }}
                   alt={`Top Udemy Coupons — ${a.shortLabel}`}
                   loading="lazy"
                   decoding="async"

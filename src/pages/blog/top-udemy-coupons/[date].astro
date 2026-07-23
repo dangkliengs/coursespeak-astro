@@ -39,7 +39,7 @@ const totalCoupons = allDeals.length;
 const catCount = categories.length;
 const topCats = categories.slice(0, 3).map(([c]) => c).join(', ');
 const pageUrl = `${siteUrl}/blog/top-udemy-coupons/${date}/`;
-const svgCoverUrl = `${siteUrl}/api/blog-cover/${date}.svg?version=${date}`;
+const svgCoverUrl = `/api/blog-cover/${date}.svg?version=${date}`;
 const hasUdemyImage = allDeals.length > 0 && !!allDeals[0].image;
 const coverImageUrl = hasUdemyImage ? allDeals[0].image! : svgCoverUrl;
 const imageWidth = hasUdemyImage ? 480 : 1200;
@@ -162,7 +162,7 @@ const jsonLd = {
             src={coverImageUrl}
             width="480"
             height="270"
-            alt={`Top Udemy Coupons ${dateLabel} — featured cover image`}
+            alt={`Top Udemy Coupons ${dateLabel}`}
             fetchpriority="high"
           />
         </figure>
@@ -199,7 +199,7 @@ const jsonLd = {
               {deals.slice(0, 6).map(deal => (
                 <div class="course-card">
                   <div class="card-image">
-                    <Image src={deal.image} alt={deal.title} loading="lazy" width={400} height={225} />
+                    <Image src={deal.image || svgCoverUrl} alt={deal.title} loading="lazy" width={400} height={225} />
                   </div>
                   <div class="card-content">
                     <a href={`/deal/${deal.id}`} class="card-title-link">
@@ -242,7 +242,7 @@ const jsonLd = {
                   {deals.slice(6).map(deal => (
                     <div class="course-card">
                       <div class="card-image">
-                        <Image src={deal.image} alt={deal.title} loading="lazy" width={400} height={225} />
+                        <Image src={deal.image || svgCoverUrl} alt={deal.title} loading="lazy" width={400} height={225} />
                       </div>
                       <div class="card-content">
                         <h3 class="card-title">{deal.title}</h3>
@@ -291,7 +291,7 @@ const jsonLd = {
           {allDeals.map(deal => (
             <div class="course-card">
               <div class="card-image">
-                <img src={deal.image} alt={deal.title} loading="lazy" onerror="this.style.display='none'" />
+                <img src={deal.image} alt={deal.title} loading="lazy" onerror={`this.onerror=null;this.src='${svgCoverUrl}'`} />
               </div>
               <div class="card-content">
                 <h3 class="card-title">{deal.title}</h3>
