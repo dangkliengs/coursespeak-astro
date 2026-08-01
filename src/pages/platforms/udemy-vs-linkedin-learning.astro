@@ -1,0 +1,373 @@
+?---
+import Layout from "../../layouts/Layout.astro";
+import AuthorCard from "../../components/AuthorCard.astro";
+import { Image } from "astro:assets";
+
+const currentYear = new Date().getFullYear();
+const lastModified = new Date().toISOString().split("T")[0];
+const monthYear = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long" });
+const canonicalUrl = "https://coursespeak.com/platforms/udemy-vs-linkedin-learning";
+
+const pageTitle = `Udemy vs LinkedIn Learning ${currentYear}: Which Is Better for Career Skills?`;
+const pageDescription = `Udemy vs LinkedIn Learning in ${currentYear} — we compare pricing, certificates, LinkedIn integration, course length, and free options. Find the best platform for professional development.`;
+
+const related = [
+  { slug: "udemy-vs-coursera", label: "Udemy vs Coursera" },
+  { slug: "udemy-vs-edx", label: "Udemy vs edX" },
+  { slug: "udemy-vs-skillshare", label: "Udemy vs Skillshare" },
+  { slug: "udemy-vs-pluralsight", label: "Udemy vs Pluralsight" },
+  { slug: "udemy-alternatives", label: "10 Best Udemy Alternatives" },
+];
+
+const faqs = [
+  {
+    q: "Is LinkedIn Learning worth it vs Udemy?",
+    a: "If you want short, professional-development courses that post certificates directly to your LinkedIn profile, LinkedIn Learning is worth considering — especially if it's bundled free with LinkedIn Premium. For deep, comprehensive courses at a better price (often free with 100% off coupons), Udemy wins.",
+  },
+  {
+    q: "Do LinkedIn Learning certificates help your resume?",
+    a: "Yes. LinkedIn Learning certificates integrate automatically with your LinkedIn profile, and recruiters can see them instantly. That said, they're professional-development certificates, not accredited credentials like Coursera or edX university certificates.",
+  },
+  {
+    q: "How long are LinkedIn Learning courses?",
+    a: "Most LinkedIn Learning courses are short — 1 to 3 hours, split into 3–10 minute lessons. Udemy courses are typically much longer (5–40 hours) and go far deeper into a subject.",
+  },
+  {
+    q: "Is LinkedIn Learning free?",
+    a: "LinkedIn Learning offers a 1-month free trial. After that it costs ~$39/month (or is included with some LinkedIn Premium tiers). Udemy courses are completely free with verified 100% off coupons from CourseSpeak.",
+  },
+  {
+    q: "Which is better for soft skills, Udemy or LinkedIn Learning?",
+    a: "LinkedIn Learning is stronger for soft skills like leadership, communication, project management, and workplace productivity — it has a curated professional library. Udemy also has these topics but shines more in hard, technical skills.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": `${canonicalUrl}#webpage`,
+      "url": canonicalUrl,
+      "name": pageTitle,
+      "description": pageDescription,
+      "isPartOf": { "@id": "https://coursespeak.com/#website" },
+      "inLanguage": "en-US",
+      "datePublished": "2025-01-01",
+      "dateModified": lastModified,
+      "author": { "@id": "https://coursespeak.com/#author" },
+      "publisher": { "@type": "Organization", "name": "CourseSpeak", "url": "https://coursespeak.com" },
+      "mainEntity": {
+        "@type": "ItemList",
+        "name": "Udemy vs LinkedIn Learning",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "item": { "@type": "Organization", "name": "Udemy", "url": "https://www.udemy.com", "description": "Global marketplace with 200,000+ practical, instructor-led courses. Often free with verified 100% off coupons." },
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "item": { "@type": "Organization", "name": "LinkedIn Learning", "url": "https://www.linkedin.com/learning", "description": "Professional development platform with short courses and certificates that integrate directly with LinkedIn profiles." },
+          },
+        ],
+      },
+    },
+    {
+      "@type": "Person",
+      "@id": "https://coursespeak.com/#author",
+      "name": "Josh Smith",
+      "jobTitle": "Founder & Editor, CourseSpeak",
+      "url": "https://coursespeak.com/about",
+      "image": "https://coursespeak.com/images/author.jpg",
+      "sameAs": [
+        "https://www.linkedin.com/in/anandayuda/",
+        "https://x.com/courses_peak",
+        "https://www.facebook.com/CourseSpeakOfficial/"
+      ],
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${canonicalUrl}#breadcrumb`,
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://coursespeak.com" },
+        { "@type": "ListItem", "position": 2, "name": "Platform Comparisons", "item": "https://coursespeak.com/platforms" },
+        { "@type": "ListItem", "position": 3, "name": "Udemy vs LinkedIn Learning", "item": canonicalUrl },
+      ],
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${canonicalUrl}#faq`,
+      "mainEntity": faqs.map((faq) => ({
+        "@type": "Question",
+        "name": faq.q,
+        "acceptedAnswer": { "@type": "Answer", "text": faq.a },
+      })),
+    },
+  ],
+};
+---
+
+<style>
+  .toc { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.35rem; }
+  .toc a { font-size: 0.875rem; color: var(--brand); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
+  .toc span { font-size: 0.7rem; color: var(--muted); width: 18px; font-weight: 600; }
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  .compare-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; }
+  .compare-card h3 { margin: 0 0 0.75rem; font-size: 1.1rem; color: var(--text); font-weight: 800; display: flex; align-items: center; gap: 0.5rem; }
+  .compare-card ul { margin: 0; padding-left: 1.1rem; line-height: 1.8; color: var(--muted); }
+  .compare-card li strong { color: var(--text); }
+  .vs-row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1rem; align-items: stretch; margin: 1rem 0; }
+  .vs-box { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; }
+  .vs-box h3 { margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 800; color: var(--text); }
+  .vs-box p { margin: 0; font-size: 0.9rem; color: var(--muted); line-height: 1.65; }
+  .vs-mid { display: flex; align-items: center; justify-content: center; font-weight: 900; color: var(--brand); font-size: 0.85rem; }
+  .prose h2 { color: var(--text); margin-top: 2rem; }
+  .prose p, .prose li { color: var(--muted); line-height: 1.75; }
+  .verdict { background: rgba(212,167,55,0.08); border: 1px solid rgba(212,167,55,0.3); border-radius: 14px; padding: 1.25rem 1.5rem; color: var(--text); font-size: 1rem; line-height: 1.7; }
+  .verdict strong { color: var(--brand); }
+  .related { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem; }
+  .related a { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 0.85rem 1rem; text-decoration: none; color: var(--brand); font-weight: 700; font-size: 0.85rem; transition: border-color 0.2s ease, transform 0.2s ease; }
+  .related a:hover { border-color: var(--brand); transform: translateY(-1px); }
+  .atglance-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+  .atglance-table th, .atglance-table td { border: 1px solid var(--border); padding: 0.7rem 0.9rem; text-align: left; vertical-align: top; line-height: 1.6; }
+  .atglance-table thead th { background: var(--card); color: var(--text); font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+  .atglance-table td:first-child { color: var(--muted); font-weight: 600; white-space: nowrap; }
+  .atglance-table td { color: var(--text); }
+  .atglance-table tr:nth-child(even) td { background: var(--bg-secondary); }
+  @media (max-width: 760px) {
+    .compare-grid, .vs-row { grid-template-columns: 1fr; }
+    .vs-mid { padding: 0.5rem 0; }
+  }
+</style>
+
+<Layout title={pageTitle} description={pageDescription} type="article" canonical={canonicalUrl} image="/images/og/og-udemy-vs-linkedin-learning.png" ogImageType="image/png">
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <section style={{ padding: "4rem 1rem 2rem", textAlign: "center" }}>
+    <div style={{ maxWidth: "900px", margin: "0 auto" }}>
+      <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        Head-to-Head Comparison — Updated {monthYear}
+      </div>
+      <h1 style={{ fontSize: "clamp(1.8rem, 4.5vw, 2.8rem)", fontWeight: 800, lineHeight: 1.2, margin: "0 auto 0.75rem" }}>
+        <span style={{ background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Udemy vs LinkedIn Learning</span>
+        <br />
+        <span style={{ color: "var(--text)" }}>Career Skills That Get Noticed</span>
+      </h1>
+      <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "680px", margin: "0 auto 1.5rem", lineHeight: 1.6 }}>
+        Udemy offers deep, affordable courses in everything. LinkedIn Learning offers short professional courses that post certificates straight to your profile. Here's how to choose for your career.
+      </p>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "1rem", flexWrap: "wrap", fontSize: "0.8rem", color: "var(--muted)" }}>
+        <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          By <strong style={{ color: "var(--text)" }}>Josh Smith</strong>
+        </span>
+        <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+          Updated <time datetime={lastModified}>{new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})}</time>
+        </span>
+        <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+            7 min read
+        </span>
+      </div>
+      <Image
+        src="/images/og/og-udemy-vs-linkedin-learning.png"
+        alt="Udemy vs LinkedIn Learning - 2026 comparison of pricing, certificates, and library"
+        width={1200}
+        height={630}
+        loading="eager"
+        fetchpriority="high"
+        style={{ width: "100%", maxWidth: "900px", height: "auto", borderRadius: "16px", border: "1px solid var(--border)", margin: "1.75rem auto 0", display: "block", boxShadow: "0 10px 40px -12px rgba(0,0,0,0.4)" }}
+      />
+    </div>
+  </section>
+
+  <nav style={{ background: "var(--card)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)", padding: "1.5rem 1rem" }}>
+    <div class="container" style={{ maxWidth: "900px" }}>
+      <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.3rem 0.75rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.68rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+        On this page
+      </div>
+      <ol class="toc">
+        {[
+          ["#overview", "Quick verdict"],
+          ["#pricing", "Pricing compared"],
+          ["#certificates", "Certificates & LinkedIn integration"],
+          ["#free", "Free course options"],
+          ["#format", "Course length & focus"],
+          ["#proscons", "Pros and cons"],
+          ["#which", "Which one for your goal?"],
+          ["#related", "Related comparisons"],
+          ["#faq", "FAQ"],
+        ].map(([href, label], i) => (
+          <li>
+            <a href={href as string}>
+              <span>{i + 1}.</span>
+              {label as string}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </nav>
+
+  <article style={{ padding: "3rem 1rem 4rem" }}>
+    <div class="container prose" style={{ maxWidth: "900px" }}>
+
+      <div id="overview" class="verdict">
+        <strong>Quick verdict:</strong> Choose <strong>Udemy</strong> for deep, comprehensive, affordable learning — often free with 100% off coupons and kept for life. Choose <strong>LinkedIn Learning</strong> when you want short professional-development courses whose certificates flow directly onto your LinkedIn profile, especially if you already have LinkedIn Premium.
+      </div>
+
+      <h2>At a Glance</h2>
+      <table class="atglance-table">
+        <thead>
+          <tr><th>Feature</th><th>Udemy</th><th>LinkedIn Learning</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Pricing model</td><td>Pay once per course, often discounted or free with coupons</td><td>Subscription, frequently bundled with LinkedIn Premium</td></tr>
+          <tr><td>Typical cost</td><td>$0 with verified coupons; $12.99-$19.99 during sales; list up to $199.99</td><td>~$39/month; often included with LinkedIn Premium; 1-month free trial</td></tr>
+          <tr><td>Free options</td><td>Full courses free via 100% off coupons, lifetime access</td><td>30-day trial; library access only while subscribed</td></tr>
+          <tr><td>Certificates</td><td>Completion only, not accredited</td><td>LinkedIn-branded certificates that display directly on your profile</td></tr>
+          <tr><td>Course library</td><td>200,000+ courses on any topic</td><td>16,000+ courses focused on business and professional skills</td></tr>
+          <tr><td>Course length</td><td>1-40+ hours, fully self-paced</td><td>Short: 1-4 hours on average, video-led</td></tr>
+          <tr><td>Access</td><td>Lifetime after you enroll</td><td>Only while subscribed; content lost when you cancel</td></tr>
+          <tr><td>Best for</td><td>Affordable deep dives and technical skills</td><td>Career skills, quick upskilling, and profile visibility</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="pricing">1. Pricing Compared</h2>
+      <p>
+        Udemy is <strong>pay-per-course</strong> (typically <strong>$12–$200</strong>), with instructors regularly publishing <strong>100% off coupons</strong> that we verify and list daily on <a href="/deals" style={{ color: "var(--brand)", fontWeight: 600 }}>CourseSpeak</a> — making premium courses free with lifetime access.
+      </p>
+      <p>
+        LinkedIn Learning is <strong>subscription-based</strong> — around <strong>$39/month</strong> — though it's frequently bundled with <strong>LinkedIn Premium</strong> subscriptions. A 1-month free trial lets you test it. Content is lost when you cancel.
+      </p>
+
+      <h2 id="certificates">2. Certificates & LinkedIn Integration</h2>
+      <div class="compare-grid">
+        <div class="compare-card">
+          <h3><a href="https://www.udemy.com" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none">Udemy</a></h3>
+          <ul>
+            <li><strong>Certificate of completion</strong> per course</li>
+            <li>Free with coupons, same as paying students</li>
+            <li>Great for portfolios & showing initiative</li>
+            <li>Not tied to any social platform</li>
+          </ul>
+        </div>
+        <div class="compare-card">
+          <h3><a href="https://www.linkedin.com/learning" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none">LinkedIn Learning</a></h3>
+          <ul>
+            <li><strong>Certificates auto-post to your LinkedIn profile</strong></li>
+            <li>Recruiters see them instantly</li>
+            <li>Short professional-development courses</li>
+            <li>Integrated with job-matching features</li>
+          </ul>
+        </div>
+      </div>
+      <p>
+        This is LinkedIn Learning's superpower: your certificates appear automatically on the profile where recruiters actually look. Udemy certificates are more useful on a portfolio or personal site.
+      </p>
+
+      <h2 id="free">3. Free Course Options</h2>
+      <div class="vs-row">
+        <div class="vs-box">
+          <h3>Udemy — Free with coupons</h3>
+          <p>Verified 100% off coupons give you the full course permanently at $0 — videos, quizzes, resources, certificate. <a href="/deals" style={{ color: "var(--brand)", fontWeight: 600 }}>Browse today's free coupons</a>.</p>
+        </div>
+        <div class="vs-mid">VS</div>
+        <div class="vs-box">
+          <h3>LinkedIn Learning — Trial only</h3>
+          <p>1-month free trial, then a subscription. Occasional free courses exist, but the library is subscription-gated.</p>
+        </div>
+      </div>
+
+      <h2 id="format">4. Course Length & Focus</h2>
+      <p>
+        LinkedIn Learning courses are <strong>short — 1 to 3 hours</strong>, broken into 3–10 minute lessons — perfect for fitting professional development into a busy week. Topics lean toward <strong>soft skills and workplace productivity</strong>: leadership, communication, Excel, project management, and industry-specific skills.
+      </p>
+      <p>
+        Udemy courses are typically <strong>5–40 hours</strong> and go deep into hard skills: programming, data science, design, and technical certification prep. If you want to genuinely master a skill, Udemy goes far deeper.
+      </p>
+
+      <h2 id="proscons">5. Pros and Cons</h2>
+      <div class="compare-grid">
+        <div class="compare-card">
+          <h3>Udemy Pros</h3>
+          <ul>
+            <li><strong>Free</strong> with verified 100% off coupons</li>
+            <li>Lifetime access — buy once, keep forever</li>
+            <li>200,000+ courses in every category</li>
+            <li>Deep, comprehensive content (5–40 hrs)</li>
+            <li>No subscription required</li>
+          </ul>
+        </div>
+        <div class="compare-card">
+          <h3>LinkedIn Learning Pros</h3>
+          <ul>
+            <li>Certificates post directly to LinkedIn</li>
+            <li>Short, easy-to-finish lessons (3–10 min)</li>
+            <li>Strong soft-skills & professional library</li>
+            <li>Bundled with LinkedIn Premium</li>
+            <li>Integrates with job matching</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2 id="which">6. Which One for Your Goal?</h2>
+      <ul>
+        <li><strong>Learn a skill deeply for free:</strong> Udemy with coupons → <a href="/deals" style={{ color: "var(--brand)", fontWeight: 600 }}>free courses today</a>.</li>
+        <li><strong>Showcase learning to recruiters on LinkedIn:</strong> LinkedIn Learning.</li>
+        <li><strong>Leadership, communication, management skills:</strong> LinkedIn Learning.</li>
+        <li><strong>Programming, data, design, cert prep:</strong> Udemy — far deeper.</li>
+        <li><strong>Quick upskilling between meetings:</strong> LinkedIn Learning's short lessons.</li>
+        <li><strong>No budget:</strong> Udemy coupons every time.</li>
+      </ul>
+
+      <div class="verdict">
+        <strong>Bottom line:</strong> Udemy is the better value for real skill-building — free with our coupons and kept forever. LinkedIn Learning is the better complement for professional polish, thanks to short courses and instant LinkedIn visibility. A strong strategy: master skills free on Udemy, then take one or two LinkedIn Learning courses to surface that learning to recruiters.
+      </div>
+
+      <h2 id="related">7. Related Comparisons</h2>
+      <div class="related">
+        {related.map((r) => <a href={`/platforms/${r.slug}`}>{r.label}</a>)}
+      </div>
+
+    </div>
+  </article>
+
+  <section style={{ padding: "4rem 1rem", background: "var(--bg-secondary)" }}>
+    <div class="container" style={{ maxWidth: "900px" }}>
+      <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
+        <h2 class="section-heading" id="faq">Udemy vs LinkedIn Learning FAQ</h2>
+        <p style={{ color: "var(--muted)", maxWidth: "600px", margin: "0.5rem auto 0" }}>Quick answers to the questions we hear most.</p>
+      </div>
+      <div class="faq-grid">
+        {faqs.map((faq) => (
+          <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "14px", padding: "1.25rem 1.5rem" }}>
+            <h3 style={{ margin: "0 0 0.5rem", fontSize: "1rem", color: "var(--text)", fontWeight: 700 }}>{faq.q}</h3>
+            <p style={{ margin: 0, color: "var(--muted)", lineHeight: 1.7, fontSize: "0.95rem" }}>{faq.a}</p>
+          </div>
+        ))}
+      </div>
+      <div style={{ marginTop: "2.5rem" }}>
+        <AuthorCard />
+      </div>
+      <div style={{ textAlign: "center", marginTop: "3rem" }}>
+        <p style={{ color: "var(--muted)", marginBottom: "1rem" }}>Ready to start learning for free?</p>
+        <a href="/deals" style={{
+          display: "inline-flex", alignItems: "center", gap: "0.5rem",
+          padding: "0.875rem 2rem", borderRadius: "12px",
+          background: "var(--brand)", color: "#1a1814",
+          textDecoration: "none", fontWeight: 700, fontSize: "1rem",
+          boxShadow: "0 4px 20px -4px hsla(45,95%,58%,0.4)"
+        }}>
+          Browse Free Udemy Coupons
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

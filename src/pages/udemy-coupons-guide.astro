@@ -2,10 +2,9 @@
 import Layout from "../layouts/Layout.astro";
 
 const canonicalUrl = "https://coursespeak.com/udemy-coupons-guide";
-const pageTitle = "Udemy Coupons Guide 2026 — How to Get 100% Off Udemy Courses | CourseSpeak";
-const pageDescription = "The complete guide to finding and using Udemy coupon codes in 2026. Learn how to get 100% off Udemy courses, where to find verified coupons, and how to redeem them step by step.";
-
 const currentYear = new Date().getFullYear();
+const pageTitle = `Udemy Coupons Guide ${currentYear} — How to Get 100% Off Udemy Courses | CourseSpeak`;
+const pageDescription = `The complete guide to finding and using Udemy coupon codes in ${currentYear}. Learn how to get 100% off Udemy courses, where to find verified coupons, and how to redeem them step by step.`;
 const lastModified = new Date().toISOString().split('T')[0];
 
 const monthYear = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
@@ -13,7 +12,7 @@ const monthYear = new Date().toLocaleDateString('en-US', { year: 'numeric', mont
 
 <Layout title={pageTitle} description={pageDescription} type="article" canonical={canonicalUrl}>
 
-  <!-- Structured Data: Article + HowTo + FAQ + BreadcrumbList -->
+  <!-- Structured Data: Article + FAQ + BreadcrumbList -->
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@graph": [
@@ -21,7 +20,7 @@ const monthYear = new Date().toLocaleDateString('en-US', { year: 'numeric', mont
         "@type": "Article",
         "@id": `${canonicalUrl}#article`,
         "url": canonicalUrl,
-        "headline": "Udemy Coupons Guide 2026 — How to Get 100% Off Udemy Courses",
+        "headline": `Udemy Coupons Guide ${currentYear} — How to Get 100% Off Udemy Courses`,
         "description": pageDescription,
         "datePublished": "2024-01-01",
         "dateModified": lastModified,
@@ -49,45 +48,6 @@ const monthYear = new Date().toLocaleDateString('en-US', { year: 'numeric', mont
             { "@type": "ListItem", "position": 2, "name": "Udemy Coupons Guide", "item": canonicalUrl }
           ]
         }
-      },
-      {
-        "@type": "HowTo",
-        "@id": `${canonicalUrl}#howto`,
-        "name": "How to Get 100% Off Udemy Courses Using Coupons",
-        "description": "Step-by-step instructions to find, verify, and redeem Udemy coupon codes for free or discounted courses.",
-        "totalTime": "PT5M",
-        "step": [
-          {
-            "@type": "HowToStep",
-            "position": 1,
-            "name": "Find a verified Udemy coupon",
-            "text": "Visit CourseSpeak's deals page and browse courses by category or topic. All listed coupons are verified and updated daily."
-          },
-          {
-            "@type": "HowToStep",
-            "position": 2,
-            "name": "Click 'Redeem Coupon'",
-            "text": "On the CourseSpeak deal page, click the 'Redeem Coupon' or 'Get Deal' button to open the Udemy course page with the discount pre-applied."
-          },
-          {
-            "@type": "HowToStep",
-            "position": 3,
-            "name": "Log in or create a Udemy account",
-            "text": "If you're not already logged in, create a free Udemy account or log in with your existing credentials."
-          },
-          {
-            "@type": "HowToStep",
-            "position": 4,
-            "name": "Confirm the discounted price",
-            "text": "On the Udemy checkout page, verify the price shows $0.00 (or the discounted amount) before proceeding."
-          },
-          {
-            "@type": "HowToStep",
-            "position": 5,
-            "name": "Enroll and access the course",
-            "text": "Complete checkout. The course is now in your Udemy library with lifetime access — start learning immediately."
-          }
-        ]
       },
       {
         "@type": "FAQPage",
@@ -366,7 +326,7 @@ const monthYear = new Date().toLocaleDateString('en-US', { year: 'numeric', mont
             </div>
           </section>
 
-          <!-- ── Section 4: How to Redeem (HowTo) ── -->
+          <!-- ── Section 4: How to Redeem ── -->
           <section aria-labelledby="how-to-redeem" style="margin-bottom:3rem;">
             <h2 id="how-to-redeem" class="section-heading">
               4. How to Redeem a Udemy Coupon — Step by Step

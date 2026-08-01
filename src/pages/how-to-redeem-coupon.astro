@@ -2,10 +2,10 @@
 import Layout from "../layouts/Layout.astro";
 
 const canonicalUrl = "https://coursespeak.com/how-to-redeem-coupon";
-const pageTitle = "How to Redeem Udemy Coupons in 2026 — Step-by-Step Guide | CourseSpeak";
-const pageDescription = "Learn exactly how to redeem a Udemy coupon code in 5 steps. Includes what to do when a coupon doesn't work, common errors, and tips to always get the best price.";
-const lastModified = new Date().toISOString().split('T')[0];
 const currentYear = new Date().getFullYear();
+const pageTitle = `How to Redeem Udemy Coupons in ${currentYear} — Step-by-Step Guide | CourseSpeak`;
+const pageDescription = `Learn exactly how to redeem a Udemy coupon code in 5 steps in ${currentYear}. Includes what to do when a coupon doesn't work, common errors, and tips to always get the best price.`;
+const lastModified = new Date().toISOString().split('T')[0];
 const monthYear = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
 ---
 
@@ -15,46 +15,22 @@ const monthYear = new Date().toLocaleDateString('en-US', { year: 'numeric', mont
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "HowTo",
-        "@id": `${canonicalUrl}#howto`,
-        "name": "How to Redeem a Udemy Coupon Code",
-        "description": "Step-by-step instructions to find a Udemy coupon on CourseSpeak and redeem it for a free or discounted course.",
-        "totalTime": "PT3M",
-        "supply": [
-          { "@type": "HowToSupply", "name": "Free Udemy account" },
-          { "@type": "HowToSupply", "name": "Valid Udemy coupon from CourseSpeak" }
-        ],
-        "step": [
-          {
-            "@type": "HowToStep", "position": 1,
-            "name": "Find a course deal on CourseSpeak",
-            "text": "Browse CourseSpeak's deals page or search by topic or category. Each listing shows the discount percentage, coupon expiry, and course rating."
-          },
-          {
-            "@type": "HowToStep", "position": 2,
-            "name": "Click 'Redeem Coupon'",
-            "text": "Click the 'Redeem Coupon' button on the CourseSpeak deal page. This opens the Udemy course page with the coupon pre-applied in the URL — no manual code entry needed."
-          },
-          {
-            "@type": "HowToStep", "position": 3,
-            "name": "Confirm the discounted price on Udemy",
-            "text": "On the Udemy course page, verify the checkout price shows $0.00 (for 100% off coupons) or the discounted amount before proceeding. If the full price appears, the coupon has expired."
-          },
-          {
-            "@type": "HowToStep", "position": 4,
-            "name": "Log in or create a free Udemy account",
-            "text": "Sign in with your Udemy credentials or create a free account using email or Google. Account creation takes under 60 seconds."
-          },
-          {
-            "@type": "HowToStep", "position": 5,
-            "name": "Click 'Enroll Now' to complete enrollment",
-            "text": "Click 'Enroll Now'. For 100% off courses, no payment details are required. The course is added to your Udemy library immediately with lifetime access."
-          }
-        ],
-        "inLanguage": "en-US",
+        "@type": "Article",
+        "@id": `${canonicalUrl}#article`,
+        "url": canonicalUrl,
+        "headline": "How to Redeem a Udemy Coupon Code",
+        "description": pageDescription,
         "datePublished": "2024-01-01",
         "dateModified": lastModified,
+        "inLanguage": "en-US",
         "author": { "@type": "Person", "name": "Josh Smith", "url": "https://coursespeak.com/about" },
+        "publisher": {
+          "@type": "Organization",
+          "@id": "https://coursespeak.com/#organization",
+          "name": "CourseSpeak",
+          "url": "https://coursespeak.com",
+          "logo": { "@type": "ImageObject", "url": "https://coursespeak.com/logo.svg" }
+        },
         "breadcrumb": {
           "@type": "BreadcrumbList",
           "itemListElement": [

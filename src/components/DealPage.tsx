@@ -3,6 +3,7 @@ import { useEffect, useRef, useMemo, useState } from 'react';
 import { renderMarkdownToHtml } from "../lib/markdown";
 import { extractDifficultyLevel, slugifyCategory } from "../lib/utils";
 import { createInstructorSlug, parseInstructors } from "../lib/instructors";
+import { buildFAQs } from "../lib/faqs";
 import ActionsPanel from "./ActionsPanel";
 import RelatedList from "./RelatedList";
 import CourseComparison from "./CourseComparison";
@@ -34,9 +35,7 @@ interface Deal {
 }
 
 export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, relatedDeals?: any[] }) {
-    const instructorProfileSlug = deal.instructor
-        ? createInstructorSlug(parseInstructors(deal.instructor)[0] ?? deal.instructor)
-        : "";
+    const instructorsList = parseInstructors(deal.instructor);
 
     const bodyContent = deal.content || deal.description || "";
     
@@ -57,53 +56,8 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
         }
     }, [bodyContent, isHtmlContent]);
 
-    // Use only real FAQs from deal data, or generate minimal, accurate ones
-    const autoFAQs = useMemo(() => {
-        if (deal.faqs && deal.faqs.length > 0) {
-            return deal.faqs;
-        }
-
-        const generated: { q: string; a: string }[] = [];
-        const provider = deal.provider || "the course platform";
-
-        if (deal.price !== undefined) {
-            const price = deal.price ?? 9.99;
-            const original = deal.originalPrice ?? 119.99;
-            const discount = original > price ? Math.round(100 - (price / original) * 100) : 0;
-            generated.push({
-                q: `Is the coupon for "${deal.title}" still valid?`,
-                a: `The coupon listed on this page was verified on ${deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'the date shown above'}. It applies a ${discount}% discount${deal.expiresAt ? ` and is valid until ${new Date(deal.expiresAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}` : ''}. Coupons can expire quickly — click "Redeem Coupon" to check current availability.`
-            });
-        }
-
-        if (deal.duration) {
-            generated.push({
-                q: `How long is the "${deal.title}" course?`,
-                a: `The course is approximately ${deal.duration} of on-demand video content. You get lifetime access, so you can study at your own pace.`
-            });
-        }
-
-        if (deal.learn && deal.learn.length > 0) {
-            generated.push({
-                q: `What will I learn in "${deal.title}"?`,
-                a: `This course covers: ${deal.learn.slice(0, 5).join('; ')}. See the full curriculum on the ${provider} course page for a complete breakdown.`
-            });
-        }
-
-        if (deal.requirements && deal.requirements.length > 0) {
-            generated.push({
-                q: `Do I need any prior knowledge to take this course?`,
-                a: `The instructor recommends: ${deal.requirements.slice(0, 3).join('; ')}.`
-            });
-        }
-
-        generated.push({
-            q: `Will I get a certificate after completing this course?`,
-            a: `Yes. Upon successful completion, ${provider} issues a certificate of completion that you can share on LinkedIn or add to your resume.`
-        });
-
-        return generated;
-    }, [deal]);
+    // Use only real FAQs from deal data, or generate accurate ones (shared with structured data)
+    const autoFAQs = useMemo(() => buildFAQs(deal), [deal]);
 
     const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -140,6 +94,29 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
     const price = deal.price ?? 9.99;
     const originalPrice = deal.originalPrice ?? 119.99;
     const discountPct = originalPrice > price ? Math.round(100 - (price / originalPrice) * 100) : 0;
+    const savings = Math.max(originalPrice - price, 0);
+
+    // Parse durations like "5h 30m" / "22.5 hours" into hours for per-hour cost math
+    const durationHours = (() => {
+        if (!deal.duration) return null;
+        const h = deal.duration.match(/(\d+(?:\.\d+)?)\s*h/);
+        const m = deal.duration.match(/(\d+)\s*m/);
+        let total = 0;
+        if (h) total += parseFloat(h[1]);
+        if (m) total += parseInt(m[1], 10) / 60;
+        return total > 0 ? total : null;
+    })();
+    const costPerHour = durationHours ? price / durationHours : null;
+
+    const learnHighlights = (deal.learn || [])
+        .map(s => s.replace(/\r/g, "").trim())
+        .filter(Boolean);
+
+    const reqHighlights = (deal.requirements || [])
+        .map(s => s.replace(/\r/g, "").trim())
+        .filter(Boolean);
+
+    const beginnerFriendly = reqHighlights.some(r => /no|beginner|none|without|any|basic|familiar|experience/i.test(r));
 
     const handleCopyCoupon = () => {
         if (deal.coupon && typeof navigator !== 'undefined' && navigator.clipboard) {
@@ -232,16 +209,22 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 <strong>({deal.students.toLocaleString()}</strong> students enrolled)
                             </span>
                         )}
-                        {deal.instructor && (
+                        {instructorsList.length > 0 && (
                             <span style={{ color: "var(--text-secondary)" }}>
                                 Created by{" "}
-                                <a href={`/instructor/${instructorProfileSlug}`}
-                                   style={{ color: "var(--brand)", fontWeight: 700, textDecoration: "none" }}
-                                   onMouseEnter={(e) => (e.target as HTMLElement).style.textDecoration = "underline"}
-                                   onMouseLeave={(e) => (e.target as HTMLElement).style.textDecoration = "none"}
-                                >
-                                    {deal.instructor}
-                                </a>
+                                {instructorsList.map((name, i) => (
+                                    <span key={name}>
+                                        {i > 0 && <>, </>}
+                                        {instructorsList.length > 1 && i === instructorsList.length - 1 && <> and </>}
+                                        <a href={`/instructor/${createInstructorSlug(name)}`}
+                                           style={{ color: "var(--brand)", fontWeight: 700, textDecoration: "none" }}
+                                           onMouseEnter={(e) => (e.target as HTMLElement).style.textDecoration = "underline"}
+                                           onMouseLeave={(e) => (e.target as HTMLElement).style.textDecoration = "none"}
+                                        >
+                                            {name}
+                                        </a>
+                                    </span>
+                                ))}
                             </span>
                         )}
                         {deal.updatedAt && (
@@ -368,7 +351,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                             About This {deal.provider || "Udemy"} Course
                         </h2>
                         <p style={{ fontSize: "0.9rem", color: "var(--muted)", marginBottom: "1.25rem" }}>
-                            The following is the full official course description as published on <strong>{deal.provider || "Udemy"}</strong> by instructor <strong style={{ color: "var(--brand)" }}>{deal.instructor}</strong>. It covers the curriculum structure, teaching methodology, and topic scope for this <a href={`/categories/${slugifyCategory(deal.category || "")}`} style={{ color: "inherit", textDecoration: "underline" }}><strong>{deal.category}</strong></a> course:
+                            The following is the full official course description as published on <strong>{deal.provider || "Udemy"}</strong> by instructor{instructorsList.length > 1 ? "s" : ""} <strong style={{ color: "var(--brand)" }}>{instructorsList.length > 0 ? instructorsList.join(", ") : deal.instructor}</strong>. It covers the curriculum structure, teaching methodology, and topic scope for this <a href={`/categories/${slugifyCategory(deal.category || "")}`} style={{ color: "inherit", textDecoration: "underline" }}><strong>{deal.category}</strong></a> course:
                         </p>
                         <div
                             ref={markdownRef}
@@ -476,17 +459,45 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                             <div style={{ padding: "1.5rem" }}>
                                 {/* Analysis */}
                                 <p style={{ fontSize: "0.9rem", color: "var(--text-secondary)", lineHeight: 1.7, margin: "0 0 1.25rem 0" }}>
-                                    Based on analysis of the curriculum structure, student engagement metrics, and verified rating data, this is a high-value resource for learners seeking to build skills in{" "}
-                                    {deal.category || "professional development"}. 
-                                    {deal.instructor ? ` Taught by ${deal.instructor} on ${deal.provider || "Udemy"}` : ` Offered on ${deal.provider || "Udemy"}`}
-                                    {deal.duration ? `, the ${deal.duration} course provides a structured progression from foundational concepts to advanced techniques` : ""} 
-                                    — making it suitable for learners at all levels.
+                                    The short answer is <strong style={{ color: "var(--text)" }}>yes</strong> — provided {deal.category ? `the ${deal.category} skills this course teaches` : "the topic"} actually line up with what you want to build. The regular price for <em>{deal.title}</em> on {deal.provider || "Udemy"} is <strong style={{ color: "var(--text)" }}>${originalPrice.toFixed(2)}</strong>.
                                     {discountPct > 0 ? (
-                                        <> The current coupon reduces the price by {discountPct}%, from ${originalPrice.toFixed(2)} to ${price.toFixed(2)}, removing the primary financial barrier to enrollment.</>
+                                        <> The coupon code listed on this page drops that to <strong style={{ color: "var(--text)" }}>${price.toFixed(2)}</strong> — a saving of ${savings.toFixed(2)}, or {discountPct}% off the standard rate.</>
                                     ) : (
-                                        <> The current offer provides excellent value with accessible pricing.</>
+                                        <> This course is currently available without a price tag, which removes the usual risk of trying a new subject.</>
                                     )}
+                                    {costPerHour ? <> Spread across {deal.duration} of on-demand video, that works out to roughly <strong style={{ color: "var(--text)" }}>${costPerHour.toFixed(2)} per hour</strong> of content — less than the cost of a single chapter of most printed {deal.category ? `${deal.category.toLowerCase()} textbooks` : "textbooks"}.</> : ""}
                                 </p>
+
+                                {learnHighlights.length > 0 && (
+                                    <p style={{ fontSize: "0.9rem", color: "var(--text-secondary)", lineHeight: 1.7, margin: "0 0 1.25rem 0" }}>
+                                        A discount is only worth something if the material delivers, and the curriculum here is built around practical outcomes.{" "}
+                                        {instructorsList.length > 0 ? `${instructorsList.join(" and ")} ${instructorsList.length > 1 ? "walk" : "walks"} you through ` : "The course walks you through "}
+                                        {learnHighlights.slice(0, 3).map((item, i, arr) => {
+                                            const text = item.charAt(0).toLowerCase() + item.slice(1);
+                                            return i === arr.length - 1 ? `and ${text}` : text;
+                                        }).join(", ")}
+                                        {" — concrete skills you can apply, not abstract theory."}
+                                        {deal.students ? ` It has already been taken by ${deal.students.toLocaleString()} students${deal.rating ? ` and holds a ${deal.rating.toFixed(1)}-star average from verified reviews` : ""}, which is a reasonable sign the content holds up in practice.` : ""}
+                                    </p>
+                                )}
+
+                                {reqHighlights.length > 0 && (
+                                    <p style={{ fontSize: "0.9rem", color: "var(--text-secondary)", lineHeight: 1.7, margin: "0 0 1.25rem 0" }}>
+                                        {beginnerFriendly ? (
+                                            <>The bar to entry is low: {reqHighlights.slice(0, 2).join("; ")}. That makes it a realistic choice even if {deal.category || "this topic"} is unfamiliar territory.</>
+                                        ) : (
+                                            <>The prerequisites are worth reading before you commit: {reqHighlights.slice(0, 2).join("; ")}. This one suits learners who already have some grounding in {deal.category || "the subject"}.</>
+                                        )}
+                                        {deal.duration && <> In practical terms, expect around {deal.duration} of on-demand video to work through at your own pace.</>}
+                                        {deal.language && <> The material is presented in {deal.language}.</>}
+                                    </p>
+                                )}
+
+                                {countdown && (
+                                    <p style={{ fontSize: "0.9rem", color: "var(--text-secondary)", lineHeight: 1.7, margin: "0 0 1.25rem 0" }}>
+                                        One practical note before you decide: this coupon is time-limited. {countdown.days > 0 ? `Our records show it runs out in ${countdown.days} day${countdown.days !== 1 ? "s" : ""}${countdown.hours > 0 ? ` and ${countdown.hours} hour${countdown.hours !== 1 ? "s" : ""}` : ""}.` : countdown.hours > 0 ? `Our records show it runs out in ${countdown.hours} hour${countdown.hours !== 1 ? "s" : ""}${countdown.minutes > 0 ? ` and ${countdown.minutes} minute${countdown.minutes !== 1 ? "s" : ""}` : ""}.` : "Our records show it runs out in under a minute."} {deal.provider || "Udemy"} instructors can change or retire a code at any time, so if the value makes sense for you, redeem sooner rather than later.
+                                    </p>
+                                )}
 
                                 {/* Pros & Cons side by side */}
                                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "1.25rem" }}>
@@ -524,18 +535,28 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                             Cons
                                         </h3>
                                         <ul style={{ margin: 0, padding: 0, listStyle: "none", color: "var(--text-secondary)", fontSize: "0.82rem", lineHeight: 1.65 }}>
+                                            {discountPct > 0 && (
+                                                <li style={{ padding: "3px 0", display: "flex", gap: "6px" }}>
+                                                    <span style={{ color: "var(--destructive)", flexShrink: 0 }}>!</span>
+                                                    The coupon is time-limited — once it expires, the price tends to revert toward the standard ${originalPrice.toFixed(2)}.
+                                                </li>
+                                            )}
                                             <li style={{ padding: "3px 0", display: "flex", gap: "6px" }}>
                                                 <span style={{ color: "var(--destructive)", flexShrink: 0 }}>!</span>
-                                                May be challenging for absolute beginners.
+                                                Lifetime access is tied to {deal.provider || "Udemy"} staying online; the platform can change its policies.
                                             </li>
-                                            <li style={{ padding: "3px 0", display: "flex", gap: "6px" }}>
-                                                <span style={{ color: "var(--destructive)", flexShrink: 0 }}>!</span>
-                                                Lifetime access depends on {deal.provider || "Udemy"}.
-                                            </li>
-                                            <li style={{ padding: "3px 0", display: "flex", gap: "6px" }}>
-                                                <span style={{ color: "var(--destructive)", flexShrink: 0 }}>!</span>
-                                                Projects & quizzes need extra time.
-                                            </li>
+                                            {deal.duration && (
+                                                <li style={{ padding: "3px 0", display: "flex", gap: "6px" }}>
+                                                    <span style={{ color: "var(--destructive)", flexShrink: 0 }}>!</span>
+                                                    Budget for the exercises and quizzes too — they add real time on top of the {deal.duration} of video.
+                                                </li>
+                                            )}
+                                            {!beginnerFriendly && (
+                                                <li style={{ padding: "3px 0", display: "flex", gap: "6px" }}>
+                                                    <span style={{ color: "var(--destructive)", flexShrink: 0 }}>!</span>
+                                                    Assumes some prior knowledge — check the prerequisites before purchasing.
+                                                </li>
+                                            )}
                                         </ul>
                                     </div>
                                 </div>
@@ -552,7 +573,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                     </div>
                                     <div style={{ flex: 2, minWidth: "250px", padding: "0.75rem 1rem", background: "linear-gradient(135deg, rgba(212, 167, 55, 0.06) 0%, rgba(212, 167, 55, 0.02) 100%)", border: "1px solid rgba(212, 167, 55, 0.12)", borderRadius: "10px" }}>
                                         <p style={{ fontSize: "0.82rem", color: "var(--text-secondary)", lineHeight: 1.6, fontStyle: "italic", margin: 0 }}>
-                                            "Given the{discountPct > 0 ? ` ${discountPct}%` : ""} price reduction{deal.rating ? ` and verified ${deal.rating.toFixed(1)}-star rating` : ""}, <strong style={{ color: "var(--text)" }}>{deal.title}</strong> is a strong value in {deal.category || "professional development"} on {deal.provider || "Udemy"}. Enrollment recommended while the coupon is active."
+                                            "At {costPerHour ? `roughly $${costPerHour.toFixed(2)} an hour of video, ` : ""}<strong style={{ color: "var(--text)" }}>{deal.title}</strong> is priced sensibly for what it actually covers{learnHighlights[0] ? ` — ${learnHighlights[0].charAt(0).toLowerCase()}${learnHighlights[0].slice(1)} and beyond` : ""}. If {deal.category || "this topic"} is on your roadmap{deal.rating ? ` and you value the ${deal.rating.toFixed(1)}-star track record` : ""}, this coupon is worth using while it's still valid."
                                         </p>
                                     </div>
                                 </div>
@@ -563,7 +584,9 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                         <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: "rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text)", fontSize: "1rem" }}>✓</div>
                                         <div>
                                             <div style={{ fontSize: "1rem", fontWeight: 700, color: "var(--text)" }}>Final Verdict: Worth It</div>
-                                            <div style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.8)" }}>Exceptional value with current pricing</div>
+                                            <div style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.8)" }}>
+                                                {discountPct > 0 ? `Saves you $${savings.toFixed(2)} against the standard ${deal.provider || "Udemy"} price` : "Available free right now — a good time to enroll"}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -574,7 +597,8 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                     Visit our <a href="/how-to-redeem-coupon" style={{ color: "var(--brand)", textDecoration: "underline" }}>step-by-step guide</a> for detailed instructions on how to apply coupon codes.
                                     <span style={{ display: "block", marginTop: "4px", color: "var(--muted)", fontSize: "0.78rem" }}>
                                         Coupon last verified {deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : "recently"}. 
-                                        {deal.provider || "Udemy"} coupons are time-limited — redeem as soon as possible.
+                                        {discountPct > 0 ? `At $${price.toFixed(2)} you save $${savings.toFixed(2)} compared to the standard $${originalPrice.toFixed(2)} price, ` : `This course is currently free, `}
+                                        and {deal.provider || "Udemy"} coupons are time-limited — redeem as soon as possible.
                                     </span>
                                 </div>
                             </div>
@@ -626,72 +650,76 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                     )}
 
                     {/* Instructor Profile */}
-                    {deal.instructor && (
+                    {instructorsList.length > 0 && (
                         <section aria-labelledby="instructor-heading" style={{ borderTop: "1px solid var(--border)", paddingTop: "2rem", marginBottom: "2rem" }}>
                             <h2 id="instructor-heading" style={{ fontSize: "1.4rem", fontWeight: 700, color: "var(--text)", marginBottom: "1.25rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
                                 <span style={{ width: "6px", height: "32px", background: "var(--brand)", borderRadius: "9999px" }} aria-hidden="true" />
-                                Instructor Profile
+                                Instructor Profile{instructorsList.length > 1 ? "s" : ""}
                             </h2>
                             <p style={{ fontSize: "0.9rem", color: "var(--muted)", marginBottom: "1.25rem" }}>
-                                Background information on <strong style={{ color: "var(--text)" }}>{deal.instructor}</strong>, the instructor responsible for this course on <strong>{deal.provider || "Udemy"}</strong>.
+                                Background information on <strong style={{ color: "var(--text)" }}>{instructorsList.join(", ")}</strong>, the instructor{instructorsList.length > 1 ? "s" : ""} responsible for this course on <strong>{deal.provider || "Udemy"}</strong>.
                             </p>
-                            <div style={{ background: "var(--bg)", border: "1px solid var(--border)", borderRadius: "16px", overflow: "hidden" }}>
-                                <div style={{ padding: "1.5rem 1.5rem 1rem", display: "flex", gap: "1rem", flexWrap: "wrap", alignItems: "center" }}>
-                                    <div style={{ width: "52px", height: "52px", borderRadius: "50%", background: "linear-gradient(135deg, var(--brand), var(--brand-hover))", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                                        <span style={{ color: "var(--text)", fontSize: "1.1rem", fontWeight: 700 }}>
-                                            {deal.instructor.split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase()}
-                                        </span>
+                            <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                                {instructorsList.map((name) => (
+                                    <div key={name} style={{ background: "var(--bg)", border: "1px solid var(--border)", borderRadius: "16px", overflow: "hidden" }}>
+                                        <div style={{ padding: "1.5rem 1.5rem 1rem", display: "flex", gap: "1rem", flexWrap: "wrap", alignItems: "center" }}>
+                                            <div style={{ width: "52px", height: "52px", borderRadius: "50%", background: "linear-gradient(135deg, var(--brand), var(--brand-hover))", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                                                <span style={{ color: "var(--text)", fontSize: "1.1rem", fontWeight: 700 }}>
+                                                    {name.split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase()}
+                                                </span>
+                                            </div>
+                                            <div style={{ flex: 1, minWidth: "180px" }}>
+                                                <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--text)" }}>
+                                                    {name}
+                                                </div>
+                                                <div style={{ fontSize: "0.8rem", color: "var(--muted)" }}>
+                                                    {deal.provider || "Udemy"} Instructor
+                                                </div>
+                                            </div>
+                                            <a
+                                                href={`/instructor/${createInstructorSlug(name)}`}
+                                                style={{
+                                                    display: "inline-flex", alignItems: "center", gap: "0.35rem",
+                                                    padding: "0.45rem 1rem", background: "rgba(212, 167, 55, 0.1)",
+                                                    border: "1px solid rgba(212, 167, 55, 0.25)", borderRadius: "8px",
+                                                    fontSize: "0.8rem", color: "var(--brand)", textDecoration: "none", fontWeight: 600,
+                                                }}
+                                            >
+                                                Full Profile ↗
+                                            </a>
+                                        </div>
+                                        <div style={{ borderTop: "1px solid var(--border)", padding: "1rem 1.5rem", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "0.75rem", fontSize: "0.85rem" }}>
+                                            <div>
+                                                <span style={{ color: "var(--muted)", fontWeight: 500 }}>Subject Area</span>
+                                                <div style={{ color: "var(--text-secondary)", marginTop: "2px" }}>{deal.category || "Development"}</div>
+                                            </div>
+                                            {deal.students && (
+                                                <div>
+                                                    <span style={{ color: "var(--muted)", fontWeight: 500 }}>Total Students</span>
+                                                    <div style={{ color: "var(--text-secondary)", marginTop: "2px" }}>{deal.students.toLocaleString()}+ enrolled</div>
+                                                </div>
+                                            )}
+                                            {deal.rating && (
+                                                <div>
+                                                    <span style={{ color: "var(--muted)", fontWeight: 500 }}>Rating</span>
+                                                    <div style={{ color: "var(--text-secondary)", marginTop: "2px" }}>{deal.rating.toFixed(1)} / 5.0</div>
+                                                </div>
+                                            )}
+                                            {deal.duration && (
+                                                <div>
+                                                    <span style={{ color: "var(--muted)", fontWeight: 500 }}>Course Duration</span>
+                                                    <div style={{ color: "var(--text-secondary)", marginTop: "2px" }}>{deal.duration}</div>
+                                                </div>
+                                            )}
+                                            <div style={{ gridColumn: "1 / -1" }}>
+                                                <span style={{ color: "var(--muted)", fontWeight: 500 }}>Teaching Approach</span>
+                                                <div style={{ color: "var(--text-secondary)", marginTop: "2px", lineHeight: 1.5 }}>
+                                                    Practical, project-based instruction built around real-world application of {deal.category || "IT"} skills, with hands-on exercises and quizzes to reinforce each section.
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div style={{ flex: 1, minWidth: "180px" }}>
-                                        <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--text)" }}>
-                                            {deal.instructor}
-                                        </div>
-                                        <div style={{ fontSize: "0.8rem", color: "var(--muted)" }}>
-                                            {deal.provider || "Udemy"} Instructor
-                                        </div>
-                                    </div>
-                                    <a
-                                        href={`/instructor/${instructorProfileSlug}`}
-                                        style={{
-                                            display: "inline-flex", alignItems: "center", gap: "0.35rem",
-                                            padding: "0.45rem 1rem", background: "rgba(212, 167, 55, 0.1)",
-                                            border: "1px solid rgba(212, 167, 55, 0.25)", borderRadius: "8px",
-                                            fontSize: "0.8rem", color: "var(--brand)", textDecoration: "none", fontWeight: 600,
-                                        }}
-                                    >
-                                        Full Profile ↗
-                                    </a>
-                                </div>
-                                <div style={{ borderTop: "1px solid var(--border)", padding: "1rem 1.5rem", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "0.75rem", fontSize: "0.85rem" }}>
-                                    <div>
-                                        <span style={{ color: "var(--muted)", fontWeight: 500 }}>Subject Area</span>
-                                        <div style={{ color: "var(--text-secondary)", marginTop: "2px" }}>{deal.category || "Development"}</div>
-                                    </div>
-                                    {deal.students && (
-                                        <div>
-                                            <span style={{ color: "var(--muted)", fontWeight: 500 }}>Total Students</span>
-                                            <div style={{ color: "var(--text-secondary)", marginTop: "2px" }}>{deal.students.toLocaleString()}+ enrolled</div>
-                                        </div>
-                                    )}
-                                    {deal.rating && (
-                                        <div>
-                                            <span style={{ color: "var(--muted)", fontWeight: 500 }}>Rating</span>
-                                            <div style={{ color: "var(--text-secondary)", marginTop: "2px" }}>{deal.rating.toFixed(1)} / 5.0</div>
-                                        </div>
-                                    )}
-                                    {deal.duration && (
-                                        <div>
-                                            <span style={{ color: "var(--muted)", fontWeight: 500 }}>Course Duration</span>
-                                            <div style={{ color: "var(--text-secondary)", marginTop: "2px" }}>{deal.duration}</div>
-                                        </div>
-                                    )}
-                                    <div style={{ gridColumn: "1 / -1" }}>
-                                        <span style={{ color: "var(--muted)", fontWeight: 500 }}>Teaching Approach</span>
-                                        <div style={{ color: "var(--text-secondary)", marginTop: "2px", lineHeight: 1.5 }}>
-                                            Practical, project-based instruction focused on real-world application of {deal.category || "IT"} skills. This course provides structured progression from foundational concepts to advanced techniques.
-                                        </div>
-                                    </div>
-                                </div>
+                                ))}
                             </div>
                         </section>
                     )}

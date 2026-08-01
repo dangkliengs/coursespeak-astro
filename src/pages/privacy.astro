@@ -4,8 +4,8 @@ import Layout from "../layouts/Layout.astro";
 const canonicalUrl = "https://coursespeak.com/privacy";
 const pageTitle = "Privacy Policy — Data Protection & Your Rights | CourseSpeak";
 const pageDescription = "CourseSpeak Privacy Policy: how we collect, use, and protect your personal data. GDPR-compliant with full transparency about your privacy rights.";
-const lastModified = "2026-01-15";
-const monthYear = "January 2026";
+const lastModified = new Date().toISOString().split('T')[0];
+const monthYear = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
 ---
 
 <Layout title={pageTitle} description={pageDescription} type="article" canonical={canonicalUrl}>

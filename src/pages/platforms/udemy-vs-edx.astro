@@ -1,0 +1,365 @@
+?---
+import Layout from "../../layouts/Layout.astro";
+import AuthorCard from "../../components/AuthorCard.astro";
+import { Image } from "astro:assets";
+
+const currentYear = new Date().getFullYear();
+const lastModified = new Date().toISOString().split("T")[0];
+const monthYear = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long" });
+const canonicalUrl = "https://coursespeak.com/platforms/udemy-vs-edx";
+
+const related = [
+  { slug: "udemy-vs-coursera", label: "Udemy vs Coursera" },
+  { slug: "udemy-vs-skillshare", label: "Udemy vs Skillshare" },
+  { slug: "udemy-vs-pluralsight", label: "Udemy vs Pluralsight" },
+  { slug: "udemy-vs-linkedin-learning", label: "Udemy vs LinkedIn Learning" },
+  { slug: "udemy-alternatives", label: "10 Best Udemy Alternatives" },
+];
+
+const pageTitle = `Udemy vs edX ${currentYear}: University Courses vs Practical Skills — Which Is Better?`;
+const pageDescription = `Udemy vs edX in ${currentYear} — we compare pricing, certificates, MicroMasters, free courses, and course quality. Find out which platform fits your learning style and career goals.`;
+
+const faqs = [
+  {
+    q: "Is edX better than Udemy?",
+    a: "For academic depth and university-issued credentials like MicroMasters and verified certificates, edX is better. For practical, job-ready skills that you can learn cheaply or free with 100% off coupons, Udemy is better. They serve different goals.",
+  },
+  {
+    q: "Are edX certificates worth it?",
+    a: "Yes, for most learners. edX certificates come from institutions like Harvard, MIT, and Berkeley and are widely recognized. They're also credit-eligible for some degree programs. However, they cost money (typically $50–$300 per course) — so they're worth it when the credential matters to your career.",
+  },
+  {
+    q: "Can I learn on edX for free?",
+    a: "Yes. Most edX courses can be audited for free, which gives you full access to the course content. You only pay if you want the verified certificate or graded assignments. Udemy courses can also be free via coupons, but you get everything — including the completion certificate — at $0.",
+  },
+  {
+    q: "Does Udemy offer university-level courses?",
+    a: "No. Udemy courses are created by independent instructors, not universities. edX is the platform founded by Harvard and MIT specifically for university-level courses, MicroMasters, and professional certificates.",
+  },
+  {
+    q: "Can edX credits transfer to a degree?",
+    a: "Yes. Some edX courses and MicroMasters programs are credit-eligible and can be applied toward degrees at partner universities. Udemy courses have no credit value.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": `${canonicalUrl}#webpage`,
+      "url": canonicalUrl,
+      "name": pageTitle,
+      "description": pageDescription,
+      "isPartOf": { "@id": "https://coursespeak.com/#website" },
+      "inLanguage": "en-US",
+      "datePublished": "2025-01-01",
+      "dateModified": lastModified,
+      "author": { "@id": "https://coursespeak.com/#author" },
+      "publisher": { "@type": "Organization", "name": "CourseSpeak", "url": "https://coursespeak.com" },
+    },
+    {
+      "@type": "Person",
+      "@id": "https://coursespeak.com/#author",
+      "name": "Josh Smith",
+      "jobTitle": "Founder & Editor, CourseSpeak",
+      "url": "https://coursespeak.com/about",
+      "image": "https://coursespeak.com/images/author.jpg",
+      "sameAs": [
+        "https://www.linkedin.com/in/anandayuda/",
+        "https://x.com/courses_peak",
+        "https://www.facebook.com/CourseSpeakOfficial/"
+      ],
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${canonicalUrl}#breadcrumb`,
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://coursespeak.com" },
+        { "@type": "ListItem", "position": 2, "name": "Platform Comparisons", "item": "https://coursespeak.com/platforms" },
+        { "@type": "ListItem", "position": 3, "name": "Udemy vs edX", "item": canonicalUrl },
+      ],
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${canonicalUrl}#faq`,
+      "mainEntity": faqs.map((faq) => ({
+        "@type": "Question",
+        "name": faq.q,
+        "acceptedAnswer": { "@type": "Answer", "text": faq.a },
+      })),
+    },
+  ],
+};
+---
+
+<style>
+  .toc { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.35rem; }
+  .toc a { font-size: 0.875rem; color: var(--brand); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
+  .toc span { font-size: 0.7rem; color: var(--muted); width: 18px; font-weight: 600; }
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  .compare-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; }
+  .compare-card h3 { margin: 0 0 0.75rem; font-size: 1.1rem; color: var(--text); font-weight: 800; display: flex; align-items: center; gap: 0.5rem; }
+  .compare-card ul { margin: 0; padding-left: 1.1rem; line-height: 1.8; color: var(--muted); }
+  .compare-card li strong { color: var(--text); }
+  .vs-row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1rem; align-items: stretch; margin: 1rem 0; }
+  .vs-box { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; }
+  .vs-box h3 { margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 800; color: var(--text); }
+  .vs-box p { margin: 0; font-size: 0.9rem; color: var(--muted); line-height: 1.65; }
+  .vs-mid { display: flex; align-items: center; justify-content: center; font-weight: 900; color: var(--brand); font-size: 0.85rem; }
+  .prose h2 { color: var(--text); margin-top: 2rem; }
+  .prose p, .prose li { color: var(--muted); line-height: 1.75; }
+  .verdict { background: rgba(212,167,55,0.08); border: 1px solid rgba(212,167,55,0.3); border-radius: 14px; padding: 1.25rem 1.5rem; color: var(--text); font-size: 1rem; line-height: 1.7; }
+  .verdict strong { color: var(--brand); }
+  .related { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem; }
+  .related a { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 0.85rem 1rem; text-decoration: none; color: var(--brand); font-weight: 700; font-size: 0.85rem; transition: border-color 0.2s ease, transform 0.2s ease; }
+  .related a:hover { border-color: var(--brand); transform: translateY(-1px); }
+  .atglance-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+  .atglance-table th, .atglance-table td { border: 1px solid var(--border); padding: 0.7rem 0.9rem; text-align: left; vertical-align: top; line-height: 1.6; }
+  .atglance-table thead th { background: var(--card); color: var(--text); font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+  .atglance-table td:first-child { color: var(--muted); font-weight: 600; white-space: nowrap; }
+  .atglance-table td { color: var(--text); }
+  .atglance-table tr:nth-child(even) td { background: var(--bg-secondary); }
+  @media (max-width: 760px) {
+    .compare-grid, .vs-row { grid-template-columns: 1fr; }
+    .vs-mid { padding: 0.5rem 0; }
+  }
+</style>
+
+<Layout title={pageTitle} description={pageDescription} type="article" canonical={canonicalUrl} image="/images/og/og-udemy-vs-edx.png" ogImageType="image/png">
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <section style={{ padding: "4rem 1rem 2rem", textAlign: "center" }}>
+    <div style={{ maxWidth: "900px", margin: "0 auto" }}>
+      <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        Head-to-Head Comparison — Updated {monthYear}
+      </div>
+      <h1 style={{ fontSize: "clamp(1.8rem, 4.5vw, 2.8rem)", fontWeight: 800, lineHeight: 1.2, margin: "0 auto 0.75rem" }}>
+        <span style={{ background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Udemy vs edX</span>
+        <br />
+        <span style={{ color: "var(--text)" }}>Practical Skills or University Credentials?</span>
+      </h1>
+      <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "680px", margin: "0 auto 1.5rem", lineHeight: 1.6 }}>
+        edX was founded by Harvard and MIT; Udemy is the world's largest marketplace for practical courses. We compare them honestly across pricing, certificates, and learning outcomes.
+      </p>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "1rem", flexWrap: "wrap", fontSize: "0.8rem", color: "var(--muted)" }}>
+        <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          By <strong style={{ color: "var(--text)" }}>Josh Smith</strong>
+        </span>
+        <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+          Updated <time datetime={lastModified}>{new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})}</time>
+        </span>
+        <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+            8 min read
+        </span>
+      </div>
+      <Image
+        src="/images/og/og-udemy-vs-edx.png"
+        alt="Udemy vs edX - 2026 comparison of free courses, pricing, and certificates"
+        width={1200}
+        height={630}
+        loading="eager"
+        fetchpriority="high"
+        style={{ width: "100%", maxWidth: "900px", height: "auto", borderRadius: "16px", border: "1px solid var(--border)", margin: "1.75rem auto 0", display: "block", boxShadow: "0 10px 40px -12px rgba(0,0,0,0.4)" }}
+      />
+    </div>
+  </section>
+
+  <nav style={{ background: "var(--card)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)", padding: "1.5rem 1rem" }}>
+    <div class="container" style={{ maxWidth: "900px" }}>
+      <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.3rem 0.75rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.68rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+        On this page
+      </div>
+      <ol class="toc">
+        {[
+          ["#overview", "Quick verdict"],
+          ["#pricing", "Pricing compared"],
+          ["#certificates", "Certificates & MicroMasters"],
+          ["#free", "Free course options"],
+          ["#quality", "Course quality & instructors"],
+          ["#proscons", "Pros and cons"],
+          ["#which", "Which one for your goal?"],
+          ["#faq", "FAQ"],
+        ].map(([href, label], i) => (
+          <li>
+            <a href={href as string}>
+              <span>{i + 1}.</span>
+              {label as string}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </nav>
+
+  <article style={{ padding: "3rem 1rem 4rem" }}>
+    <div class="container prose" style={{ maxWidth: "900px" }}>
+
+      <div id="overview" class="verdict">
+        <strong>Quick verdict:</strong> Choose <strong>Udemy</strong> for hands-on, practical skills you can learn free with 100% off coupons and keep for life. Choose <strong>edX</strong> when you want rigorous university-level education and credentials like MicroMasters and verified certificates that carry real weight with employers and universities.
+      </div>
+
+      <h2>At a Glance</h2>
+      <table class="atglance-table">
+        <thead>
+          <tr><th>Feature</th><th>Udemy</th><th>edX</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Pricing model</td><td>Pay once per course, often free with coupons</td><td>Free to audit; pay per verified certificate or program</td></tr>
+          <tr><td>Typical cost</td><td>$0 with verified coupons; $12.99-$19.99 during sales; list up to $199.99</td><td>$50-$300 per verified course; MicroMasters run a few hundred dollars</td></tr>
+          <tr><td>Free options</td><td>Full courses free via 100% off coupons, lifetime access</td><td>Full course content free to audit (no certificate)</td></tr>
+          <tr><td>Certificates</td><td>Completion only, not accredited</td><td>Verified certificates from Harvard, MIT, Berkeley; MicroMasters</td></tr>
+          <tr><td>Course library</td><td>200,000+ courses, any topic</td><td>4,000+ university-level courses and programs</td></tr>
+          <tr><td>Course length</td><td>1-40+ hours, fully self-paced</td><td>4-12 weeks with fixed schedules</td></tr>
+          <tr><td>Access</td><td>Lifetime after you enroll</td><td>Limited after the course ends (audit is time-boxed)</td></tr>
+          <tr><td>Best for</td><td>Fast, cheap, practical skills</td><td>Academic credentials and degree pathways</td></tr>
+        </tbody>
+      </table>
+      <p>
+        In short: Udemy is the fast, cheap way to build practical skills (free with coupons). edX is the academic route - rigorous courses from top universities with credit-eligible credentials. Use Udemy for skills you want today, edX for credentials you can put on a resume or degree path.
+      </p>
+
+      <h2 id="pricing">1. Pricing Compared</h2>
+      <p>
+        Udemy charges per course — typically <strong>$12–$200</strong> — with frequent discounts. Better yet, instructors release <strong>100% off coupons</strong> that we verify and list daily on <a href="/deals" style={{ color: "var(--brand)", fontWeight: 600 }}>CourseSpeak</a>, making premium courses $0 with lifetime access.
+      </p>
+      <p>
+        edX lets you <strong>audit most courses for free</strong>, but graded assignments and the verified certificate cost roughly <strong>$50–$300 per course</strong>. MicroMasters programs run a few hundred dollars but can count toward a full master's degree. There's no subscription — you pay per course or per program.
+      </p>
+      <p>
+        The value math is simple: for free practical learning, Udemy wins outright thanks to 100% off coupons. For an academic credential, budget the edX verified certificate fee ($50-$300 per course) or a MicroMasters program (a few hundred dollars) - several of which can be applied as credit toward a partner university master's degree, making them some of the most cost-effective academic credentials available online.
+      </p>
+
+      <h2 id="certificates">2. Certificates & MicroMasters</h2>
+      <div class="compare-grid">
+        <div class="compare-card">
+          <h3><a href="https://www.udemy.com" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none">Udemy</a></h3>
+          <ul>
+            <li><strong>Certificate of completion</strong> — not accredited</li>
+            <li>Free with coupon (same cert as paying students)</li>
+            <li>Good for showing you finished a course</li>
+            <li>No credit value, no degree pathway</li>
+          </ul>
+        </div>
+        <div class="compare-card">
+          <h3><a href="https://www.edx.org" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none">edX</a></h3>
+          <ul>
+            <li><strong>Verified certificates</strong> from Harvard, MIT, Berkeley, and more</li>
+            <li><strong>MicroMasters & Professional Certificates</strong></li>
+            <li>Credit-eligible for partner university degrees</li>
+            <li>Identity-verified, employer-recognized</li>
+          </ul>
+        </div>
+      </div>
+      <p>
+        This is where the two platforms are completely different. edX credentials are academic and often credit-bearing; Udemy certificates simply mark completion. If the credential is the point, edX wins decisively.
+      </p>
+      <p>
+        A key difference few people know: several edX MicroMasters programs can be counted as credit toward a full online master's degree at the partner university. That makes them both a standalone credential and a stepping stone. Udemy has no equivalent pathway - but its completion certificates are completely free with coupons, so the two actually complement each other well.
+      </p>
+
+      <h2 id="free">3. Free Course Options</h2>
+      <div class="vs-row">
+        <div class="vs-box">
+          <h3>Udemy — Free with coupons</h3>
+          <p>Verified 100% off coupons make premium courses completely free — including the completion certificate, quizzes, and resources. <a href="/deals" style={{ color: "var(--brand)", fontWeight: 600 }}>Browse today's free coupons</a>.</p>
+        </div>
+        <div class="vs-mid">VS</div>
+        <div class="vs-box">
+          <h3>edX — Free to audit</h3>
+          <p>Audit the full course content for free, but graded assignments and the verified certificate require payment. Free audit ≠ free certificate.</p>
+        </div>
+      </div>
+
+      <h2 id="quality">4. Course Quality & Instructors</h2>
+      <p>
+        <strong>Udemy</strong> content comes from independent instructors, so quality varies — but reviews, ratings, and student counts make filtering easy, and CourseSpeak only lists <strong>4.0+ rated</strong> courses from proven instructors. Content is practical, project-based, and frequently updated by creators chasing student feedback.
+      </p>
+      <p>
+        <strong>edX</strong> content is produced by universities, so it's academically rigorous and consistent. The tradeoff: it's more lecture- and theory-heavy, updates more slowly, and can feel less "job-ready" than Udemy's practitioner-led tutorials.
+      </p>
+
+      <h2 id="proscons">5. Pros and Cons</h2>
+      <div class="compare-grid">
+        <div class="compare-card">
+          <h3>Udemy Pros</h3>
+          <ul>
+            <li><strong>Free</strong> with verified 100% off coupons</li>
+            <li>Lifetime access, buy once keep forever</li>
+            <li>200,000+ practical, job-ready courses</li>
+            <li>Fast, project-based learning</li>
+            <li>No subscription or application process</li>
+          </ul>
+        </div>
+        <div class="compare-card">
+          <h3>edX Pros</h3>
+          <ul>
+            <li><strong>University credentials</strong> from Harvard/MIT</li>
+            <li>MicroMasters & credit-eligible programs</li>
+            <li>Academic rigor and structured curricula</li>
+            <li>Pathways to full online degrees</li>
+            <li>Employer & university recognized</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2 id="which">6. Which One for Your Goal?</h2>
+      <ul>
+        <li><strong>Learn a skill free & fast:</strong> Udemy with coupons → <a href="/deals" style={{ color: "var(--brand)", fontWeight: 600 }}>free courses today</a>.</li>
+        <li><strong>University-grade credential:</strong> edX verified certificates or MicroMasters.</li>
+        <li><strong>Build toward a degree:</strong> edX — credit-eligible programs.</li>
+        <li><strong>Practical coding / design skills:</strong> Udemy — practitioner-led tutorials.</li>
+        <li><strong>Academic subjects (science, humanities):</strong> edX.</li>
+        <li><strong>No budget at all:</strong> Udemy coupons first; audit edX courses for structured learning.</li>
+      </ul>
+
+      <div class="verdict">
+        <strong>Bottom line:</strong> Use Udemy for skills you need tomorrow, and edX for credentials you'll carry for years. They're complements, not competitors — and with free Udemy coupons, you can start learning both today at almost no cost.
+      </div>
+
+      <h2 id="related">7. Related Comparisons</h2>
+      <div class="related">
+        {related.map((r) => <a href={`/platforms/${r.slug}`}>{r.label}</a>)}
+      </div>
+
+    </div>
+  </article>
+
+  <section style={{ padding: "4rem 1rem", background: "var(--bg-secondary)" }}>
+    <div class="container" style={{ maxWidth: "900px" }}>
+      <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
+        <h2 class="section-heading" id="faq">Udemy vs edX FAQ</h2>
+        <p style={{ color: "var(--muted)", maxWidth: "600px", margin: "0.5rem auto 0" }}>Quick answers to the questions we hear most.</p>
+      </div>
+      <div class="faq-grid">
+        {faqs.map((faq) => (
+          <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "14px", padding: "1.25rem 1.5rem" }}>
+            <h3 style={{ margin: "0 0 0.5rem", fontSize: "1rem", color: "var(--text)", fontWeight: 700 }}>{faq.q}</h3>
+            <p style={{ margin: 0, color: "var(--muted)", lineHeight: 1.7, fontSize: "0.95rem" }}>{faq.a}</p>
+          </div>
+        ))}
+      </div>
+      <div style={{ marginTop: "2.5rem" }}>
+        <AuthorCard />
+      </div>
+      <div style={{ textAlign: "center", marginTop: "3rem" }}>
+        <p style={{ color: "var(--muted)", marginBottom: "1rem" }}>Ready to start learning for free?</p>
+        <a href="/deals" style={{
+          display: "inline-flex", alignItems: "center", gap: "0.5rem",
+          padding: "0.875rem 2rem", borderRadius: "12px",
+          background: "var(--brand)", color: "#1a1814",
+          textDecoration: "none", fontWeight: 700, fontSize: "1rem",
+          boxShadow: "0 4px 20px -4px hsla(45,95%,58%,0.4)"
+        }}>
+          Browse Free Udemy Coupons
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

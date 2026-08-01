@@ -62,6 +62,17 @@ function getYesterdayInJakarta(): string {
   return yesterday.toLocaleDateString('en-CA', { timeZone: TIMEZONE });
 }
 
+/**
+ * Check whether a deal was added today (WIB calendar day).
+ * Uses updatedAt (refresh date) first, falling back to createdAt.
+ */
+export function isDealAddedToday(deal: Pick<Deal, 'updatedAt' | 'createdAt'>): boolean {
+  const dt = deal.updatedAt || deal.createdAt || '';
+  if (!dt) return false;
+  const wibDate = new Date(dt).toLocaleDateString('en-CA', { timeZone: TIMEZONE });
+  return wibDate === getCurrentDateInJakarta();
+}
+
 /* ==================================================================== */
 
 export async function readDealsFromFile(): Promise<Deal[]> {

@@ -1,7 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import DealCard from "../components/DealCard.astro";
-import { readDeals } from "../lib/store";
+import { readDeals, isDealAddedToday } from "../lib/store";
 
 const allDeals = await readDeals();
 
@@ -55,12 +55,7 @@ const avgSavings = (() => {
   return Math.round(total / valid.length);
 })();
 
-const todayAdded = allDeals.filter((d: any) => {
-  const dt = d.updatedAt || d.createdAt || '';
-  if (!dt) return false;
-  const wibDate = new Date(dt).toLocaleDateString('en-CA', { timeZone: TIMEZONE });
-  return wibDate === todayWIB;
-}).length;
+const todayAdded = allDeals.filter(isDealAddedToday).length;
 
 const catsSet = new Set<string>();
 allDeals.forEach((d: any) => { if (d.category) catsSet.add(d.category); });

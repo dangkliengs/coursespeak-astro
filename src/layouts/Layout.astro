@@ -9,22 +9,35 @@ interface Props {
   ogImageType?: string;
   type?: string;
   canonical?: string;
+  /** Robots directive, e.g. "noindex, follow". Defaults to indexable. */
+  robots?: string;
 }
 
 
 const {
   title = "CourseSpeak - Free Udemy Courses & Deals",
   description = "Find verified Udemy deals with 100% off coupons. Updated daily with free courses and discounts.",
-  image, // No default - let each page provide its own image
-  ogImageType = "image/jpeg",
+  image,
+  ogImageType,
   type = "website",
   canonical,
+  robots,
 } = Astro.props;
 
 const siteUrl = import.meta.env.SITE || "https://coursespeak.com";
 const canonicalURL = canonical || new URL(Astro.url.pathname, siteUrl).href;
 
-const absoluteImageUrl = image ? (image.startsWith('http') ? image : new URL(image, siteUrl).href) : null;
+// Default og:image for pages that don't supply one (prevents missing social preview).
+const useDefaultImage = !image;
+const resolvedImage = useDefaultImage ? "/images/og/og-default.png" : image;
+const resolvedOgType = (() => {
+  if (useDefaultImage) return "image/png";
+  if (ogImageType) return ogImageType;
+  const clean = resolvedImage.split('?')[0];
+  const ext = clean.split('.').pop()?.toLowerCase() || "jpg";
+  return ext === "png" ? "image/png" : ext === "webp" ? "image/webp" : ext === "svg" ? "image/svg+xml" : "image/jpeg";
+})();
+const absoluteImageUrl = resolvedImage ? (resolvedImage.startsWith('http') ? resolvedImage : new URL(resolvedImage, siteUrl).href) : null;
 
 // Get current path for navigation active states
 const currentPath = Astro.url.pathname;
@@ -73,9 +86,9 @@ const currentPath = Astro.url.pathname;
     <!-- Comprehensive SEO Meta Tags -->
     <meta name="author" content="Josh Smith" />
     <meta name="publisher" content="CourseSpeak" />
-    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-    <meta name="googlebot" content="index, follow" />
-    <meta name="bingbot" content="index, follow" />
+    <meta name="robots" content={robots || "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"} />
+    <meta name="googlebot" content={robots || "index, follow"} />
+    <meta name="bingbot" content={robots || "index, follow"} />
     <meta name="revisit-after" content="1 days" />
     <meta name="language" content="English" />
     <meta name="distribution" content="global" />
@@ -212,10 +225,11 @@ const currentPath = Astro.url.pathname;
     <meta property="og:locale" content="en_US" />
     {absoluteImageUrl && <meta property="og:image" content={absoluteImageUrl} />}
     {absoluteImageUrl && <meta property="og:image:secure_url" content={absoluteImageUrl} />}
-    {/* width/height omitted — let Facebook auto-detect to avoid mismatch */}
+    {absoluteImageUrl && <meta property="og:image:width" content="1200" />}
+    {absoluteImageUrl && <meta property="og:image:height" content="630" />}
 
     {absoluteImageUrl && <meta property="og:image:alt" content={title} />}
-    {absoluteImageUrl && <meta property="og:image:type" content={ogImageType} />}
+    {absoluteImageUrl && <meta property="og:image:type" content={resolvedOgType} />}
 
     <!-- Enhanced Twitter Cards -->
     <meta property="twitter:card" content={absoluteImageUrl ? "summary_large_image" : "summary"} />
@@ -641,12 +655,25 @@ const currentPath = Astro.url.pathname;
             <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Udemy Guide</span></li></>
           )}
           
+          {currentPath === '/platforms' && (
+            <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
+            <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Compare Platforms</span></li></>
+          )}
+          
+          {currentPath.startsWith('/platforms/') && (
+            <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
+            <li><a href="/platforms" style={{ color: "var(--muted)", textDecoration: "none" }}>Compare Platforms</a></li>
+            <li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
+            <li><span style={{ color: "var(--text)", fontWeight: 500 }}>{currentPath.split('/')[2]?.split('-').map((w) => w === 'vs' ? 'vs' : w.charAt(0).toUpperCase() + w.slice(1)).join(' ') || 'Comparison'}</span></li></>
+          )}
+          
           {/* Fallback for other pages */}
-          {!['/deals', '/categories', '/topics', '/popular', '/instructors', '/blog', '/about', '/contact', '/privacy', '/terms', '/sitemap', '/how-to-redeem-coupon', '/udemy-coupons-guide'].includes(currentPath) && 
+          {!['/deals', '/categories', '/topics', '/popular', '/instructors', '/blog', '/about', '/contact', '/privacy', '/terms', '/sitemap', '/how-to-redeem-coupon', '/udemy-coupons-guide', '/platforms'].includes(currentPath) && 
            !currentPath.startsWith('/categories/') && 
            !currentPath.startsWith('/topics/') && 
            !currentPath.startsWith('/instructor/') && 
-           !currentPath.startsWith('/blog/') && (
+           !currentPath.startsWith('/blog/') && 
+           !currentPath.startsWith('/platforms/') && (
             <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
             <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Page</span></li></>
           )}
@@ -1052,6 +1079,82 @@ const currentPath = Astro.url.pathname;
                   fontWeight: "500",
                   transition: "all 0.3s ease"
                 }}>Sitemap</a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 style={{ 
+              background: "linear-gradient(135deg, #D4AF37 0%, #E8C547 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+              marginBottom: "16px",
+              fontSize: "1.1rem",
+              fontWeight: "600"
+            }}>Compare Platforms</h4>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+              <li style={{ marginBottom: "12px" }}>
+                <a href="/platforms" style={{ 
+                  color: "#a09888", 
+                  textDecoration: "none",
+                  fontSize: "0.9rem",
+                  fontWeight: "500",
+                  transition: "all 0.3s ease"
+                }}>Platform Comparison Guide</a>
+              </li>
+              <li style={{ marginBottom: "12px" }}>
+                <a href="/platforms/udemy-vs-coursera" style={{ 
+                  color: "#a09888", 
+                  textDecoration: "none",
+                  fontSize: "0.9rem",
+                  fontWeight: "500",
+                  transition: "all 0.3s ease"
+                }}>Udemy vs Coursera</a>
+              </li>
+              <li style={{ marginBottom: "12px" }}>
+                <a href="/platforms/udemy-vs-edx" style={{ 
+                  color: "#a09888", 
+                  textDecoration: "none",
+                  fontSize: "0.9rem",
+                  fontWeight: "500",
+                  transition: "all 0.3s ease"
+                }}>Udemy vs edX</a>
+              </li>
+              <li style={{ marginBottom: "12px" }}>
+                <a href="/platforms/udemy-vs-skillshare" style={{ 
+                  color: "#a09888", 
+                  textDecoration: "none",
+                  fontSize: "0.9rem",
+                  fontWeight: "500",
+                  transition: "all 0.3s ease"
+                }}>Udemy vs Skillshare</a>
+              </li>
+              <li style={{ marginBottom: "12px" }}>
+                <a href="/platforms/udemy-vs-pluralsight" style={{ 
+                  color: "#a09888", 
+                  textDecoration: "none",
+                  fontSize: "0.9rem",
+                  fontWeight: "500",
+                  transition: "all 0.3s ease"
+                }}>Udemy vs Pluralsight</a>
+              </li>
+              <li style={{ marginBottom: "12px" }}>
+                <a href="/platforms/udemy-vs-linkedin-learning" style={{ 
+                  color: "#a09888", 
+                  textDecoration: "none",
+                  fontSize: "0.9rem",
+                  fontWeight: "500",
+                  transition: "all 0.3s ease"
+                }}>Udemy vs LinkedIn Learning</a>
+              </li>
+              <li style={{ marginBottom: "12px" }}>
+                <a href="/platforms/udemy-alternatives" style={{ 
+                  color: "#a09888", 
+                  textDecoration: "none",
+                  fontSize: "0.9rem",
+                  fontWeight: "500",
+                  transition: "all 0.3s ease"
+                }}>Udemy Alternatives</a>
               </li>
             </ul>
           </div>

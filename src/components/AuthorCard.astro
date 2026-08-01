@@ -1,0 +1,111 @@
+---
+import { Image } from "astro:assets";
+
+interface Props {
+  name?: string;
+  role?: string;
+  bio?: string;
+  avatar?: string;
+  links?: { href: string; label: string }[];
+}
+
+const {
+  name = "Josh Smith",
+  role = "Founder & Editor, CourseSpeak",
+  bio = "Josh founded CourseSpeak to make premium online education accessible to everyone. He has personally reviewed thousands of Udemy courses and free coupons so you can learn without spending a cent.",
+  avatar = "/images/author.jpg",
+  links = [
+    { href: "/about", label: "About Josh" },
+    { href: "https://www.linkedin.com/in/anandayuda/", label: "LinkedIn" },
+    { href: "https://x.com/courses_peak", label: "X (Twitter)" },
+  ],
+} = Astro.props;
+---
+
+<aside class="author-card" aria-label="About the author">
+  <Image src={avatar} alt={`${name} — ${role}`} width={64} height={64} loading="lazy" decoding="async" class="author-avatar" />
+  <div class="author-body">
+    <p class="author-label">Written by</p>
+    <h3 class="author-name">{name}</h3>
+    <p class="author-role">{role}</p>
+    <p class="author-bio">{bio}</p>
+    <ul class="author-links">
+      {links.map((link) => (
+        <li>
+          <a href={link.href} target={link.href.startsWith("http") ? "_blank" : undefined} rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}>
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</aside>
+
+<style>
+  .author-card {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+  }
+  .author-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(212, 167, 55, 0.4);
+    flex-shrink: 0;
+  }
+  .author-label {
+    margin: 0 0 0.2rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--brand);
+  }
+  .author-name {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--text);
+  }
+  .author-role {
+    margin: 0 0 0.5rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .author-bio {
+    margin: 0 0 0.75rem;
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: var(--muted);
+  }
+  .author-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .author-links a {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--brand);
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    background: rgba(212, 167, 55, 0.1);
+    border: 1px solid rgba(212, 167, 55, 0.3);
+  }
+  .author-links a:hover { border-color: var(--brand); }
+  @media (max-width: 560px) {
+    .author-card { flex-direction: column; align-items: center; text-align: center; }
+    .author-links { justify-content: center; }
+  }
+</style>

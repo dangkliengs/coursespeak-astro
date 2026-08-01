@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { readDeals } from '../../lib/store';
+import { readDeals, isDealAddedToday } from '../../lib/store';
 import DealCard from '../../components/DealCard.astro';
 
 
@@ -82,6 +82,17 @@ const endIndex = startIndex + PAGE_SIZE;
 const currentItems = categoryDeals.slice(startIndex, endIndex);
 const totalPages = Math.ceil(categoryDeals.length / PAGE_SIZE);
 
+// Build pagination items as data (avoids JSX inside multi-statement arrow bodies in the template)
+const pageItems: { type: 'page' | 'ellipsis'; pageNum?: number; href?: string; active?: boolean }[] = [];
+Array.from({ length: totalPages }, (_, i) => i + 1)
+  .filter(pageNum => pageNum === 1 || pageNum === totalPages || (pageNum >= currentPage - 1 && pageNum <= currentPage + 1))
+  .forEach((pageNum, idx, arr) => {
+    if (idx > 0 && pageNum - arr[idx - 1] > 1) {
+      pageItems.push({ type: 'ellipsis' });
+    }
+    pageItems.push({ type: 'page', pageNum, href: `/categories/${category}?page=${pageNum}`, active: pageNum === currentPage });
+  });
+
 const displayName = categoryDeals.length > 0 ? normName(categoryDeals[0].category) || 'Courses' : 'Courses';
 const categoryName = displayName;
 
@@ -97,13 +108,7 @@ const TIMEZONE = 'Asia/Jakarta';
 const currentDate = new Date();
 const currentMonth = currentDate.toLocaleDateString('en-US', { timeZone: TIMEZONE, month: 'long' });
 const currentYear  = currentDate.toLocaleDateString('en-US', { timeZone: TIMEZONE, year: 'numeric' });
-const todayWIB = currentDate.toLocaleDateString('en-CA', { timeZone: TIMEZONE });
-const categoryTodayAdded = categoryDeals.filter((d: any) => {
-  const dt = d.updatedAt || d.createdAt || '';
-  if (!dt) return false;
-  const wibDate = new Date(dt).toLocaleDateString('en-CA', { timeZone: TIMEZONE });
-  return wibDate === todayWIB;
-}).length;
+const categoryTodayAdded = categoryDeals.filter(isDealAddedToday).length;
 const categoryAvgSavings = (() => {
   const valid = categoryDeals.filter((d: any) => d.originalPrice && d.price !== undefined && d.originalPrice > 0);
   if (valid.length === 0) return 90;
@@ -127,7 +132,7 @@ else {
 }
 ---
 
-<Layout title={`${categoryName} Courses - Free Udemy Coupons 2026 | CourseSpeak`} description={metaDescription}>
+<Layout title={`${categoryName} Courses - Free Udemy Coupons ${currentYear} | CourseSpeak`} description={metaDescription}>
 
   <!-- Category Collection Schema -->
   <script type="application/ld+json" set:html={
@@ -330,21 +335,15 @@ else {
             <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--muted)", opacity: 0.4, padding: "0.4rem 0.85rem" }}>← Prev</span>
           )}
           <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-            {Array.from({ length: totalPages }, (_, i) => i + 1)
-              .filter(pageNum => pageNum === 1 || pageNum === totalPages || (pageNum >= currentPage - 1 && pageNum <= currentPage + 1))
-              .map((pageNum, idx, arr) => {
-                const items = [];
-                if (idx > 0 && pageNum - arr[idx - 1] > 1) {
-                  items.push(<span style={{ fontSize: "0.85rem", color: "var(--muted)", width: "34px", textAlign: "center" }}>...</span>);
-                }
-                const isActive = pageNum === currentPage;
-                const href = `/categories/${category}?page=${pageNum}`;
-                items.push(isActive
-                  ? <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "white", width: "34px", height: "34px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "6px", border: "1px solid var(--brand)", background: "var(--brand)" }}>{pageNum}</span>
-                  : <a href={href} style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--text)", textDecoration: "none", width: "34px", height: "34px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "6px", border: "1px solid var(--border)" }}>{pageNum}</a>
-                );
-                return items;
-              })}
+            {pageItems.map((item) =>
+              item.type === 'ellipsis' ? (
+                <span style={{ fontSize: "0.85rem", color: "var(--muted)", width: "34px", textAlign: "center" }}>...</span>
+              ) : item.active ? (
+                <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "white", width: "34px", height: "34px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "6px", border: "1px solid var(--brand)", background: "var(--brand)" }}>{item.pageNum}</span>
+              ) : (
+                <a href={item.href} style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--text)", textDecoration: "none", width: "34px", height: "34px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "6px", border: "1px solid var(--border)" }}>{item.pageNum}</a>
+              )
+            )}
           </div>
           {currentPage < totalPages ? (
             <a href={`/categories/${category}?page=${currentPage + 1}`} style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--brand)", textDecoration: "none", padding: "0.4rem 0.85rem", borderRadius: "6px", border: "1px solid var(--border)" }}>Next →</a>

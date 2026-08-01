@@ -1,0 +1,386 @@
+?---
+import Layout from "../../layouts/Layout.astro";
+import AuthorCard from "../../components/AuthorCard.astro";
+import { Image } from "astro:assets";
+
+const currentYear = new Date().getFullYear();
+const lastModified = new Date().toISOString().split("T")[0];
+const monthYear = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long" });
+const canonicalUrl = "https://coursespeak.com/platforms/udemy-alternatives";
+
+const altUrls: Record<string, string> = {
+  Coursera: "https://www.coursera.org",
+  edX: "https://www.edx.org",
+  Skillshare: "https://www.skillshare.com",
+  Pluralsight: "https://www.pluralsight.com",
+  "LinkedIn Learning": "https://www.linkedin.com/learning",
+  freeCodeCamp: "https://www.freecodecamp.org",
+  "Khan Academy": "https://www.khanacademy.org",
+  "MIT OpenCourseWare": "https://ocw.mit.edu",
+  "Google Skillshop": "https://skillshop.exceedlms.com",
+  YouTube: "https://www.youtube.com",
+};
+
+const related = [
+  { slug: "udemy-vs-coursera", label: "Udemy vs Coursera" },
+  { slug: "udemy-vs-edx", label: "Udemy vs edX" },
+  { slug: "udemy-vs-skillshare", label: "Udemy vs Skillshare" },
+  { slug: "udemy-vs-pluralsight", label: "Udemy vs Pluralsight" },
+  { slug: "udemy-vs-linkedin-learning", label: "Udemy vs LinkedIn Learning" },
+];
+
+const pageTitle = `10 Best Udemy Alternatives in ${currentYear} (Free & Paid) | CourseSpeak`;
+const pageDescription = `Looking for Udemy alternatives in ${currentYear}? We compare Coursera, edX, Skillshare, Pluralsight, LinkedIn Learning, and 100% free options like freeCodeCamp and Khan Academy.`;
+
+const alternatives = [
+  {
+    name: "Coursera",
+    tag: "Best for university credentials",
+    pricing: "Free audit / $39–$79 per month",
+    desc: "Courses and professional certificates from Stanford, Yale, Google, and IBM. The best choice when the certificate itself matters to employers or your resume.",
+    pros: ["University & industry certificates", "Online degrees", "Structured learning paths", "Financial aid available"],
+    cons: ["Graded work & certificates cost money", "Subscription model for most specializations"],
+  },
+  {
+    name: "edX",
+    tag: "Best for academic rigor & MicroMasters",
+    pricing: "Free audit / $50–$300 verified",
+    desc: "Founded by Harvard and MIT. University-level courses, MicroMasters programs, and credit-eligible credentials that can count toward a degree.",
+    pros: ["Harvard/MIT-backed credentials", "Credit-eligible programs", "Academic depth"],
+    cons: ["Theory-heavy, less hands-on", "Verified certificates are pricey"],
+  },
+  {
+    name: "Skillshare",
+    tag: "Best for creative skills",
+    pricing: "~$168/year subscription",
+    desc: "Short, project-based classes in illustration, design, video, and photography. Ideal for exploring creative hobbies without committing to a long course.",
+    pros: ["Short, inspiring classes", "Creative focus", "Community & class projects"],
+    cons: ["No certificates", "Subscription required", "Weak in tech/business topics"],
+  },
+  {
+    name: "Pluralsight",
+    tag: "Best for IT, cloud & tech professionals",
+    pricing: "From ~$29/month",
+    desc: "Hands-on tech learning with skill assessments, cloud sandboxes, and certifications. Popular with developers, cloud engineers, and IT teams.",
+    pros: ["Hands-on labs & assessments", "Up-to-date tech content", "Team/enterprise plans"],
+    cons: ["Expensive for individuals", "Tech-only focus"],
+  },
+  {
+    name: "LinkedIn Learning",
+    tag: "Best for professional soft skills",
+    pricing: "From ~$39/month",
+    desc: "Business, leadership, Excel, and professional development courses. Certificates post directly to your LinkedIn profile — great for visibility.",
+    pros: ["Resume/LinkedIn integration", "Short professional courses", "Often bundled with Premium"],
+    cons: ["Subscription cost", "Less depth than Udemy"],
+  },
+  {
+    name: "freeCodeCamp",
+    tag: "Best 100% free for coding",
+    pricing: "$0 forever",
+    desc: "Completely free coding curriculum covering HTML, CSS, JavaScript, Python, data science, and more, with certificates and a large open-source community.",
+    pros: ["100% free", "Project-based", "Recognized open-source community"],
+    cons: ["Self-paced discipline required", "Coding only"],
+  },
+  {
+    name: "Khan Academy",
+    tag: "Best free for academics",
+    pricing: "$0 forever",
+    desc: "Free, world-class lessons in math, science, economics, and humanities from elementary to college level. Perfect for structured academic fundamentals.",
+    pros: ["100% free", "Excellent math/science content", "Practice exercises with feedback"],
+    cons: ["Not career-oriented", "No professional certificates"],
+  },
+  {
+    name: "MIT OpenCourseWare",
+    tag: "Best free university content",
+    pricing: "$0 forever",
+    desc: "Actual MIT course materials — lecture notes, videos, and assignments — free to everyone. Ideal for deep, self-directed academic learning.",
+    pros: ["Real MIT course material", "100% free", "Academic depth"],
+    cons: ["No guidance or support", "No certificates"],
+  },
+  {
+    name: "Google Skillshop",
+    tag: "Best free for Google certifications",
+    pricing: "$0 forever",
+    desc: "Free training and certifications for Google Ads, Analytics, and other Google tools. Directly valuable for digital marketing careers.",
+    pros: ["100% free", "Recognized Google certificates", "Practical marketing skills"],
+    cons: ["Google products only"],
+  },
+  {
+    name: "YouTube",
+    tag: "Best free for everything",
+    pricing: "$0",
+    desc: "Huge free library of tutorials for nearly every skill. Great for quick answers, though content quality varies and it's completely unstructured.",
+    pros: ["Completely free", "Vast library", "No signup needed"],
+    cons: ["Unstructured", "Variable quality", "No certificates or guidance"],
+  },
+];
+
+const faqs = [
+  {
+    q: "What is the best free alternative to Udemy?",
+    a: "For coding, freeCodeCamp is excellent. For academics, Khan Academy and MIT OpenCourseWare are unbeatable. But the closest drop-in replacement for Udemy's paid courses is Udemy itself — verified 100% off coupons on CourseSpeak make premium Udemy courses free, so you don't need an alternative to learn without paying.",
+  },
+  {
+    q: "Which platform is better than Udemy?",
+    a: "No single platform is 'better' across the board. Coursera and edX beat Udemy on credentials, Skillshare beats it for short creative classes, and Pluralsight beats it for hands-on tech labs. Udemy wins on price (free with coupons), depth, and variety.",
+  },
+  {
+    q: "Is there a platform like Udemy that is completely free?",
+    a: "freeCodeCamp (coding), Khan Academy (academics), and MIT OpenCourseWare (university material) are fully free. For a Udemy-style experience — hundreds of practical courses at $0 — use verified 100% off coupons from CourseSpeak.",
+  },
+  {
+    q: "Are Udemy alternatives with certificates free?",
+    a: "Most platforms with valuable certificates charge for them (Coursera, edX). Two exceptions: freeCodeCamp and Google Skillshop both issue free, recognized certificates. Udemy also gives a free completion certificate when you enroll via a 100% off coupon.",
+  },
+  {
+    q: "Should I use more than one learning platform?",
+    a: "Yes. The most effective strategy is to use free Udemy coupons for practical skills and combine them with a credential platform like Coursera or edX when you need recognized certificates. There's no reason to restrict yourself to a single platform.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": `${canonicalUrl}#webpage`,
+      "url": canonicalUrl,
+      "name": pageTitle,
+      "description": pageDescription,
+      "isPartOf": { "@id": "https://coursespeak.com/#website" },
+      "inLanguage": "en-US",
+      "datePublished": "2025-01-01",
+      "dateModified": lastModified,
+      "author": { "@id": "https://coursespeak.com/#author" },
+      "publisher": { "@type": "Organization", "name": "CourseSpeak", "url": "https://coursespeak.com" },
+    },
+    {
+      "@type": "Person",
+      "@id": "https://coursespeak.com/#author",
+      "name": "Josh Smith",
+      "jobTitle": "Founder & Editor, CourseSpeak",
+      "url": "https://coursespeak.com/about",
+      "image": "https://coursespeak.com/images/author.jpg",
+      "sameAs": [
+        "https://www.linkedin.com/in/anandayuda/",
+        "https://x.com/courses_peak",
+        "https://www.facebook.com/CourseSpeakOfficial/"
+      ],
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${canonicalUrl}#breadcrumb`,
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://coursespeak.com" },
+        { "@type": "ListItem", "position": 2, "name": "Platform Comparisons", "item": "https://coursespeak.com/platforms" },
+        { "@type": "ListItem", "position": 3, "name": "Udemy Alternatives", "item": canonicalUrl },
+      ],
+    },
+    {
+      "@type": "ItemList",
+      "@id": `${canonicalUrl}#alternatives`,
+      "name": "Best Udemy Alternatives",
+      "itemListElement": alternatives.map((alt, i) => ({
+        "@type": "ListItem",
+        "position": i + 1,
+        "item": {
+          "@type": "Organization",
+          "name": alt.name,
+          "description": `${alt.tag}. ${alt.desc}`,
+        },
+      })),
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${canonicalUrl}#faq`,
+      "mainEntity": faqs.map((faq) => ({
+        "@type": "Question",
+        "name": faq.q,
+        "acceptedAnswer": { "@type": "Answer", "text": faq.a },
+      })),
+    },
+  ],
+};
+---
+
+<style>
+  .toc { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.35rem; }
+  .toc a { font-size: 0.875rem; color: var(--brand); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
+  .toc span { font-size: 0.7rem; color: var(--muted); width: 18px; font-weight: 600; }
+  .alt-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; }
+  .alt-card h2 { color: var(--text); margin: 0 0 0.25rem; font-size: 1.3rem; display: flex; align-items: center; gap: 0.75rem; }
+  .alt-rank { background: linear-gradient(135deg, #D4AF37 0%, #C5A028 100%); color: #1a1814; font-size: 0.85rem; font-weight: 800; width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .alt-tag { display: inline-block; background: rgba(212,167,55,0.1); color: var(--brand); border: 1px solid rgba(212,167,55,0.3); font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 20px; margin-bottom: 0.75rem; }
+  .alt-meta { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.75rem; }
+  .alt-meta strong { color: var(--text); }
+  .alt-card p { color: var(--muted); line-height: 1.7; margin-bottom: 0.75rem; }
+  .alt-lists { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .alt-lists ul { margin: 0; padding-left: 1.1rem; line-height: 1.7; color: var(--muted); font-size: 0.9rem; }
+  .alt-lists h4 { margin: 0 0 0.35rem; font-size: 0.85rem; color: var(--text); text-transform: uppercase; letter-spacing: 0.04em; }
+  .prose h2 { color: var(--text); margin-top: 2rem; }
+  .prose p, .prose li { color: var(--muted); line-height: 1.75; }
+  .verdict { background: rgba(212,167,55,0.08); border: 1px solid rgba(212,167,55,0.3); border-radius: 14px; padding: 1.25rem 1.5rem; color: var(--text); font-size: 1rem; line-height: 1.7; }
+  .verdict strong { color: var(--brand); }
+  .related { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem; }
+  .related a { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 0.85rem 1rem; text-decoration: none; color: var(--brand); font-weight: 700; font-size: 0.85rem; transition: border-color 0.2s ease, transform 0.2s ease; }
+  .related a:hover { border-color: var(--brand); transform: translateY(-1px); }
+  @media (max-width: 640px) {
+    .alt-lists { grid-template-columns: 1fr; }
+  }
+</style>
+
+<Layout title={pageTitle} description={pageDescription} type="article" canonical={canonicalUrl} image="/images/og/og-udemy-alternatives.png" ogImageType="image/png">
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <section style={{ padding: "4rem 1rem 2rem", textAlign: "center" }}>
+    <div style={{ maxWidth: "900px", margin: "0 auto" }}>
+      <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        Platform Guide — Updated {monthYear}
+      </div>
+      <h1 style={{ fontSize: "clamp(1.8rem, 4.5vw, 2.8rem)", fontWeight: 800, lineHeight: 1.2, margin: "0 auto 0.75rem" }}>
+        <span style={{ background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>10 Best Udemy Alternatives</span>
+        <br />
+        <span style={{ color: "var(--text)" }}>Free & Paid Platforms Compared for {currentYear}</span>
+      </h1>
+      <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "680px", margin: "0 auto 1.5rem", lineHeight: 1.6 }}>
+        Whether you want recognized certificates, creative classes, hands-on tech labs, or 100% free learning — here are the best alternatives to Udemy in {currentYear}, ranked by use case and value.
+      </p>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "1rem", flexWrap: "wrap", fontSize: "0.8rem", color: "var(--muted)" }}>
+        <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          By <strong style={{ color: "var(--text)" }}>Josh Smith</strong>
+        </span>
+        <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+          Updated <time datetime={lastModified}>{new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})}</time>
+        </span>
+        <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+            8 min read
+        </span>
+      </div>
+      <Image
+        src="/images/og/og-udemy-alternatives.png"
+        alt="Best Udemy alternatives - free course platforms compared in 2026"
+        width={1200}
+        height={630}
+        loading="eager"
+        fetchpriority="high"
+        style={{ width: "100%", maxWidth: "900px", height: "auto", borderRadius: "16px", border: "1px solid var(--border)", margin: "1.75rem auto 0", display: "block", boxShadow: "0 10px 40px -12px rgba(0,0,0,0.4)" }}
+      />
+    </div>
+  </section>
+
+  <nav style={{ background: "var(--card)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)", padding: "1.5rem 1rem" }}>
+    <div class="container" style={{ maxWidth: "900px" }}>
+      <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.3rem 0.75rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.68rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+        On this page
+      </div>
+      <ol class="toc">
+        {[
+          ["#list", "The 10 alternatives"],
+          ["#quick-pick", "Which should you pick?"],
+          ["#note", "The best alternative is free Udemy"],
+          ["#faq", "FAQ"],
+        ].map(([href, label], i) => (
+          <li>
+            <a href={href as string}>
+              <span>{i + 1}.</span>
+              {label as string}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </nav>
+
+  <article style={{ padding: "3rem 1rem 4rem" }}>
+    <div class="container" style={{ maxWidth: "900px" }}>
+
+      <div id="list">
+        {alternatives.map((alt, i) => (
+          <section class="alt-card" aria-label={`${alt.name} — ${alt.tag}`}>
+            <h2><span class="alt-rank">{i + 1}</span><a href={altUrls[alt.name]} target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none">{alt.name}</a></h2>
+            <span class="alt-tag">{alt.tag}</span>
+            <div class="alt-meta"><strong>Pricing:</strong> {alt.pricing}</div>
+            <p>{alt.desc}</p>
+            <div class="alt-lists">
+              <div>
+                <h4>Pros</h4>
+                <ul>{alt.pros.map((p) => <li>{p}</li>)}</ul>
+              </div>
+              <div>
+                <h4>Cons</h4>
+                <ul>{alt.cons.map((c) => <li>{c}</li>)}</ul>
+              </div>
+            </div>
+          </section>
+        ))}
+      </div>
+
+      <div class="prose" style={{ marginTop: "3rem" }}>
+        <h2 id="quick-pick">Which Udemy Alternative Should You Pick?</h2>
+        <ul>
+          <li><strong>Recognized certificate or degree:</strong> Coursera or edX.</li>
+          <li><strong>Creative design/illustration classes:</strong> Skillshare.</li>
+          <li><strong>Hands-on IT, cloud, and tech labs:</strong> Pluralsight.</li>
+          <li><strong>Professional soft skills & resume integration:</strong> LinkedIn Learning.</li>
+          <li><strong>Learn to code 100% free:</strong> freeCodeCamp.</li>
+          <li><strong>Math, science, and academics:</strong> Khan Academy or MIT OpenCourseWare.</li>
+          <li><strong>Free Google Ads/Analytics certifications:</strong> Google Skillshop.</li>
+          <li><strong>Quick answers on any topic:</strong> YouTube.</li>
+        </ul>
+
+        <h2 id="note">The Best "Alternative" Is Free Udemy Itself</h2>
+        <p>
+          Here's the honest take: nothing matches Udemy's combination of depth, variety, and value — especially when instructors publish <strong>100% off coupons</strong>. On <a href="/deals" style={{ color: "var(--brand)", fontWeight: 600 }}>CourseSpeak</a> we verify and list hundreds of these coupons daily, which means you get the full premium Udemy experience — lifetime access, quizzes, resources, and a certificate — for $0. Before paying for any alternative, check if the course you want is available free on Udemy today.
+        </p>
+
+        <div class="verdict">
+          <strong>Bottom line:</strong> Use free Udemy coupons for practical skills, add Coursera or edX when you need a recognized credential, and turn to the truly free platforms (freeCodeCamp, Khan Academy, Skillshop) for specialized or academic learning. Combining platforms costs you almost nothing and gets you the best of everything.
+        </div>
+
+        <h2 id="related">Head-to-Head Platform Comparisons</h2>
+        <div class="related">
+          {related.map((r) => <a href={`/platforms/${r.slug}`}>{r.label}</a>)}
+        </div>
+
+      </div>
+    </div>
+  </article>
+
+  <section style={{ padding: "4rem 1rem", background: "var(--bg-secondary)" }}>
+    <div class="container" style={{ maxWidth: "900px" }}>
+      <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
+        <h2 class="section-heading" id="faq">Udemy Alternatives FAQ</h2>
+        <p style={{ color: "var(--muted)", maxWidth: "600px", margin: "0.5rem auto 0" }}>Quick answers to the questions we hear most.</p>
+      </div>
+      <div class="faq-grid">
+        {faqs.map((faq) => (
+          <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "14px", padding: "1.25rem 1.5rem" }}>
+            <h3 style={{ margin: "0 0 0.5rem", fontSize: "1rem", color: "var(--text)", fontWeight: 700 }}>{faq.q}</h3>
+            <p style={{ margin: 0, color: "var(--muted)", lineHeight: 1.7, fontSize: "0.95rem" }}>{faq.a}</p>
+          </div>
+        ))}
+      </div>
+      <div style={{ marginTop: "2.5rem" }}>
+        <AuthorCard />
+      </div>
+      <div style={{ textAlign: "center", marginTop: "3rem" }}>
+        <p style={{ color: "var(--muted)", marginBottom: "1rem" }}>Ready to start learning for free?</p>
+        <a href="/deals" style={{
+          display: "inline-flex", alignItems: "center", gap: "0.5rem",
+          padding: "0.875rem 2rem", borderRadius: "12px",
+          background: "var(--brand)", color: "#1a1814",
+          textDecoration: "none", fontWeight: 700, fontSize: "1rem",
+          boxShadow: "0 4px 20px -4px hsla(45,95%,58%,0.4)"
+        }}>
+          Browse Free Udemy Coupons
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

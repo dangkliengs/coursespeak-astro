@@ -1,6 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { readDeals } from "../../lib/store";
+import { buildFAQs } from "../../lib/faqs";
 import DealPage from "../../components/DealPage";
 import type { Deal } from "../../types/deal";
 
@@ -9,20 +10,12 @@ export const prerender = import.meta.env.PROD;
 export async function getStaticPaths() {
   if (import.meta.env.PROD) {
     const allDeals = await readDeals();
-    const paths = [];
-    const seen = new Set();
-    for (const deal of allDeals) {
-      for (const id of [deal.id, deal.slug].filter(Boolean)) {
-        if (!seen.has(id)) {
-          seen.add(id);
-          paths.push({
-            params: { id },
-            props: { deal, allDeals }
-          });
-        }
- }
-      }
-    return paths;
+    return allDeals
+      .filter(deal => deal.id)
+      .map(deal => ({
+        params: { id: deal.id },
+        props: { deal, allDeals }
+      }));
   }
   return [];
 }
@@ -182,6 +175,28 @@ function extractSkills(deal: Deal): string {
                         "bestRating": "5",
                         "worstRating": "1"
                     } : undefined,
+                    "review": deal.rating ? [{
+                        "@type": "Review",
+                        "@id": `${dealUrl}#review`,
+                        "author": {
+                            "@type": "Person",
+                            "name": "Josh Smith",
+                            "url": `${siteUrl}/about`
+                        },
+                        "publisher": {
+                            "@type": "Organization",
+                            "name": "CourseSpeak",
+                            "url": siteUrl
+                        },
+                        "datePublished": deal.updatedAt ? new Date(deal.updatedAt).toISOString().split('T')[0] : undefined,
+                        "reviewBody": `CourseSpeak reviewed "${deal.title}" on ${deal.provider || "Udemy"}. At $${(deal.price ?? 0).toFixed(2)} with the active coupon${deal.originalPrice && deal.price !== undefined && deal.originalPrice > deal.price ? ` (${discountPercentage}% off the $${deal.originalPrice.toFixed(2)} standard price)` : ""}, the course offers strong value${deal.duration ? ` across ${deal.duration} of on-demand video` : ""}${deal.rating ? ` and holds a ${deal.rating.toFixed(1)}-star average from verified students` : ""}.`,
+                        "reviewRating": {
+                            "@type": "Rating",
+                            "ratingValue": deal.rating.toString(),
+                            "bestRating": "5",
+                            "worstRating": "1"
+                        }
+                    }] : undefined,
                     "educationalLevel": "All Levels",
                     "teaches": extractSkills(deal),
                     "inLanguage": deal.language || "English",
@@ -212,18 +227,21 @@ function extractSkills(deal: Deal): string {
                         { "@type": "ListItem", "position": deal.category ? 4 : 3, "name": deal.title, "item": dealUrl }
                     ]
                 },
-                ...(deal.faqs && deal.faqs.length > 0 ? [{
-                    "@type": "FAQPage",
-                    "@id": `${dealUrl}#faq`,
-                    "mainEntity": deal.faqs.slice(0, 8).map((faq: any) => ({
-                        "@type": "Question",
-                        "name": faq.q,
-                        "acceptedAnswer": {
-                            "@type": "Answer",
-                            "text": (faq.a || "").replace(/<[^>]*>/g, "").trim()
-                        }
-                    }))
-                }] : []),
+                ...(() => {
+                    const faqs = buildFAQs(deal).slice(0, 8);
+                    return faqs.length > 0 ? [{
+                        "@type": "FAQPage",
+                        "@id": `${dealUrl}#faq`,
+                        "mainEntity": faqs.map((faq) => ({
+                            "@type": "Question",
+                            "name": faq.q,
+                            "acceptedAnswer": {
+                                "@type": "Answer",
+                                "text": (faq.a || "").replace(/<[^>]*>/g, "").trim()
+                            }
+                        }))
+                    }] : [];
+                })(),
                 {
                     "@type": "Organization",
                     "@id": `${siteUrl}#organization`,

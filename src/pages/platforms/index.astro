@@ -1,0 +1,389 @@
+?---
+import Layout from "../../layouts/Layout.astro";
+import AuthorCard from "../../components/AuthorCard.astro";
+import { Image } from "astro:assets";
+
+const currentYear = new Date().getFullYear();
+const lastModified = new Date().toISOString().split("T")[0];
+const monthYear = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long" });
+const canonicalUrl = "https://coursespeak.com/platforms";
+
+const pageTitle = `Udemy vs Coursera vs edX — Best Online Learning Platforms Compared ${currentYear} | CourseSpeak`;
+const pageDescription = `Compare Udemy, Coursera, edX, Skillshare, Pluralsight, and LinkedIn Learning in ${currentYear}. See pricing, certificates, free options, and ratings to pick the best online learning platform for you.`;
+
+const comparisons = [
+  {
+    slug: "udemy-vs-coursera",
+    title: "Udemy vs Coursera",
+    summary: "Udemy is best for cheap, self-paced, skill-focused courses with lifetime access. Coursera is best for accredited university certificates and structured career tracks from institutions like Stanford and Google.",
+    verdict: "Choose Udemy for flexible skill-building; choose Coursera for recognized credentials.",
+  },
+  {
+    slug: "udemy-vs-edx",
+    title: "Udemy vs edX",
+    summary: "edX offers university-level courses from Harvard and MIT with verified certificates and MicroMasters programs. Udemy offers more practical, instructor-led courses at lower price points.",
+    verdict: "Choose edX for academic depth; choose Udemy for hands-on, job-ready skills.",
+  },
+  {
+    slug: "udemy-vs-skillshare",
+    title: "Udemy vs Skillshare",
+    summary: "Skillshare is a subscription of short, project-based creative classes. Udemy sells deep, structured courses you keep for life — often free with 100% off coupons.",
+    verdict: "Choose Skillshare for creative exploration; choose Udemy for depth, certificates, and lifetime access.",
+  },
+  {
+    slug: "udemy-vs-pluralsight",
+    title: "Udemy vs Pluralsight",
+    summary: "Pluralsight is built for developers and IT pros with hands-on labs, skill assessments, and certifications. Udemy is broad, affordable, and often free with coupons.",
+    verdict: "Choose Pluralsight for professional tech training; choose Udemy for everyone else.",
+  },
+  {
+    slug: "udemy-vs-linkedin-learning",
+    title: "Udemy vs LinkedIn Learning",
+    summary: "LinkedIn Learning offers short professional courses with certificates that post straight to your profile. Udemy offers deep courses you keep forever.",
+    verdict: "Choose LinkedIn Learning for professional polish; choose Udemy for real skill depth.",
+  },
+  {
+    slug: "udemy-alternatives",
+    title: "10 Best Udemy Alternatives",
+    summary: "The best free and paid platforms compared — Coursera, edX, Skillshare, Pluralsight, LinkedIn Learning, freeCodeCamp, Khan Academy, and more.",
+    verdict: "Combine free Udemy coupons with a credential platform for the best value.",
+  },
+];
+
+const platforms = [
+  {
+    name: "Udemy",
+    url: "https://www.udemy.com",
+    bestFor: "Practical, job-ready skills & free coupons",
+    courses: "200,000+",
+    pricing: "Free–$200 per course (often discounted)",
+    certificates: "Yes (course completion)",
+    freeOptions: "100% off coupons daily on CourseSpeak",
+    rating: "4.5",
+    accent: "#A435F0",
+  },
+  {
+    name: "Coursera",
+    url: "https://www.coursera.org",
+    bestFor: "University degrees & professional certificates",
+    courses: "7,000+",
+    pricing: "Free audit / $39–$79/mo specializations",
+    certificates: "Yes (verified, shareable)",
+    freeOptions: "Free audit + financial aid",
+    rating: "4.7",
+    accent: "#0056D2",
+  },
+  {
+    name: "edX",
+    url: "https://www.edx.org",
+    bestFor: "Academic courses & MicroMasters",
+    courses: "4,000+",
+    pricing: "Free audit / $50–$300 verified",
+    certificates: "Yes (verified, paid)",
+    freeOptions: "Free audit of most courses",
+    rating: "4.6",
+    accent: "#02262B",
+  },
+  {
+    name: "Skillshare",
+    url: "https://www.skillshare.com",
+    bestFor: "Creative skills & short projects",
+    courses: "30,000+",
+    pricing: "Free trial / ~$168 per year",
+    certificates: "No",
+    freeOptions: "Limited free classes",
+    rating: "4.3",
+    accent: "#00FF84",
+  },
+  {
+    name: "Pluralsight",
+    url: "https://www.pluralsight.com",
+    bestFor: "Tech, cloud & IT professionals",
+    courses: "7,000+",
+    pricing: "From ~$29/mo",
+    certificates: "Yes (skill certifications)",
+    freeOptions: "10-day free trial",
+    rating: "4.4",
+    accent: "#F05A28",
+  },
+  {
+    name: "LinkedIn Learning",
+    url: "https://www.linkedin.com/learning",
+    bestFor: "Professional soft skills & resume-ready certs",
+    courses: "16,000+",
+    pricing: "From ~$39/mo (free with some Premium plans)",
+    certificates: "Yes (adds to LinkedIn profile)",
+    freeOptions: "1-month free trial",
+    rating: "4.5",
+    accent: "#0A66C2",
+  },
+];
+
+const faqs = [
+  {
+    q: "Which is better, Udemy or Coursera?",
+    a: "It depends on your goal. Udemy wins on price and flexibility — courses are often free with coupons and you keep lifetime access. Coursera wins on credibility — its certificates and degrees come from accredited universities and companies like Google and IBM. For job-ready skills on a budget, start with Udemy; for a credential that stands out on a resume, use Coursera.",
+  },
+  {
+    q: "Is Udemy free or paid?",
+    a: "Udemy courses are paid by default, but instructors regularly publish 100% off coupons. On CourseSpeak we list thousands of verified free Udemy coupons that are updated daily, so you can enroll in premium courses without paying anything.",
+  },
+  {
+    q: "Do online platform certificates have value?",
+    a: "Yes, but it varies. Coursera, edX, and Pluralsight certificates are the most widely recognized by employers because they come from universities or industry leaders. Udemy certificates confirm course completion and are useful for showing initiative, but they aren't accredited.",
+  },
+  {
+    q: "Can I get a university degree online?",
+    a: "Yes. Coursera and edX both offer fully online bachelor's and master's degrees from accredited universities, often at a fraction of on-campus tuition. Udemy does not offer degrees.",
+  },
+  {
+    q: "Which platform has the most free courses?",
+    a: "Udemy has the most free courses available in practice because of the coupon system — we publish hundreds of 100% off coupons every week on CourseSpeak. Coursera and edX let you audit courses for free, but verified certificates cost money.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": `${canonicalUrl}#webpage`,
+      "url": canonicalUrl,
+      "name": pageTitle,
+      "description": pageDescription,
+      "isPartOf": { "@id": "https://coursespeak.com/#website" },
+      "inLanguage": "en-US",
+      "datePublished": "2025-01-01",
+      "dateModified": lastModified,
+      "author": { "@id": "https://coursespeak.com/#author" },
+      "publisher": { "@type": "Organization", "name": "CourseSpeak", "url": "https://coursespeak.com" },
+    },
+    {
+      "@type": "Person",
+      "@id": "https://coursespeak.com/#author",
+      "name": "Josh Smith",
+      "jobTitle": "Founder & Editor, CourseSpeak",
+      "url": "https://coursespeak.com/about",
+      "image": "https://coursespeak.com/images/author.jpg",
+      "sameAs": [
+        "https://www.linkedin.com/in/anandayuda/",
+        "https://x.com/courses_peak",
+        "https://www.facebook.com/CourseSpeakOfficial/"
+      ],
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${canonicalUrl}#breadcrumb`,
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://coursespeak.com" },
+        { "@type": "ListItem", "position": 2, "name": "Platform Comparisons", "item": canonicalUrl },
+      ],
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${canonicalUrl}#faq`,
+      "mainEntity": faqs.map((faq) => ({
+        "@type": "Question",
+        "name": faq.q,
+        "acceptedAnswer": { "@type": "Answer", "text": faq.a },
+      })),
+    },
+  ],
+};
+---
+
+<style>
+  .matrix-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .matrix-table th, .matrix-table td {
+    padding: 0.85rem 1rem;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid var(--border);
+  }
+  .matrix-table thead th {
+    background: var(--bg-secondary);
+    font-weight: 700;
+    color: var(--text);
+    position: sticky;
+    top: 0;
+  }
+  .matrix-table tbody tr:hover { background: var(--bg-secondary); }
+  .matrix-table tbody tr:last-child td { border-bottom: none; }
+  .platform-name { display: flex; align-items: center; gap: 0.5rem; font-weight: 800; color: var(--text); white-space: nowrap; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .comparison-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: var(--text);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+  .comparison-card:hover { transform: translateY(-2px); border-color: var(--brand); }
+  .prose h2, .prose h3 { color: var(--text); }
+  .prose p { margin-bottom: 1rem; }
+  @media (max-width: 720px) {
+    .matrix-wrap { overflow-x: auto; }
+    .matrix-table { min-width: 640px; }
+  }
+</style>
+
+<Layout title={pageTitle} description={pageDescription} type="article" canonical={canonicalUrl} image="/images/og/og-platforms.png" ogImageType="image/png">
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <section style={{ padding: "4rem 1rem 2rem", textAlign: "center" }}>
+    <div style={{ maxWidth: "900px", margin: "0 auto" }}>
+      <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 0h8v8h-8v-8z"/></svg>
+        Platform Comparison — Updated {monthYear}
+      </div>
+      <h1 style={{ fontSize: "clamp(1.8rem, 4.5vw, 2.8rem)", fontWeight: 800, lineHeight: 1.2, margin: "0 auto 0.75rem" }}>
+        <span style={{ background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Udemy vs Coursera vs edX</span>
+        <br />
+        <span style={{ color: "var(--text)" }}>The 6 Best Online Learning Platforms Compared</span>
+      </h1>
+      <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "680px", margin: "0 auto 1.5rem", lineHeight: 1.6 }}>
+        We compare Udemy, Coursera, edX, Skillshare, Pluralsight, and LinkedIn Learning across pricing, certificates, free options, and course quality — so you can pick the right platform (or combination) for your goals.
+      </p>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "1rem", flexWrap: "wrap", fontSize: "0.8rem", color: "var(--muted)" }}>
+        <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          By <strong style={{ color: "var(--text)" }}>Josh Smith</strong>
+        </span>
+        <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+          Updated <time datetime={lastModified}>{new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})}</time>
+        </span>
+        <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+            7 min read
+        </span>
+      </div>
+      <Image
+        src="/images/og/og-platforms.png"
+        alt="Udemy and its top course platform competitors compared in 2026"
+        width={1200}
+        height={630}
+        loading="eager"
+        fetchpriority="high"
+        style={{ width: "100%", maxWidth: "900px", height: "auto", borderRadius: "16px", border: "1px solid var(--border)", margin: "1.75rem auto 0", display: "block", boxShadow: "0 10px 40px -12px rgba(0,0,0,0.4)" }}
+      />
+    </div>
+  </section>
+
+  <section style={{ padding: "2rem 1rem 4rem" }}>
+    <div class="container" style={{ maxWidth: "1080px" }}>
+      <div style={{ marginBottom: "2.5rem" }}>
+        <span class="section-title" style={{ color: "var(--brand)", fontSize: "0.8rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em" }}>At a Glance</span>
+        <h2 class="section-heading" style={{ marginBottom: "1rem" }}>Platform Comparison Matrix</h2>
+        <p style={{ color: "var(--muted)", lineHeight: 1.6 }}>A quick side-by-side of the six leading platforms. Prices are indicative for {currentYear} and change frequently.</p>
+      </div>
+
+      <div class="matrix-wrap">
+        <table class="matrix-table">
+          <thead>
+            <tr>
+              <th>Platform</th>
+              <th>Best For</th>
+              <th>Courses</th>
+              <th>Pricing</th>
+              <th>Certificates</th>
+              <th>Free Options</th>
+              <th>Rating</th>
+            </tr>
+          </thead>
+          <tbody>
+            {platforms.map((p) => (
+              <tr>
+                <td>
+                  <span class="platform-name">
+                    <span class="dot" style={{ background: p.accent }}></span>
+                    <a href={p.url} target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: "none" }}>{p.name}</a>
+                  </span>
+                </td>
+                <td>{p.bestFor}</td>
+                <td>{p.courses}</td>
+                <td>{p.pricing}</td>
+                <td>{p.certificates}</td>
+                <td>{p.freeOptions}</td>
+                <td>{p.rating}/5</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section style={{ padding: "2rem 1rem 4rem", background: "var(--bg-secondary)" }}>
+    <div class="container" style={{ maxWidth: "1080px" }}>
+      <div style={{ marginBottom: "2rem" }}>
+        <span class="section-title" style={{ color: "var(--brand)", fontSize: "0.8rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em" }}>Head-to-Head</span>
+        <h2 class="section-heading" style={{ marginBottom: "0.5rem" }}>In-Depth Platform Comparisons</h2>
+        <p style={{ color: "var(--muted)", lineHeight: 1.6, margin: 0 }}>New comparisons are added regularly as we benchmark each platform against Udemy.</p>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.5rem" }}>
+        {comparisons.map((c) => (
+          <a class="comparison-card" href={`/platforms/${c.slug}`}>
+            <h3 style={{ margin: 0, fontSize: "1.15rem", fontWeight: 800 }}>{c.title}</h3>
+            <p style={{ margin: 0, fontSize: "0.9rem", color: "var(--muted)", lineHeight: 1.6 }}>{c.summary}</p>
+            <span style={{ color: "var(--brand)", fontSize: "0.85rem", fontWeight: 700 }}>{c.verdict}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section style={{ padding: "4rem 1rem" }}>
+    <div class="container prose" style={{ maxWidth: "900px" }}>
+      <h2>How to Choose the Right Learning Platform</h2>
+      <p>
+        There is no single "best" platform — the right choice depends on your budget, your goal, and how you like to learn. Here's a simple framework:
+      </p>
+      <ul style={{ lineHeight: 1.9, paddingLeft: "1.25rem" }}>
+        <li><strong>Learn a practical skill cheaply or free:</strong> Udemy with 100% off coupons — browse today's verified free coupons on <a href="/deals" style={{ color: "var(--brand)", fontWeight: 600 }}>our deals page</a>.</li>
+        <li><strong>Earn a recognized credential:</strong> Coursera or edX — university and industry certificates that carry weight with employers.</li>
+        <li><strong>Build creative skills (design, illustration, video):</strong> Skillshare — project-based classes and a large community.</li>
+        <li><strong>Advance your IT/cloud career:</strong> Pluralsight — hands-on labs, skill assessments, and tech certifications.</li>
+        <li><strong>Professional soft skills + resume integration:</strong> LinkedIn Learning — certificates post directly to your LinkedIn profile.</li>
+      </ul>
+      <h2>Can You Combine Multiple Platforms?</h2>
+      <p>
+        Absolutely — and most serious learners do. A common strategy is to use free Udemy coupons (via CourseSpeak) for fast, practical skill-building, then take one or two paid certificates on Coursera or edX when you need a credential that matters to employers. This keeps your total cost near zero while building both skills and credibility.
+      </p>
+    </div>
+  </section>
+
+  <section style={{ padding: "4rem 1rem", background: "var(--bg-secondary)" }}>
+    <div class="container" style={{ maxWidth: "900px" }}>
+      <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
+        <h2 class="section-heading">Platform Comparison FAQ</h2>
+        <p style={{ color: "var(--muted)", maxWidth: "600px", margin: "0.5rem auto 0" }}>Common questions we get about choosing between online learning platforms.</p>
+      </div>
+      <div class="faq-grid">
+        {faqs.map((faq) => (
+          <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "14px", padding: "1.25rem 1.5rem" }}>
+            <h3 style={{ margin: "0 0 0.5rem", fontSize: "1rem", color: "var(--text)", fontWeight: 700 }}>{faq.q}</h3>
+            <p style={{ margin: 0, color: "var(--muted)", lineHeight: 1.7, fontSize: "0.95rem" }}>{faq.a}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="container" style={{ maxWidth: "900px", padding: "0" }}>
+        <AuthorCard />
+      </div>
+    </div>
+  </section>
+</Layout>

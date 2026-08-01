@@ -1,0 +1,378 @@
+?---
+import Layout from "../../layouts/Layout.astro";
+import AuthorCard from "../../components/AuthorCard.astro";
+import { Image } from "astro:assets";
+
+const currentYear = new Date().getFullYear();
+const lastModified = new Date().toISOString().split("T")[0];
+const monthYear = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long" });
+const canonicalUrl = "https://coursespeak.com/platforms/udemy-vs-coursera";
+
+const related = [
+  { slug: "udemy-vs-edx", label: "Udemy vs edX" },
+  { slug: "udemy-vs-skillshare", label: "Udemy vs Skillshare" },
+  { slug: "udemy-vs-pluralsight", label: "Udemy vs Pluralsight" },
+  { slug: "udemy-vs-linkedin-learning", label: "Udemy vs LinkedIn Learning" },
+  { slug: "udemy-alternatives", label: "10 Best Udemy Alternatives" },
+];
+
+const pageTitle = `Udemy vs Coursera ${currentYear}: Which Is Better for Free Courses & Certificates?`;
+const pageDescription = `Udemy vs Coursera in ${currentYear} — we compare pricing, certificates, free courses, course quality, and instructors. Find out which platform is better for your learning goals and budget.`;
+
+const faqs = [
+  {
+    q: "Is Udemy better than Coursera?",
+    a: "For practical, budget-friendly skill-building, yes — Udemy courses are often free with 100% off coupons and you keep lifetime access. For recognized credentials like professional certificates and degrees, Coursera is better. Most learners combine both.",
+  },
+  {
+    q: "Which platform has better certificates, Udemy or Coursera?",
+    a: "Coursera. Its certificates come from accredited universities (Stanford, Yale) and industry leaders (Google, IBM), and they're widely recognized by employers. Udemy certificates simply confirm course completion and aren't accredited.",
+  },
+  {
+    q: "Can I learn on Udemy and Coursera for free?",
+    a: "Yes. On Udemy you can enroll in premium courses for free using the verified 100% off coupons we publish daily on CourseSpeak. On Coursera you can audit most courses for free, and apply for financial aid to get full access and certificates.",
+  },
+  {
+    q: "Do Udemy courses count toward a degree?",
+    a: "No. Udemy courses are not credit-bearing and can't be transferred to a degree program. Coursera offers accredited bachelor's and master's degrees from partner universities.",
+  },
+  {
+    q: "Is Coursera worth the subscription cost?",
+    a: "It depends on your goal. If you need a specific career certificate (for example, the Google Data Analytics Professional Certificate), the subscription is worth it because the credential can lead directly to job opportunities. For casual learning, free Udemy coupons offer better value.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": `${canonicalUrl}#webpage`,
+      "url": canonicalUrl,
+      "name": pageTitle,
+      "description": pageDescription,
+      "isPartOf": { "@id": "https://coursespeak.com/#website" },
+      "inLanguage": "en-US",
+      "datePublished": "2025-01-01",
+      "dateModified": lastModified,
+      "author": { "@id": "https://coursespeak.com/#author" },
+      "publisher": { "@type": "Organization", "name": "CourseSpeak", "url": "https://coursespeak.com" },
+    },
+    {
+      "@type": "Person",
+      "@id": "https://coursespeak.com/#author",
+      "name": "Josh Smith",
+      "jobTitle": "Founder & Editor, CourseSpeak",
+      "url": "https://coursespeak.com/about",
+      "image": "https://coursespeak.com/images/author.jpg",
+      "sameAs": [
+        "https://www.linkedin.com/in/anandayuda/",
+        "https://x.com/courses_peak",
+        "https://www.facebook.com/CourseSpeakOfficial/"
+      ],
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${canonicalUrl}#breadcrumb`,
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://coursespeak.com" },
+        { "@type": "ListItem", "position": 2, "name": "Platform Comparisons", "item": "https://coursespeak.com/platforms" },
+        { "@type": "ListItem", "position": 3, "name": "Udemy vs Coursera", "item": canonicalUrl },
+      ],
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${canonicalUrl}#faq`,
+      "mainEntity": faqs.map((faq) => ({
+        "@type": "Question",
+        "name": faq.q,
+        "acceptedAnswer": { "@type": "Answer", "text": faq.a },
+      })),
+    },
+  ],
+};
+---
+
+<style>
+  .toc { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.35rem; }
+  .toc a { font-size: 0.875rem; color: var(--brand); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
+  .toc span { font-size: 0.7rem; color: var(--muted); width: 18px; font-weight: 600; }
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  .compare-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; }
+  .compare-card h3 { margin: 0 0 0.75rem; font-size: 1.1rem; color: var(--text); font-weight: 800; display: flex; align-items: center; gap: 0.5rem; }
+  .compare-card ul { margin: 0; padding-left: 1.1rem; line-height: 1.8; color: var(--muted); }
+  .compare-card li strong { color: var(--text); }
+  .vs-row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1rem; align-items: stretch; margin: 1rem 0; }
+  .vs-box { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; }
+  .vs-box h3 { margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 800; color: var(--text); }
+  .vs-box p { margin: 0; font-size: 0.9rem; color: var(--muted); line-height: 1.65; }
+  .vs-mid { display: flex; align-items: center; justify-content: center; font-weight: 900; color: var(--brand); font-size: 0.85rem; }
+  .prose h2 { color: var(--text); margin-top: 2rem; }
+  .prose p, .prose li { color: var(--muted); line-height: 1.75; }
+  .verdict { background: rgba(212,167,55,0.08); border: 1px solid rgba(212,167,55,0.3); border-radius: 14px; padding: 1.25rem 1.5rem; color: var(--text); font-size: 1rem; line-height: 1.7; }
+  .verdict strong { color: var(--brand); }
+  .related { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem; }
+  .related a { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 0.85rem 1rem; text-decoration: none; color: var(--brand); font-weight: 700; font-size: 0.85rem; transition: border-color 0.2s ease, transform 0.2s ease; }
+  .related a:hover { border-color: var(--brand); transform: translateY(-1px); }
+  .atglance-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+  .atglance-table th, .atglance-table td { border: 1px solid var(--border); padding: 0.7rem 0.9rem; text-align: left; vertical-align: top; line-height: 1.6; }
+  .atglance-table thead th { background: var(--card); color: var(--text); font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+  .atglance-table td:first-child { color: var(--muted); font-weight: 600; white-space: nowrap; }
+  .atglance-table td { color: var(--text); }
+  .atglance-table tr:nth-child(even) td { background: var(--bg-secondary); }
+  @media (max-width: 760px) {
+    .compare-grid, .vs-row { grid-template-columns: 1fr; }
+    .vs-mid { padding: 0.5rem 0; }
+  }
+</style>
+
+<Layout title={pageTitle} description={pageDescription} type="article" canonical={canonicalUrl} image="/images/og/og-udemy-vs-coursera.png" ogImageType="image/png">
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <section style={{ padding: "4rem 1rem 2rem", textAlign: "center" }}>
+    <div style={{ maxWidth: "900px", margin: "0 auto" }}>
+      <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        Head-to-Head Comparison — Updated {monthYear}
+      </div>
+      <h1 style={{ fontSize: "clamp(1.8rem, 4.5vw, 2.8rem)", fontWeight: 800, lineHeight: 1.2, margin: "0 auto 0.75rem" }}>
+        <span style={{ background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Udemy vs Coursera</span>
+        <br />
+        <span style={{ color: "var(--text)" }}>Which Should You Choose in {currentYear}?</span>
+      </h1>
+      <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "680px", margin: "0 auto 1.5rem", lineHeight: 1.6 }}>
+        Udemy and Coursera are the two biggest names in online learning, but they serve very different goals. We break down pricing, certificates, free options, and course quality so you can decide — with no hype.
+      </p>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "1rem", flexWrap: "wrap", fontSize: "0.8rem", color: "var(--muted)" }}>
+        <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          By <strong style={{ color: "var(--text)" }}>Josh Smith</strong>
+        </span>
+        <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+          Updated <time datetime={lastModified}>{new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})}</time>
+        </span>
+        <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+            8 min read
+        </span>
+      </div>
+      <Image
+        src="/images/og/og-udemy-vs-coursera.png"
+        alt="Udemy vs Coursera - 2026 comparison of pricing, certificates, and free courses"
+        width={1200}
+        height={630}
+        loading="eager"
+        fetchpriority="high"
+        style={{ width: "100%", maxWidth: "900px", height: "auto", borderRadius: "16px", border: "1px solid var(--border)", margin: "1.75rem auto 0", display: "block", boxShadow: "0 10px 40px -12px rgba(0,0,0,0.4)" }}
+      />
+    </div>
+  </section>
+
+  <nav style={{ background: "var(--card)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)", padding: "1.5rem 1rem" }}>
+    <div class="container" style={{ maxWidth: "900px" }}>
+      <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.3rem 0.75rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.68rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+        On this page
+      </div>
+      <ol class="toc">
+        {[
+          ["#overview", "Quick verdict"],
+          ["#pricing", "Pricing compared"],
+          ["#certificates", "Certificates & credentials"],
+          ["#free", "Free course options"],
+          ["#quality", "Course quality & instructors"],
+          ["#proscons", "Pros and cons"],
+          ["#which", "Which one for your goal?"],
+          ["#faq", "FAQ"],
+        ].map(([href, label], i) => (
+          <li>
+            <a href={href as string}>
+              <span>{i + 1}.</span>
+              {label as string}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </nav>
+
+  <article style={{ padding: "3rem 1rem 4rem" }}>
+    <div class="container prose" style={{ maxWidth: "900px" }}>
+
+      <div id="overview" class="verdict">
+        <strong>Quick verdict:</strong> Choose <strong>Udemy</strong> when you want a specific skill fast and cheap — with 100% off coupons it's free, and you keep lifetime access. Choose <strong>Coursera</strong> when you need a recognized certificate or degree that employers trust. Most smart learners use both.
+      </div>
+
+      <h2>At a Glance</h2>
+      <table class="atglance-table">
+        <thead>
+          <tr><th>Feature</th><th>Udemy</th><th>Coursera</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Pricing model</td><td>Pay once per course, often discounted or free with coupons</td><td>Subscription (Coursera Plus) or pay per specialization / certificate</td></tr>
+          <tr><td>Typical cost</td><td>$0 with verified coupons; $12.99-$19.99 during sales; list up to $199.99</td><td>~$59/month or ~$399/year (Plus); $39-$79/month per specialization</td></tr>
+          <tr><td>Free options</td><td>Full courses free via 100% off coupons, lifetime access</td><td>Free audit (no grades or certificate); financial aid</td></tr>
+          <tr><td>Certificates</td><td>Completion only, not accredited</td><td>University/company-branded, verified, widely recognized</td></tr>
+          <tr><td>Course library</td><td>200,000+ courses on any topic</td><td>7,000+ courses, specializations, and degrees</td></tr>
+          <tr><td>Course length</td><td>1-40+ hours, fully self-paced</td><td>4-12 weeks with schedules; guided projects</td></tr>
+          <tr><td>Access</td><td>Lifetime after you enroll</td><td>Only while subscribed (unless you audit)</td></tr>
+          <tr><td>Best for</td><td>Fast, cheap, practical skills</td><td>Recognized credentials, structure, academic depth</td></tr>
+        </tbody>
+      </table>
+      <p>
+        In short: Udemy is a one-time, low-cost (often free) way to pick up practical skills with lifetime access. Coursera is a subscription-style way to earn recognizable credentials from universities and companies. The rest of this guide walks through each difference in detail.
+      </p>
+
+      <h2 id="pricing">1. Pricing Compared</h2>
+      <p>
+        Udemy sells individual courses, typically <strong>$12–$200</strong>, and runs near-constant sales. More importantly for you, instructors publish <strong>100% off coupons</strong> — which is exactly what we list and verify daily on <a href="/deals" style={{ color: "var(--brand)", fontWeight: 600 }}>CourseSpeak's deals page</a>. With a coupon, premium Udemy courses cost $0.
+      </p>
+      <p>
+        Coursera works differently: many courses can be <strong>audited for free</strong>, but graded assignments and certificates require either a one-time purchase or a subscription (typically <strong>$39–$79/month</strong>) for specializations and professional certificates. Financial aid is available but takes time to approve.
+      </p>
+      <p>
+        To put the numbers in perspective: a typical Udemy course lists around <strong>$49.99-$199.99</strong> but almost always sells for <strong>$12.99-$19.99</strong>, and with the 100% off coupons we verify on CourseSpeak it costs <strong>$0</strong>. On the Coursera side, a single specialization runs roughly <strong>$39-$79 per month</strong> until you finish, Coursera Plus is about <strong>$59/month or $399/year</strong>, and full online degrees run into the <strong>thousands</strong>.
+      </p>
+
+      <h2 id="certificates">2. Certificates & Credentials</h2>
+      <div class="compare-grid">
+        <div class="compare-card">
+          <h3><a href="https://www.udemy.com" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none">Udemy</a></h3>
+          <ul>
+            <li><strong>Certificate of completion</strong> — not accredited</li>
+            <li>Shows you finished a course (good for showing initiative)</li>
+            <li>No verified identity check</li>
+            <li>No degree programs</li>
+          </ul>
+        </div>
+        <div class="compare-card">
+          <h3><a href="https://www.coursera.org" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none">Coursera</a></h3>
+          <ul>
+            <li><strong>Verified certificates</strong> from universities & companies (Google, IBM, Stanford)</li>
+            <li>Full <strong>online degrees</strong> (bachelor's & master's)</li>
+            <li>Identity-verified, shareable to LinkedIn & resumes</li>
+            <li>Widely recognized by employers and recruiters</li>
+          </ul>
+        </div>
+      </div>
+      <p>
+        This is the single biggest difference. If the credential itself matters to your career, Coursera wins. If you just want to learn the skill, the certificate rarely matters.
+      </p>
+      <p>
+        A useful framing: think of a Udemy certificate as a receipt for finishing a course, and a Coursera certificate as a credential someone can verify. Coursera certificates are tied to your verified identity and add a verifiable record to your LinkedIn profile, which is why recruiters treat them differently. If you are job hunting, one Google or IBM professional certificate on Coursera usually carries more weight than a stack of Udemy completion certificates.
+      </p>
+
+      <h2 id="free">3. Free Course Options</h2>
+      <div class="vs-row">
+        <div class="vs-box">
+          <h3>Udemy — Free with coupons</h3>
+          <p>Thousands of premium courses are free right now via verified 100% off coupons. Lifetime access, no subscription. <a href="/deals" style={{ color: "var(--brand)", fontWeight: 600 }}>Browse today's free coupons</a>.</p>
+        </div>
+        <div class="vs-mid">VS</div>
+        <div class="vs-box">
+          <h3>Coursera — Free to audit</h3>
+          <p>Audit most courses for free, but lose graded assignments, projects, and the certificate. Financial aid covers the rest but needs approval.</p>
+        </div>
+      </div>
+      <p>
+        For genuinely free learning with full benefits, Udemy coupons are the clear winner — you get everything a paying student gets, at $0. On Coursera, "free" means partial access unless you qualify for aid.
+      </p>
+      <p>
+        One caveat: Coursera's free audit tier is genuinely useful for structured, university-level overviews of a topic. Many people follow a specialization week by week in audit mode without submitting graded work, then pair it with free Udemy courses (via our coupons) for hands-on practice. That combination costs nothing and covers both theory and application.
+      </p>
+
+      <h2 id="quality">4. Course Quality & Instructors</h2>
+      <p>
+        <strong>Udemy</strong> courses are created by independent instructors, so quality varies widely. The good news: reviews, ratings, and student counts make it easy to filter, and our curation process on CourseSpeak only publishes courses rated <strong>4.0+</strong> from proven instructors. Courses are practical, hands-on, and updated by their creators.
+      </p>
+      <p>
+        <strong>Coursera</strong> courses are produced by universities and companies, so production quality and academic rigor are consistently high. However, content can feel more lecture-based and less immediately practical, and updates move more slowly because they go through institutions.
+      </p>
+      <p>
+        A practical tip for Udemy: sort by rating and check the "last updated" date. A 4.5-star course updated within the last six months is usually a solid bet, and our curation on CourseSpeak only surfaces courses rated 4.0 or higher from established instructors. For Coursera, trust the institution brand and look for courses with active discussion forums and recent learner reviews.
+      </p>
+
+      <h2 id="proscons">5. Pros and Cons</h2>
+      <div class="compare-grid">
+        <div class="compare-card">
+          <h3>Udemy Pros</h3>
+          <ul>
+            <li><strong>Free</strong> with verified 100% off coupons</li>
+            <li>Lifetime access, buy once keep forever</li>
+            <li>Huge library (200,000+ courses)</li>
+            <li>Practical, project-based learning</li>
+            <li>No subscription required</li>
+          </ul>
+        </div>
+        <div class="compare-card">
+          <h3>Coursera Pros</h3>
+          <ul>
+            <li><strong>Recognized certificates & degrees</strong></li>
+            <li>Content from top universities & Google/IBM</li>
+            <li>Structured learning paths & capstone projects</li>
+            <li>Career services & job-ready tracks</li>
+            <li>Identity-verified credentials</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2 id="which">6. Which One for Your Goal?</h2>
+      <ul>
+        <li><strong>Learn a skill free & fast:</strong> Udemy with coupons → <a href="/deals" style={{ color: "var(--brand)", fontWeight: 600 }}>free courses today</a>.</li>
+        <li><strong>Resume-boosting certificate:</strong> Coursera (Google/IBM professional certificates).</li>
+        <li><strong>College-level knowledge:</strong> Coursera or edX for university courses.</li>
+        <li><strong>Hands-on coding / design:</strong> Udemy — project-led tutorials by practitioners.</li>
+        <li><strong>Start a career in data or IT:</strong> Coursera professional track, supplemented with free Udemy practice.</li>
+        <li><strong>No budget at all:</strong> Udemy coupons first, audit Coursera for structured overviews.</li>
+        <li><strong>Learn data science or AI:</strong> Coursera for theory and certificates, Udemy for applied projects and tools.</li>
+        <li><strong>Build a portfolio:</strong> Udemy project-based courses give you hands-on artifacts fast; Coursera capstones add structure.</li>
+      </ul>
+      <p>
+        If you are still torn, start with a free Udemy course (coupon on CourseSpeak) on the skill you want. If you love the practical, project-led style and just want the skill, stay with Udemy. If you need a credential a recruiter can verify, then invest in the matching Coursera certificate afterward. You can always layer the two - most serious learners do.
+      </p>
+
+      <div class="verdict">
+        <strong>Bottom line:</strong> Udemy is the best value for learning skills — especially since free coupons make it cost nothing. Coursera is the best value when the credential itself is your goal. For most learners, the winning move is <strong>both</strong>: free Udemy courses for skills, a Coursera certificate for credibility.
+      </div>
+
+      <h2 id="related">7. Related Comparisons</h2>
+      <div class="related">
+        {related.map((r) => <a href={`/platforms/${r.slug}`}>{r.label}</a>)}
+      </div>
+    </div>
+  </article>
+
+  <section style={{ padding: "4rem 1rem", background: "var(--bg-secondary)" }}>
+    <div class="container" style={{ maxWidth: "900px" }}>
+      <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
+        <h2 class="section-heading" id="faq">Udemy vs Coursera FAQ</h2>
+        <p style={{ color: "var(--muted)", maxWidth: "600px", margin: "0.5rem auto 0" }}>Quick answers to the questions we hear most.</p>
+      </div>
+      <div class="faq-grid">
+        {faqs.map((faq) => (
+          <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "14px", padding: "1.25rem 1.5rem" }}>
+            <h3 style={{ margin: "0 0 0.5rem", fontSize: "1rem", color: "var(--text)", fontWeight: 700 }}>{faq.q}</h3>
+            <p style={{ margin: 0, color: "var(--muted)", lineHeight: 1.7, fontSize: "0.95rem" }}>{faq.a}</p>
+          </div>
+        ))}
+      </div>
+      <div style={{ marginTop: "2.5rem" }}>
+        <AuthorCard />
+      </div>
+      <div style={{ textAlign: "center", marginTop: "3rem" }}>
+        <p style={{ color: "var(--muted)", marginBottom: "1rem" }}>Ready to start learning for free?</p>
+        <a href="/deals" style={{
+          display: "inline-flex", alignItems: "center", gap: "0.5rem",
+          padding: "0.875rem 2rem", borderRadius: "12px",
+          background: "var(--brand)", color: "#1a1814",
+          textDecoration: "none", fontWeight: 700, fontSize: "1rem",
+          boxShadow: "0 4px 20px -4px hsla(45,95%,58%,0.4)"
+        }}>
+          Browse Free Udemy Coupons
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

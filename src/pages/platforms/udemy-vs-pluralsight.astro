@@ -1,0 +1,379 @@
+?---
+import Layout from "../../layouts/Layout.astro";
+import AuthorCard from "../../components/AuthorCard.astro";
+import { Image } from "astro:assets";
+
+const currentYear = new Date().getFullYear();
+const lastModified = new Date().toISOString().split("T")[0];
+const monthYear = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long" });
+const canonicalUrl = "https://coursespeak.com/platforms/udemy-vs-pluralsight";
+
+const pageTitle = `Udemy vs Pluralsight ${currentYear}: Tech Skills for Everyone or IT Pros?`;
+const pageDescription = `Udemy vs Pluralsight in ${currentYear} — we compare pricing, hands-on labs, skill assessments, certifications, and free options. Find out which platform fits developers, IT pros, and beginners.`;
+
+const related = [
+  { slug: "udemy-vs-coursera", label: "Udemy vs Coursera" },
+  { slug: "udemy-vs-edx", label: "Udemy vs edX" },
+  { slug: "udemy-vs-skillshare", label: "Udemy vs Skillshare" },
+  { slug: "udemy-vs-linkedin-learning", label: "Udemy vs LinkedIn Learning" },
+  { slug: "udemy-alternatives", label: "10 Best Udemy Alternatives" },
+];
+
+const faqs = [
+  {
+    q: "Is Pluralsight worth it over Udemy?",
+    a: "For professional developers, cloud engineers, and IT teams, yes — Pluralsight's hands-on labs, skill assessments, and curated tech paths are excellent. For everyone else, Udemy is better value, especially since 100% off coupons make it free. Pluralsight is a subscription and costs ~$29+/month.",
+  },
+  {
+    q: "Which is better for learning to code, Udemy or Pluralsight?",
+    a: "Both are strong. Udemy offers more beginner-friendly, project-based courses for a one-time cost (often free with coupons). Pluralsight targets working professionals who want structured paths, labs, and measured skill levels. Beginners usually start better on Udemy; professionals get more from Pluralsight.",
+  },
+  {
+    q: "Does Pluralsight give certificates?",
+    a: "Pluralsight offers Skill IQ and Role IQ assessments and certificates for some courses and paths, plus it's recognized in IT hiring. Udemy gives a certificate of completion for every course — free with our verified coupons.",
+  },
+  {
+    q: "Can I try Pluralsight for free?",
+    a: "Pluralsight offers a limited free trial (typically 10 days) with full access. After that you need a subscription. Udemy courses are completely free with verified 100% off coupons from CourseSpeak, with no time limit.",
+  },
+  {
+    q: "Is Pluralsight only for IT professionals?",
+    a: "Almost entirely, yes. Pluralsight focuses on software development, cloud, cybersecurity, and IT. Udemy covers everything from IT to design, business, marketing, languages, and personal development.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": `${canonicalUrl}#webpage`,
+      "url": canonicalUrl,
+      "name": pageTitle,
+      "description": pageDescription,
+      "isPartOf": { "@id": "https://coursespeak.com/#website" },
+      "inLanguage": "en-US",
+      "datePublished": "2025-01-01",
+      "dateModified": lastModified,
+      "author": { "@id": "https://coursespeak.com/#author" },
+      "publisher": { "@type": "Organization", "name": "CourseSpeak", "url": "https://coursespeak.com" },
+      "mainEntity": {
+        "@type": "ItemList",
+        "name": "Udemy vs Pluralsight",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "item": { "@type": "Organization", "name": "Udemy", "url": "https://www.udemy.com", "description": "Global marketplace with 200,000+ practical, instructor-led courses. Often free with verified 100% off coupons." },
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "item": { "@type": "Organization", "name": "Pluralsight", "url": "https://www.pluralsight.com", "description": "Professional tech skills platform with hands-on labs, skill assessments, and certifications for developers and IT professionals." },
+          },
+        ],
+      },
+    },
+    {
+      "@type": "Person",
+      "@id": "https://coursespeak.com/#author",
+      "name": "Josh Smith",
+      "jobTitle": "Founder & Editor, CourseSpeak",
+      "url": "https://coursespeak.com/about",
+      "image": "https://coursespeak.com/images/author.jpg",
+      "sameAs": [
+        "https://www.linkedin.com/in/anandayuda/",
+        "https://x.com/courses_peak",
+        "https://www.facebook.com/CourseSpeakOfficial/"
+      ],
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${canonicalUrl}#breadcrumb`,
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://coursespeak.com" },
+        { "@type": "ListItem", "position": 2, "name": "Platform Comparisons", "item": "https://coursespeak.com/platforms" },
+        { "@type": "ListItem", "position": 3, "name": "Udemy vs Pluralsight", "item": canonicalUrl },
+      ],
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${canonicalUrl}#faq`,
+      "mainEntity": faqs.map((faq) => ({
+        "@type": "Question",
+        "name": faq.q,
+        "acceptedAnswer": { "@type": "Answer", "text": faq.a },
+      })),
+    },
+  ],
+};
+---
+
+<style>
+  .toc { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.35rem; }
+  .toc a { font-size: 0.875rem; color: var(--brand); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
+  .toc span { font-size: 0.7rem; color: var(--muted); width: 18px; font-weight: 600; }
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  .compare-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; }
+  .compare-card h3 { margin: 0 0 0.75rem; font-size: 1.1rem; color: var(--text); font-weight: 800; display: flex; align-items: center; gap: 0.5rem; }
+  .compare-card ul { margin: 0; padding-left: 1.1rem; line-height: 1.8; color: var(--muted); }
+  .compare-card li strong { color: var(--text); }
+  .vs-row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1rem; align-items: stretch; margin: 1rem 0; }
+  .vs-box { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; }
+  .vs-box h3 { margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 800; color: var(--text); }
+  .vs-box p { margin: 0; font-size: 0.9rem; color: var(--muted); line-height: 1.65; }
+  .vs-mid { display: flex; align-items: center; justify-content: center; font-weight: 900; color: var(--brand); font-size: 0.85rem; }
+  .prose h2 { color: var(--text); margin-top: 2rem; }
+  .prose p, .prose li { color: var(--muted); line-height: 1.75; }
+  .verdict { background: rgba(212,167,55,0.08); border: 1px solid rgba(212,167,55,0.3); border-radius: 14px; padding: 1.25rem 1.5rem; color: var(--text); font-size: 1rem; line-height: 1.7; }
+  .verdict strong { color: var(--brand); }
+  .related { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem; }
+  .related a { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 0.85rem 1rem; text-decoration: none; color: var(--brand); font-weight: 700; font-size: 0.85rem; transition: border-color 0.2s ease, transform 0.2s ease; }
+  .related a:hover { border-color: var(--brand); transform: translateY(-1px); }
+  .atglance-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+  .atglance-table th, .atglance-table td { border: 1px solid var(--border); padding: 0.7rem 0.9rem; text-align: left; vertical-align: top; line-height: 1.6; }
+  .atglance-table thead th { background: var(--card); color: var(--text); font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+  .atglance-table td:first-child { color: var(--muted); font-weight: 600; white-space: nowrap; }
+  .atglance-table td { color: var(--text); }
+  .atglance-table tr:nth-child(even) td { background: var(--bg-secondary); }
+  @media (max-width: 760px) {
+    .compare-grid, .vs-row { grid-template-columns: 1fr; }
+    .vs-mid { padding: 0.5rem 0; }
+  }
+</style>
+
+<Layout title={pageTitle} description={pageDescription} type="article" canonical={canonicalUrl} image="/images/og/og-udemy-vs-pluralsight.png" ogImageType="image/png">
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <section style={{ padding: "4rem 1rem 2rem", textAlign: "center" }}>
+    <div style={{ maxWidth: "900px", margin: "0 auto" }}>
+      <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        Head-to-Head Comparison — Updated {monthYear}
+      </div>
+      <h1 style={{ fontSize: "clamp(1.8rem, 4.5vw, 2.8rem)", fontWeight: 800, lineHeight: 1.2, margin: "0 auto 0.75rem" }}>
+        <span style={{ background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Udemy vs Pluralsight</span>
+        <br />
+        <span style={{ color: "var(--text)" }}>Affordable Courses or Pro Tech Training?</span>
+      </h1>
+      <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "680px", margin: "0 auto 1.5rem", lineHeight: 1.6 }}>
+        Udemy is for anyone who wants practical skills at a great price. Pluralsight is built for working developers and IT professionals who need labs, assessments, and certifications. Here's how they compare.
+      </p>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "1rem", flexWrap: "wrap", fontSize: "0.8rem", color: "var(--muted)" }}>
+        <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          By <strong style={{ color: "var(--text)" }}>Josh Smith</strong>
+        </span>
+        <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+          Updated <time datetime={lastModified}>{new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})}</time>
+        </span>
+        <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+            8 min read
+        </span>
+      </div>
+      <Image
+        src="/images/og/og-udemy-vs-pluralsight.png"
+        alt="Udemy vs Pluralsight - 2026 comparison of pricing, subscription, and free trials"
+        width={1200}
+        height={630}
+        loading="eager"
+        fetchpriority="high"
+        style={{ width: "100%", maxWidth: "900px", height: "auto", borderRadius: "16px", border: "1px solid var(--border)", margin: "1.75rem auto 0", display: "block", boxShadow: "0 10px 40px -12px rgba(0,0,0,0.4)" }}
+      />
+    </div>
+  </section>
+
+  <nav style={{ background: "var(--card)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)", padding: "1.5rem 1rem" }}>
+    <div class="container" style={{ maxWidth: "900px" }}>
+      <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.3rem 0.75rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.68rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+        On this page
+      </div>
+      <ol class="toc">
+        {[
+          ["#overview", "Quick verdict"],
+          ["#pricing", "Pricing compared"],
+          ["#certificates", "Certifications & assessments"],
+          ["#free", "Free course options"],
+          ["#quality", "Course quality & audience"],
+          ["#proscons", "Pros and cons"],
+          ["#which", "Which one for your goal?"],
+          ["#related", "Related comparisons"],
+          ["#faq", "FAQ"],
+        ].map(([href, label], i) => (
+          <li>
+            <a href={href as string}>
+              <span>{i + 1}.</span>
+              {label as string}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </nav>
+
+  <article style={{ padding: "3rem 1rem 4rem" }}>
+    <div class="container prose" style={{ maxWidth: "900px" }}>
+
+      <div id="overview" class="verdict">
+        <strong>Quick verdict:</strong> Choose <strong>Udemy</strong> for broad, affordable (often free with 100% off coupons) practical courses in any field, with lifetime access. Choose <strong>Pluralsight</strong> if you're a developer or IT professional who wants structured paths, hands-on cloud labs, skill assessments, and certifications recognized in tech hiring.
+      </div>
+
+      <h2>At a Glance</h2>
+      <table class="atglance-table">
+        <thead>
+          <tr><th>Feature</th><th>Udemy</th><th>Pluralsight</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Pricing model</td><td>Pay once per course, often free with coupons</td><td>Subscription-only, access while subscribed</td></tr>
+          <tr><td>Typical cost</td><td>$0 with verified coupons; $12.99-$19.99 during sales</td><td>~$29-$49/month; 10-day free trial</td></tr>
+          <tr><td>Free options</td><td>Full courses free via 100% off coupons, lifetime access</td><td>10-day trial only</td></tr>
+          <tr><td>Certificates</td><td>Certificate of completion, not accredited</td><td>Skill IQ / Role IQ assessments, certifications</td></tr>
+          <tr><td>Course library</td><td>200,000+ courses, any topic</td><td>7,000+ tech, cloud, and IT courses</td></tr>
+          <tr><td>Course length</td><td>5-40+ hours, self-paced</td><td>2-10+ hours with structured learning paths</td></tr>
+          <tr><td>Access</td><td>Lifetime after you enroll</td><td>Lost when you cancel</td></tr>
+          <tr><td>Best for</td><td>Affordable skills in any field</td><td>Tech careers, hands-on labs, measurable skills</td></tr>
+        </tbody>
+      </table>
+      <p>
+        In short: Udemy is the affordable (often free) way to learn any skill with lifetime access. Pluralsight is a professional subscription for developers and IT teams, built around measurable skill levels, hands-on labs, and recognized certifications.
+      </p>
+
+      <h2 id="pricing">1. Pricing Compared</h2>
+      <p>
+        Udemy is <strong>pay-per-course</strong> (typically <strong>$12–$200</strong>) with frequent discounts — and instructors regularly publish <strong>100% off coupons</strong>. On <a href="/deals" style={{ color: "var(--brand)", fontWeight: 600 }}>CourseSpeak's deals page</a> we verify and list these daily, so premium courses cost $0 with lifetime access.
+      </p>
+      <p>
+        Pluralsight is <strong>subscription-only</strong> — roughly <strong>$29–$49/month</strong> (annual plans cheaper). You get the full library while subscribed, plus a 10-day free trial to test it. It's a genuine investment, but for a professional it often pays for itself in one certification.
+      </p>
+      <p>
+        For a job seeker or working professional, Pluralsight's subscription is easier to justify because it bundles practice labs and skill assessments that a standalone Udemy course does not include. But for casual or budget learners, Pluralsight's recurring cost is the dealbreaker - Udemy coupons deliver the same breadth of tech topics at $0. Many developers start with free Udemy courses to build fundamentals, then subscribe to Pluralsight only when they need labs and certification prep.
+      </p>
+
+      <h2 id="certificates">2. Certifications & Skill Assessments</h2>
+      <div class="compare-grid">
+        <div class="compare-card">
+          <h3><a href="https://www.udemy.com" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none">Udemy</a></h3>
+          <ul>
+            <li><strong>Certificate of completion</strong> per course</li>
+            <li>Free with coupons, same as paying students</li>
+            <li>Good for portfolios and showing initiative</li>
+            <li>Not accredited, no skill-level scoring</li>
+          </ul>
+        </div>
+        <div class="compare-card">
+          <h3><a href="https://www.pluralsight.com" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none">Pluralsight</a></h3>
+          <ul>
+            <li><strong>Skill IQ & Role IQ assessments</strong> — measure your level</li>
+            <li>Certifications and course-completion certs</li>
+            <li>Recognized in IT/engineering hiring</li>
+            <li>Personalized learning paths by role</li>
+          </ul>
+        </div>
+      </div>
+      <p>
+        Pluralsight's big differentiator is measurement — Skill IQ tells you exactly where you stand and what to learn next. Udemy simply confirms completion.
+      </p>
+
+      <h2 id="free">3. Free Course Options</h2>
+      <div class="vs-row">
+        <div class="vs-box">
+          <h3>Udemy — Free with coupons</h3>
+          <p>Verified 100% off coupons give you the full course permanently at $0 — no subscription, no time limit. <a href="/deals" style={{ color: "var(--brand)", fontWeight: 600 }}>Browse today's free coupons</a>.</p>
+        </div>
+        <div class="vs-mid">VS</div>
+        <div class="vs-box">
+          <h3>Pluralsight — Trial only</h3>
+          <p>A ~10-day free trial with full access, then a paid subscription. No permanent free courses.</p>
+        </div>
+      </div>
+
+      <h2 id="quality">4. Course Quality & Audience</h2>
+      <p>
+        <strong>Udemy</strong> has 200,000+ courses from independent instructors across every topic. Quality varies, but ratings and student counts make filtering easy, and CourseSpeak only lists <strong>4.0+ rated</strong> courses from proven instructors. It's ideal for beginners through advanced learners in tech and beyond.
+      </p>
+      <p>
+        <strong>Pluralsight</strong> is curated and tech-focused — software development, cloud (AWS, Azure, GCP), cybersecurity, and IT operations. Content is produced by vetted industry experts, with hands-on labs and cloud sandboxes you can't find on Udemy. It's squarely aimed at working professionals and teams.
+      </p>
+
+      <h2 id="proscons">5. Pros and Cons</h2>
+      <div class="compare-grid">
+        <div class="compare-card">
+          <h3>Udemy Pros</h3>
+          <ul>
+            <li><strong>Free</strong> with verified 100% off coupons</li>
+            <li>Lifetime access — buy once, keep forever</li>
+            <li>200,000+ courses in every category</li>
+            <li>Beginner-friendly and project-based</li>
+            <li>No subscription required</li>
+          </ul>
+        </div>
+        <div class="compare-card">
+          <h3>Pluralsight Pros</h3>
+          <ul>
+            <li>Hands-on labs & cloud sandboxes</li>
+            <li>Skill IQ / Role IQ assessments</li>
+            <li>Curated, employer-recognized tech content</li>
+            <li>Structured learning paths for careers</li>
+            <li>Enterprise & team plans</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2 id="which">6. Which One for Your Goal?</h2>
+      <ul>
+        <li><strong>Learn any skill cheaply or free:</strong> Udemy with coupons → <a href="/deals" style={{ color: "var(--brand)", fontWeight: 600 }}>free courses today</a>.</li>
+        <li><strong>Advance your developer/IT career:</strong> Pluralsight paths + Skill IQ.</li>
+        <li><strong>Prepare for AWS/Azure/cloud certifications:</strong> Pluralsight labs.</li>
+        <li><strong>First programming language as a beginner:</strong> Udemy — friendlier and free.</li>
+        <li><strong>Build a portfolio project:</strong> Udemy — project-led tutorials.</li>
+        <li><strong>Non-tech skills (business, design, marketing):</strong> Udemy — Pluralsight doesn't cover these.</li>
+      </ul>
+
+      <div class="verdict">
+        <strong>Bottom line:</strong> For most learners, Udemy is the smarter choice — it's free with our coupons, broad, and you keep access forever. If you're a paid tech professional who benefits from labs, assessments, and recognized tech paths, Pluralsight earns its subscription. You can absolutely use both: free Udemy courses to fill gaps, Pluralsight for your core specialization.
+      </div>
+
+      <h2 id="related">7. Related Comparisons</h2>
+      <div class="related">
+        {related.map((r) => <a href={`/platforms/${r.slug}`}>{r.label}</a>)}
+      </div>
+
+    </div>
+  </article>
+
+  <section style={{ padding: "4rem 1rem", background: "var(--bg-secondary)" }}>
+    <div class="container" style={{ maxWidth: "900px" }}>
+      <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
+        <h2 class="section-heading" id="faq">Udemy vs Pluralsight FAQ</h2>
+        <p style={{ color: "var(--muted)", maxWidth: "600px", margin: "0.5rem auto 0" }}>Quick answers to the questions we hear most.</p>
+      </div>
+      <div class="faq-grid">
+        {faqs.map((faq) => (
+          <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "14px", padding: "1.25rem 1.5rem" }}>
+            <h3 style={{ margin: "0 0 0.5rem", fontSize: "1rem", color: "var(--text)", fontWeight: 700 }}>{faq.q}</h3>
+            <p style={{ margin: 0, color: "var(--muted)", lineHeight: 1.7, fontSize: "0.95rem" }}>{faq.a}</p>
+          </div>
+        ))}
+      </div>
+      <div style={{ marginTop: "2.5rem" }}>
+        <AuthorCard />
+      </div>
+      <div style={{ textAlign: "center", marginTop: "3rem" }}>
+        <p style={{ color: "var(--muted)", marginBottom: "1rem" }}>Ready to start learning for free?</p>
+        <a href="/deals" style={{
+          display: "inline-flex", alignItems: "center", gap: "0.5rem",
+          padding: "0.875rem 2rem", borderRadius: "12px",
+          background: "var(--brand)", color: "#1a1814",
+          textDecoration: "none", fontWeight: 700, fontSize: "1rem",
+          boxShadow: "0 4px 20px -4px hsla(45,95%,58%,0.4)"
+        }}>
+          Browse Free Udemy Coupons
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

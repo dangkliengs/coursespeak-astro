@@ -4,8 +4,8 @@ import Layout from "../layouts/Layout.astro";
 const canonicalUrl = "https://coursespeak.com/affiliate-disclosure";
 const pageTitle = "Affiliate Disclosure — Transparent Partnerships & Earnings | CourseSpeak";
 const pageDescription = "CourseSpeak's affiliate disclosure: we earn commissions when you purchase courses through our links. Full transparency on our partnerships, pricing, and editorial independence.";
-const lastModified = "2026-01-15";
-const monthYear = "January 2026";
+const lastModified = new Date().toISOString().split('T')[0];
+const monthYear = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
 
 const faqs = [
   {

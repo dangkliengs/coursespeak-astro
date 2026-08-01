@@ -4,8 +4,8 @@ import Layout from "../layouts/Layout.astro";
 const canonicalUrl = "https://coursespeak.com/terms";
 const pageTitle = "Terms of Service — Legal Terms & Conditions | CourseSpeak";
 const pageDescription = "CourseSpeak Terms of Service: legal terms governing the use of our Udemy coupon platform, including user conduct, disclaimers, and intellectual property.";
-const lastModified = "2026-01-15";
-const monthYear = "January 2026";
+const lastModified = new Date().toISOString().split('T')[0];
+const monthYear = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
 ---
 
 <Layout title={pageTitle} description={pageDescription} type="article" canonical={canonicalUrl}>

@@ -2,11 +2,10 @@
 import { Image } from 'astro:assets';
 import { createInstructorSlug, parseInstructors } from '../lib/instructors';
 
-const { deal } = Astro.props;
+const { deal, eager = false } = Astro.props;
 
-const instructorProfileSlug = deal.instructor
-  ? createInstructorSlug(parseInstructors(deal.instructor)[0] ?? deal.instructor)
-  : '';
+const instructorsList = deal.instructor ? parseInstructors(deal.instructor) : [];
+const instructorProfileSlug = createInstructorSlug(instructorsList[0] ?? deal.instructor);
 
 function formatDuration(duration: string) {
   if (!duration) return "";
@@ -161,7 +160,7 @@ const title = String(deal.title || "").replace(/&amp;/g, "&").replace(/&quot;/g,
     </h3>
 
     {/* Instructor */}
-    {deal.instructor && (
+    {instructorsList.length > 0 && (
       <div style={{
         display: "flex",
         alignItems: "center",
@@ -171,17 +170,23 @@ const title = String(deal.title || "").replace(/&amp;/g, "&").replace(/&quot;/g,
         <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--muted)">
           <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
         </svg>
-        <a 
-          href={`/instructor/${instructorProfileSlug}`}
-          style={{
-            color: "var(--text)",
-            fontSize: "0.85rem",
-            fontWeight: 600,
-            textDecoration: "none"
-          }}
-        >
-          By {deal.instructor}
-        </a>
+        {instructorsList.length === 1 ? (
+          <a
+            href={`/instructor/${instructorProfileSlug}`}
+            style={{
+              color: "var(--text)",
+              fontSize: "0.85rem",
+              fontWeight: 600,
+              textDecoration: "none"
+            }}
+          >
+            By {instructorsList[0]}
+          </a>
+        ) : (
+          <span style={{ color: "var(--text)", fontSize: "0.85rem", fontWeight: 600 }}>
+            By {instructorsList.join(", ")}
+          </span>
+        )}
       </div>
     )}
 
