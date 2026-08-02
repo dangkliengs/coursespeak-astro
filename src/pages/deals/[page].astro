@@ -43,6 +43,14 @@ const todayWIB     = currentDate.toLocaleDateString('en-CA', { timeZone: TIMEZON
 
 const totalDeals = allDeals.length;
 
+const maxSavings = (() => {
+  const valid = allDeals.filter((d: any) => d.originalPrice && d.price !== undefined && d.originalPrice > 0 && d.originalPrice > d.price);
+  if (valid.length === 0) return 90;
+  const max = valid.reduce((m: number, d: any) =>
+    Math.max(m, ((d.originalPrice - (d.price ?? 0)) / d.originalPrice) * 100), 0);
+  return Math.round(max);
+})();
+
 const todayAdded = allDeals.filter(isDealAddedToday).length;
 
 const catsSet = new Set<string>();
@@ -67,8 +75,8 @@ function slugifyCategory(cat: string): string {
   return cat.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 }
 
-const pageTitle = `Free Udemy Coupons ${currentMonth} ${currentYear} — Page ${currentPage} | CourseSpeak`;
-const pageDescription = `Page ${currentPage}: Browse more verified free Udemy coupons and 100% off deals. ${totalDeals}+ free courses updated daily — ${currentMonth} ${currentYear}.`;
+const pageTitle = `Udemy promo codes, coupons, and deals for ${currentMonth} ${currentYear} — Page ${currentPage} | CourseSpeak`;
+const pageDescription = `Page ${currentPage} of Udemy promo codes, coupons, and deals for ${currentMonth} ${currentYear}. Browse more verified discounted courses with savings up to ${maxSavings}% off. Updated daily.`;
 
 // FAQ data — identical between schema and visible HTML (Google requirement)
 const faqs = [
@@ -77,16 +85,20 @@ const faqs = [
     a: "Yes! All deals on CourseSpeak are verified and sourced directly from Udemy or authorized partners. We regularly check and update our listings to ensure every coupon is active and working."
   },
   {
+    q: "Are CourseSpeak coupon codes really free?",
+    a: "The coupon codes themselves are completely free to use. They give you access to heavily discounted Udemy courses, typically 87–95% off the regular price, rather than completely free courses."
+  },
+  {
     q: "How often are new Udemy coupons added?",
-    a: "CourseSpeak adds new Udemy coupons daily. We continuously monitor and verify deals from instructors worldwide to bring you the latest free and discounted courses."
+    a: "CourseSpeak adds new Udemy coupons daily. We continuously monitor and verify deals from instructors worldwide to bring you the latest discounted courses."
   },
   {
-    q: "Do I need to pay for 100% off Udemy courses?",
-    a: "No. 100% off coupons give you full, lifetime access to the course without any payment. Simply click the deal link, enroll, and start learning immediately."
+    q: "How much can I save with a Udemy coupon?",
+    a: "Deals on CourseSpeak currently offer savings of up to 95% off the regular course price. The exact discount is shown on each deal card and applied automatically at checkout on Udemy."
   },
   {
-    q: "Can I get a certificate from free Udemy courses?",
-    a: "Yes. You receive the same certificate of completion for free courses as you would for paid ones — provided you complete the course requirements."
+    q: "Can I get a certificate from Udemy courses enrolled with a coupon?",
+    a: "Yes. You receive the same certificate of completion for coupon-enrolled courses as you would for full-price ones — provided you complete the course requirements."
   },
   {
     q: "How do I apply a Udemy coupon code?",
@@ -139,7 +151,7 @@ const structuredData = {
       "inLanguage": "en-US",
       "mainEntity": {
         "@type": "ItemList",
-        "name": `Udemy Deals — Page ${currentPage}`,
+        "name": `Udemy Deals & Coupon Codes — Page ${currentPage}`,
         "numberOfItems": allDeals.length,
         "itemListElement": currentItems.map((deal: any, index: number) => ({
           "@type": "ListItem",
@@ -147,7 +159,7 @@ const structuredData = {
           "item": {
             "@type": "Course",
             "name": deal.title,
-            "description": deal.description || `Get ${deal.title} free with a verified 100% off coupon.`,
+            "description": deal.description || `Get ${deal.title} at up to ${maxSavings}% off with a verified coupon code.`,
             "url": `${siteUrl}/deal/${deal.id}`,
             "image": deal.image,
             "provider": {
@@ -211,12 +223,12 @@ const structuredData = {
           Updated Daily — {currentMonth} {currentYear}
         </div>
         <h1 style={{ fontSize: "clamp(1.5rem, 4vw, 2.2rem)", fontWeight: 800, lineHeight: 1.2, margin: "0 auto 0.75rem" }}>
-          <span style={{ background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Free Udemy Coupons</span>
+          <span style={{ background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Udemy Promo Codes, Coupons & Deals</span>
           <br />
           <span style={{ background: "linear-gradient(135deg, var(--text) 0%, var(--muted) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Page {currentPage}</span>
         </h1>
         <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "600px", margin: "0 auto", lineHeight: 1.6 }}>
-          Browse more verified Udemy deals — showing {startIndex + 1}–{Math.min(endIndex, allDeals.length)} of {allDeals.length} free courses and 100% off coupons.
+          Browse more verified Udemy deals — showing {startIndex + 1}–{Math.min(endIndex, allDeals.length)} of {allDeals.length} discounted courses with coupon codes.
         </p>
       </div>
     </section>
@@ -268,7 +280,7 @@ const structuredData = {
           Course Categories
         </h2>
         <p style={{ fontSize: "0.85rem", color: "var(--muted)", margin: "0 auto 1rem", maxWidth: "550px", lineHeight: 1.6 }}>
-          Find free Udemy coupons in {categories.length} categories — from programming and data science to design, marketing, and more.
+          Find Udemy coupon codes in {categories.length} categories — from programming and data science to design, marketing, and more.
         </p>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", justifyContent: "center" }}>
           <a href="/deals" style={{ fontSize: "0.78rem", fontWeight: 600, color: "white", textDecoration: "none", padding: "3px 10px", borderRadius: "100px", border: "1px solid var(--brand)", background: "var(--brand)" }}>All</a>
@@ -287,10 +299,10 @@ const structuredData = {
             Page {currentPage} — Continued
           </div>
           <h2 style={{ fontSize: "1.3rem", fontWeight: 800, color: "var(--text)", margin: "0 0 0.3rem" }}>
-            More Free Udemy Coupons
+            More Udemy Promo Codes, Coupons & Deals
           </h2>
           <p style={{ fontSize: "0.9rem", color: "var(--muted)", maxWidth: "650px", margin: "0 auto", lineHeight: 1.6 }}>
-            Browse {currentItems.length} more verified free Udemy coupon{currentItems.length !== 1 ? 's' : ''} with 100% off discounts. Find courses in programming, web development, data science, and more — all updated {currentMonth} {currentYear}.
+            Browse {currentItems.length} more verified Udemy promo codes, coupons, and deals with discounts up to {maxSavings}%. Find courses in programming, web development, data science, and more — all updated {currentMonth} {currentYear}.
           </p>
         </div>
         <div style={{
@@ -384,7 +396,7 @@ const structuredData = {
             Learn More
           </div>
           <h2 style={{ fontSize: "clamp(1.5rem, 4vw, 2rem)", fontWeight: 800, color: "var(--text)", marginBottom: "0.75rem" }}>
-            About Udemy Coupons & Free Courses
+            About Udemy Coupons & Discounted Courses
           </h2>
           <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "700px", margin: "0 auto", lineHeight: 1.6 }}>
             Everything you need to know about finding and using verified Udemy coupon codes for online learning
@@ -398,7 +410,7 @@ const structuredData = {
             </div>
             <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--text)", marginBottom: "0.5rem" }}>What Are Udemy Coupons?</h3>
             <p style={{ color: "var(--muted)", fontSize: "0.85rem", lineHeight: 1.7, margin: 0 }}>
-              Udemy coupons are promotional codes that allow you to access premium courses at significantly reduced prices or completely free. CourseSpeak curates and verifies these coupons daily, ensuring you get access to legitimate deals from instructors and Udemy itself. These coupons can offer discounts ranging from 50% to 100% off, making professional education accessible to learners worldwide.
+              Udemy coupons are promotional codes that allow you to access premium courses at significantly reduced prices. CourseSpeak curates and verifies these coupons daily, ensuring you get access to legitimate deals from instructors and Udemy itself. These coupons currently offer discounts of 87–95% off, making professional education affordable for learners worldwide.
             </p>
           </div>
 
@@ -408,7 +420,7 @@ const structuredData = {
             </div>
             <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--text)", marginBottom: "0.5rem" }}>How to Use Udemy Coupon Codes</h3>
             <p style={{ color: "var(--muted)", fontSize: "0.85rem", lineHeight: 1.7, margin: 0 }}>
-              Using Udemy coupons from CourseSpeak is simple. Click on any deal on this page, and you will be redirected to the official Udemy course page with the discount automatically applied. For 100% off coupons, simply click "Enroll Now" and complete checkout without any payment. For percentage discounts, the reduced price will be shown at checkout. All coupons include full course benefits: lifetime access, completion certificates, and all course materials.
+              Using Udemy coupons from CourseSpeak is simple. Click on any deal on this page, and you will be redirected to the official Udemy course page with the discount automatically applied. The reduced price is shown at checkout — simply click "Enroll Now" to enroll. All coupon-enrolled courses include full course benefits: lifetime access, completion certificates, and all course materials.
             </p>
           </div>
 
@@ -418,7 +430,7 @@ const structuredData = {
             </div>
             <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--text)", marginBottom: "0.5rem" }}>Why Choose CourseSpeak?</h3>
             <p style={{ color: "var(--muted)", fontSize: "0.85rem", lineHeight: 1.7, margin: 0 }}>
-              CourseSpeak offers the most comprehensive collection of verified Udemy coupons. Our team manually verifies each coupon to ensure it works and provides real value. We update our database daily with new free courses and discounts from top instructors worldwide. Whether you are in the United States, United Kingdom, India, Canada, Australia, or any other country, our coupons work globally.
+              CourseSpeak offers the most comprehensive collection of verified Udemy coupons. Our team manually verifies each coupon to ensure it works and provides real value. We update our database daily with new courses and discounts from top instructors worldwide. Whether you are in the United States, United Kingdom, India, Canada, Australia, or any other country, our coupons work globally.
             </p>
           </div>
 
@@ -426,7 +438,7 @@ const structuredData = {
             <div style={{ width: "40px", height: "40px", borderRadius: "10px", background: "rgba(234,179,8,0.12)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="hsl(35, 90%, 68%)"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
             </div>
-            <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--text)", marginBottom: "0.5rem" }}>Global Access to Free Education</h3>
+            <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--text)", marginBottom: "0.5rem" }}>Global Access to Affordable Education</h3>
             <p style={{ color: "var(--muted)", fontSize: "0.85rem", lineHeight: 1.7, margin: 0 }}>
               Our Udemy coupons work globally, serving learners in the US, UK, India, Canada, Australia, Germany, France, Brazil, Japan, and 150+ other countries. All courses support multiple languages including English, Spanish, Portuguese, French, German, Japanese, Chinese, and more. This global accessibility breaks down geographical and financial barriers to learning.
             </p>
@@ -436,9 +448,9 @@ const structuredData = {
             <div style={{ width: "40px", height: "40px", borderRadius: "10px", background: "rgba(168,85,247,0.12)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="hsl(280, 70%, 60%)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
             </div>
-            <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--text)", marginBottom: "0.5rem" }}>Benefits of Free Udemy Courses</h3>
+            <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--text)", marginBottom: "0.5rem" }}>Benefits of Discounted Udemy Courses</h3>
             <p style={{ color: "var(--muted)", fontSize: "0.85rem", lineHeight: 1.7, margin: 0 }}>
-              Free Udemy courses obtained through CourseSpeak offer the same benefits as paid courses: lifetime access to course materials, downloadable resources, completion certificates, and instructor support. You can learn at your own pace, revisit lessons anytime, and showcase your new skills with verified certificates on your LinkedIn profile and resume.
+              Discounted Udemy courses obtained through CourseSpeak offer the same benefits as full-price courses: lifetime access to course materials, downloadable resources, completion certificates, and instructor support. You can learn at your own pace, revisit lessons anytime, and showcase your new skills with verified certificates on your LinkedIn profile and resume.
             </p>
           </div>
 
@@ -448,7 +460,7 @@ const structuredData = {
             </div>
             <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--text)", marginBottom: "0.5rem" }}>Course Categories Available</h3>
             <p style={{ color: "var(--muted)", fontSize: "0.85rem", lineHeight: 1.7, margin: 0 }}>
-              CourseSpeak offers free Udemy coupons across all major categories: programming and web development, data science and machine learning, digital marketing, business and entrepreneurship, design and creative arts, personal development, and more. Whether you want to learn Python, JavaScript, React, digital marketing strategies, or graphic design, we have verified coupons for courses that match your learning goals.
+              CourseSpeak offers Udemy coupons across all major categories: programming and web development, data science and machine learning, digital marketing, business and entrepreneurship, design and creative arts, personal development, and more. Whether you want to learn Python, JavaScript, React, digital marketing strategies, or graphic design, we have verified coupons for courses that match your learning goals.
             </p>
           </div>
         </div>
@@ -520,7 +532,7 @@ const structuredData = {
           Frequently asked questions
         </h2>
         <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "600px", margin: "0 auto", lineHeight: 1.6 }}>
-          Quick answers to common questions about finding and using free Udemy coupons.
+          Quick answers to common questions about finding and using Udemy coupon codes.
         </p>
       </div>
       {faqs.map((faq) => (
