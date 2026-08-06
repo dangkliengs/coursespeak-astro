@@ -1,14 +1,22 @@
 # CourseSpeak — 100% OFF Udemy Coupons & Free Courses 2026
 
+> ## ⚠️ ALL RIGHTS RESERVED — NOT AN OPEN-SOURCE TEMPLATE
+>
+> This repository is **public for transparency only** and is **NOT licensed for copying, cloning, redistribution, or reuse**.
+> The CourseSpeak brand, design, content, and code are the exclusive property of CourseSpeak.
+> **Cloning this repository or copying this site to build a competing Udemy coupon service is strictly prohibited**
+> and may result in **legal action under copyright law and the DMCA** (17 U.S.C. § 512). See the
+> [License & Copyright](#license--copyright) section below.
+
 [![Live Site](https://img.shields.io/badge/CourseSpeak.com-100%25_Free_Udemy_Courses-4F46E5?style=for-the-badge&logo=udemy&logoColor=white)](https://coursespeak.com)
-[![Free Coupons](https://img.shields.io/badge/1.3k%2B_Active_Coupons-100%25_OFF_Verified-10B981?style=for-the-badge)](https://coursespeak.com/deals)
-[![Instructors](https://img.shields.io/badge/Instructors-Browse_Top_Instructors-F59E0B?style=for-the-badge)](https://coursespeak.com/instructors)
-[![Categories](https://img.shields.io/badge/12%2B_Categories-Browse_Free_Courses-F59E0B?style=for-the-badge)](https://coursespeak.com/categories)
-[![Popular](https://img.shields.io/badge/Top_Rated_Courses-View_Popular-EF4444?style=for-the-badge)](https://coursespeak.com/popular)
+[![Free Coupons](https://img.shields.io/badge/1.3k%2B_Verified_Coupons-100%25_OFF-10B981?style=for-the-badge)](https://coursespeak.com/deals)
+[![Categories](https://img.shields.io/badge/12_Categories-Browse_Free_Courses-F59E0B?style=for-the-badge)](https://coursespeak.com/categories)
+[![Topics](https://img.shields.io/badge/448%2B_Topics-Browse_by_Skill-6366F1?style=for-the-badge)](https://coursespeak.com/topics)
+[![Instructors](https://img.shields.io/badge/438%2B_Instructors-Top_Rated-EF4444?style=for-the-badge)](https://coursespeak.com/instructors)
 [![Daily Blog](https://img.shields.io/badge/Daily_Coupon_Blog-Updated_Every_Day-6366F1?style=for-the-badge)](https://coursespeak.com/blog)
 [![Admin](https://img.shields.io/badge/Admin_Dashboard-Full_CRUD_Built_In-6D28D9?style=for-the-badge)](https://coursespeak.com)
 
-CourseSpeak.com is a high-performance Udemy coupon platform trusted by 150,000+ learners worldwide. Built with Astro 7.1, React, and Tailwind CSS — featuring a full admin dashboard, sub-second load times, and 1.3k+ verified free Udemy coupons updated daily. Featured in the Official Astro Showcase March 2026.
+CourseSpeak.com is a high-performance Udemy coupon platform trusted by 150,000+ learners worldwide. Built with Astro 7.1, React, and Tailwind CSS — featuring a full admin dashboard, sub-second load times, and 1,357+ verified free Udemy coupons across 12 categories and 448+ topics, updated daily. Featured in the Official Astro Showcase March 2026.
 
 Get free Udemy courses at [coursespeak.com/deals](https://coursespeak.com/deals)
 
@@ -19,9 +27,10 @@ Get free Udemy courses at [coursespeak.com/deals](https://coursespeak.com/deals)
 [CourseSpeak](https://coursespeak.com) is one of the most trusted platforms for free Udemy coupons and 100% OFF Udemy deals. We source, verify, and publish hundreds of coupon codes every day — no expired codes, no spam, zero cost.
 
 - 150,000+ active learners worldwide trust [CourseSpeak](https://coursespeak.com) for free premium education
-- 1.3k+ verified coupons live and updated daily at [coursespeak.com/deals](https://coursespeak.com/deals)
+- 1,357+ verified coupons live and updated daily at [coursespeak.com/deals](https://coursespeak.com/deals)
 - 100% verified — every coupon manually tested before publishing
-- 14+ categories covering IT, Development, Business, Design, Finance and more
+- 12 main categories covering IT & Software, Development, Business, Design, Finance, Marketing and more
+- 448+ topic pages and 438+ instructor profiles for deep niche SEO coverage
 - Daily coupon blog at [coursespeak.com/blog](https://coursespeak.com/blog) updated every day
 - No account required to browse — visit [coursespeak.com](https://coursespeak.com) and start immediately
 
@@ -29,12 +38,12 @@ Get free Udemy courses at [coursespeak.com/deals](https://coursespeak.com/deals)
 
 ## What Makes CourseSpeak Different
 
-Most Udemy coupon sites are basic static pages. [CourseSpeak](https://coursespeak.com) ships a complete admin dashboard built into the Astro 7.1 static architecture — full CRUD management of 1.3k+ courses via a browser UI, with zero backend server and sub-second page loads.
+Most Udemy coupon sites are basic static pages. [CourseSpeak](https://coursespeak.com) ships a complete admin dashboard built into the Astro 7.1 static architecture — full CRUD management of 1,357+ courses via a browser UI, with zero backend server and sub-second page loads.
 
 - Built-in admin dashboard with add, edit, delete for all course deals
 - GitHub API integration — admin changes commit directly to the repository
 - WYSIWYG rich text editor for course descriptions
-- Astro 7.1 static generation — 74+ pages built in under 25 seconds
+- Astro 7.1 static generation — 2,000+ pages built in under 60 seconds
 - Sub-second page loads with zero backend server
 - Schema.org structured data on every page for rich search results
 - Mobile-first responsive design with Tailwind CSS
@@ -49,51 +58,58 @@ Browse all verified 100% OFF coupons at [coursespeak.com/deals](https://coursesp
 
 ## Browse Free Udemy Courses by Category
 
-All 14 categories at [coursespeak.com/categories](https://coursespeak.com/categories):
+All 12 categories at [coursespeak.com/categories](https://coursespeak.com/categories) — live coupon counts as of August 2026:
 
 | Category | Coupons | Link |
 |---|---|---|
-| IT and Software | 465 | [coursespeak.com/categories/it-and-software](https://coursespeak.com/categories/it-and-software) |
-| Development | 391 | [coursespeak.com/categories/development](https://coursespeak.com/categories/development) |
-| Business | 124 | [coursespeak.com/categories/business](https://coursespeak.com/categories/business) |
-| Programming Languages | 32 | [coursespeak.com/categories/programming-languages](https://coursespeak.com/categories/programming-languages) |
-| Teaching and Academics | 33 | [coursespeak.com/categories/teaching-and-academics](https://coursespeak.com/categories/teaching-and-academics) |
-| Design | 25 | [coursespeak.com/categories/design](https://coursespeak.com/categories/design) |
-| Finance and Accounting | 26 | [coursespeak.com/categories/finance-and-accounting](https://coursespeak.com/categories/finance-and-accounting) |
-| Office Productivity | 25 | [coursespeak.com/categories/office-productivity](https://coursespeak.com/categories/office-productivity) |
-| Marketing | 14 | [coursespeak.com/categories/marketing](https://coursespeak.com/categories/marketing) |
-| Photography and Video | 9 | [coursespeak.com/categories/photography-and-video](https://coursespeak.com/categories/photography-and-video) |
-| Music | 9 | [coursespeak.com/categories/music](https://coursespeak.com/categories/music) |
+| IT & Software | 559 | [coursespeak.com/categories/it-and-software](https://coursespeak.com/categories/it-and-software) |
+| Development | 460 | [coursespeak.com/categories/development](https://coursespeak.com/categories/development) |
+| Business | 130 | [coursespeak.com/categories/business](https://coursespeak.com/categories/business) |
+| Office Productivity | 37 | [coursespeak.com/categories/office-productivity](https://coursespeak.com/categories/office-productivity) |
+| Teaching & Academics | 36 | [coursespeak.com/categories/teaching-and-academics](https://coursespeak.com/categories/teaching-and-academics) |
+| Programming Languages | 33 | [coursespeak.com/categories/programming-languages](https://coursespeak.com/categories/programming-languages) |
+| Design | 31 | [coursespeak.com/categories/design](https://coursespeak.com/categories/design) |
+| Finance & Accounting | 28 | [coursespeak.com/categories/finance-and-accounting](https://coursespeak.com/categories/finance-and-accounting) |
+| Marketing | 16 | [coursespeak.com/categories/marketing](https://coursespeak.com/categories/marketing) |
+| Photography & Video | 10 | [coursespeak.com/categories/photography-and-video](https://coursespeak.com/categories/photography-and-video) |
+| Music | 10 | [coursespeak.com/categories/music](https://coursespeak.com/categories/music) |
 | Personal Development | 7 | [coursespeak.com/categories/personal-development](https://coursespeak.com/categories/personal-development) |
 
 ---
 
 ## Popular Topics with Free Coupons
 
-Find 100% OFF coupons by skill at [coursespeak.com/topics](https://coursespeak.com/topics):
+Find 100% OFF coupons by skill at [coursespeak.com/topics](https://coursespeak.com/topics) — 448+ topic pages with live coupon counts:
 
-| Topic | Link |
-|---|---|
-| Python | [coursespeak.com/topics/python](https://coursespeak.com/topics/python) |
-| Web Development | [coursespeak.com/topics/web-development](https://coursespeak.com/topics/web-development) |
-| Data Science | [coursespeak.com/topics/data-science](https://coursespeak.com/topics/data-science) |
-| AI and Machine Learning | [coursespeak.com/topics/artificial-intelligence-ai](https://coursespeak.com/topics/artificial-intelligence-ai) |
-| Cybersecurity | [coursespeak.com/topics/network-and-security](https://coursespeak.com/topics/network-and-security) |
-| IT Certifications | [coursespeak.com/topics/it-certifications](https://coursespeak.com/topics/it-certifications) |
-| Google Cloud | [coursespeak.com/topics/google-cloud-professional-cloud-developer](https://coursespeak.com/topics/google-cloud-professional-cloud-developer) |
-| n8n Automation | [coursespeak.com/topics/n8n](https://coursespeak.com/topics/n8n) |
-| Microsoft Excel | [coursespeak.com/topics/microsoft-excel](https://coursespeak.com/topics/microsoft-excel) |
-| Java | [coursespeak.com/topics/java](https://coursespeak.com/topics/java) |
-| Software Testing | [coursespeak.com/topics/software-testing](https://coursespeak.com/topics/software-testing) |
-| 3D Animation | [coursespeak.com/topics/3d-animation](https://coursespeak.com/topics/3d-animation) |
+| Topic | Coupons | Link |
+|---|---|---|
+| IT Certifications | 151 | [coursespeak.com/topics/it-certifications](https://coursespeak.com/topics/it-certifications) |
+| Web Development | 68 | [coursespeak.com/topics/web-development](https://coursespeak.com/topics/web-development) |
+| Network & Security | 37 | [coursespeak.com/topics/network-security](https://coursespeak.com/topics/network-security) |
+| AI Agents & Agentic AI | 29 | [coursespeak.com/topics/ai-agents-agentic-ai](https://coursespeak.com/topics/ai-agents-agentic-ai) |
+| Software Testing | 28 | [coursespeak.com/topics/software-testing](https://coursespeak.com/topics/software-testing) |
+| Python | 27 | [coursespeak.com/topics/python](https://coursespeak.com/topics/python) |
+| Generative AI (GenAI) | 26 | [coursespeak.com/topics/generative-ai-genai](https://coursespeak.com/topics/generative-ai-genai) |
+| Artificial Intelligence (AI) | 25 | [coursespeak.com/topics/artificial-intelligence-ai](https://coursespeak.com/topics/artificial-intelligence-ai) |
+| Claude AI | 20 | [coursespeak.com/topics/claude-ai](https://coursespeak.com/topics/claude-ai) |
+| Claude Code | 17 | [coursespeak.com/topics/claude-code](https://coursespeak.com/topics/claude-code) |
+| Project Management | 17 | [coursespeak.com/topics/project-management](https://coursespeak.com/topics/project-management) |
+| Game Development | 17 | [coursespeak.com/topics/game-development](https://coursespeak.com/topics/game-development) |
+| Data Science | 16 | [coursespeak.com/topics/data-science](https://coursespeak.com/topics/data-science) |
+| ChatGPT | 16 | [coursespeak.com/topics/chatgpt](https://coursespeak.com/topics/chatgpt) |
+| n8n | 12 | [coursespeak.com/topics/n8n](https://coursespeak.com/topics/n8n) |
+| Microsoft Excel | — | [coursespeak.com/topics/microsoft-excel](https://coursespeak.com/topics/microsoft-excel) |
+| Java | 11 | [coursespeak.com/topics/java](https://coursespeak.com/topics/java) |
+| 3D Animation | 10 | [coursespeak.com/topics/3d-animation](https://coursespeak.com/topics/3d-animation) |
+| Model Context Protocol (MCP) | 9 | [coursespeak.com/topics/model-context-protocol-mcp](https://coursespeak.com/topics/model-context-protocol-mcp) |
 
-Browse all 514+ topics at [coursespeak.com/topics](https://coursespeak.com/topics)
+Browse all 448+ topics at [coursespeak.com/topics](https://coursespeak.com/topics)
 
 ---
 
 ## Browse Top Instructors
 
-Discover the best Udemy instructors and their free courses at [coursespeak.com/instructors](https://coursespeak.com/instructors). Each instructor profile shows their expertise areas, hot coupons, and student ratings.
+Discover the best Udemy instructors and their free courses at [coursespeak.com/instructors](https://coursespeak.com/instructors). Each of the 438+ instructor profiles shows their expertise areas, hot coupons, and student ratings.
 
 Browse all top instructors at [coursespeak.com/instructors](https://coursespeak.com/instructors)
 
@@ -101,7 +117,7 @@ Browse all top instructors at [coursespeak.com/instructors](https://coursespeak.
 
 ## Daily Udemy Coupon Blog
 
-[CourseSpeak](https://coursespeak.com) publishes a fresh verified coupon roundup every day at [coursespeak.com/blog](https://coursespeak.com/blog). Each article covers that day's top free courses grouped by category — Development, Design, Business, Marketing, and more.
+[CourseSpeak](https://coursespeak.com) publishes a fresh verified coupon roundup every day at [coursespeak.com/blog](https://coursespeak.com/blog), with a searchable archive of the last 90 days. Each article covers that day's top free courses grouped by category — Development, Design, Business, Marketing, and more.
 
 Browse all daily coupon articles at [coursespeak.com/blog](https://coursespeak.com/blog)
 
@@ -127,17 +143,39 @@ Why are courses free? Udemy instructors release 100% OFF coupons to attract firs
 
 ---
 
-## Platform Stats
+## Platform Stats (August 2026)
 
 | Metric | Value |
 |---|---|
 | Active Learners | 150,000+ worldwide |
-| Active Coupons | 1.3k+ verified |
-| Categories | 14+ main categories |
-| Topics | 514+ subcategories |
-| Static Pages | 74+ generated at build |
-| Build Time | Under 25 seconds |
+| Verified Deals | 1,357+ in database |
+| Categories | 12 main categories |
+| Topic Pages | 448+ subcategories |
+| Instructor Profiles | 438+ |
+| Static Pages | 2,000+ generated at build |
+| Build Time | Under 60 seconds |
+| Blog Archive | 90 days of daily coupon roundups |
 | Verification | 100% manual before publishing |
+
+---
+
+## SEO & Keywords
+
+CourseSpeak targets high-intent, long-tail keywords that drive organic traffic from Google:
+
+- **Head terms:** free udemy courses, udemy coupon, udemy coupon code 100 off, free udemy coupon codes, udemy deals, 100 off udemy courses
+- **Category terms:** free it courses, free development courses, free business courses, free python courses
+- **Topic terms:** free cybersecurity course, free ai course, free data science course, free excel course, free chatgpt course
+- **Localized terms:** coupon udemy gratis, kupon udemy gratis, kursus udemy gratis
+
+Technical SEO implemented across every page:
+
+- Schema.org structured data: `Course`, `ItemList`, `CollectionPage`, `BreadcrumbList`, and `FAQPage` rich results
+- sitemap at [coursespeak.com/sitemap](https://coursespeak.com/sitemap)
+- Unique `<title>` and meta description for every one of the 2,000+ pages
+- Canonical URLs on all pages
+- SEO-friendly slugs for deals, categories, topics, and instructors
+- Internal linking between deals, topics, categories, and related articles
 
 ---
 
@@ -146,15 +184,15 @@ Why are courses free? Udemy instructors release 100% OFF coupons to attract firs
 | Layer | Technology |
 |---|---|
 | Framework | [Astro 7.1](https://astro.build/), static site generation |
-| UI Components | [React](https://react.dev)|
-| Styling | [Tailwind CSS](https://tailwindcss.com)|
-| Deployment | [GitHub Pages](https://github.com)|
+| UI Components | [React](https://react.dev) |
+| Styling | [Tailwind CSS](https://tailwindcss.com) |
+| Deployment | [GitHub Pages](https://github.com) |
 | Admin API | GitHub API with full CRUD |
 | SEO | Schema.org structured data |
-| Database | 1.3k+ courses in deals.json |
+| Database | 1,357+ courses in deals.json |
 | Auth | GitHub Personal Access Token |
 
-Performance: 74+ static pages, sub-second load times, mobile-first, all Core Web Vitals green.
+Performance: 2,000+ static pages, sub-second load times, mobile-first, all Core Web Vitals green.
 
 ---
 
@@ -172,11 +210,11 @@ Performance: 74+ static pages, sub-second load times, mobile-first, all Core Web
 
 ---
 
-## Quick Start
+## Local Development
+
+> **Note:** This repository is **not** open-source and not intended for cloning or reuse. The commands below are for the original project owner only. No `git clone` instructions are provided on purpose — see the [License & Copyright](#license--copyright) section.
 
 ```
-git clone https://github.com/dangkliengs/coursespeak-astro.git
-cd coursespeak-astro
 npm install
 npm run dev
 ```
@@ -198,7 +236,7 @@ coursespeak-astro/
 ├── src/
 │   ├── components/        Astro and React UI components
 │   ├── data/
-│   │   └── deals.json     1.3k+ Udemy course deals database
+│   │   └── deals.json     1,357+ Udemy course deals database
 │   ├── lib/
 │   │   ├── store.ts       State management
 │   │   └── github-api.js  Admin GitHub API integration
@@ -206,9 +244,9 @@ coursespeak-astro/
 │   │   ├── admin/deals/   Admin dashboard CRUD
 │   │   ├── deals/         Paginated coupon listings
 │   │   ├── deal/[id]/     Individual course pages
-│   │   ├── blog/          Daily coupon articles
-│   │   ├── categories/    14 category browse pages
-│   │   ├── topics/        514+ topic pages
+│   │   ├── blog/          Daily coupon articles (90-day archive)
+│   │   ├── categories/    12 category browse pages
+│   │   ├── topics/        448+ topic pages
 │   │   ├── instructors/   Top instructors page
 │   │   └── popular/       Top-rated courses
 │   └── layouts/
@@ -237,12 +275,26 @@ coursespeak-astro/
 
 ---
 
-## License
+## License & Copyright
 
-© 2026 CourseSpeak. All Rights Reserved.
+**© 2026 CourseSpeak. All Rights Reserved.**
 
-This repository is shared for educational and transparency purposes. Copying or redistributing this codebase to build a competing service is not permitted without explicit written permission.
+This repository and everything in it — including but not limited to the source code, design, branding, content, course database (`deals.json`), and blog articles — is the exclusive property of CourseSpeak and its owner.
+
+**You may NOT:**
+
+- Clone, fork, download, or copy this repository for any purpose other than review
+- Copy, replicate, or redistribute the codebase to build a competing Udemy coupon or deal website
+- Republish CourseSpeak content (coupon data, descriptions, blog posts) on another site, including mirror sites
+- Reuse the CourseSpeak name, logo, design, or branding
+- Scrape, bulk-download, or republish the coupon database
+
+**Legal notice:** Unauthorized copying, distribution, or cloning of this repository may constitute copyright infringement under the Copyright Act and the DMCA (17 U.S.C. § 512). Infringement can result in removal of the infringing repository from GitHub and legal liability. CourseSpeak actively monitors for cloned repositories and duplicate sites.
+
+**Exceptions:** Written permission may be granted on a case-by-case basis. Contact us at [coursespeak.com/contact](https://coursespeak.com/contact) to request authorization.
 
 ---
 
-Get 1.3k+ free Udemy courses with verified 100% OFF coupons at [CourseSpeak.com](https://coursespeak.com) — admin dashboard, Astro 7.1, trusted by 150,000+ learners, updated daily.
+Get 1,357+ free Udemy courses with verified 100% OFF coupons at [CourseSpeak.com](https://coursespeak.com) — admin dashboard, Astro 7.1, trusted by 150,000+ learners, updated daily.
+
+© 2026 CourseSpeak. All Rights Reserved.
