@@ -110,16 +110,13 @@ export async function readDeals(): Promise<Deal[]> {
 export async function getDealById(idOrSlug: string): Promise<Deal | null> {
   const key = String(idOrSlug);
   const all = await readDealsFromFile();
-  return all.find((deal) => deal.id === key || deal.slug === key) ?? null;
+  return all.find((deal) => deal.id === key) ?? null;
 }
 
 export async function createDeal(deal: Deal): Promise<Deal> {
   const all = await readDealsFromFile();
   if (all.some((item) => item.id === deal.id)) {
     throw new Error("ID already exists");
-  }
-  if (deal.slug && all.some((item) => item.slug === deal.slug)) {
-    throw new Error("Slug already exists");
   }
 
   const now = new Date().toISOString();

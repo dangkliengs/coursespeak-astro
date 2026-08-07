@@ -4,7 +4,6 @@ import { useState } from "react";
 type Item = {
   id: string;
   title: string;
-  slug?: string;
   image?: string;
   provider?: string;
   category?: string;

@@ -38,7 +38,7 @@ if (import.meta.env.PROD) {
   const url = new URL(Astro.request.url);
   const slug = url.pathname.split('/').pop() || '';
   allDeals = await readDeals();
-  const foundDeal = allDeals.find((d) => d.id === slug || d.slug === slug);
+  const foundDeal = allDeals.find((d) => d.id === slug);
 
   if (!foundDeal) {
     return new Response(null, {
