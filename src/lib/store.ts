@@ -78,7 +78,7 @@ export function isDealAddedToday(deal: Pick<Deal, 'updatedAt' | 'createdAt'>): b
 export async function readDealsFromFile(): Promise<Deal[]> {
   try {
     const buf = await fs.readFile(DEALS_FILE, "utf-8");
-    const data = JSON.parse(buf) as Deal[];
+    const data = JSON.parse(buf.replace(/^\uFEFF/, "")) as Deal[];
     if (Array.isArray(data)) {
       return data;
     }
