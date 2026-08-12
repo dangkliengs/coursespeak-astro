@@ -333,6 +333,12 @@ import Layout from "../layouts/Layout.astro";
               </p>
             </div>
           </div>
+          <div style={{ marginTop: "1.5rem", paddingTop: "1.25rem", borderTop: "1px solid var(--border)" }}>
+            <p style={{ color: "var(--muted)", fontSize: "0.85rem", lineHeight: 1.7, margin: 0 }}>
+              <strong style={{ color: "var(--text)" }}>Affiliate Disclosure:</strong> CourseSpeak is an affiliate marketing platform. We earn small commissions from qualifying purchases made through our links at no cost to you. Our affiliate relationships do not influence which courses we recommend.{" "}
+              <a href="/affiliate-disclosure" style={{ color: "var(--brand)", textDecoration: "underline" }}>Read Full Disclosure</a>
+            </p>
+          </div>
         </div>
       </div>
     </section>
@@ -406,26 +412,6 @@ import Layout from "../layouts/Layout.astro";
             <p style={{ fontSize: "0.85rem", color: "var(--muted)", lineHeight: 1.7, margin: 0 }}>{faq.a}</p>
           </div>
         ))}
-      </div>
-    </section>
-
-    {/* ── AFFILIATE DISCLOSURE ── */}
-    <section style={{ padding: "3rem 1rem", background: "linear-gradient(135deg, rgba(212,167,55,0.05) 0%, rgba(197,160,40,0.03) 100%)" }}>
-      <div class="container" style={{ maxWidth: "1400px" }}>
-        <div style={{ background: "var(--card)", border: "1px solid rgba(212,167,55,0.2)", borderRadius: "12px", padding: "2rem", textAlign: "center", maxWidth: "900px", margin: "0 auto" }}>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.5rem 1rem", borderRadius: "20px", marginBottom: "1rem" }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--brand)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0 2h-2v2h2v-2z"/></svg>
-            <span style={{ color: "#92400E", fontWeight: 600, fontSize: "0.85rem" }}>Transparency First</span>
-          </div>
-          <h3 style={{ fontSize: "1.25rem", fontWeight: 700, color: "var(--text)", marginBottom: "0.75rem" }}>Affiliate Disclosure</h3>
-          <p style={{ color: "var(--muted)", fontSize: "0.95rem", lineHeight: 1.6, marginBottom: "1.5rem", maxWidth: "650px", margin: "0 auto 1.5rem" }}>
-            CourseSpeak is an affiliate marketing platform. We earn small commissions from qualifying purchases made through our links at no cost to you. Our affiliate relationships do not influence which courses we recommend.
-          </p>
-          <a href="/affiliate-disclosure" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", padding: "0.75rem 1.5rem", background: "var(--brand)", color: "var(--bg)", textDecoration: "none", borderRadius: "8px", fontSize: "0.9rem", fontWeight: 600 }}>
-            Read Full Disclosure
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
-          </a>
-        </div>
       </div>
     </section>
 

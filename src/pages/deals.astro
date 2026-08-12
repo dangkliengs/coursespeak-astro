@@ -131,6 +131,10 @@ const faqs = [
   {
     q: "Can I access Udemy courses offline?",
     a: "Yes! Udemy courses enrolled through our coupons support offline learning via the Udemy mobile app. Download course materials and watch videos anytime, anywhere without internet connection."
+  },
+  {
+    q: "How long are the coupon codes valid?",
+    a: "Most coupon codes are limited-time offers. Some expire within a few days while others last a few weeks. We flag expired deals as soon as we detect them, so every code listed on CourseSpeak is active at the time of publishing. To avoid missing out, enroll as soon as you find a course you like."
   }
 ];
 
@@ -464,6 +468,12 @@ const structuredData = {
                 </p>
               </div>
             </div>
+            <div style={{ marginTop: "1.5rem", paddingTop: "1.25rem", borderTop: "1px solid var(--border)" }}>
+              <p style={{ color: "var(--muted)", fontSize: "0.85rem", lineHeight: 1.7, margin: 0 }}>
+                <strong style={{ color: "var(--text)" }}>Affiliate Disclosure:</strong> CourseSpeak is an affiliate marketing platform. We earn small commissions from qualifying purchases made through our links. This helps us maintain and improve CourseSpeak at no cost to you. Our affiliate relationships do not influence which courses we recommend.{" "}
+                <a href="/affiliate-disclosure" style={{ color: "var(--brand)", textDecoration: "underline" }}>Read Full Disclosure</a>
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -471,25 +481,42 @@ const structuredData = {
 
     {/* ── ABOUT UDEMY COUPONS — SEO Content (page 1 only) ── */}
     {currentPage === 1 && (
-      <section style={{ padding: "4rem 1rem", background: "var(--card)" }}>
+      <section style={{ padding: "4rem 1rem", background: "linear-gradient(180deg, rgba(212,167,55,0.06) 0%, rgba(212,167,55,0.02) 100%)" }}>
         <div class="container" style={{ maxWidth: "1400px" }}>
           <div style={{ textAlign: "center", marginBottom: "3rem" }}>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "1rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "linear-gradient(135deg, rgba(212,167,55,0.12) 0%, rgba(197,160,40,0.08) 100%)", padding: "0.5rem 1rem", borderRadius: "20px", marginBottom: "1rem", fontSize: "0.75rem", fontWeight: 700, color: "#8a7e6a", textTransform: "uppercase", letterSpacing: "0.08em", border: "1px solid rgba(212,167,55,0.2)" }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style={{ color: "#B8860B" }}><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
               Learn More
             </div>
-            <h2 style={{ fontSize: "clamp(1.5rem, 4vw, 2rem)", fontWeight: 800, color: "var(--text)", marginBottom: "0.75rem" }}>
-              About Udemy Coupon Codes & Discounted Courses
+            <h2 style={{ fontSize: "clamp(1.6rem, 4vw, 2.2rem)", fontWeight: 800, color: "var(--text)", marginBottom: "0.75rem" }}>
+              About <span style={{ color: "var(--brand)" }}>Udemy Coupon Codes</span> & Discounted Courses
             </h2>
             <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "700px", margin: "0 auto", lineHeight: 1.6 }}>
               Everything you need to know about finding and using verified Udemy coupon codes for online learning
             </p>
+            <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap", marginTop: "1.5rem" }}>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem", fontSize: "0.8rem", fontWeight: 600, color: "var(--text)", background: "var(--card)", border: "1px solid rgba(212,167,55,0.25)", borderRadius: "999px", padding: "0.45rem 1rem" }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+                Verified daily
+              </span>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem", fontSize: "0.8rem", fontWeight: 600, color: "var(--text)", background: "var(--card)", border: "1px solid rgba(212,167,55,0.25)", borderRadius: "999px", padding: "0.45rem 1rem" }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                87–95% OFF discounts
+              </span>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem", fontSize: "0.8rem", fontWeight: 600, color: "var(--text)", background: "var(--card)", border: "1px solid rgba(212,167,55,0.25)", borderRadius: "999px", padding: "0.45rem 1rem" }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                Works in 150+ countries
+              </span>
+            </div>
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.5rem" }}>
-            <div style={{ background: "var(--card)", padding: "1.5rem", borderRadius: "12px", border: "1px solid var(--border)", transition: "all 0.3s", position: "relative", overflow: "hidden" }}>
-              <div style={{ width: "40px", height: "40px", borderRadius: "10px", background: "rgba(212,167,55,0.12)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--brand)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <div class="about-card">
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
+                <div style={{ width: "44px", height: "44px", borderRadius: "12px", background: "rgba(212,167,55,0.12)", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(212,167,55,0.2)" }}>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="var(--brand)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+                <span style={{ fontSize: "0.8rem", fontWeight: 800, color: "rgba(212,167,55,0.45)", letterSpacing: "0.05em" }}>01</span>
               </div>
               <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--text)", marginBottom: "0.5rem" }}>What Are Udemy Coupons?</h3>
               <p style={{ color: "var(--muted)", fontSize: "0.85rem", lineHeight: 1.7, margin: 0 }}>
@@ -497,9 +524,12 @@ const structuredData = {
               </p>
             </div>
 
-            <div style={{ background: "var(--card)", padding: "1.5rem", borderRadius: "12px", border: "1px solid var(--border)", transition: "all 0.3s", position: "relative", overflow: "hidden" }}>
-              <div style={{ width: "40px", height: "40px", borderRadius: "10px", background: "rgba(34,197,94,0.12)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="hsl(120, 70%, 45%)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            <div class="about-card">
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
+                <div style={{ width: "44px", height: "44px", borderRadius: "12px", background: "rgba(34,197,94,0.12)", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(34,197,94,0.25)" }}>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="hsl(120, 70%, 45%)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                </div>
+                <span style={{ fontSize: "0.8rem", fontWeight: 800, color: "rgba(212,167,55,0.45)", letterSpacing: "0.05em" }}>02</span>
               </div>
               <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--text)", marginBottom: "0.5rem" }}>How to Use Udemy Coupon Codes</h3>
               <p style={{ color: "var(--muted)", fontSize: "0.85rem", lineHeight: 1.7, margin: 0 }}>
@@ -507,9 +537,12 @@ const structuredData = {
               </p>
             </div>
 
-            <div style={{ background: "var(--card)", padding: "1.5rem", borderRadius: "12px", border: "1px solid var(--border)", transition: "all 0.3s", position: "relative", overflow: "hidden" }}>
-              <div style={{ width: "40px", height: "40px", borderRadius: "10px", background: "rgba(59,130,246,0.12)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="hsl(210, 100%, 60%)"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+            <div class="about-card">
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
+                <div style={{ width: "44px", height: "44px", borderRadius: "12px", background: "rgba(59,130,246,0.12)", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(59,130,246,0.25)" }}>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="hsl(210, 100%, 60%)"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+                </div>
+                <span style={{ fontSize: "0.8rem", fontWeight: 800, color: "rgba(212,167,55,0.45)", letterSpacing: "0.05em" }}>03</span>
               </div>
               <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--text)", marginBottom: "0.5rem" }}>Why Choose CourseSpeak?</h3>
               <p style={{ color: "var(--muted)", fontSize: "0.85rem", lineHeight: 1.7, margin: 0 }}>
@@ -517,9 +550,12 @@ const structuredData = {
               </p>
             </div>
 
-            <div style={{ background: "var(--card)", padding: "1.5rem", borderRadius: "12px", border: "1px solid var(--border)", transition: "all 0.3s", position: "relative", overflow: "hidden" }}>
-              <div style={{ width: "40px", height: "40px", borderRadius: "10px", background: "rgba(234,179,8,0.12)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="hsl(35, 90%, 68%)"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            <div class="about-card">
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
+                <div style={{ width: "44px", height: "44px", borderRadius: "12px", background: "rgba(234,179,8,0.12)", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(234,179,8,0.25)" }}>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="hsl(35, 90%, 68%)"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                </div>
+                <span style={{ fontSize: "0.8rem", fontWeight: 800, color: "rgba(212,167,55,0.45)", letterSpacing: "0.05em" }}>04</span>
               </div>
               <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--text)", marginBottom: "0.5rem" }}>Global Access to Affordable Education</h3>
               <p style={{ color: "var(--muted)", fontSize: "0.85rem", lineHeight: 1.7, margin: 0 }}>
@@ -527,9 +563,12 @@ const structuredData = {
               </p>
             </div>
 
-            <div style={{ background: "var(--card)", padding: "1.5rem", borderRadius: "12px", border: "1px solid var(--border)", transition: "all 0.3s", position: "relative", overflow: "hidden" }}>
-              <div style={{ width: "40px", height: "40px", borderRadius: "10px", background: "rgba(168,85,247,0.12)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="hsl(280, 70%, 60%)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            <div class="about-card">
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
+                <div style={{ width: "44px", height: "44px", borderRadius: "12px", background: "rgba(168,85,247,0.12)", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(168,85,247,0.25)" }}>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="hsl(280, 70%, 60%)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                </div>
+                <span style={{ fontSize: "0.8rem", fontWeight: 800, color: "rgba(212,167,55,0.45)", letterSpacing: "0.05em" }}>05</span>
               </div>
               <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--text)", marginBottom: "0.5rem" }}>Benefits of Discounted Udemy Courses</h3>
               <p style={{ color: "var(--muted)", fontSize: "0.85rem", lineHeight: 1.7, margin: 0 }}>
@@ -537,9 +576,12 @@ const structuredData = {
               </p>
             </div>
 
-            <div style={{ background: "var(--card)", padding: "1.5rem", borderRadius: "12px", border: "1px solid var(--border)", transition: "all 0.3s", position: "relative", overflow: "hidden" }}>
-              <div style={{ width: "40px", height: "40px", borderRadius: "10px", background: "rgba(59,130,246,0.12)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="hsl(200, 70%, 60%)"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+            <div class="about-card">
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
+                <div style={{ width: "44px", height: "44px", borderRadius: "12px", background: "rgba(59,130,246,0.12)", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(59,130,246,0.25)" }}>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="hsl(200, 70%, 60%)"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                </div>
+                <span style={{ fontSize: "0.8rem", fontWeight: 800, color: "rgba(212,167,55,0.45)", letterSpacing: "0.05em" }}>06</span>
               </div>
               <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--text)", marginBottom: "0.5rem" }}>Course Categories Available</h3>
               <p style={{ color: "var(--muted)", fontSize: "0.85rem", lineHeight: 1.7, margin: 0 }}>
@@ -547,61 +589,31 @@ const structuredData = {
               </p>
             </div>
           </div>
-        </div>
-      </section>
-    )}
 
-    {/* ── AFFILIATE DISCLOSURE — page 1 only ── */}
-    {currentPage === 1 && (
-      <section style={{ padding: "3rem 1rem", background: "linear-gradient(135deg, rgba(212,167,55,0.05) 0%, rgba(197,160,40,0.03) 100%)" }}>
-        <div class="container" style={{ maxWidth: "1400px" }}>
-          <div style={{
-            background: "var(--card)",
-            border: "1px solid rgba(212,167,55,0.2)",
-            borderRadius: "12px",
-            padding: "2rem",
-            textAlign: "center",
-            maxWidth: "900px",
-            margin: "0 auto"
-          }}>
-            <div style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.5rem",
-              background: "rgba(212,167,55,0.1)",
-              padding: "0.5rem 1rem",
-              borderRadius: "20px",
-              marginBottom: "1rem"
-            }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--brand)">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0 2h-2v2h2v-2z"/>
-              </svg>
-              <span style={{ color: "#92400E", fontWeight: 600, fontSize: "0.85rem" }}>Transparency First</span>
+          {/* ── Personal Plan CTA ── */}
+          <div style={{ marginTop: "3rem" }}>
+            <div class="cta-box">
+              <span class="cta-eyebrow">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 14.9l6.36-3.7-.7-1.2L12 13.14 6.34 10l-.7 1.2z"/>
+                </svg>
+                Udemy Personal Plan
+              </span>
+              <h2>Go Unlimited with <span style={{ color: "var(--brand)" }}>Udemy Personal Plan</span><br />26,000+ Premium Courses, One Subscription</h2>
+              <p class="cta-subtext">One flat price, unlimited learning. Level up every month without buying courses one by one — and cancel anytime.</p>
+              <div class="cta-actions">
+                <a href="https://trk.udemy.com/c/6564357/3775958/39854" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg" style="border-radius:999px;padding:1rem 2.5rem">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M5 21h14"/></svg>
+                  Start Free Trial
+                </a>
+              </div>
+              <div class="cta-features">
+                <span><span class="cta-dot"></span>26,000+ courses</span>
+                <span><span class="cta-dot"></span>7-day free trial</span>
+                <span><span class="cta-dot"></span>Cancel anytime</span>
+                <span><span class="cta-dot"></span>From $20/month</span>
+              </div>
             </div>
-            <h3 style={{ fontSize: "1.25rem", fontWeight: 700, color: "var(--text)", marginBottom: "0.75rem" }}>
-              Affiliate Disclosure
-            </h3>
-            <p style={{ color: "var(--muted)", fontSize: "0.95rem", lineHeight: 1.6, marginBottom: "1.5rem", maxWidth: "650px", margin: "0 auto 1.5rem" }}>
-              CourseSpeak is an affiliate marketing platform. We earn small commissions from qualifying purchases made through our links. This helps us maintain and improve CourseSpeak at no cost to you. Our affiliate relationships do not influence which courses we recommend.
-            </p>
-            <a href="/affiliate-disclosure" style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.5rem",
-              padding: "0.75rem 1.5rem",
-              background: "var(--brand)",
-              color: "var(--bg)",
-              textDecoration: "none",
-              borderRadius: "8px",
-              fontSize: "0.9rem",
-              fontWeight: 600,
-              transition: "all 0.2s ease"
-            }}>
-              Read Full Disclosure
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
-              </svg>
-            </a>
           </div>
         </div>
       </section>
@@ -616,21 +628,45 @@ const structuredData = {
             Got Questions?
           </div>
           <h2 style={{ fontSize: "clamp(1.3rem, 3vw, 1.8rem)", fontWeight: 800, color: "var(--text)", margin: "0 0 0.5rem" }}>
-            Frequently asked questions
+            Frequently Asked Questions About <span style={{ color: "var(--brand)" }}>Udemy Coupon Codes</span>
           </h2>
           <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "600px", margin: "0 auto", lineHeight: 1.6 }}>
             Quick answers to common questions about finding and using Udemy coupon codes.
           </p>
         </div>
-        {faqs.map((faq) => (
-          <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "12px", padding: "1.25rem 1.5rem", marginBottom: "0.75rem", transition: "all 0.2s" }}>
-            <h3 style={{ fontSize: "0.95rem", fontWeight: 700, color: "var(--text)", margin: "0 0 0.5rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-              {faq.q}
-            </h3>
-            <p style={{ fontSize: "0.85rem", color: "var(--muted)", lineHeight: 1.7, margin: 0 }}>{faq.a}</p>
-          </div>
-        ))}
+        <div class="faq-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(420px, 1fr))", gap: "1.5rem" }}>
+          {faqs.map((faq) => (
+            <div
+              itemscope itemtype="https://schema.org/Question"
+              style={{
+                background: "var(--card)", padding: "1.75rem 2rem", borderRadius: "20px",
+                border: "1px solid rgba(212,167,55,0.15)", position: "relative",
+                overflow: "hidden", boxShadow: "0 4px 12px -2px rgba(212,167,55,0.08)"
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "0.75rem" }}>
+                <div style={{
+                  flexShrink: 0, width: "44px", height: "44px",
+                  background: "linear-gradient(135deg, rgba(212,167,55,0.12) 0%, rgba(197,160,40,0.08) 100%)",
+                  borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center",
+                  border: "1px solid rgba(212,167,55,0.2)"
+                }}>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style={{ color: "#B8860B" }} aria-hidden="true">
+                    <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                  </svg>
+                </div>
+                <h3 itemprop="name" style={{ color: "var(--text)", fontSize: "1.05rem", margin: 0, fontWeight: 700, lineHeight: 1.4 }}>
+                  {faq.q}
+                </h3>
+              </div>
+              <div itemscope itemtype="https://schema.org/Answer" itemprop="acceptedAnswer">
+                <p itemprop="text" style={{ color: "var(--muted)", lineHeight: 1.75, fontSize: "0.95rem", margin: 0 }}>
+                  {faq.a}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
       </section>
     )}
 
@@ -640,6 +676,34 @@ const structuredData = {
 </Layout>
 
 <style>
+  .about-card {
+    background: var(--card);
+    padding: 1.5rem;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .about-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #D4AF37, #C5A028);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .about-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(212,167,55,0.4);
+    box-shadow: 0 14px 30px -12px rgba(212,167,55,0.3);
+  }
+  .about-card:hover::before {
+    opacity: 1;
+  }
   @media (max-width: 768px) {
     h1 { font-size: 1.4rem !important; }
   }

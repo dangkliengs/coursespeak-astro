@@ -649,6 +649,32 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                         </section>
                     )}
 
+                    {/* ── Personal Plan CTA ── */}
+                    <div style={{ margin: "0 0 2rem" }}>
+                        <div className="cta-box">
+                            <span className="cta-eyebrow">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M12 14.9l6.36-3.7-.7-1.2L12 13.14 6.34 10l-.7 1.2z"/>
+                                </svg>
+                                Udemy Personal Plan
+                            </span>
+                            <h2>Go Unlimited with <span style={{ color: "var(--brand)" }}>Udemy Personal Plan</span><br />26,000+ Premium Courses, One Subscription</h2>
+                            <p className="cta-subtext">One flat price, unlimited learning. Level up every month without buying courses one by one — and cancel anytime.</p>
+                            <div className="cta-actions">
+                                <a href="https://trk.udemy.com/c/6564357/3775958/39854" target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-lg" style={{ borderRadius: "999px", padding: "1rem 2.5rem" }}>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M5 21h14"/></svg>
+                                    Start Free Trial
+                                </a>
+                            </div>
+                            <div className="cta-features">
+                                <span><span className="cta-dot"></span>26,000+ courses</span>
+                                <span><span className="cta-dot"></span>7-day free trial</span>
+                                <span><span className="cta-dot"></span>Cancel anytime</span>
+                                <span><span className="cta-dot"></span>From $20/month</span>
+                            </div>
+                        </div>
+                    </div>
+
                     {/* Instructor Profile */}
                     {instructorsList.length > 0 && (
                         <section aria-labelledby="instructor-heading" style={{ borderTop: "1px solid var(--border)", paddingTop: "2rem", marginBottom: "2rem" }}>

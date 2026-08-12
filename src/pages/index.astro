@@ -846,7 +846,7 @@ const jsonLd = {
       <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: "0.5rem", flexWrap: "wrap", gap: "0.5rem" }}>
         <div>
           <span class="section-title">Fresh Deals</span>
-          <h2 class="section-heading" style={{ marginBottom: "0.25rem" }}>Latest coupon codes</h2>
+          <h2 class="section-heading" style={{ marginBottom: "0.25rem" }}>Latest <span style={{ color: "var(--brand)" }}>coupon codes</span></h2>
           <p style={{ color: "var(--text-secondary)", fontSize: "0.85rem", lineHeight: 1.5, margin: 0, maxWidth: "480px" }}>
             Manually verified Udemy coupons updated {currentMonth}. Click any deal to enroll for free.
           </p>
@@ -1062,11 +1062,9 @@ const jsonLd = {
       <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
         <h2 style={{
           fontSize: "clamp(1.5rem, 3vw, 2.2rem)", fontWeight: 700,
-          marginBottom: "0.75rem",
-          background: "linear-gradient(135deg, var(--brand) 0%, hsl(35,90%,68%) 100%)",
-          WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text"
+          color: "var(--text)", marginBottom: "0.75rem"
         }}>
-          Why Choose CourseSpeak?
+          Why Choose <span style={{ color: "var(--brand)" }}>CourseSpeak?</span>
         </h2>
         <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "500px", margin: "0 auto", lineHeight: 1.6 }}>
           The smartest way to access premium Udemy courses without paying a cent
@@ -1178,7 +1176,7 @@ const jsonLd = {
     <div class="container">
       <div style={{ textAlign: "center", maxWidth: "600px", margin: "0 auto 2.5rem" }}>
         <span class="section-title">Categories</span>
-        <h2 class="section-heading">Browse by Category</h2>
+        <h2 class="section-heading">Browse by <span style={{ color: "var(--brand)" }}>Category</span></h2>
         <p style={{ color: "var(--text-secondary)", fontSize: "0.92rem", lineHeight: 1.6, margin: "0.5rem auto 0" }}>
           Find verified Udemy coupons in your field — from AI and coding to design and cloud computing.
         </p>
@@ -1603,20 +1601,21 @@ const jsonLd = {
               overflow: "hidden", boxShadow: "0 4px 12px -2px rgba(212,167,55,0.08)"
             }}
           >
-            <div style={{
-              position: "absolute", top: "1rem", left: "1rem",
-              width: "44px", height: "44px",
-              background: "linear-gradient(135deg, rgba(212,167,55,0.12) 0%, rgba(197,160,40,0.08) 100%)",
-              borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center",
-              border: "1px solid rgba(212,167,55,0.2)"
-            }}>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style={{ color: "#B8860B" }} aria-hidden="true">
-                <path d={faq.icon} />
-              </svg>
+            <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "0.75rem" }}>
+              <div style={{
+                flexShrink: 0, width: "44px", height: "44px",
+                background: "linear-gradient(135deg, rgba(212,167,55,0.12) 0%, rgba(197,160,40,0.08) 100%)",
+                borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center",
+                border: "1px solid rgba(212,167,55,0.2)"
+              }}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style={{ color: "#B8860B" }} aria-hidden="true">
+                  <path d={faq.icon} />
+                </svg>
+              </div>
+              <h3 itemprop="name" style={{ color: "var(--text)", fontSize: "1.1rem", margin: 0, fontWeight: 700, lineHeight: 1.4 }}>
+                {faq.q}
+              </h3>
             </div>
-            <h3 itemprop="name" style={{ color: "var(--text)", fontSize: "1.1rem", marginBottom: "0.75rem", marginLeft: "3.5rem", fontWeight: 700, lineHeight: 1.4 }}>
-              {faq.q}
-            </h3>
             <div itemscope itemtype="https://schema.org/Answer" itemprop="acceptedAnswer">
               <p itemprop="text" style={{ color: "var(--muted)", lineHeight: 1.75, fontSize: "0.95rem", margin: 0 }}>
                 {faq.a}
@@ -1666,7 +1665,7 @@ const jsonLd = {
         fontSize: "clamp(1.6rem, 3vw, 2rem)", fontWeight: 700, color: "var(--text)",
         marginBottom: "0.75rem", lineHeight: 1.2
       }}>
-        Follow Us for Daily Free Courses
+        Follow Us for Daily <span style={{ color: "var(--brand)" }}>Free Courses</span>
       </h2>
 
       <p style={{
@@ -1724,7 +1723,14 @@ const jsonLd = {
   <section class="cta-section" aria-label="Udemy Personal Plan">
     <div class="container">
       <div class="cta-box">
-        <h2>Go Unlimited with Udemy Personal Plan<br />26,000+ Premium Courses, One Subscription</h2>
+        <span class="cta-eyebrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 14.9l6.36-3.7-.7-1.2L12 13.14 6.34 10l-.7 1.2z"/>
+          </svg>
+          Udemy Personal Plan
+        </span>
+        <h2>Go Unlimited with <span style={{ color: "var(--brand)" }}>Udemy Personal Plan</span><br />26,000+ Premium Courses, One Subscription</h2>
+        <p class="cta-subtext">One flat price, unlimited learning. Level up every month without buying courses one by one — and cancel anytime.</p>
         <div class="cta-actions">
           <a href="https://trk.udemy.com/c/6564357/3775958/39854" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg" style="border-radius:999px;padding:1rem 2.5rem">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M5 21h14"/></svg>
@@ -1734,6 +1740,7 @@ const jsonLd = {
         <div class="cta-features">
           <span><span class="cta-dot"></span>26,000+ courses</span>
           <span><span class="cta-dot"></span>7-day free trial</span>
+          <span><span class="cta-dot"></span>Cancel anytime</span>
           <span><span class="cta-dot"></span>From $20/month</span>
         </div>
       </div>
