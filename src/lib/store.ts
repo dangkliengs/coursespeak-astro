@@ -19,6 +19,29 @@ function resolveDealsFilePath(): string {
 const DEALS_FILE = resolveDealsFilePath();
 const DEALS_DIR = path.dirname(DEALS_FILE);
 
+export interface InstructorRecord {
+  name: string;
+  image?: string;
+}
+
+const INSTRUCTORS_FILE = path.join(DEALS_DIR, "instructors.json");
+
+export async function readInstructors(): Promise<Record<string, InstructorRecord>> {
+  try {
+    const buf = await fs.readFile(INSTRUCTORS_FILE, "utf-8");
+    const data = JSON.parse(buf.replace(/^\uFEFF/, ""));
+    return data && typeof data === "object" ? data : {};
+  } catch (error) {
+    console.error("Error reading instructors file:", error);
+    return {};
+  }
+}
+
+export async function writeInstructors(all: Record<string, InstructorRecord>): Promise<void> {
+  await fs.mkdir(DEALS_DIR, { recursive: true });
+  await fs.writeFile(INSTRUCTORS_FILE, JSON.stringify(all, null, 2), "utf-8");
+}
+
 /**
  * ==================== TIMEZONE HELPER (ASIA/JAKARTA) ====================
  * All date operations now consistently use Asia/Jakarta (WIB) timezone.

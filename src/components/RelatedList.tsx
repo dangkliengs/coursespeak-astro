@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 type Item = {
   id: string;
@@ -17,8 +17,13 @@ type Item = {
 
 export default function RelatedList({ items, initial = 4, step = 4 }: { items: Item[]; initial?: number; step?: number }) {
   const [count, setCount] = useState(Math.min(initial, items.length));
+  const [mounted, setMounted] = useState(false);
   const visible = items.slice(0, count);
   const canShowMore = count < items.length;
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <>
@@ -38,10 +43,10 @@ export default function RelatedList({ items, initial = 4, step = 4 }: { items: I
                     style={{ width: "100%", height: "140px", borderRadius: 8, border: "1px solid var(--border)", objectFit: "cover" }} 
                   />
                   <div style={{ position: "absolute", top: 8, left: 8, display: "flex", gap: 6, flexWrap: "wrap" }}>
-                    {isNew(r.updatedAt) && (
+                    {mounted && isNew(r.updatedAt) && (
                       <span className="pill" style={{ background: "var(--brand)", color: "#080b12", fontWeight: 800 }}>New</span>
                     )}
-                    {isBestSeller(r.price, r.originalPrice, r.students) && (
+                    {mounted && isBestSeller(r.price, r.originalPrice, r.students) && (
                       <span className="pill" style={{ background: "var(--brand)", color: "#080b12", fontWeight: 800 }}>Best Seller</span>
                     )}
                   </div>
@@ -67,7 +72,7 @@ export default function RelatedList({ items, initial = 4, step = 4 }: { items: I
                 )}
               </div>
               {r.updatedAt && (
-                <div className="muted" style={{ fontSize: 12 }}>Updated {timeAgo(r.updatedAt)}</div>
+                <div className="muted" style={{ fontSize: 12 }}>Updated {mounted ? timeAgo(r.updatedAt) : "recently"}</div>
               )}
             </div>
             <div className="card-footer" style={{ display: "flex", justifyContent: "flex-end" }}>

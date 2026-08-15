@@ -1,0 +1,280 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import AdminProtection from "../../components/AdminProtection.astro";
+import AdminAuthGate from "../../components/AdminAuthGate";
+import { readDealsFromFile, readInstructors } from "../../lib/store";
+import { parseInstructors, createInstructorSlug } from "../../lib/instructors";
+
+const deals = await readDealsFromFile();
+const instructorImages = await readInstructors();
+
+const instructorMap = new Map<string, { name: string; count: number }>();
+deals.forEach((deal) => {
+  parseInstructors(deal.instructor).forEach((name) => {
+    const slug = createInstructorSlug(name);
+    if (!instructorMap.has(slug)) {
+      instructorMap.set(slug, { name, count: 0 });
+    }
+    instructorMap.get(slug)!.count++;
+  });
+});
+
+const instructors = [...instructorMap.entries()]
+  .map(([slug, { name, count }]) => ({ slug, name, count, image: instructorImages[slug]?.image || "" }))
+  .sort((a, b) => b.count - a.count);
+
+const pageTitle = "Manage Instructors - Admin Dashboard";
+const pageDescription = "Add instructor profile images used across all their courses on CourseSpeak.";
+export const prerender = false;
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <AdminProtection>
+    <AdminAuthGate>
+      <div style={{ background: "var(--bg)", minHeight: "100vh", color: "var(--text)" }}>
+        <div style={{ marginBottom: "2rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div>
+            <h1 style={{ fontSize: "2.5rem", fontWeight: 700, color: "#fff", marginBottom: "0.5rem" }}>
+              Manage Instructors
+            </h1>
+            <p style={{ fontSize: "1.125rem", color: "#a9b0c0" }}>
+              {instructors.length} total instructors — add an image URL once, it applies to every course by that instructor
+            </p>
+          </div>
+          <a
+            href="/admin/deals"
+            style={{
+              padding: "0.75rem 1.5rem",
+              backgroundColor: "#10b981",
+              color: "#fff",
+              textDecoration: "none",
+              borderRadius: "0.5rem",
+              fontWeight: 600,
+              border: "1px solid #10b981"
+            }}
+          >
+            Manage Deals →
+          </a>
+        </div>
+
+        <div style={{ marginBottom: "1.5rem" }}>
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search instructors..."
+            style={{
+              width: "100%",
+              padding: "0.75rem",
+              backgroundColor: "rgba(255, 255, 255, 0.1)",
+              border: "1px solid rgba(91, 140, 255, 0.24)",
+              borderRadius: "0.5rem",
+              color: "#fff",
+              fontSize: "1rem"
+            }}
+            oninput="filterInstructors()"
+          />
+        </div>
+
+        <div style={{
+          borderRadius: "1rem",
+          border: "1px solid rgba(91, 140, 255, 0.24)",
+          background: "linear-gradient(140deg, rgba(11, 13, 18, 0.98) 0%, rgba(18, 24, 40, 0.98) 55%, rgba(42, 64, 110, 0.38) 100%)",
+          boxShadow: "0 18px 36px rgba(8, 12, 26, 0.45)",
+          overflow: "hidden"
+        }}>
+          <div style={{ overflowX: "auto" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead>
+                <tr style={{ borderBottom: "1px solid rgba(91, 140, 255, 0.24)" }}>
+                  <th style={{ padding: "1rem", textAlign: "left", color: "#fff", fontWeight: 600 }}>Instructor</th>
+                  <th style={{ padding: "1rem", textAlign: "left", color: "#fff", fontWeight: 600 }}>Courses</th>
+                  <th style={{ padding: "1rem", textAlign: "left", color: "#fff", fontWeight: 600 }}>Image URL (Udemy CDN)</th>
+                  <th style={{ padding: "1rem", textAlign: "left", color: "#fff", fontWeight: 600 }}>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="instructorTableBody">
+                {instructors.map((inst) => (
+                  <tr
+                    style={{ borderBottom: "1px solid rgba(91, 140, 255, 0.1)" }}
+                    data-instructor-slug={inst.slug}
+                    data-instructor-name={inst.name.toLowerCase()}
+                  >
+                    <td style={{ padding: "1rem", color: "var(--text)" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                        <div style={{
+                          width: "44px", height: "44px", borderRadius: "50%", flexShrink: 0, overflow: "hidden",
+                          background: "linear-gradient(135deg, var(--brand), var(--brand-hover))",
+                          display: "flex", alignItems: "center", justifyContent: "center"
+                        }}>
+                          {inst.image ? (
+                            <img src={inst.image} alt={inst.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} loading="lazy" />
+                          ) : (
+                            <span style={{ color: "#fff", fontSize: "0.85rem", fontWeight: 700 }}>
+                              {inst.name.split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase()}
+                            </span>
+                          )}
+                        </div>
+                        <div>
+                          <div style={{ fontWeight: 600 }}>{inst.name}</div>
+                          <div style={{ fontSize: "0.875rem", color: "#a9b0c0" }}>{inst.slug}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td style={{ padding: "1rem", color: "var(--text)" }}>{inst.count}</td>
+                    <td style={{ padding: "1rem" }}>
+                      <input
+                        type="text"
+                        class="instructor-image-input"
+                        value={inst.image}
+                        placeholder="https://img-c.udemycdn.com/user/..."
+                        style={{
+                          width: "100%",
+                          minWidth: "260px",
+                          padding: "0.6rem 0.75rem",
+                          backgroundColor: "rgba(255, 255, 255, 0.1)",
+                          border: "1px solid rgba(91, 140, 255, 0.24)",
+                          borderRadius: "0.375rem",
+                          color: "#fff",
+                          fontSize: "0.875rem"
+                        }}
+                      />
+                    </td>
+                    <td style={{ padding: "1rem" }}>
+                      <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+                        <button onclick={`saveInstructor('${inst.slug}')`} style={{
+                          padding: "0.5rem 1rem",
+                          backgroundColor: "var(--brand)",
+                          color: "#fff",
+                          border: "1px solid var(--brand)",
+                          borderRadius: "0.375rem",
+                          fontSize: "0.875rem",
+                          fontWeight: 600,
+                          cursor: "pointer"
+                        }}>
+                          Save
+                        </button>
+                        <button onclick={`deleteInstructor('${inst.slug}')`} style={{
+                          padding: "0.5rem 1rem",
+                          backgroundColor: "transparent",
+                          color: "var(--destructive)",
+                          border: "1px solid var(--destructive)",
+                          borderRadius: "0.375rem",
+                          fontSize: "0.875rem",
+                          fontWeight: 600,
+                          cursor: "pointer"
+                        }}>
+                          Clear
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div style={{ padding: "1rem", textAlign: "center", color: "#a9b0c0", fontSize: "0.875rem" }}>
+            Tip: right-click an instructor photo on Udemy → Copy image address, then paste it here.
+          </div>
+        </div>
+      </div>
+
+      <div id="instructors-data" style="display: none;">{JSON.stringify(instructors)}</div>
+
+      <script>
+        let allInstructors: any[] = [];
+
+        document.addEventListener('DOMContentLoaded', function() {
+          const el = document.getElementById('instructors-data');
+          if (el) {
+            allInstructors = JSON.parse(el.textContent || '[]');
+          }
+        });
+
+        function filterInstructors() {
+          const input = document.getElementById('searchInput') as HTMLInputElement;
+          const tableBody = document.getElementById('instructorTableBody');
+          if (!input || !tableBody) return;
+
+          const term = input.value.toLowerCase();
+          tableBody.querySelectorAll('tr').forEach((row) => {
+            const name = row.getAttribute('data-instructor-name') || '';
+            row.style.display = name.includes(term) ? '' : 'none';
+          });
+        }
+
+        function rowSlug(button: any): string {
+          return (button.closest('tr') as HTMLElement).getAttribute('data-instructor-slug') || '';
+        }
+
+        function rowImage(button: any): string {
+          const input = (button.closest('tr') as HTMLElement).querySelector('.instructor-image-input') as HTMLInputElement;
+          return input ? input.value.trim() : '';
+        }
+
+        function saveInstructor(slug: string) {
+          const row = document.querySelector(`tr[data-instructor-slug="${slug}"]`) as HTMLElement;
+          if (!row) return;
+          const name = (row.querySelector('div[style*="font-weight: 600"]') as HTMLElement)?.textContent?.trim() || slug;
+          const image = rowImage(row.querySelector('button') as any);
+
+          fetch('/api/instructors', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ slug, name, image }),
+          })
+            .then((r) => r.json())
+            .then((data) => {
+              if (data.success) {
+                alert(`Saved image for ${name}`);
+                const imgWrap = row.querySelector('div[style*="border-radius: 50%"]') as HTMLElement;
+                if (imgWrap && image) {
+                  imgWrap.innerHTML = `<img src="${image.replace(/"/g, '&quot;')}" alt="${name}" style="width:100%;height:100%;object-fit:cover" loading="lazy">`;
+                } else if (imgWrap) {
+                  imgWrap.innerHTML = `<span style="color:#fff;font-size:0.85rem;font-weight:700">${name.split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase()}</span>`;
+                }
+              } else {
+                alert('Error: ' + (data.error || 'Failed to save'));
+              }
+            })
+            .catch((err) => alert('Network error: ' + err.message));
+        }
+
+        function deleteInstructor(slug: string) {
+          if (!confirm('Clear the image for this instructor?')) return;
+
+          fetch(`/api/instructors?slug=${encodeURIComponent(slug)}`, { method: 'DELETE' })
+            .then((r) => r.json())
+            .then((data) => {
+              if (data.success) {
+                const row = document.querySelector(`tr[data-instructor-slug="${slug}"]`) as HTMLElement;
+                if (row) {
+                  const input = row.querySelector('.instructor-image-input') as HTMLInputElement;
+                  if (input) input.value = '';
+                  const name = (row.querySelector('div[style*="font-weight: 600"]') as HTMLElement)?.textContent?.trim() || slug;
+                  const imgWrap = row.querySelector('div[style*="border-radius: 50%"]') as HTMLElement;
+                  if (imgWrap) {
+                    imgWrap.innerHTML = `<span style="color:#fff;font-size:0.85rem;font-weight:700">${name.split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase()}</span>`;
+                  }
+                }
+              } else {
+                alert('Error: ' + (data.error || 'Failed to clear'));
+              }
+            })
+            .catch((err) => alert('Network error: ' + err.message));
+        }
+
+        declare global {
+          interface Window {
+            filterInstructors: () => void;
+            saveInstructor: (slug: string) => void;
+            deleteInstructor: (slug: string) => void;
+          }
+        }
+        window.filterInstructors = filterInstructors;
+        window.saveInstructor = saveInstructor;
+        window.deleteInstructor = deleteInstructor;
+      </script>
+    </AdminAuthGate>
+  </AdminProtection>
+</Layout>

@@ -172,7 +172,7 @@ export default function CourseComparison({ currentDeal, similarDeals }: CourseCo
                   <a
                     href={d.url || `/deal/${d.id}`}
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="sponsored noopener noreferrer"
                     style={{
                       display: "inline-block",
                       padding: "0.55rem 1.25rem",

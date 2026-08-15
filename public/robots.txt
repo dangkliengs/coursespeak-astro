@@ -7,9 +7,6 @@ Allow: /
 # Sitemap location
 Sitemap: https://coursespeak.com/sitemap-index.xml
 
-# Crawl delay (optional - be respectful to servers)
-Crawl-delay: 1
-
 # Disallow admin and private areas
 Disallow: /admin/
 Disallow: /admin/deals/
@@ -17,7 +14,6 @@ Disallow: /admin/analytics/
 Disallow: /api/
 Disallow: /_astro/
 Disallow: /_image/
-Disallow: /*.json$
 
 # Allow specific important areas
 Allow: /deals
