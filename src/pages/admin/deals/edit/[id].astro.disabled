@@ -266,23 +266,6 @@ const pageDescription = "Edit a course deal on CourseSpeak.";
               <span style={{ fontSize: "1.1rem" }}>💰</span>
               Pricing
             </button>
-            <button type="button" onclick="showTab('seo')" id="seoTab" style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "0.5rem",
-              padding: "1rem 2rem",
-              background: "transparent",
-              color: "#94a3b8",
-              border: "1px solid transparent",
-              borderRadius: "0.75rem",
-              fontSize: "0.95rem",
-              fontWeight: 600,
-              cursor: "pointer",
-              transition: "all 0.2s ease"
-            }}>
-              <span style={{ fontSize: "1.1rem" }}>🔍</span>
-              SEO
-            </button>
             <button type="button" onclick="showTab('settings')" id="settingsTab" style={{
               display: "flex",
               alignItems: "center",
@@ -1073,134 +1056,6 @@ const pageDescription = "Edit a course deal on CourseSpeak.";
             </div>
           </div>
 
-          <!-- SEO Tab -->
-          <div id="seoTabContent" style={{ display: "none" }}>
-            <div style={{
-              background: "rgba(30, 41, 59, 0.5)",
-              borderRadius: "1rem",
-              padding: "2.5rem",
-              border: "1px solid rgba(91, 140, 255, 0.1)",
-              boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)"
-            }}>
-              <h3 style={{
-                fontSize: "1.25rem",
-                fontWeight: 700,
-                color: "#fff",
-                marginBottom: "1.5rem",
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem"
-              }}>
-                <span style={{
-                  width: "4px",
-                  height: "18px",
-                  background: "linear-gradient(to bottom, var(--brand), var(--brand-hover))",
-                  borderRadius: "2px"
-                }}></span>
-                SEO Settings
-              </h3>
-
-              <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-                <div>
-                  <label style={{
-                    display: "block",
-                    color: "#fff",
-                    fontWeight: 600,
-                    marginBottom: "0.5rem",
-                    fontSize: "0.9rem"
-                  }}>
-                    SEO Title
-                  </label>
-                  <input
-                    type="text"
-                    name="seoTitle"
-                    value={deal.seoTitle || ""}
-                    style={{
-                      width: "100%",
-                      padding: "1rem",
-                      backgroundColor: "rgba(51, 65, 85, 0.8)",
-                      border: "2px solid transparent",
-                      borderRadius: "0.75rem",
-                      color: "#e2e8f0",
-                      fontSize: "1rem",
-                      fontWeight: 600,
-                      transition: "all 0.2s ease",
-                      outline: "none",
-                      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)"
-                    }}
-                    placeholder="Enter SEO title"
-                    onfocus="this.style.borderColor='var(--brand)'; this.style.boxShadow='0 0 0 3px rgba(245, 158, 11, 0.1)'"
-                    onblur="this.style.borderColor='transparent'; this.style.boxShadow='0 2px 4px rgba(0, 0, 0, 0.1)'"
-                  />
-                </div>
-
-                <div>
-                  <label style={{
-                    display: "block",
-                    color: "#fff",
-                    fontWeight: 600,
-                    marginBottom: "0.5rem",
-                    fontSize: "0.9rem"
-                  }}>
-                    SEO Description
-                  </label>
-                  <textarea
-                    name="seoDescription"
-                    rows="3"
-                    style={{
-                      width: "100%",
-                      padding: "1rem",
-                      backgroundColor: "rgba(51, 65, 85, 0.8)",
-                      border: "2px solid transparent",
-                      borderRadius: "0.75rem",
-                      color: "#e2e8f0",
-                      fontSize: "1rem",
-                      transition: "all 0.2s ease",
-                      outline: "none",
-                      resize: "vertical",
-                      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)"
-                    }}
-                    placeholder="Enter SEO description (meta description)"
-                    onfocus="this.style.borderColor='var(--brand)'; this.style.boxShadow='0 0 0 3px rgba(245, 158, 11, 0.1)'"
-                    onblur="this.style.borderColor='transparent'; this.style.boxShadow='0 2px 4px rgba(0, 0, 0, 0.1)'"
-                  >{deal.seoDescription || ""}</textarea>
-                </div>
-
-                <div>
-                  <label style={{
-                    display: "block",
-                    color: "#fff",
-                    fontWeight: 600,
-                    marginBottom: "0.5rem",
-                    fontSize: "0.9rem"
-                  }}>
-                    SEO Open Graph Image
-                  </label>
-                  <input
-                    type="url"
-                    name="seoOgImage"
-                    value={deal.seoOgImage || ""}
-                    style={{
-                      width: "100%",
-                      padding: "1rem",
-                      backgroundColor: "rgba(51, 65, 85, 0.8)",
-                      border: "2px solid transparent",
-                      borderRadius: "0.75rem",
-                      color: "#e2e8f0",
-                      fontSize: "1rem",
-                      transition: "all 0.2s ease",
-                      outline: "none",
-                      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)"
-                    }}
-                    placeholder="https://example.com/seo-image.jpg"
-                    onfocus="this.style.borderColor='var(--brand)'; this.style.boxShadow='0 0 0 3px rgba(245, 158, 11, 0.1)'"
-                    onblur="this.style.borderColor='transparent'; this.style.boxShadow='0 2px 4px rgba(0, 0, 0, 0.1)'"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
           <!-- Settings Tab -->
           <div id="settingsTabContent" style={{ display: "none" }}>
             <div style={{
@@ -1394,7 +1249,7 @@ const pageDescription = "Edit a course deal on CourseSpeak.";
   // Tab functionality
   function showTab(tabName: string) {
     // Hide all tab contents
-    const tabContents = ['basicTabContent', 'contentTabContent', 'pricingTabContent', 'seoTabContent', 'settingsTabContent'];
+    const tabContents = ['basicTabContent', 'contentTabContent', 'pricingTabContent', 'settingsTabContent'];
     tabContents.forEach(contentId => {
       const element = document.getElementById(contentId);
       if (element) {
@@ -1403,7 +1258,7 @@ const pageDescription = "Edit a course deal on CourseSpeak.";
     });
 
     // Remove active class from all tabs
-    const tabs = ['basicTab', 'contentTab', 'pricingTab', 'seoTab', 'settingsTab'];
+    const tabs = ['basicTab', 'contentTab', 'pricingTab', 'settingsTab'];
     tabs.forEach(tabId => {
       const element = document.getElementById(tabId);
       if (element) {

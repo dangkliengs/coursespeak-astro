@@ -871,7 +871,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                     alt={`${deal.title} — ${deal.provider || "Udemy"} course in ${deal.category || "Development"} — thumbnail`}
                                     width="400"
                                     height="190"
-                                    loading="lazy"
+                                    loading="eager"
                                     decoding="async"
                                     style={{ width: "100%", height: "190px", objectFit: "cover", display: "block" }}
                                 />

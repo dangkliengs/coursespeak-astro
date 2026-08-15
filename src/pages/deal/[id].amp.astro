@@ -27,6 +27,8 @@ if (!deal) {
 const discountPercentage = deal.originalPrice && deal.price && deal.originalPrice > deal.price
   ? Math.round(((deal.originalPrice - deal.price) / deal.originalPrice) * 100)
   : 0;
+
+const metaDescription = `${deal.title} Udemy Coupon Code — ${discountPercentage}% Off. Top-rated ${deal.subcategory || deal.category || "online"} course at a huge discount. Grab exclusive offers, claim now, limited time.`;
 ---
 
 <!doctype html>
@@ -39,7 +41,7 @@ const discountPercentage = deal.originalPrice && deal.price && deal.originalPric
   <script async custom-element="amp-sidebar" src="https://cdn.ampproject.org/v0/amp-sidebar-0.1.js"></script>
 
   <title>{deal.title} | {discountPercentage}% Off Udemy Coupon - CourseSpeak</title>
-  <meta name="description" content={deal.seoDescription || deal.description}>
+  <meta name="description" content={metaDescription}>
   <link rel="canonical" href={`https://coursespeak.com/deal/${deal.id}`}>
   <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
 

@@ -64,6 +64,8 @@ const discountPercentage = deal.originalPrice && deal.price && deal.originalPric
   ? Math.round(((deal.originalPrice - deal.price) / deal.originalPrice) * 100)
   : 0;
 
+const metaDescription = `${deal.title} Udemy Coupon Code — ${discountPercentage}% Off. Top-rated ${deal.subcategory || deal.category || "online"} course at a huge discount. Grab exclusive offers, claim now, limited time.`;
+
 const siteUrl = "https://coursespeak.com";
 const dealUrl = `${siteUrl}/deal/${deal.id}`;
 
@@ -101,8 +103,8 @@ function extractSkills(deal: Deal): string {
 
 <Layout
     title={`${deal.title} | ${discountPercentage}% Off Udemy Coupon`}
-    description={deal.seoDescription || deal.description || ""}
-    image={deal.seoOgImage || deal.image}
+    description={metaDescription}
+    image={deal.image}
     canonical={dealUrl}
 >
     <script type="application/ld+json" set:html={
@@ -114,7 +116,7 @@ function extractSkills(deal: Deal): string {
                     "@id": `${dealUrl}#webpage`,
                     "url": dealUrl,
                     "name": `${deal.title} — ${discountPercentage}% Off Udemy Coupon`,
-                    "description": (deal.seoDescription || deal.description || "").slice(0, 160),
+                    "description": metaDescription,
                     "inLanguage": "en-US",
                     "isPartOf": {
                         "@type": "WebSite",
@@ -143,9 +145,9 @@ function extractSkills(deal: Deal): string {
                     "@type": "Course",
                     "@id": `${dealUrl}#course`,
                     "name": deal.title,
-                    "description": deal.seoDescription || deal.description || "",
-                    "image": deal.seoOgImage || deal.image,
-                    "thumbnailUrl": deal.seoOgImage || deal.image,
+                    "description": metaDescription,
+                    "image": deal.image,
+                    "thumbnailUrl": deal.image,
                     "url": dealUrl,
                     "provider": {
                         "@type": "Organization",
