@@ -1,7 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import DealCard from "../../components/DealCard.astro";
-import { readDeals, readInstructors } from "../../lib/store";
+import { readDeals } from "../../lib/store";
 import type { Deal } from "../../types/deal";
 
 import { parseInstructors, createInstructorSlug, instructorSlugLookupKeys } from "../../lib/instructors";
@@ -125,9 +125,6 @@ const instructorData: InstructorData = {
   providers
 };
 
-const instructorsRecord = await readInstructors();
-const instructorImage = instructorsRecord[instructorSlug]?.image || instructorsRecord[createInstructorSlug(instructorName)]?.image || "";
-
 const provider = providers[0] || 'Udemy';
 
 function getMaxDiscount(courses: Deal[]): number {
@@ -222,17 +219,6 @@ const faqs = [
     <section class="hero">
       <div class="container">
         <div class="hero-content anim-up">
-          {instructorImage && (
-            <div style="display:flex;justify-content:center;margin-bottom:1.25rem">
-              <img
-                src={instructorImage}
-                alt={instructorName}
-                width="96"
-                height="96"
-                style="width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid var(--brand);box-shadow:0 8px 24px rgba(212,167,55,0.25)"
-              />
-            </div>
-          )}
           <h1>
             <span style="display:block;font-size:1rem;font-weight:700;color:var(--brand);margin-bottom:0.5rem;">
              {instructorData.courseCount} Coupon Code {instructorData.courseCount === 1 ? '' : 's'} in {provider}  

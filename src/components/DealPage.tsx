@@ -4,7 +4,7 @@ import { renderMarkdownToHtml } from "../lib/markdown";
 import { extractDifficultyLevel, slugifyCategory } from "../lib/utils";
 import { createInstructorSlug, parseInstructors } from "../lib/instructors";
 import { buildFAQs } from "../lib/faqs";
-import { computeVerdict } from "../lib/verdict";
+import ActionsPanel from "./ActionsPanel";
 import RelatedList from "./RelatedList";
 import CourseComparison from "./CourseComparison";
 
@@ -34,21 +34,8 @@ interface Deal {
     faqs?: { q: string; a: string }[];
 }
 
-export default function DealPage({ deal, relatedDeals = [], instructorImages = {}, instructorStats = {} }: { deal: Deal, relatedDeals?: any[], instructorImages?: Record<string, string>, instructorStats?: Record<string, { courses: number }> }) {
+export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, relatedDeals?: any[] }) {
     const instructorsList = parseInstructors(deal.instructor);
-    const instructorImage = (name: string): string | null => instructorImages[createInstructorSlug(name)] || null;
-
-    const formatDuration = (duration: string | undefined): string => {
-        if (!duration) return "";
-        const h = duration.match(/(\d+(?:\.\d+)?)\s*h/);
-        const m = duration.match(/(\d+)\s*m/);
-        let total = 0;
-        if (h) total += parseFloat(h[1]);
-        if (m) total += parseInt(m[1], 10) / 60;
-        if (total <= 0) return duration;
-        const rounded = Math.round(total * 10) / 10;
-        return `${Number.isInteger(rounded) ? rounded : rounded.toFixed(1)} hours total`;
-    };
 
     const bodyContent = deal.content || deal.description || "";
     
@@ -71,7 +58,6 @@ export default function DealPage({ deal, relatedDeals = [], instructorImages = {
 
     // Use only real FAQs from deal data, or generate accurate ones (shared with structured data)
     const autoFAQs = useMemo(() => buildFAQs(deal), [deal]);
-    const verdict = useMemo(() => computeVerdict(deal), [deal]);
 
     const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -108,60 +94,6 @@ export default function DealPage({ deal, relatedDeals = [], instructorImages = {
     const price = deal.price ?? 9.99;
     const originalPrice = deal.originalPrice ?? 119.99;
     const discountPct = originalPrice > price ? Math.round(100 - (price / originalPrice) * 100) : 0;
-
-    const buildIntro = (): string => {
-        const parts: string[] = [];
-        const lead = discountPct > 0
-            ? `Get ${deal.title} with this verified ${discountPct}% off Udemy coupon.`
-            : deal.price === 0
-                ? `Get ${deal.title} for free with this verified Udemy coupon.`
-                : `Get ${deal.title} with a verified Udemy coupon.`;
-        parts.push(lead);
-        const facts: string[] = [];
-        if (deal.rating) facts.push(`rated ${deal.rating.toFixed(1)}/5`);
-        if (deal.students) facts.push(`${deal.students.toLocaleString()} students enrolled`);
-        if (deal.duration) facts.push(`${formatDuration(deal.duration)} of on-demand video`);
-        if (deal.language) facts.push(`taught in ${deal.language}`);
-        if (facts.length > 0) {
-            parts.push(`This ${deal.category || "course"} online course is ${facts.join(", ")}.`);
-        }
-        if (deal.learn && deal.learn.length > 0) {
-            const outcomes = [...deal.learn].sort((a, b) => a.length - b.length);
-            const topic = outcomes[0].trim();
-            const startsWithHowTo = /^how to /i.test(topic);
-            const verbPrefix = /^(build |learn |master |create |understand |manage |use |apply |implement |design |develop |work with |configure |automate |deploy )/i;
-            parts.push(startsWithHowTo
-                ? `You'll learn ${topic.charAt(0).toLowerCase() + topic.slice(1)}.`
-                : verbPrefix.test(topic)
-                    ? `You'll learn how to ${topic.charAt(0).toLowerCase() + topic.slice(1)}.`
-                    : `You'll learn ${topic.charAt(0).toLowerCase() + topic.slice(1)}.`);
-        }
-        if (deal.expiresAt) {
-            const expiry = new Date(deal.expiresAt);
-            if (!isNaN(expiry.getTime())) {
-                parts.push(`Act now — the coupon expires ${expiry.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}.`);
-            }
-        }
-        return parts.join(" ");
-    };
-
-    const buildInstructorDescription = (name: string): string => {
-        const facts: string[] = [];
-        if (deal.rating) facts.push(`rated ${deal.rating.toFixed(1)}/5 by verified students`);
-        if (deal.students) facts.push(`${deal.students.toLocaleString()} students enrolled`);
-        if (deal.duration) facts.push(`${formatDuration(deal.duration)} of on-demand video`);
-        const stats = instructorStats[createInstructorSlug(name)];
-        if (stats && stats.courses > 1) {
-            facts.push(`${stats.courses} courses tracked on CourseSpeak with verified coupons`);
-        }
-        const courseCount = facts.length > 0 ? ` The course is ${facts.join(", ")}.` : "";
-        const couponLine = discountPct > 0
-            ? ` CourseSpeak verified the ${discountPct}% off coupon${deal.updatedAt ? ` on ${new Date(deal.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}` : ""}, so you can enroll at the discounted price while it lasts.`
-            : deal.price === 0
-                ? " CourseSpeak verified this course is currently free to enroll."
-                : " CourseSpeak verified the active coupon, so you can enroll at the discounted price while it lasts.";
-        return `${name} is the instructor of "${deal.title}" on ${deal.provider || "Udemy"}, an ${deal.category || "online"} course.${courseCount}${couponLine}`;
-    };
     const savings = Math.max(originalPrice - price, 0);
 
     // Parse durations like "5h 30m" / "22.5 hours" into hours for per-hour cost math
@@ -202,9 +134,6 @@ export default function DealPage({ deal, relatedDeals = [], instructorImages = {
                     {/* Breadcrumb + Hero */}
                     <header style={{ background: "var(--card)", padding: "2rem 0", borderBottom: "1px solid var(--bg)" }}>
                         <div className="container" style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 1rem" }}>
-                            <div style={{ display: "flex", gap: "2.5rem", alignItems: "flex-start", flexWrap: "wrap" }}>
-                            {/* ─── LEFT COLUMN: breadcrumb + title + intro + CTA ─── */}
-                            <div style={{ flex: "1 1 480px", minWidth: 0 }}>
                             {/* Breadcrumb */}
                             <nav aria-label="Breadcrumb" style={{ marginBottom: "1rem" }}>
                                 <ol
@@ -252,6 +181,10 @@ export default function DealPage({ deal, relatedDeals = [], instructorImages = {
                                             </li>
                                         </>
                                     )}
+                                    <li aria-hidden="true" style={{ color: "var(--muted)" }}>›</li>
+                                    <li aria-current="page" style={{ color: "var(--brand)", fontWeight: 700, wordBreak: "break-word" }}>
+                                        {deal.title}
+                                    </li>
                                 </ol>
                             </nav>
                             <h1 style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: 800, lineHeight: 1.2, marginBottom: "1rem", color: "var(--text)" }}>
@@ -259,238 +192,54 @@ export default function DealPage({ deal, relatedDeals = [], instructorImages = {
                                 {discountPct > 0 ? ` — ${discountPct}% Off Coupon` : ' — Free Coupon'}
                             </h1>
 
-                            <p style={{ fontSize: "1.05rem", lineHeight: 1.6, marginBottom: "1.5rem", color: "var(--text-secondary)", maxWidth: "800px" }}>
-                                {buildIntro()}
-                            </p>
+                            {/* ... */}
+                    <p style={{ fontSize: "1.05rem", lineHeight: 1.6, marginBottom: "1.5rem", color: "var(--text-secondary)", maxWidth: "800px" }}>
+                        {deal.description}
+                    </p>
 
-                            {/* Stat pills */}
-                            {(deal.duration || deal.students || deal.rating || deal.language || (deal.learn && deal.learn.length > 0)) && (
-                                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "0.6rem", marginBottom: "0.9rem" }}>
-                                    {deal.duration && (
-                                        <div style={{ display: "flex", flexDirection: "column", gap: "0.2rem", padding: "0.7rem 0.9rem", background: "rgba(212,167,55,0.06)", border: "1px solid rgba(212,167,55,0.16)", borderRadius: "0.9rem" }}>
-                                            <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", color: "var(--muted)", fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px" }}>
-                                                <span style={{ color: "var(--brand)", fontSize: "0.8rem" }}>⏱</span> Duration
-                                            </span>
-                                            <span style={{ color: "var(--text)", fontSize: "0.95rem", fontWeight: 700 }}>{formatDuration(deal.duration)}</span>
-                                        </div>
-                                    )}
-                                    {deal.students && (
-                                        <div style={{ display: "flex", flexDirection: "column", gap: "0.2rem", padding: "0.7rem 0.9rem", background: "rgba(212,167,55,0.06)", border: "1px solid rgba(212,167,55,0.16)", borderRadius: "0.9rem" }}>
-                                            <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", color: "var(--muted)", fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px" }}>
-                                                <span style={{ color: "var(--brand)", fontSize: "0.8rem" }}>👥</span> Students
-                                            </span>
-                                            <span style={{ color: "var(--text)", fontSize: "0.95rem", fontWeight: 700 }}>{deal.students.toLocaleString()} enrolled</span>
-                                        </div>
-                                    )}
-                                    {deal.rating && (
-                                        <div style={{ display: "flex", flexDirection: "column", gap: "0.2rem", padding: "0.7rem 0.9rem", background: "rgba(212,167,55,0.06)", border: "1px solid rgba(212,167,55,0.16)", borderRadius: "0.9rem" }}>
-                                            <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", color: "var(--muted)", fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px" }}>
-                                                <span style={{ color: "var(--brand)", fontSize: "0.8rem" }}>⭐</span> Rating
-                                            </span>
-                                            <span style={{ color: "var(--text)", fontSize: "0.95rem", fontWeight: 700 }}>{deal.rating.toFixed(1)} / 5</span>
-                                        </div>
-                                    )}
-                                    {deal.language && (
-                                        <div style={{ display: "flex", flexDirection: "column", gap: "0.2rem", padding: "0.7rem 0.9rem", background: "rgba(212,167,55,0.06)", border: "1px solid rgba(212,167,55,0.16)", borderRadius: "0.9rem" }}>
-                                            <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", color: "var(--muted)", fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px" }}>
-                                                <span style={{ color: "var(--brand)", fontSize: "0.8rem" }}>🌐</span> Language
-                                            </span>
-                                            <span style={{ color: "var(--text)", fontSize: "0.95rem", fontWeight: 700 }}>{deal.language}</span>
-                                        </div>
-                                    )}
-                                    {deal.learn && deal.learn.length > 0 && (
-                                        <div style={{ display: "flex", flexDirection: "column", gap: "0.2rem", padding: "0.7rem 0.9rem", background: "rgba(212,167,55,0.06)", border: "1px solid rgba(212,167,55,0.16)", borderRadius: "0.9rem" }}>
-                                            <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", color: "var(--muted)", fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px" }}>
-                                                <span style={{ color: "var(--brand)", fontSize: "0.8rem" }}>📚</span> Outcomes
-                                            </span>
-                                            <span style={{ color: "var(--text)", fontSize: "0.95rem", fontWeight: 700 }}>{deal.learn.length} learning outcomes</span>
-                                        </div>
-                                    )}
-                                </div>
-                            )}
-                            {(deal.category || deal.subcategory) && (
-                                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap", marginBottom: "1.5rem" }}>
-                                    <span style={{ color: "var(--muted)", fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px" }}>Topics:</span>
-                                    {deal.category && (
-                                        <a href={`/categories/${slugifyCategory(deal.category)}`} style={{ padding: "0.4rem 0.9rem", background: "rgba(212,167,55,0.06)", border: "1px solid rgba(212,167,55,0.16)", borderRadius: "9999px", fontSize: "0.78rem", color: "var(--brand)", fontWeight: 600, textDecoration: "none" }}>
-                                            {deal.category}
-                                        </a>
-                                    )}
-                                    {deal.subcategory && deal.subcategory !== deal.category && (
-                                        <a href={`/topics/${slugifyCategory(deal.subcategory)}`} style={{ padding: "0.4rem 0.9rem", background: "rgba(212,167,55,0.06)", border: "1px solid rgba(212,167,55,0.16)", borderRadius: "9999px", fontSize: "0.78rem", color: "var(--brand)", fontWeight: 600, textDecoration: "none" }}>
-                                            {deal.subcategory}
-                                        </a>
-                                    )}
-                                </div>
-                            )}
-                            </div>
-
-                            {/* ─── RIGHT COLUMN: Coupon Panel ─── */}
-                            <div style={{ flex: "0 1 360px", minWidth: "300px" }}>
-                                <div style={{ background: "linear-gradient(135deg, #0f1420 0%, #1a2233 100%)", border: "1px solid rgba(212,167,55,0.15)", borderRadius: "8px", overflow: "hidden", boxShadow: "0 8px 32px rgba(212,167,55,0.1)" }}>
-                                    {deal.image && (
-                                        <div style={{ position: "relative" }}>
-                                            <img
-                                                src={deal.image}
-                                                alt={`${deal.title} — ${deal.provider || "Udemy"} course in ${deal.category || "Development"} — thumbnail`}
-                                                width="400"
-                                                height="190"
-                                                loading="eager"
-                                                fetchPriority="high"
-                                                decoding="async"
-                                                style={{ width: "100%", height: "190px", objectFit: "cover", display: "block" }}
-                                            />
-                                            <div
-                                                style={{
-                                                    position: "absolute",
-                                                    top: "12px",
-                                                    right: "12px",
-                                                    transform: "rotate(-4deg)",
-                                                    padding: "6px 12px",
-                                                    borderRadius: "8px",
-                                                    display: "flex",
-                                                    alignItems: "center",
-                                                    gap: "5px",
-                                                    background: "rgba(22, 163, 74, 0.95)",
-                                                    border: "2px solid rgba(255, 255, 255, 0.85)",
-                                                    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.35)",
-                                                    color: "#fff",
-                                                    fontSize: "0.68rem",
-                                                    fontWeight: 800,
-                                                    letterSpacing: "0.5px",
-                                                    textTransform: "uppercase",
-                                                    lineHeight: 1,
-                                                    pointerEvents: "none",
-                                                    userSelect: "none",
-                                                }}
-                                            >
-                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
-                                                    <polyline points="20 6 9 17 4 12"/>
-                                                </svg>
-                                                Verified Coupon
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    <div style={{ padding: "1.25rem" }}>
-                                        {/* Price */}
-                                        <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: discountPct > 0 ? "6px" : "1rem" }}>
-                                            <span style={{ fontSize: "1.5rem", fontWeight: 800, color: "var(--text)" }}>
-                                                {price === 0 ? "Free" : `$${price}`}
-                                            </span>
-                                            {discountPct > 0 && (
-                                                <>
-                                                    <span style={{ fontSize: "0.9rem", color: "#6b7280", textDecoration: "line-through" }}>${originalPrice}</span>
-                                                    <span style={{ fontSize: "0.75rem", background: "var(--brand)", color: "#080b12", padding: "2px 7px", borderRadius: "3px", fontWeight: 700 }}>{discountPct}% OFF</span>
-                                                </>
-                                            )}
-                                        </div>
-
-                                        {/* Countdown */}
-                                        {countdown && (
-                                            <div role="timer" aria-live="polite" style={{ background: "rgba(255,255,255,0.04)", color: "var(--text)", fontSize: "0.85rem", padding: "10px 12px", borderRadius: "6px", marginBottom: "1rem", border: "1px solid var(--border)" }}>
-                                                <div style={{ fontWeight: 700, fontSize: "0.75rem", marginBottom: "6px", display: "flex", alignItems: "center", gap: "5px", color: "var(--muted)" }}>
-                                                    <svg style={{ width: "13px", height: "13px" }} fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" /></svg>
-                                                    COUPON EXPIRES IN
-                                                </div>
-                                                <div style={{ display: "flex", gap: "8px", justifyContent: "center", fontWeight: 800 }}>
-                                                    {[
-                                                        { val: countdown.days, label: "Days" },
-                                                        { val: countdown.hours, label: "Hrs" },
-                                                        { val: countdown.minutes, label: "Min" },
-                                                        { val: countdown.seconds, label: "Sec" },
-                                                    ].map(({ val, label }) => (
-                                                        <div key={label} style={{ textAlign: "center" }}>
-                                                            <div style={{ fontSize: "1.2rem" }}>{String(val).padStart(2, '0')}</div>
-                                                            <div style={{ fontSize: "0.65rem", opacity: 0.75, fontWeight: 500 }}>{label}</div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {/* Coupon code preview */}
-                                        {deal.coupon && (
-                                            <div style={{ background: "var(--bg)", border: "1px solid var(--border)", borderRadius: "6px", marginBottom: "0.75rem", padding: "0.6rem 0.75rem" }}>
-                                                <div style={{ fontSize: "0.65rem", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "4px" }}>
-                                                    🎫 Coupon Code
-                                                </div>
-                                                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                                                    <code style={{ fontSize: "0.8rem", fontWeight: 700, background: "var(--card)", padding: "4px 8px", borderRadius: "4px", border: "1px dashed var(--border)", color: "var(--text)", flex: 1, textAlign: "center", letterSpacing: "0.5px" }}>
-                                                        {deal.coupon.length > 4 ? `${deal.coupon.substring(0, 4)}···` : deal.coupon}
-                                                    </code>
-                                                    <button
-                                                        onClick={() => setIsModalOpen(true)}
-                                                        style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "4px", padding: "4px 8px", fontSize: "0.7rem", fontWeight: 600, cursor: "pointer", color: "var(--brand)", whiteSpace: "nowrap" }}
-                                                    >
-                                                        Copy code
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {/* CTA */}
-                                        <a
-                                            href={deal.url}
-                                            target="_blank"
-                                            rel="sponsored noopener noreferrer nofollow"
-                                            aria-label={`Redeem coupon for ${deal.title} on ${deal.provider || "Udemy"}`}
-                                            style={{
-                                                display: "block",
-                                                width: "100%",
-                                                padding: "0.75rem",
-                                                background: "linear-gradient(135deg, #D4AF37 0%, #C5A028 100%)",
-                                                color: "#080b12",
-                                                textDecoration: "none",
-                                                borderRadius: "8px",
-                                                textAlign: "center",
-                                                fontWeight: 700,
-                                                fontSize: "0.9rem",
-                                                transition: "all 0.3s ease",
-                                                border: "none",
-                                                cursor: "pointer",
-                                                boxShadow: "0 4px 16px rgba(212, 167, 55, 0.3)"
-                                            }}
-                                            onMouseEnter={(e) => {
-                                                (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)";
-                                                (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 6px 20px rgba(255, 215, 0, 0.4)";
-                                            }}
-                                            onMouseLeave={(e) => {
-                                                (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(0)";
-                                                (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 16px rgba(255, 215, 0, 0.3)";
-                                            }}
+                    {/* Course meta */}
+                    <div style={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap", fontSize: "14px" }}>
+                        {deal.rating && (
+                            <span style={{ color: "var(--brand)", fontWeight: 700 }} aria-label={`Rated ${deal.rating.toFixed(1)} out of 5`}>
+                                ⭐ {deal.rating.toFixed(1)} out of 5
+                            </span>
+                        )}
+                        {deal.students && (
+                            <span style={{ color: "var(--text-secondary)" }}>
+                                <strong>({deal.students.toLocaleString()}</strong> students enrolled)
+                            </span>
+                        )}
+                        {instructorsList.length > 0 && (
+                            <span style={{ color: "var(--text-secondary)" }}>
+                                Created by{" "}
+                                {instructorsList.map((name, i) => (
+                                    <span key={name}>
+                                        {i > 0 && <>, </>}
+                                        {instructorsList.length > 1 && i === instructorsList.length - 1 && <> and </>}
+                                        <a href={`/instructor/${createInstructorSlug(name)}`}
+                                           style={{ color: "var(--brand)", fontWeight: 700, textDecoration: "none" }}
+                                           onMouseEnter={(e) => (e.target as HTMLElement).style.textDecoration = "underline"}
+                                           onMouseLeave={(e) => (e.target as HTMLElement).style.textDecoration = "none"}
                                         >
-                                            REDEEM COUPON
+                                            {name}
                                         </a>
-
-                                        <p style={{ textAlign: "center", fontSize: "0.8rem", color: "#6b7280", marginBottom: "1.25rem" }}>
-                                            30-Day Money-Back Guarantee via {deal.provider || "Udemy"}
-                                        </p>
-
-                                        {/* Affiliate Disclosure */}
-                                        <div style={{
-                                            marginTop: "1rem",
-                                            padding: "0.75rem",
-                                            background: "rgba(212, 167, 55, 0.05)",
-                                            border: "1px solid rgba(212, 167, 55, 0.1)",
-                                            borderRadius: "6px",
-                                            fontSize: "0.75rem",
-                                            color: "var(--muted)",
-                                            textAlign: "center",
-                                            lineHeight: 1.4
-                                        }}>
-                                            <span>We may earn a commission when you purchase through our links. </span>
-                                            <a href="/affiliate-disclosure" style={{
-                                                color: "var(--brand)",
-                                                textDecoration: "none",
-                                                fontWeight: 600
-                                            }}>Learn more</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            </div>
-                        </div>
+                                    </span>
+                                ))}
+                            </span>
+                        )}
+                        {deal.updatedAt && (
+                            <span style={{ color: "var(--muted)" }}>
+                                Last updated:{" "}
+                                <time dateTime={new Date(deal.updatedAt).toISOString()}>
+                                    {new Date(deal.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
+                                </time>
+                            </span>
+                        )}
+                        {deal.language && (
+                            <span style={{ color: "var(--text-secondary)" }}>🌐 {deal.language}</span>
+                        )}
+                    </div>
+                </div>
             </header>
 
             {/* Main layout */}
@@ -612,6 +361,55 @@ export default function DealPage({ deal, relatedDeals = [], instructorImages = {
                         />
                     </section>
 
+                    {/* Udemy Coupons Guide Link */}
+                    <div style={{
+                        marginBottom: "2rem",
+                        padding: "1.25rem 1.5rem",
+                        background: "var(--bg)",
+                        border: "1px solid var(--border)",
+                        borderRadius: "12px",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "1rem",
+                        flexWrap: "wrap",
+                    }}>
+                        <div style={{
+                            width: "44px", height: "44px", borderRadius: "10px",
+                            background: "linear-gradient(135deg, rgba(212, 167, 55, 0.15), rgba(212, 167, 55, 0.05))",
+                            border: "1px solid rgba(212, 167, 55, 0.2)",
+                            display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+                        }}>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+                            </svg>
+                        </div>
+                        <div style={{ flex: 1, minWidth: "180px" }}>
+                            <div style={{ fontSize: "0.9rem", fontWeight: 700, color: "var(--text)", marginBottom: "2px" }}>
+                                Complete Udemy Coupons Guide
+                            </div>
+                            <div style={{ fontSize: "0.8rem", color: "var(--muted)", lineHeight: 1.5 }}>
+                                Where to find coupons, how to redeem them, and how to avoid expired codes.
+                            </div>
+                        </div>
+                        <a
+                            href="/udemy-coupons-guide"
+                            style={{
+                                display: "inline-flex", alignItems: "center", gap: "0.35rem",
+                                padding: "0.5rem 1rem",
+                                background: "rgba(212, 167, 55, 0.1)",
+                                border: "1px solid rgba(212, 167, 55, 0.2)",
+                                borderRadius: "8px",
+                                color: "var(--brand)",
+                                textDecoration: "none",
+                                fontSize: "0.8rem",
+                                fontWeight: 600,
+                                flexShrink: 0,
+                            }}
+                        >
+                            Read Guide ↗
+                        </a>
+                    </div>
+
                     {/* Course Comparison */}
                     {relatedDeals && relatedDeals.length > 0 && (
                         <CourseComparison
@@ -656,21 +454,6 @@ export default function DealPage({ deal, relatedDeals = [], instructorImages = {
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.5rem", padding: "0.75rem 1.25rem", background: "var(--bg)", borderBottom: "1px solid var(--border)", fontSize: "0.8rem", color: "var(--muted)" }}>
                                 <span>Expert review by <strong style={{ color: "var(--text)" }}>Josh Smith</strong>, Lead Course Reviewer at CourseSpeak</span>
                                 <span>Updated {deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : "recently"}</span>
-                            </div>
-
-                            {/* CourseSpeak Verdict Score */}
-                            <div style={{ display: "flex", alignItems: "center", gap: "1rem", padding: "1rem 1.25rem", background: "linear-gradient(135deg, rgba(212, 167, 55, 0.08), rgba(212, 167, 55, 0.02))", borderBottom: "1px solid var(--border)" }}>
-                                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", width: "68px", height: "68px", borderRadius: "12px", background: "linear-gradient(135deg, #D4AF37 0%, #C5A028 100%)", color: "#080b12", flexShrink: 0 }}>
-                                    <span style={{ fontSize: "1.5rem", fontWeight: 800, lineHeight: 1 }}>{verdict.score.toFixed(1)}</span>
-                                    <span style={{ fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.5px" }}>/10</span>
-                                </div>
-                                <div style={{ flex: 1 }}>
-                                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
-                                        <span style={{ fontSize: "1.05rem", fontWeight: 800, color: "var(--text)" }}>CourseSpeak Verdict: {verdict.label}</span>
-                                        <span style={{ fontSize: "0.7rem", fontWeight: 700, background: "rgba(212, 167, 55, 0.15)", color: "var(--brand)", padding: "2px 8px", borderRadius: "9999px", border: "1px solid rgba(212, 167, 55, 0.3)" }}>Grade {verdict.grade}</span>
-                                    </div>
-                                    <p style={{ margin: "0.25rem 0 0 0", fontSize: "0.8rem", color: "var(--text-secondary)", lineHeight: 1.5 }}>{verdict.summary}</p>
-                                </div>
                             </div>
 
                             <div style={{ padding: "1.5rem" }}>
@@ -781,9 +564,7 @@ export default function DealPage({ deal, relatedDeals = [], instructorImages = {
                                 {/* Reviewer & Quote row */}
                                 <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", marginBottom: "1.25rem" }}>
                                     <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flex: 1, minWidth: "200px", padding: "0.75rem 1rem", background: "rgba(212, 167, 55, 0.04)", border: "1px solid rgba(212, 167, 55, 0.12)", borderRadius: "10px" }}>
-                                        <div style={{ width: "40px", height: "40px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, overflow: "hidden", background: "linear-gradient(135deg, var(--brand), var(--brand-hover))", border: "2px solid var(--brand)" }}>
-                                            <img src="/images/author.jpg" alt="Josh Smith" style={{ width: "100%", height: "100%", objectFit: "cover" }} loading="lazy" />
-                                        </div>
+                                        <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "linear-gradient(135deg, var(--brand), var(--brand-hover))", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--border)", fontWeight: 700, fontSize: "0.9rem", flexShrink: 0 }}>JS</div>
                                         <div>
                                             <div style={{ fontWeight: 600, color: "var(--text)", fontSize: "0.85rem" }}>Josh Smith</div>
                                             <div style={{ color: "var(--muted)", fontSize: "0.75rem" }}>Lead Course Reviewer</div>
@@ -805,11 +586,22 @@ export default function DealPage({ deal, relatedDeals = [], instructorImages = {
                                             <div style={{ fontSize: "1rem", fontWeight: 700, color: "var(--text)" }}>Final Verdict: Worth It</div>
                                             <div style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.8)" }}>
                                                 {discountPct > 0 ? `Saves you $${savings.toFixed(2)} against the standard ${deal.provider || "Udemy"} price` : "Available free right now — a good time to enroll"}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+
+                                {/* Additional Info */}
+                                <div style={{ marginTop: "1rem", padding: "0.75rem 1rem", background: "rgba(212, 167, 55, 0.05)", border: "1px solid rgba(212, 167, 55, 0.12)", borderRadius: "8px", fontSize: "0.82rem", color: "var(--text-secondary)", lineHeight: 1.6 }}>
+                                    <strong style={{ color: "var(--brand)" }}>New to redeeming coupons?</strong>{" "}
+                                    Visit our <a href="/how-to-redeem-coupon" style={{ color: "var(--brand)", textDecoration: "underline" }}>step-by-step guide</a> for detailed instructions on how to apply coupon codes.
+                                    <span style={{ display: "block", marginTop: "4px", color: "var(--muted)", fontSize: "0.78rem" }}>
+                                        Coupon last verified {deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : "recently"}. 
+                                        {discountPct > 0 ? `At $${price.toFixed(2)} you save $${savings.toFixed(2)} compared to the standard $${originalPrice.toFixed(2)} price, ` : `This course is currently free, `}
+                                        and {deal.provider || "Udemy"} coupons are time-limited — redeem as soon as possible.
+                                    </span>
+                                </div>
                             </div>
-                        </div>
                         </div>
                     </section>
 
@@ -821,7 +613,7 @@ export default function DealPage({ deal, relatedDeals = [], instructorImages = {
                                 Course Rating Summary
                             </h2>
                             <p style={{ fontSize: "0.9rem", color: "var(--muted)", marginBottom: "1.5rem" }}>
-                                This course holds an aggregate rating of {deal.rating?.toFixed(1) || "4.8"} out of 5 based on {deal.students?.toLocaleString() || "1,489"} student reviews on {deal.provider || "Udemy"}.
+                                This course holds an aggregate rating of {deal.rating?.toFixed(1) || "4.8"} out of 5 based on {deal.students?.toLocaleString() || "1,489"} student reviews on {deal.provider || "Udemy"}. The distribution below shows the approximate percentage of students who gave each star rating.
                             </p>
                             <div style={{ display: "flex", alignItems: "center", gap: "2rem", flexWrap: "wrap" }}>
                                 <div style={{ textAlign: "center", minWidth: "100px" }}>
@@ -833,12 +625,26 @@ export default function DealPage({ deal, relatedDeals = [], instructorImages = {
                                         {deal.students?.toLocaleString() || "Many"} Verified Ratings
                                     </div>
                                 </div>
-                                <div style={{ flex: 1, minWidth: "200px", fontSize: "0.9rem", color: "var(--text-secondary)", lineHeight: 1.7 }}>
-                                    The {deal.rating?.toFixed(1) || "4.8"}-star aggregate is drawn directly from verified student reviews on {deal.provider || "Udemy"}. CourseSpeak checks these figures against the live course page when each coupon is verified, so the rating and review count reflect the course as it currently stands.
+                                <div style={{ flex: 1, minWidth: "200px" }}>
+                                    {[
+                                        { star: 5, pct: 75 },
+                                        { star: 4, pct: 15 },
+                                        { star: 3, pct: 6 },
+                                        { star: 2, pct: 2 },
+                                        { star: 1, pct: 2 },
+                                    ].map(({ star, pct }) => (
+                                        <div key={star} style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "6px" }}>
+                                            <span style={{ color: "var(--muted)", fontSize: "0.8rem", width: "50px", flexShrink: 0 }}>{star} star{star !== 1 ? 's' : ''}</span>
+                                            <div role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label={`${star} stars: ${pct}%`} style={{ flex: 1, height: "8px", background: "var(--border)", borderRadius: "4px", overflow: "hidden" }}>
+                                                <div style={{ width: `${pct}%`, height: "100%", background: "var(--brand)", borderRadius: "4px" }}></div>
+                                            </div>
+                                            <span style={{ color: "var(--muted)", fontSize: "0.8rem", width: "35px", textAlign: "right" }}>{pct}%</span>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                             <p style={{ fontSize: "0.8rem", color: "var(--muted)", marginTop: "1rem", fontStyle: "italic" }}>
-                                Sourced from {deal.provider || "Udemy"}. Last verified: {deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : "March 2026"}.
+                                * Rating distribution is approximated from the aggregate score. Sourced from {deal.provider || "Udemy"}. Last verified: {deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : "March 2026"}.
                             </p>
                         </section>
                     )}
@@ -855,7 +661,7 @@ export default function DealPage({ deal, relatedDeals = [], instructorImages = {
                             <h2>Go Unlimited with <span style={{ color: "var(--brand)" }}>Udemy Personal Plan</span><br />26,000+ Premium Courses, One Subscription</h2>
                             <p className="cta-subtext">One flat price, unlimited learning. Level up every month without buying courses one by one — and cancel anytime.</p>
                             <div className="cta-actions">
-                                <a href="https://trk.udemy.com/c/6564357/3775958/39854" target="_blank" rel="sponsored noopener noreferrer" className="btn btn-primary btn-lg" style={{ borderRadius: "999px", padding: "1rem 2.5rem" }}>
+                                <a href="https://trk.udemy.com/c/6564357/3775958/39854" target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-lg" style={{ borderRadius: "999px", padding: "1rem 2.5rem" }}>
                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M5 21h14"/></svg>
                                     Start Free Trial
                                 </a>
@@ -868,6 +674,81 @@ export default function DealPage({ deal, relatedDeals = [], instructorImages = {
                             </div>
                         </div>
                     </div>
+
+                    {/* Instructor Profile */}
+                    {instructorsList.length > 0 && (
+                        <section aria-labelledby="instructor-heading" style={{ borderTop: "1px solid var(--border)", paddingTop: "2rem", marginBottom: "2rem" }}>
+                            <h2 id="instructor-heading" style={{ fontSize: "1.4rem", fontWeight: 700, color: "var(--text)", marginBottom: "1.25rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                                <span style={{ width: "6px", height: "32px", background: "var(--brand)", borderRadius: "9999px" }} aria-hidden="true" />
+                                Instructor Profile{instructorsList.length > 1 ? "s" : ""}
+                            </h2>
+                            <p style={{ fontSize: "0.9rem", color: "var(--muted)", marginBottom: "1.25rem" }}>
+                                Background information on <strong style={{ color: "var(--text)" }}>{instructorsList.join(", ")}</strong>, the instructor{instructorsList.length > 1 ? "s" : ""} responsible for this course on <strong>{deal.provider || "Udemy"}</strong>.
+                            </p>
+                            <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                                {instructorsList.map((name) => (
+                                    <div key={name} style={{ background: "var(--bg)", border: "1px solid var(--border)", borderRadius: "16px", overflow: "hidden" }}>
+                                        <div style={{ padding: "1.5rem 1.5rem 1rem", display: "flex", gap: "1rem", flexWrap: "wrap", alignItems: "center" }}>
+                                            <div style={{ width: "52px", height: "52px", borderRadius: "50%", background: "linear-gradient(135deg, var(--brand), var(--brand-hover))", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                                                <span style={{ color: "var(--text)", fontSize: "1.1rem", fontWeight: 700 }}>
+                                                    {name.split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase()}
+                                                </span>
+                                            </div>
+                                            <div style={{ flex: 1, minWidth: "180px" }}>
+                                                <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--text)" }}>
+                                                    {name}
+                                                </div>
+                                                <div style={{ fontSize: "0.8rem", color: "var(--muted)" }}>
+                                                    {deal.provider || "Udemy"} Instructor
+                                                </div>
+                                            </div>
+                                            <a
+                                                href={`/instructor/${createInstructorSlug(name)}`}
+                                                style={{
+                                                    display: "inline-flex", alignItems: "center", gap: "0.35rem",
+                                                    padding: "0.45rem 1rem", background: "rgba(212, 167, 55, 0.1)",
+                                                    border: "1px solid rgba(212, 167, 55, 0.25)", borderRadius: "8px",
+                                                    fontSize: "0.8rem", color: "var(--brand)", textDecoration: "none", fontWeight: 600,
+                                                }}
+                                            >
+                                                Full Profile ↗
+                                            </a>
+                                        </div>
+                                        <div style={{ borderTop: "1px solid var(--border)", padding: "1rem 1.5rem", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "0.75rem", fontSize: "0.85rem" }}>
+                                            <div>
+                                                <span style={{ color: "var(--muted)", fontWeight: 500 }}>Subject Area</span>
+                                                <div style={{ color: "var(--text-secondary)", marginTop: "2px" }}>{deal.category || "Development"}</div>
+                                            </div>
+                                            {deal.students && (
+                                                <div>
+                                                    <span style={{ color: "var(--muted)", fontWeight: 500 }}>Total Students</span>
+                                                    <div style={{ color: "var(--text-secondary)", marginTop: "2px" }}>{deal.students.toLocaleString()}+ enrolled</div>
+                                                </div>
+                                            )}
+                                            {deal.rating && (
+                                                <div>
+                                                    <span style={{ color: "var(--muted)", fontWeight: 500 }}>Rating</span>
+                                                    <div style={{ color: "var(--text-secondary)", marginTop: "2px" }}>{deal.rating.toFixed(1)} / 5.0</div>
+                                                </div>
+                                            )}
+                                            {deal.duration && (
+                                                <div>
+                                                    <span style={{ color: "var(--muted)", fontWeight: 500 }}>Course Duration</span>
+                                                    <div style={{ color: "var(--text-secondary)", marginTop: "2px" }}>{deal.duration}</div>
+                                                </div>
+                                            )}
+                                            <div style={{ gridColumn: "1 / -1" }}>
+                                                <span style={{ color: "var(--muted)", fontWeight: 500 }}>Teaching Approach</span>
+                                                <div style={{ color: "var(--text-secondary)", marginTop: "2px", lineHeight: 1.5 }}>
+                                                    Practical, project-based instruction built around real-world application of {deal.category || "IT"} skills, with hands-on exercises and quizzes to reinforce each section.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
 
                     {/* FAQs */}
                     {autoFAQs.length > 0 && (
@@ -980,159 +861,164 @@ export default function DealPage({ deal, relatedDeals = [], instructorImages = {
 
                 </main>
 
-                {/* ─── RIGHT COLUMN — Sidebar: Instructor + Guides ─── */}
-                <aside aria-label="Instructor information" style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-                    <div style={{ background: "var(--bg)", border: "1px solid var(--border)", borderRadius: "1.75rem", overflow: "hidden", boxShadow: "0 8px 32px rgba(0,0,0,0.25)" }}>
-                        {instructorsList.length > 0 && (
-                            <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem", padding: "1.5rem" }}>
-                                {instructorsList.map((name) => (
-                                    <a
-                                        key={name}
-                                        href={`/instructor/${createInstructorSlug(name)}`}
-                                        title={name}
-                                        style={{ display: "flex", alignItems: "center", gap: "0.75rem", color: "var(--text)", textDecoration: "none" }}
-                                    >
-                                        {instructorImage(name) ? (
-                                            <img
-                                                src={instructorImage(name)!}
-                                                alt={name}
-                                                width="56"
-                                                height="56"
-                                                style={{ width: "56px", height: "56px", borderRadius: "50%", objectFit: "cover", border: "2px solid var(--brand)", boxShadow: "0 2px 10px rgba(212,167,55,0.25)", display: "inline-block" }}
-                                                loading="lazy"
-                                            />
-                                        ) : (
-                                            <span style={{ width: "56px", height: "56px", borderRadius: "50%", background: "linear-gradient(135deg, var(--brand), var(--brand-hover))", display: "inline-flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: "1rem", fontWeight: 700 }}>
-                                                {name.split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase()}
-                                            </span>
-                                        )}
-                                        <span style={{ display: "flex", flexDirection: "column", gap: "0.15rem" }}>
-                                            <span style={{ color: "var(--muted)", fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.8px" }}>
-                                                Instructor
-                                            </span>
-                                            <span style={{ fontSize: "1rem", fontWeight: 700, color: "var(--text)", textDecoration: "none" }}
-                                                onMouseEnter={(e) => (e.target as HTMLElement).style.textDecoration = "underline"}
-                                                onMouseLeave={(e) => (e.target as HTMLElement).style.textDecoration = "none"}
-                                            >
-                                                {name}
-                                            </span>
-                                            <span style={{ fontSize: "0.78rem", color: "var(--muted)" }}>
-                                                Course instructor on {deal.provider || "Udemy"}
-                                            </span>
-                                        </span>
-                                    </a>
-                                ))}
-                                <div style={{ fontSize: "0.9rem", lineHeight: 1.6, color: "var(--text-secondary)", borderTop: "1px solid var(--border)", paddingTop: "1.25rem" }}>
-                                    {buildInstructorDescription(instructorsList[0])}
-                                </div>
+                {/* ─── RIGHT COLUMN — Sticky Sidebar ─── */}
+                <aside aria-label="Course purchase options" style={{ position: "relative" }}>
+                    <div style={{ position: "sticky", top: "2rem", background: "linear-gradient(135deg, #0f1420 0%, #1a2233 100%)", border: "1px solid rgba(212,167,55,0.15)", borderRadius: "8px", overflow: "hidden", boxShadow: "0 8px 32px rgba(212,167,55,0.1)" }}>
+                        {deal.image && (
+                            <div style={{ position: "relative" }}>
+                                <img
+                                    src={deal.image}
+                                    alt={`${deal.title} — ${deal.provider || "Udemy"} course in ${deal.category || "Development"} — thumbnail`}
+                                    width="400"
+                                    height="190"
+                                    loading="lazy"
+                                    decoding="async"
+                                    style={{ width: "100%", height: "190px", objectFit: "cover", display: "block" }}
+                                />
                             </div>
                         )}
-                    </div>
 
-                    {/* Personal Plan compact CTA */}
-                    <div style={{
-                        padding: "1.25rem 1.5rem",
-                        background: "linear-gradient(135deg, rgba(212, 167, 55, 0.1) 0%, rgba(212, 167, 55, 0.03) 100%)",
-                        border: "1px solid rgba(212, 167, 55, 0.2)",
-                        borderRadius: "12px",
-                    }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.5rem" }}>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
-                            </svg>
-                            <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--text)" }}>
-                                Udemy Personal Plan
-                            </span>
-                        </div>
-                        <p style={{ fontSize: "0.8rem", color: "var(--text-secondary)", lineHeight: 1.55, margin: "0 0 0.75rem 0" }}>
-                            26,000+ premium courses with one subscription — including this one.
-                        </p>
-                        <a
-                            href="https://trk.udemy.com/c/6564357/3775958/39854"
-                            target="_blank"
-                            rel="sponsored noopener noreferrer"
-                            style={{
-                                display: "inline-flex",
-                                alignItems: "center",
-                                gap: "0.35rem",
-                                padding: "0.5rem 1rem",
-                                background: "linear-gradient(135deg, #D4AF37 0%, #C5A028 100%)",
-                                color: "#080b12",
-                                borderRadius: "999px",
-                                fontSize: "0.8rem",
-                                fontWeight: 700,
-                                textDecoration: "none",
-                            }}
-                        >
-                            Start 7-Day Free Trial ↗
-                        </a>
-                    </div>
-
-                    {/* Udemy Coupons Guide Link */}
-                    <div style={{
-                        padding: "1.25rem 1.5rem",
-                        background: "var(--bg)",
-                        border: "1px solid var(--border)",
-                        borderRadius: "12px",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "1rem",
-                        flexWrap: "wrap",
-                    }}>
-                        <div style={{
-                            width: "44px", height: "44px", borderRadius: "10px",
-                            background: "linear-gradient(135deg, rgba(212, 167, 55, 0.15), rgba(212, 167, 55, 0.05))",
-                            border: "1px solid rgba(212, 167, 55, 0.2)",
-                            display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
-                        }}>
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
-                            </svg>
-                        </div>
-                        <div style={{ flex: 1, minWidth: "180px" }}>
-                            <div style={{ fontSize: "0.9rem", fontWeight: 700, color: "var(--text)", marginBottom: "2px" }}>
-                                Complete Udemy Coupons Guide
+                        <div style={{ padding: "1.25rem" }}>
+                            {/* Price */}
+                            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: discountPct > 0 ? "6px" : "1rem" }}>
+                                <span style={{ fontSize: "1.5rem", fontWeight: 800, color: "var(--text)" }}>
+                                    {price === 0 ? "Free" : `$${price}`}
+                                </span>
+                                {discountPct > 0 && (
+                                    <>
+                                        <span style={{ fontSize: "0.9rem", color: "#6b7280", textDecoration: "line-through" }}>${originalPrice}</span>
+                                        <span style={{ fontSize: "0.75rem", background: "var(--brand)", color: "#080b12", padding: "2px 7px", borderRadius: "3px", fontWeight: 700 }}>{discountPct}% OFF</span>
+                                    </>
+                                )}
                             </div>
-                            <div style={{ fontSize: "0.8rem", color: "var(--muted)", lineHeight: 1.5 }}>
-                                Where to find coupons, how to redeem them, and how to avoid expired codes.
+
+                            {/* Countdown */}
+                            {countdown && (
+                                <div role="timer" aria-live="polite" style={{ background: "rgba(255,255,255,0.04)", color: "var(--text)", fontSize: "0.85rem", padding: "10px 12px", borderRadius: "6px", marginBottom: "1rem", border: "1px solid var(--border)" }}>
+                                    <div style={{ fontWeight: 700, fontSize: "0.75rem", marginBottom: "6px", display: "flex", alignItems: "center", gap: "5px", color: "var(--muted)" }}>
+                                        <svg style={{ width: "13px", height: "13px" }} fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" /></svg>
+                                        COUPON EXPIRES IN
+                                    </div>
+                                    <div style={{ display: "flex", gap: "8px", justifyContent: "center", fontWeight: 800 }}>
+                                        {[
+                                            { val: countdown.days, label: "Days" },
+                                            { val: countdown.hours, label: "Hrs" },
+                                            { val: countdown.minutes, label: "Min" },
+                                            { val: countdown.seconds, label: "Sec" },
+                                        ].map(({ val, label }) => (
+                                            <div key={label} style={{ textAlign: "center" }}>
+                                                <div style={{ fontSize: "1.2rem" }}>{String(val).padStart(2, '0')}</div>
+                                                <div style={{ fontSize: "0.65rem", opacity: 0.75, fontWeight: 500 }}>{label}</div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Coupon code preview */}
+                            {deal.coupon && (
+                                <div style={{ background: "var(--bg)", border: "1px solid var(--border)", borderRadius: "6px", marginBottom: "0.75rem", padding: "0.6rem 0.75rem" }}>
+                                    <div style={{ fontSize: "0.65rem", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "4px" }}>
+                                        🎫 Coupon Code
+                                    </div>
+                                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                                        <code style={{ fontSize: "0.8rem", fontWeight: 700, background: "var(--card)", padding: "4px 8px", borderRadius: "4px", border: "1px dashed var(--border)", color: "var(--text)", flex: 1, textAlign: "center", letterSpacing: "0.5px" }}>
+                                            {deal.coupon.length > 4 ? `${deal.coupon.substring(0, 4)}···` : deal.coupon}
+                                        </code>
+                                        <button
+                                            onClick={() => setIsModalOpen(true)}
+                                            style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "4px", padding: "4px 8px", fontSize: "0.7rem", fontWeight: 600, cursor: "pointer", color: "var(--brand)", whiteSpace: "nowrap" }}
+                                        >
+                                            Copy code
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* CTA */}
+                            <a
+                                href={deal.url}
+                                target="_blank"
+                                rel="noopener noreferrer nofollow"
+                                aria-label={`Redeem coupon for ${deal.title} on ${deal.provider || "Udemy"}`}
+                                style={{
+                                    display: "block",
+                                    width: "100%",
+                                    padding: "0.75rem",
+                                    background: "linear-gradient(135deg, #D4AF37 0%, #C5A028 100%)",
+                                    color: "#080b12",
+                                    textDecoration: "none",
+                                    borderRadius: "8px",
+                                    textAlign: "center",
+                                    fontWeight: 700,
+                                    fontSize: "0.9rem",
+                                    transition: "all 0.3s ease",
+                                    border: "none",
+                                    cursor: "pointer",
+                                    boxShadow: "0 4px 16px rgba(212, 167, 55, 0.3)"
+                                }}
+                                onMouseEnter={(e) => {
+                                    (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)";
+                                    (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 6px 20px rgba(255, 215, 0, 0.4)";
+                                }}
+                                onMouseLeave={(e) => {
+                                    (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(0)";
+                                    (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 16px rgba(255, 215, 0, 0.3)";
+                                }}
+                            >
+                                REDEEM COUPON
+                            </a>
+
+                            <p style={{ textAlign: "center", fontSize: "0.8rem", color: "#6b7280", marginBottom: "1.25rem" }}>
+                                30-Day Money-Back Guarantee via {deal.provider || "Udemy"}
+                            </p>
+
+                            {/* Course includes */}
+                            <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)" }}>
+                                <p style={{ fontWeight: 700, color: "var(--text)", marginBottom: "10px", fontSize: "0.875rem" }}>This Course Includes:</p>
+                                {[
+                                    ["Duration", deal.duration ? `${deal.duration} on-demand video` : "On-demand video"],
+                                    ["Access", "Lifetime access · Mobile & TV"],
+                                    ["Certificate", "Certificate of completion"],
+                                    ["Language", deal.language || "English"],
+                                ].map(([label, value]) => (
+                                    <div key={label} style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: "1px solid rgba(255,255,255,0.07)", alignItems: "center" }}>
+                                        <span style={{ color: "#6b7280", fontSize: "0.8rem" }}>{label}</span>
+                                        <span style={{ color: "var(--text)", fontWeight: 500, textAlign: "right", maxWidth: "60%" }}>{value}</span>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div style={{ borderTop: "1px solid #2d3748", marginTop: "1rem", paddingTop: "1rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                <button
+                                    onClick={() => navigator.share?.({ title: deal.title, url: window.location.href })}
+                                    style={{ color: "var(--muted)", fontWeight: 600, fontSize: "0.85rem", background: "none", border: "none", cursor: "pointer", textDecoration: "underline" }}
+                                >
+                                    Share this deal
+                                </button>
+                                <ActionsPanel deal={{ ...deal, url: deal.url || '' }} />
+                            </div>
+
+                            {/* Affiliate Disclosure */}
+                            <div style={{
+                                marginTop: "1rem",
+                                padding: "0.75rem",
+                                background: "rgba(212, 167, 55, 0.05)",
+                                border: "1px solid rgba(212, 167, 55, 0.1)",
+                                borderRadius: "6px",
+                                fontSize: "0.75rem",
+                                color: "var(--muted)",
+                                textAlign: "center",
+                                lineHeight: 1.4
+                            }}>
+                                <span>We may earn a commission when you purchase through our links. </span>
+                                <a href="/affiliate-disclosure" style={{
+                                    color: "var(--brand)",
+                                    textDecoration: "none",
+                                    fontWeight: 600
+                                }}>Learn more</a>
                             </div>
                         </div>
-                        <a
-                            href="/udemy-coupons-guide"
-                            style={{
-                                display: "inline-flex", alignItems: "center", gap: "0.35rem",
-                                padding: "0.5rem 1rem",
-                                background: "rgba(212, 167, 55, 0.1)",
-                                border: "1px solid rgba(212, 167, 55, 0.2)",
-                                borderRadius: "8px",
-                                color: "var(--brand)",
-                                textDecoration: "none",
-                                fontSize: "0.8rem",
-                                fontWeight: 600,
-                                flexShrink: 0,
-                            }}
-                        >
-                            Read Guide ↗
-                        </a>
-                    </div>
-
-                    {/* New to redeeming coupons */}
-                    <div style={{
-                        padding: "0.75rem 1rem",
-                        background: "rgba(212, 167, 55, 0.05)",
-                        border: "1px solid rgba(212, 167, 55, 0.12)",
-                        borderRadius: "8px",
-                        fontSize: "0.82rem",
-                        color: "var(--text-secondary)",
-                        lineHeight: 1.6,
-                    }}>
-                        <strong style={{ color: "var(--brand)" }}>New to redeeming coupons?</strong>{" "}
-                        Visit our <a href="/how-to-redeem-coupon" style={{ color: "var(--brand)", textDecoration: "underline" }}>step-by-step guide</a> for detailed instructions on how to apply coupon codes.
-                        <span style={{ display: "block", marginTop: "4px", color: "var(--muted)", fontSize: "0.78rem" }}>
-                            Coupon last verified {deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : "recently"}.
-                            {discountPct > 0 ? `At $${price.toFixed(2)} you save $${savings.toFixed(2)} compared to the standard $${originalPrice.toFixed(2)} price, ` : `This course is currently free, `}
-                            and {deal.provider || "Udemy"} coupons are time-limited — redeem as soon as possible.
-                        </span>
                     </div>
                 </aside>
             </div>

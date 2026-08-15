@@ -21,10 +21,9 @@ const CONFIG_BACKUP = path.join(__dirname, '..', 'astro.config.backup.mjs');
 const SERVER_ROUTES = [
   'src/pages/api/update.js',
   'src/pages/admin/deals/edit/[id].astro',
-  'src/pages/admin/deals/create/index.astro',
+  'src/pages/admin/deals/create.astro',
   'src/pages/admin.astro',
   'src/pages/admin/deals.astro',
-  'src/pages/admin/instructors.astro',
   'src/pages/test/[slug].astro'
 ];
 

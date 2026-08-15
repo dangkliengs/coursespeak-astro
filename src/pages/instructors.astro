@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { readDeals, readInstructors } from '../lib/store';
+import { readDeals } from '../lib/store';
 import type { Deal } from '../types/deal.d';
 import { parseInstructors, createInstructorSlug } from '../lib/instructors';
 
@@ -68,12 +68,6 @@ const instructors: Instructor[] = Array.from(instructorMap.values())
     avgRating: Number(inst.avgRating.toFixed(1)),
   }))
   .sort((a, b) => b.totalStudents - a.totalStudents);
-
-// Load instructor profile images (Udemy CDN hotlinks) keyed by slug
-const instructorImageRecords = await readInstructors();
-function getInstructorImage(name: string): string | undefined {
-  return instructorImageRecords[createInstructorSlug(name)]?.image;
-}
 
 // ─────────────────────────────────────────────
 // HELPERS
@@ -434,33 +428,14 @@ const structuredData = {
 
                 {/* Instructor header */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-                  {getInstructorImage(instructor.name) ? (
-                    <a 
-                      href={`/instructor/${createInstructorSlug(instructor.name)}`}
-                      class="inst-avatar"
-                      aria-hidden="true"
-                      style={{ textDecoration: 'none' }}
-                    >
-                      <img
-                        src={getInstructorImage(instructor.name)}
-                        alt={instructor.name}
-                        width="54"
-                        height="54"
-                        loading="lazy"
-                        decoding="async"
-                        style={{ width: '54px', height: '54px', borderRadius: '50%', objectFit: 'cover', display: 'block' }}
-                      />
-                    </a>
-                  ) : (
-                    <a 
-                      href={`/instructor/${createInstructorSlug(instructor.name)}`}
-                      class="inst-avatar" 
-                      aria-hidden="true"
-                      style={{ textDecoration: 'none' }}
-                    >
-                      {getInitials(instructor.name)}
-                    </a>
-                  )}
+                  <a 
+                    href={`/instructor/${createInstructorSlug(instructor.name)}`}
+                    class="inst-avatar" 
+                    aria-hidden="true"
+                    style={{ textDecoration: 'none' }}
+                  >
+                    {getInitials(instructor.name)}
+                  </a>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <a 
                       href={`/instructor/${createInstructorSlug(instructor.name)}`}

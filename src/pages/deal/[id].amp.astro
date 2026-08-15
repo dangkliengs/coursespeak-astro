@@ -1,6 +1,5 @@
 ---
 import { readDeals } from '../../lib/store';
-import { buildSeoDescription } from '../../lib/verdict';
 
 // Dynamic rendering in dev mode, static in production
 export const prerender = import.meta.env.PROD;
@@ -28,10 +27,6 @@ if (!deal) {
 const discountPercentage = deal.originalPrice && deal.price && deal.originalPrice > deal.price
   ? Math.round(((deal.originalPrice - deal.price) / deal.originalPrice) * 100)
   : 0;
-
-const isTemplateDescription = !deal.seoDescription || /this is applicable to/i.test(deal.seoDescription);
-const seoDescription = isTemplateDescription ? buildSeoDescription(deal) : deal.seoDescription;
-const seoTitle = deal.seoTitle || deal.title;
 ---
 
 <!doctype html>
@@ -43,8 +38,8 @@ const seoTitle = deal.seoTitle || deal.title;
   <script async custom-element="amp-analytics" src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>
   <script async custom-element="amp-sidebar" src="https://cdn.ampproject.org/v0/amp-sidebar-0.1.js"></script>
 
-  <title>{seoTitle} | {discountPercentage}% Off Udemy Coupon - CourseSpeak</title>
-  <meta name="description" content={seoDescription}>
+  <title>{deal.title} | {discountPercentage}% Off Udemy Coupon - CourseSpeak</title>
+  <meta name="description" content={deal.seoDescription || deal.description}>
   <link rel="canonical" href={`https://coursespeak.com/deal/${deal.id}`}>
   <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
 

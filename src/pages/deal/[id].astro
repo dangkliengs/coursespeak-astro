@@ -1,9 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { readDeals, readInstructors } from "../../lib/store";
+import { readDeals } from "../../lib/store";
 import { buildFAQs } from "../../lib/faqs";
-import { computeVerdict, buildSeoDescription } from "../../lib/verdict";
-import { parseInstructors, createInstructorSlug } from "../../lib/instructors";
 import DealPage from "../../components/DealPage";
 import type { Deal } from "../../types/deal";
 
@@ -62,32 +60,9 @@ const relatedDeals = allDeals
   })
   .slice(0, 4);
 
-const instructorImages: Record<string, string> = {};
-const instructorStats: Record<string, { courses: number }> = {};
-{
-  const records = await readInstructors();
-  allDeals.forEach((d) => {
-    parseInstructors(d.instructor).forEach((name) => {
-      const slug = createInstructorSlug(name);
-      if (records[slug]?.image) instructorImages[slug] = records[slug].image;
-      instructorStats[slug] = { courses: (instructorStats[slug]?.courses || 0) + 1 };
-    });
-  });
-}
-
 const discountPercentage = deal.originalPrice && deal.price && deal.originalPrice > deal.price
   ? Math.round(((deal.originalPrice - deal.price) / deal.originalPrice) * 100)
   : 0;
-
-const verdict = computeVerdict(deal);
-
-// Use the stored custom seoDescription only if the author wrote a real one;
-// otherwise (old "This is applicable to..." template or none) generate a varied one.
-const isTemplateDescription = !deal.seoDescription || /this is applicable to/i.test(deal.seoDescription);
-const seoDescription: string = isTemplateDescription
-  ? buildSeoDescription(deal)
-  : deal.seoDescription!;
-const seoTitle = deal.seoTitle || deal.title;
 
 const siteUrl = "https://coursespeak.com";
 const dealUrl = `${siteUrl}/deal/${deal.id}`;
@@ -125,8 +100,8 @@ function extractSkills(deal: Deal): string {
 ---
 
 <Layout
-    title={`${seoTitle} | ${discountPercentage}% Off Udemy Coupon`}
-    description={seoDescription}
+    title={`${deal.title} | ${discountPercentage}% Off Udemy Coupon`}
+    description={deal.seoDescription || deal.description || ""}
     image={deal.seoOgImage || deal.image}
     canonical={dealUrl}
 >
@@ -139,7 +114,7 @@ function extractSkills(deal: Deal): string {
                     "@id": `${dealUrl}#webpage`,
                     "url": dealUrl,
                     "name": `${deal.title} — ${discountPercentage}% Off Udemy Coupon`,
-                    "description": seoDescription.slice(0, 160),
+                    "description": (deal.seoDescription || deal.description || "").slice(0, 160),
                     "inLanguage": "en-US",
                     "isPartOf": {
                         "@type": "WebSite",
@@ -168,7 +143,7 @@ function extractSkills(deal: Deal): string {
                     "@type": "Course",
                     "@id": `${dealUrl}#course`,
                     "name": deal.title,
-                    "description": seoDescription,
+                    "description": deal.seoDescription || deal.description || "",
                     "image": deal.seoOgImage || deal.image,
                     "thumbnailUrl": deal.seoOgImage || deal.image,
                     "url": dealUrl,
@@ -214,11 +189,11 @@ function extractSkills(deal: Deal): string {
                             "url": siteUrl
                         },
                         "datePublished": deal.updatedAt ? new Date(deal.updatedAt).toISOString().split('T')[0] : undefined,
-                        "reviewBody": `CourseSpeak reviewed "${deal.title}" on ${deal.provider || "Udemy"} and rates it ${verdict.score.toFixed(1)}/10 (${verdict.label}). At $${(deal.price ?? 0).toFixed(2)} with the active coupon${deal.originalPrice && deal.price !== undefined && deal.originalPrice > deal.price ? ` (${discountPercentage}% off the $${deal.originalPrice.toFixed(2)} standard price)` : ""}, the course offers strong value${deal.duration ? ` across ${deal.duration} of on-demand video` : ""}${deal.rating ? ` and holds a ${deal.rating.toFixed(1)}-star average from verified students` : ""}. ${verdict.summary}`,
+                        "reviewBody": `CourseSpeak reviewed "${deal.title}" on ${deal.provider || "Udemy"}. At $${(deal.price ?? 0).toFixed(2)} with the active coupon${deal.originalPrice && deal.price !== undefined && deal.originalPrice > deal.price ? ` (${discountPercentage}% off the $${deal.originalPrice.toFixed(2)} standard price)` : ""}, the course offers strong value${deal.duration ? ` across ${deal.duration} of on-demand video` : ""}${deal.rating ? ` and holds a ${deal.rating.toFixed(1)}-star average from verified students` : ""}.`,
                         "reviewRating": {
                             "@type": "Rating",
-                            "ratingValue": verdict.score.toString(),
-                            "bestRating": "10",
+                            "ratingValue": deal.rating.toString(),
+                            "bestRating": "5",
                             "worstRating": "1"
                         }
                     }] : undefined,
@@ -253,7 +228,7 @@ function extractSkills(deal: Deal): string {
                     ]
                 },
                 ...(() => {
-                    const faqs = buildFAQs(deal);
+                    const faqs = buildFAQs(deal).slice(0, 8);
                     return faqs.length > 0 ? [{
                         "@type": "FAQPage",
                         "@id": `${dealUrl}#faq`,
@@ -289,6 +264,6 @@ function extractSkills(deal: Deal): string {
         })
     } />
 
-    <DealPage client:load deal={deal} relatedDeals={relatedDeals} instructorImages={instructorImages} instructorStats={instructorStats} />
+    <DealPage client:load deal={deal} relatedDeals={relatedDeals} />
 
 </Layout>
