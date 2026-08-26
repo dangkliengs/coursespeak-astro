@@ -163,113 +163,30 @@ const pageDescription = "View, edit, and delete course deals on CourseSpeak.";
               <table style={{ width: "100%", borderCollapse: "collapse" }}>
                 <thead>
                   <tr style={{ borderBottom: "1px solid rgba(91, 140, 255, 0.24)" }}>
-                    <th style={{ padding: "1rem", textAlign: "left", color: "#fff", fontWeight: 600 }}>Title</th>
-                    <th style={{ padding: "1rem", textAlign: "left", color: "#fff", fontWeight: 600 }}>Provider</th>
-                    <th style={{ padding: "1rem", textAlign: "left", color: "#fff", fontWeight: 600 }}>Category</th>
-                    <th style={{ padding: "1rem", textAlign: "left", color: "#fff", fontWeight: 600 }}>Price</th>
-                    <th style={{ padding: "1rem", textAlign: "left", color: "#fff", fontWeight: 600 }}>Date</th>
-                    <th style={{ padding: "1rem", textAlign: "left", color: "#fff", fontWeight: 600 }}>Coupon</th>
-                    <th style={{ padding: "1rem", textAlign: "left", color: "#fff", fontWeight: 600 }}>Actions</th>
+                    <th style={{ padding: "1rem", textAlign: "left", color: "var(--brand)", fontWeight: 600 }}>Title</th>
+                    <th style={{ padding: "1rem", textAlign: "left", color: "var(--brand)", fontWeight: 600 }}>Provider</th>
+                    <th style={{ padding: "1rem", textAlign: "left", color: "var(--brand)", fontWeight: 600 }}>Category</th>
+                    <th style={{ padding: "1rem", textAlign: "left", color: "var(--brand)", fontWeight: 600 }}>Price</th>
+                    <th style={{ padding: "1rem", textAlign: "left", color: "var(--brand)", fontWeight: 600 }}>Date</th>
+                    <th style={{ padding: "1rem", textAlign: "left", color: "var(--brand)", fontWeight: 600 }}>Coupon</th>
+                    <th style={{ padding: "1rem", textAlign: "left", color: "var(--brand)", fontWeight: 600 }}>Actions</th>
                   </tr>
                 </thead>
                 <tbody id="dealsTableBody">
-                  {allDeals.slice(0, 50).map((deal) => (
-                    <tr style={{ borderBottom: "1px solid rgba(91, 140, 255, 0.1)" }} data-deal-id={deal.id}>
-                      <td style={{ padding: "1rem", color: "var(--text)" }}>
-                        <div style={{ maxWidth: "300px" }}>
-                          <div style={{ fontWeight: 600, marginBottom: "0.25rem" }}>{deal.title}</div>
-                          <div style={{ fontSize: "0.875rem", color: "#a9b0c0" }}>ID: {deal.id}</div>
-                        </div>
-                      </td>
-                      <td style={{ padding: "1rem", color: "var(--text)" }}>{deal.provider}</td>
-                      <td style={{ padding: "1rem", color: "var(--text)" }}>
-                        <div>
-                          <div>{deal.category}</div>
-                          {deal.subcategory && (
-                            <div style={{ fontSize: "0.875rem", color: "#a9b0c0" }}>{deal.subcategory}</div>
-                          )}
-                        </div>
-                      </td>
-                      <td style={{ padding: "1rem", color: "var(--text)" }}>
-                        ${deal.price}
-                        {deal.originalPrice && (
-                          <span style={{
-                            textDecoration: "line-through",
-                            color: "#a9b0c0",
-                            marginLeft: "0.5rem"
-                          }}>
-                            ${deal.originalPrice}
-                          </span>
-                        )}
-                      </td>
-                      <td style={{ padding: "1rem", color: "var(--text)" }}>
-                        <div style={{ fontSize: "0.875rem" }}>
-                          {deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString() : (deal.createdAt ? new Date(deal.createdAt).toLocaleDateString() : 'Unknown')}
-                        </div>
-                      </td>
-                      <td style={{ padding: "1rem", color: "var(--text)" }}>
-                        <div style={{
-                          fontSize: "0.875rem",
-                          fontFamily: "monospace",
-                          backgroundColor: "rgba(91, 140, 255, 0.1)",
-                          padding: "0.25rem 0.5rem",
-                          borderRadius: "0.25rem",
-                          display: "inline-block"
-                        }}>
-                          {deal.coupon || 'N/A'}
-                        </div>
-                      </td>
-                      <td style={{ padding: "1rem" }}>
-                        <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-                          <a href={`/deal/${deal.id}`} target="_blank" style={{
-                            padding: "0.5rem 1rem",
-                            backgroundColor: "#10b981",
-                            color: "#fff",
-                            textDecoration: "none",
-                            borderRadius: "0.375rem",
-                            fontSize: "0.875rem",
-                            fontWeight: 600,
-                            border: "1px solid #10b981"
-                          }}>
-                            View
-                          </a>
-                          <a href={`/admin/deals/edit/${deal.id}`} style={{
-                            padding: "0.5rem 1rem",
-                            backgroundColor: "transparent",
-                            color: "var(--brand)",
-                            border: "1px solid var(--brand)",
-                            textDecoration: "none",
-                            borderRadius: "0.375rem",
-                            fontSize: "0.875rem",
-                            fontWeight: 600
-                          }}>
-                            Edit
-                          </a>
-                          <button onclick={`deleteDeal('${deal.id}')`} style={{
-                            padding: "0.5rem 1rem",
-                            backgroundColor: "transparent",
-                            color: "var(--destructive)",
-                            border: "1px solid var(--destructive)",
-                            borderRadius: "0.375rem",
-                            fontSize: "0.875rem",
-                            fontWeight: 600,
-                            cursor: "pointer"
-                          }}>
-                            Delete
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
                 </tbody>
               </table>
             </div>
 
-            {allDeals.length > 50 && (
-              <div style={{ padding: "1rem", textAlign: "center", color: "#a9b0c0" }}>
-                Showing first 50 deals of {allDeals.length}
-              </div>
-            )}
+            <div id="pagination" style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "0.5rem",
+              flexWrap: "wrap",
+              padding: "1.25rem",
+              borderTop: "1px solid rgba(91, 140, 255, 0.1)"
+            }}>
+            </div>
           </div>
         </div>
 
@@ -279,12 +196,18 @@ const pageDescription = "View, edit, and delete course deals on CourseSpeak.";
       <script>
         console.log('Script loaded!');
 
+        const PAGE_SIZE = 20;
+        let currentPage = 1;
+        let allDealsData: any[] = [];
+
+        const searchInput = document.getElementById('searchInput') as HTMLInputElement | null;
+        const categoryFilter = document.getElementById('categoryFilter') as HTMLSelectElement | null;
+        const tableBody = document.getElementById('dealsTableBody');
+        const searchResults = document.getElementById('searchResults');
+        const pagination = document.getElementById('pagination');
+
         document.addEventListener('DOMContentLoaded', function() {
           console.log('DOM loaded');
-
-          const searchInput = document.getElementById('searchInput');
-          const categoryFilter = document.getElementById('categoryFilter');
-          const tableBody = document.getElementById('dealsTableBody');
 
           console.log('Elements found:', {
             searchInput: !!searchInput,
@@ -292,17 +215,8 @@ const pageDescription = "View, edit, and delete course deals on CourseSpeak.";
             tableBody: !!tableBody
           });
 
-          if (searchInput) {
-            searchInput.addEventListener('input', function(this: HTMLInputElement) {
-              console.log('Input changed:', this.value);
-              performSearch();
-            });
-          }
-
           loadDataAndInitialize();
         });
-
-        let allDealsData: any[] = [];
 
         function loadDataAndInitialize() {
           try {
@@ -311,118 +225,249 @@ const pageDescription = "View, edit, and delete course deals on CourseSpeak.";
               allDealsData = JSON.parse(dealsElement.textContent);
               console.log('Data loaded:', allDealsData.length, 'deals');
             }
+            populateCategories();
+            currentPage = 1;
+            renderDeals();
           } catch (error) {
             console.error('Error loading data:', error);
           }
         }
 
-        function performSearch() {
-          console.log('Searching...');
-
-          const searchInput = document.getElementById('searchInput') as HTMLInputElement;
-          const tableBody = document.getElementById('dealsTableBody');
-          const searchResults = document.getElementById('searchResults');
-
-          if (!searchInput || !tableBody || !searchResults) return;
-
-          const searchTerm = searchInput.value.toLowerCase();
-          console.log('Search term:', searchTerm);
-
-          let filteredDeals = allDealsData.filter(deal => {
-            return !searchTerm ||
-              (deal.title && deal.title.toLowerCase().includes(searchTerm)) ||
-              (deal.provider && deal.provider.toLowerCase().includes(searchTerm)) ||
-              (deal.category && deal.category.toLowerCase().includes(searchTerm)) ||
-              (deal.coupon && deal.coupon.toLowerCase().includes(searchTerm));
+        function populateCategories() {
+          if (!categoryFilter) return;
+          const categories = Array.from(
+            new Set(
+              allDealsData
+                .map((d: any) => d.category)
+                .filter((c: any) => c && typeof c === 'string')
+            )
+          ).sort();
+          categories.forEach((cat: string) => {
+            const opt = document.createElement('option');
+            opt.value = cat;
+            opt.textContent = cat;
+            categoryFilter.appendChild(opt);
           });
+        }
 
-          console.log('Found:', filteredDeals.length, 'deals');
+        function getFilteredDeals() {
+          const term = (searchInput?.value || '').toLowerCase().trim();
+          const cat = categoryFilter?.value || '';
 
+          return allDealsData.filter((deal: any) => {
+            const matchTerm = !term ||
+              (deal.title && deal.title.toLowerCase().includes(term)) ||
+              (deal.provider && deal.provider.toLowerCase().includes(term)) ||
+              (deal.category && deal.category.toLowerCase().includes(term)) ||
+              (deal.coupon && deal.coupon.toLowerCase().includes(term));
+
+            const matchCat = !cat || (deal.category && deal.category === cat);
+
+            return matchTerm && matchCat;
+          });
+        }
+
+        function buildRowHtml(deal: any): string {
           const esc = (s: any) => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+          return `
+            <td style="padding: 1rem; color: var(--text);">
+              <div style="max-width: 300px;">
+                <div style="font-weight: 600; margin-bottom: 0.25rem;">${esc(deal.title) || 'Untitled'}</div>
+                <div style="font-size: 0.875rem; color: #a9b0c0;">ID: ${esc(deal.id) || 'Unknown'}</div>
+              </div>
+            </td>
+            <td style="padding: 1rem; color: var(--text);">${esc(deal.provider) || 'Unknown'}</td>
+            <td style="padding: 1rem; color: var(--text);">
+              <div>
+                <div>${esc(deal.category) || 'Uncategorized'}</div>
+                ${deal.subcategory ? `<div style="font-size: 0.875rem; color: #a9b0c0;">${esc(deal.subcategory)}</div>` : ''}
+              </div>
+            </td>
+            <td style="padding: 1rem; color: var(--text);">
+              $${deal.price || '0'}
+              ${deal.originalPrice ? `<span style="text-decoration: line-through; color: #a9b0c0; margin-left: 0.5rem;">$${deal.originalPrice}</span>` : ''}
+            </td>
+            <td style="padding: 1rem; color: var(--text);">
+              <div style="font-size: 0.875rem;">
+                ${deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString() : (deal.createdAt ? new Date(deal.createdAt).toLocaleDateString() : 'Unknown')}
+              </div>
+            </td>
+            <td style="padding: 1rem; color: var(--text);">
+              <div style="
+                font-size: 0.875rem;
+                font-family: monospace;
+                background-color: rgba(91, 140, 255, 0.1);
+                padding: 0.25rem 0.5rem;
+                border-radius: 0.25rem;
+                display: inline-block;
+              ">
+                ${esc(deal.coupon) || 'N/A'}
+              </div>
+            </td>
+            <td style="padding: 1rem;">
+              <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <a href="/deal/${deal.id || ''}" target="_blank" style="
+                  padding: 0.5rem 1rem;
+                  background-color: #10b981;
+                  color: #fff;
+                  text-decoration: none;
+                  border-radius: 0.375rem;
+                  font-size: 0.875rem;
+                  font-weight: 600;
+                  border: 1px solid #10b981;
+                ">View</a>
+                <a href="/admin/deals/edit/${deal.id || ''}" style="
+                  padding: 0.5rem 1rem;
+                  background-color: transparent;
+                  color: var(--brand);
+                  border: 1px solid var(--brand);
+                  text-decoration: none;
+                  border-radius: 0.375rem;
+                  font-size: 0.875rem;
+                  font-weight: 600;
+                ">Edit</a>
+                <button onclick="deleteDeal('${esc(deal.id) || ''}')" style="
+                  padding: 0.5rem 1rem;
+                  background-color: transparent;
+                  color: var(--destructive);
+                  border: 1px solid var(--destructive);
+                  border-radius: 0.375rem;
+                  font-size: 0.875rem;
+                  font-weight: 600;
+                  cursor: pointer;
+                ">Delete</button>
+              </div>
+            </td>
+          `;
+        }
+
+        function renderDeals() {
+          if (!tableBody || !searchResults) return;
+
+          const filtered = getFilteredDeals();
+          const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+
+          if (currentPage > totalPages) currentPage = totalPages;
+          if (currentPage < 1) currentPage = 1;
+
+          const start = (currentPage - 1) * PAGE_SIZE;
+          const pageItems = filtered.slice(start, start + PAGE_SIZE);
 
           tableBody.innerHTML = '';
 
-          filteredDeals.slice(0, 50).forEach(deal => {
-            const row = document.createElement('tr');
-            row.style.borderBottom = '1px solid rgba(91, 140, 255, 0.1)';
+          if (pageItems.length === 0) {
+            const emptyRow = document.createElement('tr');
+            emptyRow.innerHTML = `<td colspan="7" style="padding: 2rem; text-align: center; color: #a9b0c0;">No deals found</td>`;
+            tableBody.appendChild(emptyRow);
+          } else {
+            pageItems.forEach((deal: any) => {
+              const row = document.createElement('tr');
+              row.style.borderBottom = '1px solid rgba(91, 140, 255, 0.1)';
+              row.setAttribute('data-deal-id', String(deal.id || ''));
+              row.innerHTML = buildRowHtml(deal);
+              tableBody.appendChild(row);
+            });
+          }
 
-            row.innerHTML = `
-              <td style="padding: 1rem; color: var(--text);">
-                <div style="max-width: 300px;">
-                  <div style="font-weight: 600; margin-bottom: 0.25rem;">${esc(deal.title) || 'Untitled'}</div>
-                  <div style="font-size: 0.875rem; color: #a9b0c0;">ID: ${esc(deal.id) || 'Unknown'}</div>
-                </div>
-              </td>
-              <td style="padding: 1rem; color: var(--text);">${esc(deal.provider) || 'Unknown'}</td>
-              <td style="padding: 1rem; color: var(--text);">
-                <div>
-                  <div>${esc(deal.category) || 'Uncategorized'}</div>
-                  ${deal.subcategory ? `<div style="font-size: 0.875rem; color: #a9b0c0;">${esc(deal.subcategory)}</div>` : ''}
-                </div>
-              </td>
-              <td style="padding: 1rem; color: var(--text);">
-                $${deal.price || '0'}
-                ${deal.originalPrice ? `<span style="text-decoration: line-through; color: #a9b0c0; margin-left: 0.5rem;">$${deal.originalPrice}</span>` : ''}
-              </td>
-              <td style="padding: 1rem; color: var(--text);">
-                <div style="font-size: 0.875rem;">
-                  ${deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString() : (deal.createdAt ? new Date(deal.createdAt).toLocaleDateString() : 'Unknown')}
-                </div>
-              </td>
-              <td style="padding: 1rem; color: var(--text);">
-                <div style="
-                  font-size: 0.875rem;
-                  font-family: monospace;
-                  background-color: rgba(91, 140, 255, 0.1);
-                  padding: 0.25rem 0.5rem;
-                  border-radius: 0.25rem;
-                  display: inline-block;
-                ">
-                  ${esc(deal.coupon) || 'N/A'}
-                </div>
-              </td>
-              <td style="padding: 1rem;">
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                  <a href="/deal/${deal.id || ''}" target="_blank" style="
-                    padding: 0.5rem 1rem;
-                    background-color: #10b981;
-                    color: #fff;
-                    text-decoration: none;
-                    border-radius: 0.375rem;
-                    font-size: 0.875rem;
-                    font-weight: 600;
-                    border: 1px solid #10b981;
-                  ">View</a>
-                  <a href="/admin/deals/edit/${deal.id || ''}" style="
-                    padding: 0.5rem 1rem;
-                    background-color: transparent;
-                    color: var(--brand);
-                    border: 1px solid var(--brand);
-                    text-decoration: none;
-                    border-radius: 0.375rem;
-                    font-size: 0.875rem;
-                    font-weight: 600;
-                  ">Edit</a>
-                </div>
-              </td>
-            `;
+          searchResults.textContent = filtered.length === 0
+            ? 'No deals found'
+            : `Showing ${filtered.length} of ${allDealsData.length} deals (page ${currentPage} of ${totalPages})`;
 
-            tableBody.appendChild(row);
+          renderPagination(totalPages, filtered.length, start, pageItems.length);
+        }
+
+        function renderPagination(totalPages: number, totalItems: number, start: number, count: number) {
+          if (!pagination) return;
+          pagination.innerHTML = '';
+
+          if (totalPages <= 1) return;
+
+          const info = document.createElement('span');
+          info.style.color = '#a9b0c0';
+          info.style.fontSize = '0.875rem';
+          info.style.marginRight = '0.5rem';
+          info.textContent = `${start + 1}-${start + count} of ${totalItems}`;
+          pagination.appendChild(info);
+
+          const btnStyle = (active: boolean) => `
+            padding: 0.5rem 0.9rem;
+            background-color: ${active ? 'var(--brand)' : 'transparent'};
+            color: ${active ? '#fff' : '#a9b0c0'};
+            border: 1px solid ${active ? 'var(--brand)' : 'rgba(91, 140, 255, 0.24)'};
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            min-width: 2.5rem;
+          `;
+
+          const addBtn = (label: string, page: number, active = false, disabled = false) => {
+            const btn = document.createElement('button');
+            btn.textContent = label;
+            btn.setAttribute('style', btnStyle(active));
+            if (disabled) {
+              btn.disabled = true;
+              btn.style.opacity = '0.4';
+              btn.style.cursor = 'not-allowed';
+            } else {
+              btn.onclick = () => {
+                currentPage = page;
+                renderDeals();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              };
+            }
+            pagination.appendChild(btn);
+          };
+
+          addBtn('‹ Prev', currentPage - 1, false, currentPage === 1);
+
+          const pageNumbers: (number | string)[] = [];
+          if (totalPages <= 7) {
+            for (let i = 1; i <= totalPages; i++) pageNumbers.push(i);
+          } else {
+            pageNumbers.push(1);
+            const from = Math.max(2, currentPage - 1);
+            const to = Math.min(totalPages - 1, currentPage + 1);
+            if (from > 2) pageNumbers.push('...');
+            for (let i = from; i <= to; i++) pageNumbers.push(i);
+            if (to < totalPages - 1) pageNumbers.push('...');
+            pageNumbers.push(totalPages);
+          }
+
+          pageNumbers.forEach((p) => {
+            if (p === '...') {
+              const span = document.createElement('span');
+              span.textContent = '...';
+              span.style.color = '#a9b0c0';
+              span.style.padding = '0 0.25rem';
+              pagination.appendChild(span);
+            } else {
+              addBtn(String(p), p as number, p === currentPage);
+            }
           });
 
-          searchResults.textContent = filteredDeals.length === 0
-            ? 'No deals found'
-            : `Showing ${filteredDeals.length} of ${allDealsData.length} deals`;
+          addBtn('Next ›', currentPage + 1, false, currentPage === totalPages);
+        }
+
+        function performSearch() {
+          console.log('Searching...');
+          currentPage = 1;
+          renderDeals();
+        }
+
+        function filterDeals() {
+          console.log('Filtering by category...');
+          currentPage = 1;
+          renderDeals();
         }
 
         function clearFilters() {
           console.log('Clearing filters');
-          const searchInput = document.getElementById('searchInput') as HTMLInputElement;
-
-          if (searchInput) {
-            searchInput.value = '';
-            performSearch();
-          }
+          if (searchInput) searchInput.value = '';
+          if (categoryFilter) categoryFilter.value = '';
+          currentPage = 1;
+          renderDeals();
         }
 
         function testSearch() {
@@ -437,7 +482,6 @@ const pageDescription = "View, edit, and delete course deals on CourseSpeak.";
             return;
           }
 
-          // Use API DELETE request
           fetch(`/api/deals?id=${encodeURIComponent(dealId)}`, {
             method: 'DELETE',
             headers: {
@@ -449,20 +493,12 @@ const pageDescription = "View, edit, and delete course deals on CourseSpeak.";
             if (data.success) {
               alert(`Deal deleted successfully! ID: ${data.deletedId}`);
 
-              // Remove row from table for immediate visual feedback
-              const row = document.querySelector(`[data-deal-id="${dealId}"]`) as HTMLElement;
-              if (row) {
-                row.remove();
-              }
+              allDealsData = allDealsData.filter((d: any) => d.id !== dealId);
+              renderDeals();
 
-              // Update count
               const countElement = document.querySelector('p');
               if (countElement && countElement.textContent?.includes('total deals')) {
-                const match = countElement.textContent.match(/\d+/);
-                if (match) {
-                  const currentCount = parseInt(match[0]);
-                  countElement.textContent = `${currentCount - 1} total deals`;
-                }
+                countElement.textContent = `${allDealsData.length} total deals`;
               }
 
               console.log('Deal deleted successfully:', data);
@@ -481,12 +517,14 @@ const pageDescription = "View, edit, and delete course deals on CourseSpeak.";
         declare global {
           interface Window {
             performSearch: () => void;
+            filterDeals: () => void;
             clearFilters: () => void;
             testSearch: () => void;
             deleteDeal: (dealId: string) => void;
           }
         }
         window.performSearch = performSearch;
+        window.filterDeals = filterDeals;
         window.clearFilters = clearFilters;
         window.testSearch = testSearch;
         window.deleteDeal = deleteDeal;
