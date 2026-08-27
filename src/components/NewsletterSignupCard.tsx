@@ -34,7 +34,7 @@ export default function NewsletterSignupCard() {
           </p>
         </div>
         <form
-          action="https://app.convertkit.com/forms/9125901/subscriptions"
+          action="https://buttondown.com/api/emails/embed-subscribe/coursespeak"
           method="post"
           style={{ display: "grid", gap: 8 }}
         >
@@ -45,7 +45,7 @@ export default function NewsletterSignupCard() {
             <input
               id="newsletter-email"
               type="email"
-              name="email_address"
+              name="email"
               placeholder="you@example.com"
               autoComplete="email"
               required
