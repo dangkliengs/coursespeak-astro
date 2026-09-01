@@ -21,7 +21,7 @@
     "@astrojs/sitemap": "^3.7.3",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
-    "astro": "^7.2.7",
+    "astro": "^7.2.9",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "remark": "^15.0.1",
