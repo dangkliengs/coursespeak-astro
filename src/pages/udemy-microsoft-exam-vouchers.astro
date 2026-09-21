@@ -1,0 +1,114 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { microsoftVouchers, microsoftGroupBlurbs, ALL_VOUCHERS_URL } from "../data/vouchers";
+const currentYear = new Date().getFullYear();
+const lastModified = new Date().toISOString().split("T")[0];
+const updatedLong = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+const canonicalUrl = "https://coursespeak.com/udemy-microsoft-exam-vouchers";
+const pageTitle = `Udemy Microsoft Exam Vouchers ${currentYear}: Save 10% | CourseSpeak`;
+const pageDescription = `All 8 official Microsoft exam vouchers on Udemy ${currentYear} — AZ-900, DP-900, AZ-104, AZ-500, AI-102, AZ-305, AZ-800, MD-102. Flat 10% off ~$99–$165 retail, valid 9+ months, Retake Assurance on Associate & Expert exams.`;
+const groups: Record<string, typeof microsoftVouchers> = {};
+for (const vv of microsoftVouchers) { (groups[vv.category] ||= []).push(vv); }
+const faqs = [
+  { q: "Which Microsoft vouchers are sold on Udemy?", a: "All 8: Fundamentals (AZ-900 Azure Fundamentals, DP-900 Azure Data Fundamentals), Associate (AZ-104 Administrator, AZ-500 Security Engineer, AI-102 AI Engineer, AZ-800 Windows Server Hybrid Administrator, MD-102 Endpoint Administrator), and Expert (AZ-305 Solutions Architect Expert). Every voucher saves a flat 10% off the retail fee." },
+  { q: "What is Retake Assurance on Microsoft exams?", a: "The Microsoft version of the retake safety net. Buy the Exam Voucher + Retake bundle and, if you fail, you can re-sit the same exam under Microsoft's certification exam policies. It must be bought together with the voucher — never separately — covers one extra attempt, and is not refunded if you pass first try." },
+  { q: "How do I schedule a Microsoft exam with a voucher?", a: "Sign in with your Microsoft account, which routes you to Pearson VUE (Microsoft's test provider). Paste the voucher code from My learning → Certifications at the payment step. Exams run online proctored or in person, and vouchers are valid only in the country of purchase." },
+  { q: "AZ-900 vs DP-900 vs AI-900 — which fundamental first?", a: "AZ-900 for general cloud roles and administrators, DP-900 for data analysts and database-adjacent roles, AI-900 (paired via prep courses) for anyone moving toward AI-102. All three need 2–4 weeks of study; AZ-900 carries the most weight with employers." },
+  { q: "Do I need a prep course if I buy the voucher?", a: "The voucher only pays for the exam seat — it teaches nothing. Microsoft exams are scenario-heavy; most first-time candidates fail without structured prep. Scott Duffy's AZ-104 and AZ-900 courses are long-running bestsellers. Use CourseSpeak coupon deals to get training for a few dollars, then spend the real money on the voucher." },
+  { q: "Can coupons discount the voucher?", a: "No — coupons never apply to vouchers, though Udemy credits do. Coupons do apply to the prep courses below the voucher on each Udemy page." },
+];
+const jsonLd = { "@context": "https://schema.org", "@graph": [
+  { "@type": "WebPage", "@id": `${canonicalUrl}#webpage`, url: canonicalUrl, name: pageTitle, description: pageDescription, isPartOf: { "@id": "https://coursespeak.com/#website" }, inLanguage: "en-US", datePublished: "2025-01-01", dateModified: lastModified, author: { "@id": "https://coursespeak.com/#author" } },
+  { "@type": "BreadcrumbList", "@id": `${canonicalUrl}#breadcrumb`, itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: "https://coursespeak.com" }, { "@type": "ListItem", position: 2, name: "Exam Vouchers", item: "https://coursespeak.com/udemy-certification-vouchers" }, { "@type": "ListItem", position: 3, name: "Microsoft", item: canonicalUrl }] },
+  { "@type": "ItemList", name: `Microsoft Exam Vouchers ${currentYear}`, numberOfItems: microsoftVouchers.length, itemListElement: microsoftVouchers.map((vv, i) => ({ "@type": "ListItem", position: i + 1, url: vv.url, name: `${vv.title} (${vv.code})` })) },
+  { "@type": "FAQPage", mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
+  { "@type": "Person", "@id": "https://coursespeak.com/#author", name: "Josh Smith", jobTitle: "Founder & Editor, CourseSpeak", url: "https://coursespeak.com/about" },
+]};
+---
+<Layout title={pageTitle} description={pageDescription} canonical={canonicalUrl} type="article" image="/assets/images/vouchers/provider-microsoft.svg" ogImageType="image/svg+xml">
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+<style>
+  .voucher-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,border-color .2s}
+  .voucher-card:hover{transform:translateY(-3px);border-color:var(--brand)}
+  .voucher-card img{width:100%;height:140px;object-fit:cover;background:#fff}
+  @media(max-width:768px){.grid-3{grid-template-columns:1fr!important}}
+</style>
+<section style={{ padding: "4rem 1rem 2rem", textAlign: "center" }}>
+  <div style={{ maxWidth: "880px", margin: "0 auto" }}>
+    <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Microsoft Vouchers · Updated {new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" })}</div>
+    <h1 style={{ fontSize: "clamp(1.8rem,4.5vw,2.8rem)", fontWeight: 800, lineHeight: 1.2, margin: "0 auto 0.75rem" }}>
+      <span style={{ background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Udemy Microsoft Exam Vouchers</span><br />
+      <span style={{ color: "var(--text)" }}>AZ-900 · AZ-104 · AZ-500 & 5 More</span>
+    </h1>
+    <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "680px", margin: "0 auto 1.5rem", lineHeight: 1.7 }}>
+      All 8 official Microsoft vouchers on Udemy — every one a flat 10% off retail (fundamentals ~$99, associate and
+      expert ~$165). Each voucher is valid at least 9 months and schedules through Pearson VUE, online or in person.
+      Associate and Expert exams offer a Retake Assurance bundle so a first-attempt failure does not mean paying full price twice.
+    </p>
+    <img src="/assets/images/vouchers/provider-microsoft.svg" alt="Microsoft exam vouchers — AZ-900, AZ-104, AZ-500" width="480" height="270" loading="eager" fetchpriority="high" style={{ width: "100%", maxWidth: "720px", height: "auto", borderRadius: "16px", border: "1px solid var(--border)", margin: "0 auto 1.5rem", display: "block", background: "#fff" }} />
+    <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center", flexWrap: "wrap" }}>
+      <a href={ALL_VOUCHERS_URL} target="_blank" rel="sponsored noopener noreferrer" class="btn btn-primary btn-lg" style={{ borderRadius: "999px" }}>Browse All Microsoft Vouchers →</a>
+      <a href="/udemy-certification-vouchers" class="btn btn-ghost btn-lg" style={{ borderRadius: "999px" }}>All Providers</a>
+    </div>
+    <p style={{ fontSize: "0.78rem", color: "var(--muted)", marginTop: "0.9rem" }}>Sponsored — CourseSpeak may earn a commission at no extra cost to you. <a href="/affiliate-disclosure" style={{ color: "var(--brand)" }}>Affiliate Disclosure</a></p>
+  </div>
+</section>
+<section style={{ paddingBottom: "2rem" }}>
+  <div class="container"><div class="stat-grid" style={{ gridTemplateColumns: "repeat(3,1fr)", maxWidth: "600px" }}>
+    <div class="stat-box"><div class="stat-value">8</div><div class="stat-label">Official vouchers</div></div>
+    <div class="stat-box"><div class="stat-value">10%</div><div class="stat-label">Flat discount</div></div>
+    <div class="stat-box"><div class="stat-value">≥9 mo</div><div class="stat-label">Validity</div></div>
+  </div></div>
+</section>
+<section style={{ padding: "1rem 1rem 3rem" }}>
+  <div class="container" style={{ maxWidth: "1080px" }}>
+    <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
+      <span class="section-title">Full list</span>
+      <h2 class="section-heading">All 8 Microsoft Exam Vouchers</h2>
+      <p style={{ color: "var(--muted)", fontSize: "0.9rem" }}>Fundamentals first, then Associate, then Expert — the order Microsoft's own learning paths recommend.</p>
+    </div>
+    {Object.entries(groups).map(([cat, list]) => (
+      <div style={{ marginBottom: "2rem" }}>
+        <h3 style={{ fontSize: "1.05rem", fontWeight: 800, margin: "0 0 0.9rem" }}>{cat}</h3>
+        <p style={{ margin: "0.35rem 0 1rem", color: "var(--muted)", fontSize: "0.88rem", lineHeight: 1.65 }}>{microsoftGroupBlurbs[cat]}</p>
+        <div class="grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1rem" }}>
+          {list.map((vv) => (
+            <div class="voucher-card">
+              <img src={vv.image} alt={vv.title} width="480" height="270" loading="lazy" />
+              <div style={{ padding: "1.1rem 1.2rem", display: "flex", flexDirection: "column", gap: "0.5rem", flex: 1 }}>
+                <span style={{ fontSize: "0.72rem", fontWeight: 800, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--brand)" }}>{vv.code}</span>
+                <div style={{ fontWeight: 700 }}>{vv.title}</div>
+                <p style={{ margin: 0, color: "var(--muted)", fontSize: "0.83rem", lineHeight: 1.6 }}>{vv.blurb}</p>
+                <a href={vv.url} target="_blank" rel="sponsored noopener noreferrer" class="btn btn-primary" style={{ borderRadius: "8px", marginTop: "0.3rem" }}>Get Voucher →</a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+    <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "12px", padding: "1.5rem" }}>
+      <h3 style={{ margin: "0 0 0.5rem", fontSize: "1rem" }}>AZ-104 study plan that actually works</h3>
+      <p style={{ color: "var(--muted)", fontSize: "0.92rem", lineHeight: 1.7, margin: 0 }}>Budget 8–12 weeks: identity and governance first, then storage, networking, and compute, with a free Azure account for every lab. Score 85%+ on two timed practice exams before booking. The voucher + Retake Assurance bundle removes the fear of booking early — which is exactly what keeps most candidates studying. Compare <a href="/udemy-aws-exam-vouchers" style={{ color: "var(--brand)", fontWeight: 600 }}>AWS vouchers</a> and <a href="/udemy-comptia-exam-vouchers" style={{ color: "var(--brand)", fontWeight: 600 }}>CompTIA vouchers</a>.</p>
+    </div>
+  </div>
+</section>
+<section style={{ padding: "2rem 1rem 4rem", background: "var(--bg-secondary)" }}>
+  <div class="container" style={{ maxWidth: "900px" }}>
+    <h2 class="section-heading" style={{ textAlign: "center", marginBottom: "1.5rem" }}>Microsoft Voucher FAQ</h2>
+    <div style={{ display: "grid", gap: "0.75rem" }}>
+      {faqs.map((f) => (
+        <details style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "12px", padding: "1.1rem 1.25rem" }}>
+          <summary style={{ fontWeight: 700, cursor: "pointer" }}>{f.q}</summary>
+          <p style={{ color: "var(--muted)", margin: "0.6rem 0 0", lineHeight: 1.7, fontSize: "0.92rem" }}>{f.a}</p>
+        </details>
+      ))}
+    </div>
+    <div class="cta-box" style={{ marginTop: "2.5rem" }}>
+      <span class="cta-eyebrow">Commit today</span>
+      <h2>Save 10% on Your Microsoft Exam</h2>
+      <p class="cta-subtext">Pearson VUE scheduling · Retake Assurance · 9+ months validity.</p>
+      <div class="cta-actions"><a href={ALL_VOUCHERS_URL} target="_blank" rel="sponsored noopener noreferrer" class="btn btn-primary btn-lg" style="border-radius:999px">Get Microsoft Vouchers →</a></div>
+    </div>
+  </div>
+</section>
+</Layout>

@@ -1,0 +1,115 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { awsVouchers, awsGroupBlurbs, ALL_VOUCHERS_URL } from "../data/vouchers";
+const currentYear = new Date().getFullYear();
+const lastModified = new Date().toISOString().split("T")[0];
+const updatedLong = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+const canonicalUrl = "https://coursespeak.com/udemy-aws-exam-vouchers";
+const pageTitle = `Udemy AWS Exam Vouchers ${currentYear}: Save 10% | CourseSpeak`;
+const pageDescription = `All 12 official AWS exam vouchers on Udemy ${currentYear} — Cloud Practitioner CLF-C02, AI Practitioner, SAA-C03, Developer, DevOps, Security & ML Specialty. Pearson VUE scheduling, Second Chance, valid 9+ months.`;
+const groups: Record<string, typeof awsVouchers> = {};
+for (const vv of awsVouchers) { (groups[vv.category] ||= []).push(vv); }
+const faqs = [
+  { q: "Which AWS vouchers can I buy on Udemy?", a: "All 12: Foundational (Cloud Practitioner CLF-C02, AI Practitioner AIF-C01), Associate (Solutions Architect SAA-C03, Developer, Data Engineer, CloudOps, ML Engineer), Professional (Solutions Architect Professional, DevOps Engineer Professional), and Specialty (Security, Machine Learning, Advanced Networking). Associate vouchers are interchangeable across Associate exams; Professional/Specialty vouchers across Professional and Specialty exams." },
+  { q: "How does Second Chance work for AWS exams?", a: "Buy the voucher + Second Chance bundle. Take the exam via Pearson VUE. If you fail, report it from My learning → Certifications within 9 months. Udemy verifies your result and issues a brand-new voucher code, usually within 7 days, valid at least 9 more months. One extra attempt, non-refundable, must be bought with the original voucher." },
+  { q: "How do I schedule an AWS exam with a voucher?", a: "Log in to your AWS Certification account, which directs you to Pearson VUE. Paste the voucher code from My learning → Certifications at the payment step. Choose online proctored (OnVUE) or a test center. Vouchers are valid only in the country of purchase." },
+  { q: "What should I know about the SAA-C03 retake terms?", a: "Promotional retake bundles occasionally carry attempt windows (for example, past promos required the first attempt by a set date). Always read the current terms on the live voucher page before buying — windows change between campaigns." },
+  { q: "Can I use an Udemy coupon on an AWS voucher?", a: "No — coupons never apply to vouchers. They do apply to the prep courses (Stephane Maarek's courses dominate the AWS bestseller lists), which is the cheapest way to get exam-ready: discounted training plus a discounted exam seat." },
+  { q: "Which AWS cert first?", a: "New to cloud: Cloud Practitioner CLF-C02 (1–3 weeks of study). First cloud job: Solutions Architect Associate SAA-C03 — the most requested AWS cert in job posts. Then specialize: Developer for builders, DevOps Professional for platform roles, Security Specialty for security engineers." },
+];
+const jsonLd = { "@context": "https://schema.org", "@graph": [
+  { "@type": "WebPage", "@id": `${canonicalUrl}#webpage`, url: canonicalUrl, name: pageTitle, description: pageDescription, isPartOf: { "@id": "https://coursespeak.com/#website" }, inLanguage: "en-US", datePublished: "2025-01-01", dateModified: lastModified, author: { "@id": "https://coursespeak.com/#author" } },
+  { "@type": "BreadcrumbList", "@id": `${canonicalUrl}#breadcrumb`, itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: "https://coursespeak.com" }, { "@type": "ListItem", position: 2, name: "Exam Vouchers", item: "https://coursespeak.com/udemy-certification-vouchers" }, { "@type": "ListItem", position: 3, name: "AWS", item: canonicalUrl }] },
+  { "@type": "ItemList", name: `AWS Exam Vouchers ${currentYear}`, numberOfItems: awsVouchers.length, itemListElement: awsVouchers.map((vv, i) => ({ "@type": "ListItem", position: i + 1, url: vv.url, name: `${vv.title} (${vv.code})` })) },
+  { "@type": "FAQPage", mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
+  { "@type": "Person", "@id": "https://coursespeak.com/#author", name: "Josh Smith", jobTitle: "Founder & Editor, CourseSpeak", url: "https://coursespeak.com/about" },
+]};
+---
+<Layout title={pageTitle} description={pageDescription} canonical={canonicalUrl} type="article" image="/assets/images/vouchers/provider-aws.svg" ogImageType="image/svg+xml">
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+<style>
+  .voucher-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,border-color .2s}
+  .voucher-card:hover{transform:translateY(-3px);border-color:var(--brand)}
+  .voucher-card img{width:100%;height:140px;object-fit:cover;background:#fff}
+  @media(max-width:768px){.grid-3{grid-template-columns:1fr!important}}
+</style>
+<section style={{ padding: "4rem 1rem 2rem", textAlign: "center" }}>
+  <div style={{ maxWidth: "880px", margin: "0 auto" }}>
+    <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>AWS Vouchers · Updated {new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" })}</div>
+    <h1 style={{ fontSize: "clamp(1.8rem,4.5vw,2.8rem)", fontWeight: 800, lineHeight: 1.2, margin: "0 auto 0.75rem" }}>
+      <span style={{ background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Udemy AWS Exam Vouchers</span><br />
+      <span style={{ color: "var(--text)" }}>Cloud Practitioner to Professional & Specialty</span>
+    </h1>
+    <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "680px", margin: "0 auto 1.5rem", lineHeight: 1.7 }}>
+      All 12 official AWS vouchers on Udemy — the complete end-to-end certification journey Udemy launched in
+      February 2026 after 10M+ prep enrollments in the prior year. Foundational exams cost $100 retail, Associate $150,
+      Professional and Specialty $300; Udemy vouchers shave roughly 10% off each. Every exam schedules through
+      Pearson VUE, valid at least 9 months, with Second Chance bundles on nearly every voucher.
+    </p>
+    <img src="/assets/images/vouchers/provider-aws.svg" alt="AWS exam vouchers — Cloud Practitioner, Solutions Architect" width="480" height="270" loading="eager" fetchpriority="high" style={{ width: "100%", maxWidth: "720px", height: "auto", borderRadius: "16px", border: "1px solid var(--border)", margin: "0 auto 1.5rem", display: "block", background: "#fff" }} />
+    <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center", flexWrap: "wrap" }}>
+      <a href={ALL_VOUCHERS_URL} target="_blank" rel="sponsored noopener noreferrer" class="btn btn-primary btn-lg" style={{ borderRadius: "999px" }}>Browse All AWS Vouchers →</a>
+      <a href="/udemy-certification-vouchers" class="btn btn-ghost btn-lg" style={{ borderRadius: "999px" }}>All Providers</a>
+    </div>
+    <p style={{ fontSize: "0.78rem", color: "var(--muted)", marginTop: "0.9rem" }}>Sponsored — CourseSpeak may earn a commission at no extra cost to you. <a href="/affiliate-disclosure" style={{ color: "var(--brand)" }}>Affiliate Disclosure</a></p>
+  </div>
+</section>
+<section style={{ paddingBottom: "2rem" }}>
+  <div class="container"><div class="stat-grid" style={{ gridTemplateColumns: "repeat(3,1fr)", maxWidth: "600px" }}>
+    <div class="stat-box"><div class="stat-value">12</div><div class="stat-label">Official vouchers</div></div>
+    <div class="stat-box"><div class="stat-value">$100+</div><div class="stat-label">Exams from</div></div>
+    <div class="stat-box"><div class="stat-value">≥9 mo</div><div class="stat-label">Validity</div></div>
+  </div></div>
+</section>
+<section style={{ padding: "1rem 1rem 3rem" }}>
+  <div class="container" style={{ maxWidth: "1080px" }}>
+    <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
+      <span class="section-title">Full list</span>
+      <h2 class="section-heading">All 12 AWS Exam Vouchers</h2>
+      <p style={{ color: "var(--muted)", fontSize: "0.9rem" }}>Associate vouchers work across all Associate exams; Professional & Specialty vouchers across Pro/Specialty.</p>
+    </div>
+    {Object.entries(groups).map(([cat, list]) => (
+      <div style={{ marginBottom: "2rem" }}>
+        <h3 style={{ fontSize: "1.05rem", fontWeight: 800, margin: "0 0 0.9rem" }}>{cat}</h3>
+        <p style={{ margin: "0.35rem 0 1rem", color: "var(--muted)", fontSize: "0.88rem", lineHeight: 1.65 }}>{awsGroupBlurbs[cat]}</p>
+        <div class="grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1rem" }}>
+          {list.map((vv) => (
+            <div class="voucher-card">
+              <img src={vv.image} alt={vv.title} width="480" height="270" loading="lazy" />
+              <div style={{ padding: "1.1rem 1.2rem", display: "flex", flexDirection: "column", gap: "0.5rem", flex: 1 }}>
+                <span style={{ fontSize: "0.72rem", fontWeight: 800, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--brand)" }}>{vv.code}{vv.badge ? ` · ${vv.badge}` : ""}</span>
+                <div style={{ fontWeight: 700 }}>{vv.title}</div>
+                <p style={{ margin: 0, color: "var(--muted)", fontSize: "0.83rem", lineHeight: 1.6 }}>{vv.blurb}</p>
+                <a href={vv.url} target="_blank" rel="sponsored noopener noreferrer" class="btn btn-primary" style={{ borderRadius: "8px", marginTop: "0.3rem" }}>Get Voucher →</a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+    <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "12px", padding: "1.5rem" }}>
+      <h3 style={{ margin: "0 0 0.5rem", fontSize: "1rem" }}>How to pass SAA-C03 on the first attempt</h3>
+      <p style={{ color: "var(--muted)", fontSize: "0.92rem", lineHeight: 1.7, margin: 0 }}>Most candidates need 6–10 weeks: one major course (Stephane Maarek's SAA-C03 course is the category bestseller), one practice-exam set scored above 80% twice in a row, plus hands-on labs in a free-tier AWS account for VPC, EC2, S3, and IAM. Book the voucher early in your final study week so the date forces the finish. Compare <a href="/udemy-comptia-exam-vouchers" style={{ color: "var(--brand)", fontWeight: 600 }}>CompTIA vouchers</a> and <a href="/udemy-microsoft-exam-vouchers" style={{ color: "var(--brand)", fontWeight: 600 }}>Microsoft vouchers</a>.</p>
+    </div>
+  </div>
+</section>
+<section style={{ padding: "2rem 1rem 4rem", background: "var(--bg-secondary)" }}>
+  <div class="container" style={{ maxWidth: "900px" }}>
+    <h2 class="section-heading" style={{ textAlign: "center", marginBottom: "1.5rem" }}>AWS Voucher FAQ</h2>
+    <div style={{ display: "grid", gap: "0.75rem" }}>
+      {faqs.map((f) => (
+        <details style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "12px", padding: "1.1rem 1.25rem" }}>
+          <summary style={{ fontWeight: 700, cursor: "pointer" }}>{f.q}</summary>
+          <p style={{ color: "var(--muted)", margin: "0.6rem 0 0", lineHeight: 1.7, fontSize: "0.92rem" }}>{f.a}</p>
+        </details>
+      ))}
+    </div>
+    <div class="cta-box" style={{ marginTop: "2.5rem" }}>
+      <span class="cta-eyebrow">Commit today</span>
+      <h2>Lock In Your AWS Exam Date</h2>
+      <p class="cta-subtext">Pearson VUE scheduling · Second Chance safety net · 9+ months validity.</p>
+      <div class="cta-actions"><a href={ALL_VOUCHERS_URL} target="_blank" rel="sponsored noopener noreferrer" class="btn btn-primary btn-lg" style="border-radius:999px">Get AWS Vouchers →</a></div>
+    </div>
+  </div>
+</section>
+</Layout>

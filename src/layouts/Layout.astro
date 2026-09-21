@@ -189,8 +189,8 @@ const currentPath = Astro.url.pathname;
         },
         {
           "@type": "ReadAction",
-          "target": "https://coursespeak.com/instructors",
-          "name": "Instructors"
+          "target": "https://coursespeak.com/udemy-certification-vouchers",
+          "name": "Exam Vouchers"
         },
         {
           "@type": "ReadAction",
@@ -514,11 +514,11 @@ const currentPath = Astro.url.pathname;
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
             <span itemprop="name">Course Categories</span>
           </a>
-          <a href="/instructors" itemprop="url"
-            class:list={['nav-item', { active: currentPath === '/instructors' }]}
-            aria-current={currentPath === '/instructors' ? 'page' : undefined}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            <span itemprop="name">Top Instructors</span>
+          <a href="/udemy-certification-vouchers" itemprop="url"
+            class:list={['nav-item', { active: currentPath.includes('exam-vouchers') || currentPath.includes('certification-vouchers') }]}
+            aria-current={currentPath.includes('exam-vouchers') || currentPath.includes('certification-vouchers') ? 'page' : undefined}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>
+            <span itemprop="name">Exam Vouchers</span>
           </a>
           <a href="/topics" itemprop="url"
             class:list={['nav-item', { active: currentPath === '/topics' || currentPath.startsWith('/topics/') }]}
@@ -685,9 +685,21 @@ const currentPath = Astro.url.pathname;
             <li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
             <li><span style={{ color: "var(--text)", fontWeight: 500 }}>{currentPath.split('/')[2]?.split('-').map((w) => w === 'vs' ? 'vs' : w.charAt(0).toUpperCase() + w.slice(1)).join(' ') || 'Comparison'}</span></li></>
           )}
+
+          {currentPath === '/udemy-certification-vouchers' && (
+            <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
+            <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Exam Vouchers</span></li></>
+          )}
+
+          {['/udemy-comptia-exam-vouchers','/udemy-aws-exam-vouchers','/udemy-microsoft-exam-vouchers'].includes(currentPath) && (
+            <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
+            <li><a href="/udemy-certification-vouchers" style={{ color: "var(--muted)", textDecoration: "none" }}>Exam Vouchers</a></li>
+            <li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
+            <li><span style={{ color: "var(--text)", fontWeight: 500 }}>{currentPath.includes('comptia') ? 'CompTIA' : currentPath.includes('aws') ? 'AWS' : 'Microsoft'}</span></li></>
+          )}
           
           {/* Fallback for other pages */}
-          {!['/deals', '/categories', '/topics', '/popular', '/instructors', '/blog', '/about', '/contact', '/privacy', '/terms', '/sitemap', '/how-to-redeem-coupon', '/udemy-coupons-guide', '/platforms'].includes(currentPath) && 
+          {!['/deals', '/categories', '/topics', '/popular', '/instructors', '/blog', '/about', '/contact', '/privacy', '/terms', '/sitemap', '/how-to-redeem-coupon', '/udemy-coupons-guide', '/platforms', '/udemy-certification-vouchers', '/udemy-comptia-exam-vouchers', '/udemy-aws-exam-vouchers', '/udemy-microsoft-exam-vouchers'].includes(currentPath) && 
            !currentPath.startsWith('/categories/') && 
            !currentPath.startsWith('/topics/') && 
            !currentPath.startsWith('/instructor/') && 
@@ -976,34 +988,16 @@ const currentPath = Astro.url.pathname;
               marginBottom: "16px",
               fontSize: "1.1rem",
               fontWeight: "600"
-            }}>Browse Courses</h4>
+            }}>Learn</h4>
             <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
               <li style={{ marginBottom: "12px" }}>
-                <a href="/" style={{ 
-                  color: "#a09888", 
+                <a href="/instructors" style={{
+                  color: "#a09888",
                   textDecoration: "none",
                   fontSize: "0.9rem",
                   fontWeight: "500",
                   transition: "all 0.3s ease"
-                }}>Home</a>
-              </li>
-              <li style={{ marginBottom: "12px" }}>
-                <a href="/deals" style={{ 
-                  color: "#a09888", 
-                  textDecoration: "none",
-                  fontSize: "0.9rem",
-                  fontWeight: "500",
-                  transition: "all 0.3s ease"
-                }}>Udemy Deals</a>
-              </li>
-              <li style={{ marginBottom: "12px" }}>
-                <a href="/popular" style={{ 
-                  color: "#a09888", 
-                  textDecoration: "none",
-                  fontSize: "0.9rem",
-                  fontWeight: "500",
-                  transition: "all 0.3s ease"
-                }}>Popular Courses</a>
+                }}>Top Instructors</a>
               </li>
               <li style={{ marginBottom: "12px" }}>
                 <a href="/about" style={{ 
@@ -1034,73 +1028,7 @@ const currentPath = Astro.url.pathname;
               </li>
             </ul>
           </div>
-          <div>
-            <h4 style={{ 
-              background: "linear-gradient(135deg, #D4AF37 0%, #E8C547 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-              marginBottom: "16px",
-              fontSize: "1.1rem",
-              fontWeight: "600"
-            }}>Company & Legal</h4>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-              <li style={{ marginBottom: "12px" }}>
-                <a href="/privacy" style={{ 
-                  color: "#a09888", 
-                  textDecoration: "none",
-                  fontSize: "0.9rem",
-                  fontWeight: "500",
-                  transition: "all 0.3s ease"
-                }}>Privacy Policy</a>
-              </li>
-              <li style={{ marginBottom: "12px" }}>
-                <a href="/terms" style={{ 
-                  color: "#a09888", 
-                  textDecoration: "none",
-                  fontSize: "0.9rem",
-                  fontWeight: "500",
-                  transition: "all 0.3s ease"
-                }}>Terms of Service</a>
-              </li>
-              <li style={{ marginBottom: "12px" }}>
-                <a href="/affiliate-disclosure" style={{ 
-                  color: "#a09888", 
-                  textDecoration: "none",
-                  fontSize: "0.9rem",
-                  fontWeight: "500",
-                  transition: "all 0.3s ease"
-                }}>Affiliate Disclosure</a>
-              </li>
-              <li style={{ marginBottom: "12px" }}>
-                <a href="/contact" style={{ 
-                  color: "#a09888", 
-                  textDecoration: "none",
-                  fontSize: "0.9rem",
-                  fontWeight: "500",
-                  transition: "all 0.3s ease"
-                }}>Contact Us</a>
-              </li>
-              <li style={{ marginBottom: "12px" }}>
-                <a href="/success-stories" style={{ 
-                  color: "#a09888", 
-                  textDecoration: "none",
-                  fontSize: "0.9rem",
-                  fontWeight: "500",
-                  transition: "all 0.3s ease"
-                }}>Student Success Stories</a>
-              </li>
-              <li style={{ marginBottom: "12px" }}>
-                <a href="/sitemap" style={{ 
-                  color: "#a09888", 
-                  textDecoration: "none",
-                  fontSize: "0.9rem",
-                  fontWeight: "500",
-                  transition: "all 0.3s ease"
-                }}>Sitemap</a>
-              </li>
-            </ul>
-          </div>
+
           <div>
             <h4 style={{ 
               background: "linear-gradient(135deg, #D4AF37 0%, #E8C547 100%)",
@@ -1177,6 +1105,31 @@ const currentPath = Astro.url.pathname;
               </li>
             </ul>
           </div>
+          <div>
+            <h4 style={{ 
+              background: "linear-gradient(135deg, #D4AF37 0%, #E8C547 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+              marginBottom: "16px",
+              fontSize: "1.1rem",
+              fontWeight: "600"
+            }}>Exam Vouchers</h4>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+              <li style={{ marginBottom: "12px" }}>
+                <a href="/udemy-certification-vouchers" style={{ color: "#a09888", textDecoration: "none", fontSize: "0.9rem", fontWeight: "500" }}>All Certification Vouchers</a>
+              </li>
+              <li style={{ marginBottom: "12px" }}>
+                <a href="/udemy-comptia-exam-vouchers" style={{ color: "#a09888", textDecoration: "none", fontSize: "0.9rem", fontWeight: "500" }}>CompTIA Exam Vouchers</a>
+              </li>
+              <li style={{ marginBottom: "12px" }}>
+                <a href="/udemy-aws-exam-vouchers" style={{ color: "#a09888", textDecoration: "none", fontSize: "0.9rem", fontWeight: "500" }}>AWS Exam Vouchers</a>
+              </li>
+              <li style={{ marginBottom: "12px" }}>
+                <a href="/udemy-microsoft-exam-vouchers" style={{ color: "#a09888", textDecoration: "none", fontSize: "0.9rem", fontWeight: "500" }}>Microsoft Exam Vouchers</a>
+              </li>
+            </ul>
+          </div>
         </div>
 
         {/* Copyright + Trust Badges */}
@@ -1202,6 +1155,14 @@ const currentPath = Astro.url.pathname;
             <p itemprop="description" style={{ margin: "0.25rem 0 0", fontSize: "0.8rem", opacity: 0.5 }}>
               Free Udemy course deals updated daily — 100% off coupons across 400+ topics.
             </p>
+            <nav aria-label="Legal" style={{ display: "flex", gap: "0.35rem 0.9rem", flexWrap: "wrap", marginTop: "0.6rem", fontSize: "0.78rem" }}>
+              <a href="/privacy" style={{ color: "#a09888", textDecoration: "none" }}>Privacy Policy</a>
+              <a href="/terms" style={{ color: "#a09888", textDecoration: "none" }}>Terms of Service</a>
+              <a href="/affiliate-disclosure" style={{ color: "#a09888", textDecoration: "none" }}>Affiliate Disclosure</a>
+              <a href="/contact" style={{ color: "#a09888", textDecoration: "none" }}>Contact Us</a>
+              <a href="/success-stories" style={{ color: "#a09888", textDecoration: "none" }}>Success Stories</a>
+              <a href="/sitemap" style={{ color: "#a09888", textDecoration: "none" }}>Sitemap</a>
+            </nav>
           </div>
           <div style={{
             display: "flex",
