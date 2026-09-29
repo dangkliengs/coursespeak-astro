@@ -50,15 +50,24 @@ if (import.meta.env.PROD) {
   deal = foundDeal;
 }
 
-const relatedDeals = allDeals
-  .filter((d) => {
-    if (d.id === deal.id) return false;
-    if (deal.subcategory && d.subcategory) {
-      return d.subcategory === deal.subcategory;
-    }
-    return d.category === deal.category;
-  })
-  .slice(0, 4);
+const relatedDeals = (() => {
+  const others = allDeals.filter((d) => d.id !== deal.id);
+  // 1. Same subcategory first (both must have one — avoids subcategory-less
+  //    courses like 6807 matching every rare subcategory via category fallback).
+  const sameSub = others.filter(
+    (d) => deal.subcategory && d.subcategory && d.subcategory === deal.subcategory
+  );
+  // 2. Top up with same-category courses sorted by quality so rare
+  //    subcategories (e.g. RHCE with 1 course) still get 4 diverse results.
+  const sameSubIds = new Set(sameSub.map((d) => d.id));
+  const sameCat = others
+    .filter((d) => d.category === deal.category && !sameSubIds.has(d.id))
+    .sort(
+      (a, b) =>
+        (b.rating || 0) - (a.rating || 0) || (b.students || 0) - (a.students || 0)
+    );
+  return [...sameSub, ...sameCat].slice(0, 4);
+})();
 
 const discountPercentage = deal.originalPrice && deal.price && deal.originalPrice > deal.price
   ? Math.round(((deal.originalPrice - deal.price) / deal.originalPrice) * 100)

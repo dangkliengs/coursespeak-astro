@@ -1032,11 +1032,6 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                             </div>
                         </div>
                     </div>
-
-                    {/* Ad: sidebar below purchase box (display responsive) */}
-                    <div style={{ marginTop: "1.5rem" }}>
-                        <AdUnit variant="display" lazy={true} minHeight={250} />
-                    </div>
                 </aside>
             </div>
 
