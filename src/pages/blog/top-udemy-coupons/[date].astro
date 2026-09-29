@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import Layout from '../../../layouts/Layout.astro';
+import AdSlot from '../../../components/AdSlot.astro';
 import { getDeals, getAvailableDates } from '../../../lib/store.js';
 
 export async function getStaticPaths() {
@@ -186,6 +187,7 @@ const jsonLd = {
       </div>
 
       <!-- Categories: grid of course cards per category -->
+      <AdSlot variant="infeed" lazy={true} />
       <div class="categories-block">
         {categories.map(([cat, deals]) => (
           <section class="cat-block" aria-labelledby={`cat-${slugifyCat(cat)}`}>
@@ -283,6 +285,9 @@ const jsonLd = {
           </section>
         ))}
       </div>
+
+      {/* Ad: after category listings, before explore-all (multiplex grid) */}
+      <AdSlot variant="multiplex" lazy={true} />
 
       <!-- Explore all: list of course items -->
       <section class="explore-block" aria-labelledby="explore-heading">

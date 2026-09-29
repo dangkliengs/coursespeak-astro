@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import AdSlot from "../components/AdSlot.astro";
 
 const canonicalUrl = "https://coursespeak.com/udemy-coupons-guide";
 const currentYear = new Date().getFullYear();
@@ -327,6 +328,7 @@ const monthYear = new Date().toLocaleDateString('en-US', { year: 'numeric', mont
           </section>
 
           <!-- ── Section 4: How to Redeem ── -->
+          <AdSlot variant="inarticle" lazy={true} />
           <section aria-labelledby="how-to-redeem" style="margin-bottom:3rem;">
             <h2 id="how-to-redeem" class="section-heading">
               4. How to Redeem a Udemy Coupon — Step by Step
@@ -407,6 +409,7 @@ const monthYear = new Date().toLocaleDateString('en-US', { year: 'numeric', mont
           </section>
 
           <!-- ── Section 6: FAQ ── -->
+          <AdSlot variant="multiplex" lazy={true} />
           <section aria-labelledby="faq" style="margin-bottom:2rem;">
             <h2 id="faq" class="section-heading">
               6. Frequently Asked Questions

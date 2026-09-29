@@ -7,6 +7,7 @@ import { buildFAQs } from "../lib/faqs";
 import ActionsPanel from "./ActionsPanel";
 import RelatedList from "./RelatedList";
 import CourseComparison from "./CourseComparison";
+import AdUnit from "./AdUnit";
 
 interface Deal {
     id: string;
@@ -242,6 +243,11 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                 </div>
             </header>
 
+            {/* Ad: below hero / above content — display responsive */}
+            <div className="container" style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 1rem" }}>
+                <AdUnit variant="display" lazy={false} />
+            </div>
+
             {/* Main layout */}
             <div className="container deal-layout" style={{ maxWidth: "1200px", margin: "0 auto", padding: "2rem 1rem", display: "grid", gridTemplateColumns: "1fr 340px", gap: "3rem" }}>
 
@@ -360,6 +366,9 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                             suppressHydrationWarning={true}
                         />
                     </section>
+
+                    {/* Ad: in-article after course description (falls back to display until in-article slot arrives) */}
+                    <AdUnit variant="inarticle" lazy={true} />
 
                     {/* Udemy Coupons Guide Link */}
                     <div style={{
@@ -845,6 +854,9 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                         </div>
                     </section>
 
+                    {/* Ad: before related deals (multiplex grid) */}
+                    <AdUnit variant="multiplex" lazy={true} />
+
                     {/* Related Deals */}
                     {relatedDeals.length > 0 && (
                         <section aria-labelledby="related-heading" style={{ borderTop: "1px solid var(--border)", paddingTop: "2rem", marginTop: "2rem" }}>
@@ -1019,6 +1031,11 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 }}>Learn more</a>
                             </div>
                         </div>
+                    </div>
+
+                    {/* Ad: sidebar below purchase box (display responsive) */}
+                    <div style={{ marginTop: "1.5rem" }}>
+                        <AdUnit variant="display" lazy={true} minHeight={250} />
                     </div>
                 </aside>
             </div>

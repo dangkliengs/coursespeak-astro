@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 import DealCard from "../components/DealCard.astro";
+import AdSlot from "../components/AdSlot.astro";
 import { CATEGORY_ICONS } from "../lib/categories";
 import { readDeals, isDealAddedToday } from "../lib/store";
 
@@ -838,6 +839,11 @@ const jsonLd = {
     </div>
   </section>
 
+  <!-- Ad: below hero stats, above listing (display responsive) -->
+  <div class="container">
+    <AdSlot variant="display" lazy={true} />
+  </div>
+
   <!-- ══════════════════════════════════════════════════════════════════════
        2. LATEST DEALS
        ══════════════════════════════════════════════════════════════════════ -->
@@ -869,6 +875,9 @@ const jsonLd = {
           <DealCard deal={deal} />
         ))}
       </div>
+
+      <!-- Ad: after latest-deals grid, before featured (multiplex grid) -->
+      <AdSlot variant="multiplex" lazy={true} />
     </div>
   </section>
 

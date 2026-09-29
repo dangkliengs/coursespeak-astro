@@ -270,21 +270,9 @@ const currentPath = Astro.url.pathname;
 
 
 
-    <script>
-      const ADS_CLIENT = "ca-pub-8220442576502761";
-      function loadAds() {
-        if (document.querySelector("script[data-google-ads]")) return;
-        const s = document.createElement("script");
-        s.async = true;
-        s.dataset.googleAds = "true";
-        s.crossOrigin = "anonymous";
-        s.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=" + ADS_CLIENT;
-        document.head.appendChild(s);
-      }
-      for (const ev of ["scroll", "pointerdown", "keydown"]) {
-        addEventListener(ev, loadAds, { once: true, passive: true });
-      }
-    </script>
+    <!-- AdSense: eager async load (revenue-optimal). Auto Ads + manual units share this library. -->
+    <meta name="google-adsense-account" content="ca-pub-8220442576502761" />
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8220442576502761" crossorigin="anonymous"></script>
 
     <style>
       body {

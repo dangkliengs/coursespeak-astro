@@ -1,47 +1,184 @@
 ---
 interface Props {
-  /** Ad unit slot id. Falls back to PUBLIC_ADSENSE_AD_SLOT env. */
+  /** Format variant. display = responsive, multiplex = grid, infeed/inarticle = native (needs own slot id when ready). */
+  variant?: "display" | "multiplex" | "infeed" | "inarticle";
+  /** Ad unit slot id. Falls back to per-variant env / defaults below. */
   slot?: string;
   /** AdSense publisher id. Falls back to PUBLIC_ADSENSE_CLIENT env. */
   publisher?: string;
   /** Extra class for the wrapper. */
   className?: string;
+  /** In-feed layout key (data-ad-layout-key). AdSense shows it in the in-feed Get-code dialog. Optional until your in-feed code arrives. */
+  layoutKey?: string;
+  /** Lazy-push below-fold units via IntersectionObserver. Default true (CWV-friendly, still monetizes). */
+  lazy?: boolean;
+  /** Reserved min-height to avoid CLS. Defaults per variant. */
+  minHeight?: number;
 }
 
 const {
+  variant = "display",
   slot,
   publisher = import.meta.env.PUBLIC_ADSENSE_CLIENT || "ca-pub-8220442576502761",
   className = "",
+  layoutKey = import.meta.env.PUBLIC_ADSENSE_INFEED_LAYOUT_KEY || "-5p+ce-n-65+pn",
+  lazy = true,
+  minHeight,
 } = Astro.props;
 
-// Real CourseSpeak display ad unit (from the live site's slot 2951964915).
-// Override via PUBLIC_ADSENSE_AD_SLOT env if you create a new unit.
-const adSlot =
-  slot ?? import.meta.env.PUBLIC_ADSENSE_AD_SLOT ?? "2951964915";
+// Slot IDs — override via env without touching code:
+// PUBLIC_ADSENSE_SLOT_DISPLAY=2951964915
+// PUBLIC_ADSENSE_SLOT_MULTIPLEX=7774760180
+// PUBLIC_ADSENSE_SLOT_INFEED=xxxx (paste when AdSense shows the code)
+// PUBLIC_ADSENSE_SLOT_INARTICLE=xxxx (paste when AdSense shows the code)
+const DISPLAY_SLOT =
+  import.meta.env.PUBLIC_ADSENSE_SLOT_DISPLAY ??
+  import.meta.env.PUBLIC_ADSENSE_AD_SLOT ??
+  "2951964915";
+const MULTIPLEX_SLOT =
+  import.meta.env.PUBLIC_ADSENSE_SLOT_MULTIPLEX ?? "7774760180";
+// In-feed / in-article units (real IDs from AdSense dashboard).
+const INFEED_SLOT =
+  import.meta.env.PUBLIC_ADSENSE_SLOT_INFEED ?? "1297905186";
+const INARTICLE_SLOT =
+  import.meta.env.PUBLIC_ADSENSE_SLOT_INARTICLE ?? "1600982501";
+
+const slotByVariant: Record<string, string> = {
+  display: DISPLAY_SLOT,
+  multiplex: MULTIPLEX_SLOT,
+  infeed: INFEED_SLOT,
+  inarticle: INARTICLE_SLOT,
+};
+
+const adSlot = slot ?? slotByVariant[variant] ?? DISPLAY_SLOT;
 const show = Boolean(adSlot);
+
+// Per-variant <ins> attributes (matches the exact codes from AdSense dashboard)
+const adFormat =
+  variant === "multiplex" ? "autorelaxed" : variant === "display" ? "auto" : "fluid";
+const adLayout =
+  variant === "inarticle" ? "in-article" : undefined;
+const adLayoutKey =
+  variant === "infeed" ? layoutKey : undefined;
+const fullWidthResponsive =
+  variant === "display" ? "true" : undefined;
+const insStyle =
+  variant === "inarticle"
+    ? "display:block; text-align:center;"
+    : "display:block";
+
+const defaultMinHeight =
+  minHeight ??
+  (variant === "multiplex" ? 400 : variant === "infeed" ? 250 : 280);
+const styleReserve = `min-height:${defaultMinHeight}px`;
 ---
 
 {show && (
-  <aside class:list={["ad-slot", className]} aria-label="Advertisement">
+  <aside class:list={["ad-slot", `ad-slot-${variant}`, className]} aria-label="Advertisement" data-ad-lazy={lazy ? "true" : "false"} data-ad-variant={variant} style={styleReserve}>
+    <span class="ad-label" aria-hidden="true">Advertisement</span>
     <ins
       class="adsbygoogle"
-      style="display:block"
+      style={insStyle}
       data-ad-client={publisher}
       data-ad-slot={adSlot}
-      data-ad-format="auto"
-      data-full-width-responsive="true"
+      data-ad-format={adFormat}
+      data-ad-layout={adLayout}
+      data-ad-layout-key={adLayoutKey}
+      data-full-width-responsive={fullWidthResponsive}
     ></ins>
-    <script is:inline>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    <script is:inline>
+      (function () {
+        var container = document.currentScript && document.currentScript.parentElement;
+        if (!container) return;
+        var ins = container.querySelector("ins.adsbygoogle");
+        if (!ins) return;
+        // Skip if already filled by AdSense
+        if (ins.dataset.adPushed === "true") return;
+        function push() {
+          if (ins.dataset.adPushed === "true") return;
+          ins.dataset.adPushed = "true";
+          try {
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+          } catch (e) {}
+        }
+        var lazy = container.getAttribute("data-ad-lazy") === "true";
+        if (!lazy || !("IntersectionObserver" in window)) {
+          push();
+          return;
+        }
+        // Above-the-fold units: push immediately so the auction starts fast
+        try {
+          var rect = container.getBoundingClientRect();
+          if (rect.top < window.innerHeight * 1.2) {
+            push();
+            return;
+          }
+        } catch (e) {}
+        var io = new IntersectionObserver(
+          function (entries) {
+            for (var i = 0; i < entries.length; i++) {
+              if (entries[i].isIntersecting) {
+                push();
+                try { io.disconnect(); } catch (e) {}
+                break;
+              }
+            }
+          },
+          { rootMargin: "400px 0px" }
+        );
+        io.observe(container);
+      })();
+    </script>
   </aside>
 )}
 
 <style is:global>
   .ad-slot {
-    margin: 2rem 0;
+    margin: 2rem auto;
     text-align: center;
+    max-width: 100%;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(212, 167, 55, 0.03);
+    border: 1px dashed rgba(212, 167, 55, 0.15);
+    border-radius: 12px;
+    padding: 12px 8px 8px;
+    overflow: hidden;
+  }
+  .ad-slot-multiplex {
+    min-height: 400px;
+  }
+  .ad-slot-infeed {
+    min-height: 250px;
+  }
+  .ad-slot .ad-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted, #8a7e6a);
+    opacity: 0.7;
+    margin-bottom: 6px;
   }
   .ad-slot .adsbygoogle {
     width: 100%;
-    min-height: 90px;
+    min-height: 250px;
+  }
+  .ad-slot-multiplex .adsbygoogle {
+    min-height: 350px;
+  }
+  @media (max-width: 768px) {
+    .ad-slot {
+      min-height: 250px;
+      margin: 1.5rem auto;
+    }
+    .ad-slot-multiplex {
+      min-height: 350px;
+    }
+    .ad-slot .adsbygoogle {
+      min-height: 250px;
+    }
   }
 </style>

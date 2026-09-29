@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import DealCard from "../components/DealCard.astro";
+import AdSlot from "../components/AdSlot.astro";
 import { readDeals, isDealAddedToday } from "../lib/store";
 
 const allDeals = await readDeals();
@@ -388,10 +389,25 @@ const structuredData = {
           gridTemplateColumns: "repeat(3, 1fr)",
           gap: "1.25rem"
         }}>
-          {currentItems.map((deal: any) => (
+          {currentItems.slice(0, 6).map((deal: any) => (
             <DealCard deal={deal} />
           ))}
         </div>
+
+        {/* Ad: in-feed mid-listing — uses display fallback until in-feed slot id arrives */}
+        {currentItems.length > 6 && <AdSlot variant="infeed" lazy={true} />}
+
+        {currentItems.length > 6 && (
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: "1.25rem"
+          }}>
+            {currentItems.slice(6).map((deal: any) => (
+              <DealCard deal={deal} />
+            ))}
+          </div>
+        )}
 
         {/* ── PAGINATION ── */}
         {totalPages > 1 && (

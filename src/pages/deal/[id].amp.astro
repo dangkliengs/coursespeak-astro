@@ -38,6 +38,7 @@ const metaDescription = `${deal.title} Udemy Coupon Code — ${discountPercentag
   <script async src="https://cdn.ampproject.org/v0.js"></script>
   <script async custom-element="amp-img" src="https://cdn.ampproject.org/v0/amp-img-0.1.js"></script>
   <script async custom-element="amp-analytics" src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>
+  <script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"></script>
   <script async custom-element="amp-sidebar" src="https://cdn.ampproject.org/v0/amp-sidebar-0.1.js"></script>
 
   <title>{deal.title} | {discountPercentage}% Off Udemy Coupon - CourseSpeak</title>
@@ -147,6 +148,19 @@ const metaDescription = `${deal.title} Udemy Coupon Code — ${discountPercentag
   </header>
 
   <main class="container">
+    {/* Ad: below price CTA — highest viewability on AMP deal pages */}
+    <amp-ad
+      width="100vw"
+      height="320"
+      type="adsense"
+      data-ad-client="ca-pub-8220442576502761"
+      data-ad-slot="2951964915"
+      data-auto-format="rspv"
+      data-full-width=""
+    >
+      <div overflow=""></div>
+    </amp-ad>
+
     <section class="price-section">
       <div class="price">
         ${deal.price}
@@ -184,6 +198,18 @@ const metaDescription = `${deal.title} Udemy Coupon Code — ${discountPercentag
 
     <div class="related">
       <h2>More Course Deals</h2>
+      {/* Ad: before related links (multiplex position) */}
+      <amp-ad
+        width="100vw"
+        height="320"
+        type="adsense"
+        data-ad-client="ca-pub-8220442576502761"
+        data-ad-slot="2951964915"
+        data-auto-format="rspv"
+        data-full-width=""
+      >
+        <div overflow=""></div>
+      </amp-ad>
       <p>Check out more discounted courses on CourseSpeak.</p>
       <a href="/deals" class="cta-button">Browse All Deals</a>
     </div>
