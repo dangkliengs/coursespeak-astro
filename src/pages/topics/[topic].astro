@@ -196,19 +196,19 @@ const faqs = [
 ];
 ---
 
-<Layout title={`${topicName} Courses - Free Udemy Coupons ${currentYear} | CourseSpeak`} description={topicDescription} canonical={`https://coursespeak.com/topics/${topicSlug}`}>
+<Layout title={`Top Free ${topicName} Udemy Courses with Coupons (${currentMonth} ${currentYear})`} description={topicDescription} canonical={`https://coursespeak.com/topics/${topicSlug}`}>
 
   <script type="application/ld+json" set:html={
     JSON.stringify([
       {
         "@context": "https://schema.org",
         "@type": "CollectionPage",
-        "name": `${topicName} Courses`,
+        "name": `Top Free ${topicName} Udemy Courses with Coupons (${currentMonth} ${currentYear})`,
         "description": topicDescription,
         "url": `https://coursespeak.com/topics/${topicSlug}`,
         "mainEntity": {
           "@type": "ItemList",
-          "name": `${topicName} Course Collection`,
+          "name": `Top Free ${topicName} Udemy Courses with Coupons (${currentMonth} ${currentYear})`,
           "numberOfItems": topicDeals.length,
           "itemListElement": topicDeals.slice(0, 10).map((deal, index) => ({
             "@type": "ListItem",
@@ -261,12 +261,12 @@ const faqs = [
           {topicDeals.length} Courses — {currentMonth} {currentYear}
         </div>
         <h1 style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)", fontWeight: 800, lineHeight: 1.1, maxWidth: "900px", margin: "0 auto 1.5rem" }}>
-          <span style={{ background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>{topicName} Courses</span>
+          <span style={{ background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Top Free {topicName} Udemy Courses</span>
           <br />
-          <span style={{ background: "linear-gradient(135deg, var(--text) 0%, var(--muted) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Free Udemy Coupons {currentYear}</span>
+          <span style={{ background: "linear-gradient(135deg, var(--text) 0%, var(--muted) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>with Coupons ({currentMonth} {currentYear})</span>
         </h1>
         <p style={{ fontSize: "clamp(1rem, 2.5vw, 1.25rem)", color: "var(--muted)", maxWidth: "650px", margin: "0 auto 2.5rem", lineHeight: 1.7 }}>
-          Browse <strong style={{ color: "var(--text)" }}>{topicDeals.length}+ verified {topicName.toLowerCase()} courses</strong> with <strong style={{ color: "var(--text)" }}>free coupons</strong>. Save up to <strong style={{ color: "var(--brand)" }}>{topicAvgSavings}%</strong> — learn {topicName.toLowerCase()} from industry experts. Updated daily.
+          Browse <strong style={{ color: "var(--text)" }}>{topicDeals.length}+ verified {topicName} courses</strong> with <strong style={{ color: "var(--text)" }}>free Udemy coupons</strong>. Save up to <strong style={{ color: "var(--brand)" }}>{topicAvgSavings}%</strong> — learn from {topicInstructors} top-rated Udemy instructors with lifetime access and certificates. New coupons verified daily.
         </p>
       </div>
     </section>

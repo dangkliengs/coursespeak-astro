@@ -99,15 +99,14 @@ const categoryName = displayName;
 // Get related categories for internal linking
 const allCategories = [...new Set(allDeals.map(deal => normName(deal.category)).filter(Boolean))].filter(cat => cat !== categoryName);
 
-// Create dynamic meta description with keywords
-const categoryKeywords = `${categoryName.toLowerCase()}, ${categoryName.toLowerCase()} courses, ${categoryName.toLowerCase()} certification, learn ${categoryName.toLowerCase()}, ${categoryName.toLowerCase()} tutorial`;
-const metaDescription = `Browse ${categoryDeals.length}+ verified ${categoryName.toLowerCase()} courses with massive discounts up to 90% off. Learn ${categoryKeywords} from industry experts. Udemy coupons updated daily.`;
-
 // Stats
 const TIMEZONE = 'Asia/Jakarta';
 const currentDate = new Date();
 const currentMonth = currentDate.toLocaleDateString('en-US', { timeZone: TIMEZONE, month: 'long' });
 const currentYear  = currentDate.toLocaleDateString('en-US', { timeZone: TIMEZONE, year: 'numeric' });
+
+// SEO meta description (proper-case names, verifiable claims, freshness)
+const metaDescription = `Browse ${categoryDeals.length}+ free ${categoryName} Udemy courses with verified 100% off coupons. Lifetime access & certificates included. Updated ${currentMonth} ${currentYear}.`;
 const categoryTodayAdded = categoryDeals.filter(isDealAddedToday).length;
 const categoryAvgSavings = (() => {
   const valid = categoryDeals.filter((d: any) => d.originalPrice && d.price !== undefined && d.originalPrice > 0);
@@ -132,7 +131,7 @@ else {
 }
 ---
 
-<Layout title={`${categoryName} Courses - Free Udemy Coupons ${currentYear} | CourseSpeak`} description={metaDescription}>
+<Layout title={`Best Free ${categoryName} Udemy Courses with Coupons (${currentMonth} ${currentYear})`} description={metaDescription}>
 
   <!-- Category Collection Schema -->
   <script type="application/ld+json" set:html={
@@ -140,12 +139,12 @@ else {
       {
         "@context": "https://schema.org",
         "@type": "CollectionPage",
-        "name": `${categoryName} Courses`,
+        "name": `Best Free ${categoryName} Udemy Courses with Coupons (${currentMonth} ${currentYear})`,
         "description": metaDescription,
         "url": `https://coursespeak.com/categories/${category}`,
         "mainEntity": {
           "@type": "ItemList",
-          "name": `${categoryName} Course Collection`,
+          "name": `Best Free ${categoryName} Udemy Courses with Coupons (${currentMonth} ${currentYear})`,
           "numberOfItems": categoryDeals.length,
           "itemListElement": categoryDeals.slice(0, 10).map((deal, index) => ({
             "@type": "ListItem",
@@ -244,12 +243,12 @@ else {
           {categoryDeals.length} Courses — {currentMonth} {currentYear}
         </div>
         <h1 style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)", fontWeight: 800, lineHeight: 1.1, maxWidth: "900px", margin: "0 auto 1.5rem" }}>
-          <span style={{ background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>{categoryName} Courses</span>
+          <span style={{ background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Best Free {categoryName} Udemy Courses</span>
           <br />
-          <span style={{ background: "linear-gradient(135deg, var(--text) 0%, var(--muted) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Free Udemy Coupons {currentYear}</span>
+          <span style={{ background: "linear-gradient(135deg, var(--text) 0%, var(--muted) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>with Coupons ({currentMonth} {currentYear})</span>
         </h1>
         <p style={{ fontSize: "clamp(1rem, 2.5vw, 1.25rem)", color: "var(--muted)", maxWidth: "650px", margin: "0 auto 2.5rem", lineHeight: 1.7 }}>
-          Browse <strong style={{ color: "var(--text)" }}>{categoryDeals.length}+ verified {categoryName.toLowerCase()} courses</strong> with <strong style={{ color: "var(--text)" }}>free coupons</strong>. Save up to <strong style={{ color: "var(--brand)" }}>{categoryAvgSavings}%</strong> — learn {categoryName.toLowerCase()} from industry experts. Updated daily.
+          Browse <strong style={{ color: "var(--text)" }}>{categoryDeals.length}+ verified {categoryName} courses</strong> with <strong style={{ color: "var(--text)" }}>free Udemy coupons</strong>. Save up to <strong style={{ color: "var(--brand)" }}>{categoryAvgSavings}%</strong> — learn from {categoryInstructors} top-rated Udemy instructors with lifetime access and certificates. New coupons verified daily.
         </p>
       </div>
     </section>
