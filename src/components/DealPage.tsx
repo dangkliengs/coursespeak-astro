@@ -245,7 +245,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
 
             {/* Ad: below hero / above content — display responsive */}
             <div className="container" style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 1rem" }}>
-                <AdUnit variant="display" lazy={false} />
+                <AdUnit variant="display" lazy={true} />
             </div>
 
             {/* Main layout */}

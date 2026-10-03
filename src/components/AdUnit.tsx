@@ -86,16 +86,8 @@ export default function AdUnit({
       return;
     }
 
-    try {
-      const rect = container.getBoundingClientRect();
-      if (rect.top < window.innerHeight * 1.2) {
-        push();
-        return;
-      }
-    } catch {
-      /* ignore */
-    }
-
+    // Below-fold units: push only when actually entering the viewport
+    // (strict lazy — avoids "iframe below the fold" warnings)
     const io = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -106,7 +98,7 @@ export default function AdUnit({
           }
         }
       },
-      { rootMargin: "400px 0px" }
+      { rootMargin: "0px", threshold: 0 }
     );
     io.observe(container);
     return () => io.disconnect();

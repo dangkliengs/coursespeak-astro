@@ -1,5 +1,5 @@
 ---
-import Layout from "../../../../layouts/Layout.astro";
+import AdminShell from "../../../../components/admin/AdminShell.astro";
 import { getDealById } from "../../../../lib/store";
 
 export const prerender = false;
@@ -88,76 +88,8 @@ const pageTitle = `Edit Deal - ${deal.title} - Admin Dashboard`;
 const pageDescription = "Edit a course deal on CourseSpeak.";
 ---
 
-<Layout title={pageTitle} description={pageDescription}>
-  <div style={{
-    background: "linear-gradient(135deg, var(--bg) 0%, var(--border) 100%)",
-    minHeight: "100vh",
-    color: "#e2e8f0",
-    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-  }}>
-    <!-- Modern Header with Back Button -->
-    <div style={{
-      background: "rgba(15, 23, 42, 0.95)",
-      backdropFilter: "blur(20px)",
-      borderBottom: "1px solid rgba(91, 140, 255, 0.2)",
-      padding: "1rem 0",
-      position: "sticky",
-      top: 0,
-      zIndex: 50
-    }}>
-      <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "0 1rem" }}>
-        <div style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: "1rem"
-        }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-            <a
-              href="/admin/deals"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                color: "#D4AF37",
-                textDecoration: "none",
-                fontWeight: 600,
-                padding: "0.5rem 1rem",
-                borderRadius: "0.5rem",
-                transition: "all 0.2s ease",
-                background: "rgba(212, 167, 55, 0.1)",
-                border: "1px solid rgba(212, 167, 55, 0.2)"
-              }}
-              onmouseover="this.style.background='rgba(212, 167, 55, 0.2)'"
-              onmouseout="this.style.background='rgba(212, 167, 55, 0.1)'"
-            >
-              ← Back to Deals
-            </a>
-            <div style={{ height: "20px", width: "1px", background: "rgba(91, 140, 255, 0.3)" }}></div>
-            <h1 style={{
-              fontSize: "1.5rem",
-              fontWeight: 700,
-              color: "#fff",
-              margin: 0
-            }}>
-              Edit Deal: {deal.title}
-            </h1>
-          </div>
-          <div style={{
-            fontSize: "0.9rem",
-            color: "#94a3b8",
-            background: "rgba(71, 85, 105, 0.5)",
-            padding: "0.25rem 0.75rem",
-            borderRadius: "1rem",
-            border: "1px solid rgba(91, 140, 255, 0.2)"
-          }}>
-            ID: {deal.id}
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "2rem 1rem" }}>
+<AdminShell title={`Edit Deal — ${deal.title}`} desc="Edit a course deal on CourseSpeak" parent="Deals" parentHref="/admin/deals" badge={`ID: ${deal.id}`}>
+  <div>
       <!-- Main Form Container -->
       <form action={`/api/update?id=${deal.id}`} method="POST" id="editForm" style={{
         background: "rgba(15, 23, 42, 0.95)",
@@ -1193,26 +1125,26 @@ const pageDescription = "Edit a course deal on CourseSpeak.";
                   flexDirection: "column",
                   gap: "1rem"
                 }}>
-                  <button
-                    type="submit"
-                    style={{
-                      width: "100%",
-                      padding: "1rem 2rem",
-                      background: "linear-gradient(135deg, var(--brand-hover) 0%, var(--brand) 100%)",
-                      color: "#fff",
-                      border: "none",
-                      borderRadius: "0.75rem",
-                      fontSize: "1.1rem",
-                      fontWeight: 700,
-                      cursor: "pointer",
-                      transition: "all 0.2s ease",
-                      boxShadow: "0 4px 12px rgba(212, 167, 55, 0.3)"
-                    }}
-                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(212, 167, 55, 0.4)'"
-                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(212, 167, 55, 0.3)'"
-                  >
-                    Update Deal
-                  </button>
+                    <button
+                      type="submit"
+                      style={{
+                        width: "100%",
+                        padding: "1rem 2rem",
+                        backgroundColor: "#10b981",
+                        color: "#fff",
+                        border: "1px solid #10b981",
+                        borderRadius: "0.75rem",
+                        fontSize: "1.1rem",
+                        fontWeight: 700,
+                        cursor: "pointer",
+                        transition: "all 0.2s ease",
+                        boxShadow: "0 4px 12px rgba(16, 185, 129, 0.3)"
+                      }}
+                      onmouseover="this.style.backgroundColor='#059669'"
+                      onmouseout="this.style.backgroundColor='#10b981'"
+                    >
+                      Update Deal
+                    </button>
 
                   <a
                     href="/admin/deals"
@@ -1220,8 +1152,8 @@ const pageDescription = "Edit a course deal on CourseSpeak.";
                       width: "100%",
                       padding: "1rem 2rem",
                       backgroundColor: "transparent",
-                      color: "#94a3b8",
-                      border: "2px solid #4b5563",
+                      color: "#f07178",
+                      border: "2px solid #f07178",
                       textDecoration: "none",
                       borderRadius: "0.75rem",
                       fontSize: "1.1rem",
@@ -1230,8 +1162,8 @@ const pageDescription = "Edit a course deal on CourseSpeak.";
                       transition: "all 0.2s ease",
                       boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)"
                     }}
-                    onmouseover="this.style.backgroundColor='#4b5563'; this.style.color='#fff'; this.style.transform='translateY(-1px)'"
-                    onmouseout="this.style.backgroundColor='transparent'; this.style.color='#94a3b8'; this.style.transform='translateY(0)'"
+                    onmouseover="this.style.backgroundColor='#f07178'; this.style.color='#fff'; this.style.transform='translateY(-1px)'"
+                    onmouseout="this.style.backgroundColor='transparent'; this.style.color='#f07178'; this.style.transform='translateY(0)'"
                   >
                     Cancel
                   </a>
@@ -1242,8 +1174,7 @@ const pageDescription = "Edit a course deal on CourseSpeak.";
         </div>
       </form>
     </div>
-  </div>
-</Layout>
+</AdminShell>
 
 <script>
   // Tab functionality

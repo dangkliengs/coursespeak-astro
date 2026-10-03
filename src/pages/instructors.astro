@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import { readDeals } from '../lib/store';
 import type { Deal } from '../types/deal.d';
 import { parseInstructors, createInstructorSlug } from '../lib/instructors';
+import { getInstructorImageByName } from '../lib/instructorProfiles';
 
 // ─────────────────────────────────────────────
 // TYPES
@@ -12,6 +13,7 @@ interface Instructor {
   courses: Deal[];
   totalStudents: number;
   avgRating: number;
+  avgDiscount: number;
   categories: string[];
   totalReviews: number;
   provider: string;
@@ -40,6 +42,7 @@ deals.forEach((deal: Deal) => {
         courses: [],
         totalStudents: 0,
         avgRating: 0,
+        avgDiscount: 0,
         categories: [],
         totalReviews: 0,
         provider: deal.provider || 'Udemy',
@@ -49,11 +52,16 @@ deals.forEach((deal: Deal) => {
 
     const inst = instructorMap.get(instructorName)!;
     inst.courses.push(deal);
-    if (deal.students) inst.totalStudents += deal.students;
+    inst.totalStudents += deal.students || 0;
     if (deal.rating) {
       const count = inst.courses.length;
       inst.avgRating = (inst.avgRating * (count - 1) + deal.rating) / count;
       inst.totalReviews += deal.students || 0;
+    }
+    if (deal.originalPrice && (deal.price ?? 0) < deal.originalPrice) {
+      const disc = Math.round(100 - ((deal.price ?? 0) / deal.originalPrice) * 100);
+      const count = inst.courses.length;
+      inst.avgDiscount = (inst.avgDiscount * (count - 1) + disc) / count;
     }
     if (deal.category && !inst.categories.includes(deal.category)) {
       inst.categories.push(deal.category);
@@ -66,39 +74,51 @@ const instructors: Instructor[] = Array.from(instructorMap.values())
     ...inst,
     courseCount: inst.courses.length,
     avgRating: Number(inst.avgRating.toFixed(1)),
+    avgDiscount: Math.round(inst.avgDiscount),
   }))
   .sort((a, b) => b.totalStudents - a.totalStudents);
 
 // ─────────────────────────────────────────────
+// INSTRUCTOR IMAGES (registry foto instructor)
+// ─────────────────────────────────────────────
+const instructorImages = new Map<string, string>();
+for (const inst of instructors) {
+  const img = getInstructorImageByName(inst.name);
+  if (img) instructorImages.set(createInstructorSlug(inst.name), img);
+}
+
+// ─────────────────────────────────────────────
+// FRESH FEED for hero
+// ─────────────────────────────────────────────
+function timeAgo(iso: string | undefined): string {
+  if (!iso) return 'new';
+  const mins = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 60000));
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.round(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  const days = Math.round(hrs / 24);
+  return days <= 1 ? 'today' : `${days}d ago`;
+}
+
+const heroFeed = deals.slice(0, 3).map((d) => {
+  const pct =
+    d.originalPrice && (d.price ?? 0) < d.originalPrice
+      ? Math.round(100 - ((d.price ?? 0) / (d.originalPrice ?? 1)) * 100)
+      : 0;
+  return {
+    href: `/deal/${d.id}`,
+    time: timeAgo(d.updatedAt ?? d.createdAt),
+    cat: d.category || 'Course',
+    title: d.title,
+    save: (d.price ?? 0) === 0 ? 'FREE' : `−${pct}%`,
+  };
+});
+
+// ─────────────────────────────────────────────
 // HELPERS
 // ─────────────────────────────────────────────
-function getMaxDiscount(courses: Deal[]): number {
-  return Math.max(
-    0,
-    ...courses.map((c) => {
-      if (!c.originalPrice || !c.price || c.price >= c.originalPrice) return 0;
-      return Math.round(100 - (c.price / c.originalPrice) * 100);
-    })
-  );
-}
-
-function hasFree(courses: Deal[]): boolean {
-  return courses.some((c) => c.price === 0);
-}
-
 function getInitials(name: string): string {
   return name.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2);
-}
-
-function getTopDeals(courses: Deal[]): Deal[] {
-  return courses
-    .filter((c) => c.originalPrice && c.price !== undefined && c.price < c.originalPrice)
-    .sort((a, b) => {
-      const da = Math.round(100 - ((a.price ?? 0) / (a.originalPrice ?? 1)) * 100);
-      const db = Math.round(100 - ((b.price ?? 0) / (b.originalPrice ?? 1)) * 100);
-      return db - da;
-    })
-    .slice(0, 2);
 }
 
 // ─────────────────────────────────────────────
@@ -106,12 +126,7 @@ function getTopDeals(courses: Deal[]): Deal[] {
 // ─────────────────────────────────────────────
 // One row per deal in deals.json — do not sum per-instructor counts (co-teachers double-count)
 const dealCount = deals.length;
-const totalStudents = instructors.reduce((s, i) => s + i.totalStudents, 0);
-const avgRating     = (
-  instructors.reduce((s, i) => s + i.avgRating, 0) / (instructors.length || 1)
-).toFixed(1);
 const allCategories = Array.from(new Set(instructors.flatMap((i) => i.categories))).sort();
-const totalFree     = instructors.reduce((s, i) => s + (hasFree(i.courses) ? 1 : 0), 0);
 
 // ─────────────────────────────────────────────
 // DATE
@@ -162,6 +177,19 @@ const faqs = [
   },
 ];
 
+const avgDiscountOverall = deals.length
+  ? Math.round(
+      deals.reduce(
+        (s, d) =>
+          s +
+          (d.originalPrice
+            ? Math.round(100 - ((d.price ?? 0) / d.originalPrice) * 100)
+            : 0),
+        0
+      ) / deals.length
+    )
+  : 0;
+
 // ─────────────────────────────────────────────
 // STRUCTURED DATA
 // ─────────────────────────────────────────────
@@ -206,6 +234,9 @@ const structuredData = {
           item: {
             '@type': 'Person',
             name: inst.name,
+            ...(instructorImages.get(createInstructorSlug(inst.name))
+              ? { image: instructorImages.get(createInstructorSlug(inst.name)) }
+              : {}),
             jobTitle: 'Udemy Instructor',
             worksFor: { '@type': 'Organization', name: inst.provider },
             knowsAbout: inst.categories,
@@ -248,73 +279,55 @@ const structuredData = {
 
   <div style={{ minHeight: '100vh', color: 'var(--text)' }}>
 
-    {/* ── HERO ── */}
-    <section class="hero-gradient" style={{ position: 'relative', padding: '5rem 1rem 4rem', textAlign: 'center', overflow: 'hidden' }}>
-      <div class="container" style={{ position: 'relative', zIndex: 10 }}>
-
-        <div style={{
-          display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-          background: 'var(--brand-soft)', padding: '0.5rem 1rem',
-          borderRadius: '9999px', marginBottom: '1.5rem',
-          fontSize: '0.875rem', color: 'var(--brand)', fontWeight: 600,
-        }}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-          </svg>
-          Updated Daily — {currentMonth} {currentYear}
-        </div>
-
-        <h1 style={{
-          fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 800,
-          lineHeight: 1.1, maxWidth: '900px', margin: '0 auto 1.5rem',
-        }}>
-          <span style={{
-            background: 'linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)',
-            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-          }}>Top Udemy Instructors</span>
-          <br />
-          <span style={{
-            background: 'linear-gradient(135deg, var(--text) 0%, var(--muted) 100%)',
-            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-          }}>with Verified Coupons — {currentMonth} {currentYear}</span>
-        </h1>
-
-        <p style={{
-          fontSize: 'clamp(1rem, 2.5vw, 1.2rem)', color: 'var(--muted)',
-          maxWidth: '660px', margin: '0 auto 2.5rem', lineHeight: 1.7,
-        }}>
-          Discover exclusive discount codes from{' '}
-          <strong style={{ color: 'var(--text)' }}>{instructors.length} expert instructors</strong>.
-          Browse <strong style={{ color: 'var(--text)' }}>{dealCount.toLocaleString()} courses</strong> with up to{' '}
-          <strong style={{ color: 'var(--brand)' }}>100% off</strong> — verified and updated daily.
-        </p>
-
-        {/* Stat pills — identical style to /deals hero */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-          {[
-            { label: `${instructors.length} Instructors`,         path: 'M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z',   color: 'var(--brand)' },
-            { label: `${dealCount.toLocaleString()} Courses`,  path: 'M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 8H5V9h7v2zm0-4H5V5h7v2z',       color: 'hsl(35, 90%, 68%)' },
-            { label: `${totalFree}+ Free Courses`,                path: 'M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z',                                                                 color: 'hsl(120, 70%, 45%)' },
-            { label: `${avgRating} Avg Rating`,                   path: 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z',                  color: 'hsl(210, 100%, 60%)' },
-          ].map((stat) => (
-            <div style={{
-              display: 'flex', alignItems: 'center', gap: '0.5rem',
-              background: 'var(--card)', padding: '0.625rem 1.25rem',
-              borderRadius: '10px', border: '1px solid var(--border)',
-              fontSize: '0.875rem', fontWeight: 600, color: 'var(--text)',
-            }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill={stat.color}>
-                <path d={stat.path} />
-              </svg>
-              {stat.label}
+    {/* ── HERO (headline + stats + feed) ── */}
+    <section class="il-hero">
+      <div class="container il-grid">
+        <div class="il-copy">
+          <p class="il-eyebrow">
+            <span class="il-blink" aria-hidden="true"></span>
+            Verified instructor directory · {dealCount.toLocaleString()} coupons
+          </p>
+          <h1 class="il-title">Top Udemy <span>Instructors</span></h1>
+          <p class="il-sub">
+            Instructors ranked by <strong>{dealCount.toLocaleString()}+ verified coupon deals</strong> shared
+            with learners — every code manually checked before listing, updated {currentMonth} {currentYear}.
+          </p>
+          <div class="il-stats">
+            <div class="il-stat">
+              <div class="il-stat-num"><span data-il-count={instructors.length}>0</span></div>
+              <div class="il-stat-lab">instructors</div>
             </div>
-          ))}
+            <div class="il-stat">
+              <div class="il-stat-num"><span data-il-count={dealCount}>0</span>+</div>
+              <div class="il-stat-lab">coupons tracked</div>
+            </div>
+            <div class="il-stat">
+              <div class="il-stat-num"><span data-il-count={avgDiscountOverall}>0</span>%</div>
+              <div class="il-stat-lab">avg discount</div>
+            </div>
+          </div>
+          <div class="il-toolbar">
+            <a class="il-btn" href="#leaderboard">View the leaderboard</a>
+            <a class="il-btn ghost" href="/categories">Browse by category</a>
+            <a class="il-btn ghost" href="/deals">Today's new deals</a>
+          </div>
+        </div>
+        <div class="il-feed">
+          <div class="il-feed-head"><span>Freshly verified</span><a href="/deals">Today's batch →</a></div>
+          <div class="il-feed-body">
+            {heroFeed.map((d) => (
+              <a class="il-feed-line" href={d.href}>
+                <span class="il-feed-time">{d.time}</span>
+                <span class="il-feed-ok">✓</span>
+                <span class="il-feed-cat">{d.cat}</span>
+                <span class="il-feed-title">{d.title}</span>
+                <span class="il-feed-save">{d.save}</span>
+              </a>
+            ))}
+          </div>
+          <div class="il-feed-foot">{instructors.length} instructors ranked · <b>{dealCount.toLocaleString()} coupons</b></div>
         </div>
       </div>
-
-      {/* Ambient glows — identical to /deals */}
-      <div style={{ position: 'absolute', top: '20%', left: '5%', width: '280px', height: '280px', background: 'var(--brand)', filter: 'blur(120px)', opacity: 0.07, borderRadius: '50%', pointerEvents: 'none' }} />
-      <div style={{ position: 'absolute', bottom: '10%', right: '5%', width: '240px', height: '240px', background: 'hsl(0, 84%, 60%)', filter: 'blur(100px)', opacity: 0.07, borderRadius: '50%', pointerEvents: 'none' }} />
     </section>
 
     {/* ── GEO AI PERSONALISATION BANNER ── */}
@@ -327,7 +340,7 @@ const structuredData = {
           <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
         </svg>
         <span id="geo-text" style={{ fontSize: '0.88rem', color: 'var(--text)', fontWeight: 500 }}></span>
-        <a id="geo-link" href="#instructorGrid" style={{ marginLeft: 'auto', fontSize: '0.82rem', color: 'var(--brand)', fontWeight: 700, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+        <a id="geo-link" href="#leaderboard" style={{ marginLeft: 'auto', fontSize: '0.82rem', color: 'var(--brand)', fontWeight: 700, textDecoration: 'none', whiteSpace: 'nowrap' }}>
           Browse now →
         </a>
       </div>
@@ -393,138 +406,70 @@ const structuredData = {
           </div>
         </div>
 
-        {/* ── INSTRUCTOR GRID ── */}
-        <div
-          id="instructorGrid"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
-            gap: '1.5rem',
-            marginBottom: '3rem',
-          }}
-        >
-          {instructors.map((instructor) => {
-            const maxDisc  = getMaxDiscount(instructor.courses);
-            const free     = hasFree(instructor.courses);
-            const topDeals = getTopDeals(instructor.courses);
+        {/* ── LEADERBOARD ── */}
+        <h2 class="il-sec-title" id="leaderboard" style={{ scrollMarginTop: '5rem' }}>
+          Top Instructors with Verified Coupons <span class="il-tag">{instructors.length} ranked</span>
+        </h2>
+        <p class="il-sec-desc" style={{ marginBottom: '1rem' }}>Sorted by students — every code manually checked before listing.</p>
 
-            return (
-              <article
-                class="inst-card"
-                data-categories={instructor.categories.join(',')}
-                data-rating={instructor.avgRating}
-                data-students={instructor.totalStudents}
-                data-courses={instructor.courseCount}
-                data-name={instructor.name.toLowerCase()}
-              >
-                <div class="card-accent-bar"></div>
-
-                {/* Badge */}
-                {free
-                  ? <div class="card-badge badge-free">🎁 FREE Course</div>
-                  : maxDisc >= 90
-                    ? <div class="card-badge badge-hot">🔥 {maxDisc}% OFF</div>
-                    : null}
-
-                {/* Instructor header */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-                  <a 
-                    href={`/instructor/${createInstructorSlug(instructor.name)}`}
-                    class="inst-avatar" 
-                    aria-hidden="true"
-                    style={{ textDecoration: 'none' }}
+        <div class="il-table-wrap" id="leaderboardWrap">
+          <table class="il-table">
+            <thead>
+              <tr>
+                <th class="il-th-rank">#</th>
+                <th class="il-th-name">Instructor</th>
+                <th class="il-th-num">Courses</th>
+                <th class="il-th-num">Avg Disc</th>
+                <th class="il-th-num">Students</th>
+                <th class="il-th-num">Rating</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboardBody">
+              {instructors.map((instructor, index) => {
+                const slug = createInstructorSlug(instructor.name);
+                const instructorImg = instructorImages.get(slug);
+                const medal = index === 0 ? '#D4AF37' : index === 1 ? '#94a3b8' : index === 2 ? '#cd7f32' : null;
+                const students = instructor.totalStudents > 1000
+                  ? (instructor.totalStudents / 1000).toFixed(1) + 'k'
+                  : String(instructor.totalStudents);
+                return (
+                  <tr
+                    class="il-row"
+                    data-categories={instructor.categories.join(',')}
+                    data-rating={instructor.avgRating}
+                    data-students={instructor.totalStudents}
+                    data-courses={instructor.courseCount}
+                    data-name={instructor.name.toLowerCase()}
                   >
-                    {getInitials(instructor.name)}
-                  </a>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <a 
-                      href={`/instructor/${createInstructorSlug(instructor.name)}`}
-                      style={{ textDecoration: 'none' }}
-                    >
-                      <h3 class="inst-name" style={{ cursor: 'pointer' }}>{instructor.name}</h3>
-                    </a>
-                    <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.35rem', fontSize: '0.85rem', color: 'var(--muted)' }}>
-                      <span>{instructor.courseCount} courses</span>
-                      <span>·</span>
-                      <span>{instructor.provider}</span>
-                      {maxDisc > 0 && (
-                        <>
-                          <span>·</span>
-                          <span style={{ color: 'var(--brand)', fontWeight: 700 }}>Up to {maxDisc}% off</span>
-                        </>
+                    <td class="il-rank">
+                      {medal ? (
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill={medal} aria-label={`Rank ${index + 1}`}>
+                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                      ) : (
+                        <span class="il-rank-num">{index + 1}</span>
                       )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Stats — 3-column, matches DealCard metadata style */}
-                <div class="inst-stats-row">
-                  <div class="inst-stat">
-                    <span class="stat-val" style={{ color: 'var(--brand)' }}>{instructor.courseCount}</span>
-                    <span class="stat-lbl">Courses</span>
-                  </div>
-                  <div class="inst-stat">
-                    <span class="stat-val" style={{ color: 'hsl(210, 100%, 65%)' }}>{instructor.totalStudents.toLocaleString()}</span>
-                    <span class="stat-lbl">Students</span>
-                  </div>
-                  <div class="inst-stat">
-                    <span class="stat-val" style={{ color: 'hsl(35, 90%, 68%)' }}>{instructor.avgRating} ★</span>
-                    <span class="stat-lbl">Rating</span>
-                  </div>
-                </div>
-
-                {/* Category tags — linkable for internal SEO */}
-                <div style={{ marginBottom: '1.25rem' }}>
-                  <p class="section-label">Expertise</p>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
-                    {[...new Set(instructor.categories)].map((cat) => (
-                      <a
-                        href={`/categories/${cat.toLowerCase().replace(/\s+/g, '-')}`}
-                        class="cat-tag"
-                      >{cat}</a>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Hot deals preview — clickable rows */}
-                {topDeals.length > 0 && (
-                  <div style={{ marginBottom: '1.5rem' }}>
-                    <p class="section-label">🔥 Hot Coupons</p>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.55rem' }}>
-                      {topDeals.map((course) => {
-                        const disc = Math.round(
-                          100 - ((course.price ?? 0) / (course.originalPrice ?? 1)) * 100
-                        );
-                        return (
-                          <a href={`/deal/${course.id}`} class="deal-preview-row">
-                            <span class="deal-disc-pill">-{disc}%</span>
-                            <span class="deal-preview-title">{course.title}</span>
-                            <span class="deal-price-current">
-                              {(course.price ?? 0) === 0 ? 'FREE' : `$${course.price}`}
-                            </span>
-                          </a>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-
-                {/* Single CTA — link to instructor detail page */}
-                <a
-                  href={`/instructor/${createInstructorSlug(instructor.name)}`}
-                  class="cta-btn"
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
-                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                  </svg>
-                  View All Courses
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style={{ marginLeft: 'auto', opacity: 0.6 }}>
-                    <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
-                  </svg>
-                </a>
-              </article>
-            );
-          })}
+                    </td>
+                    <td class="il-name-cell">
+                      {instructorImg ? (
+                        <span class="il-avatar"><img src={instructorImg} alt={instructor.name} loading="lazy" width="36" height="36" /></span>
+                      ) : (
+                        <span class="il-avatar il-avatar-fb">{getInitials(instructor.name)}</span>
+                      )}
+                      <span class="il-name-info">
+                        <a href={`/instructor/${slug}`} class="il-name-link">{instructor.name}</a>
+                        <span class="il-name-meta">{instructor.categories.slice(0, 2).join(', ') || instructor.provider}</span>
+                      </span>
+                    </td>
+                    <td class="il-num">{instructor.courseCount}</td>
+                    <td class="il-num">{instructor.avgDiscount}%</td>
+                    <td class="il-num">{students}</td>
+                    <td class="il-num"><span class="il-rating">★ {instructor.avgRating}</span></td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
 
         {/* No results state */}
@@ -735,6 +680,114 @@ const structuredData = {
   .card-gradient {
     background: var(--bg);
   }
+
+  /* ── LEADERBOARD ── */
+  .il-hero {
+    background: linear-gradient(135deg, #080b12 0%, #141a2a 60%, #1a1408 100%);
+    padding: 3.5rem 1rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .il-hero::before {
+    content: ''; position: absolute; top: -100px; left: 12%;
+    width: 380px; height: 380px;
+    background: radial-gradient(circle, rgba(212,167,55,0.16) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .il-hero::after {
+    content: ''; position: absolute; bottom: -120px; right: 8%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(232,197,71,0.10) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .il-grid {
+    position: relative; z-index: 1;
+    display: grid; grid-template-columns: 1.05fr 1fr;
+    gap: 2.5rem; align-items: center;
+  }
+  .il-copy { min-width: 0; }
+  .il-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.75rem; font-weight: 800;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--brand); background: var(--brand-soft);
+    border: 1px solid rgba(212,167,55,0.35);
+    border-radius: 999px; padding: 7px 16px;
+    margin: 0 0 1.1rem;
+  }
+  .il-blink {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--brand); flex-shrink: 0;
+    animation: ilBlip 1.6s infinite;
+  }
+  @keyframes ilBlip { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .il-title {
+    font-size: clamp(1.9rem, 4vw, 2.9rem);
+    font-weight: 800; line-height: 1.12;
+    letter-spacing: -0.02em; color: var(--text);
+    margin: 0 0 0.75rem;
+  }
+  .il-title span {
+    background: linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .il-sub { font-size: 1.02rem; color: var(--muted); max-width: 560px; margin: 0 0 1.5rem; line-height: 1.65; }
+  .il-sub strong { color: var(--text); }
+  .il-stats { display: flex; gap: 2rem; flex-wrap: wrap; }
+  .il-stat { display: flex; flex-direction: column; }
+  .il-stat-num { font-size: 1.5rem; font-weight: 800; color: var(--brand); font-variant-numeric: tabular-nums; }
+  .il-stat-lab { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+  .il-toolbar { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.75rem; }
+  .il-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; font-weight: 700; text-decoration: none;
+    padding: 12px 20px; border-radius: 10px;
+    background: linear-gradient(135deg, #B8860B 0%, #D4AF37 40%, #E8C547 60%, #D4AF37 100%);
+    color: #080b12; white-space: nowrap;
+    box-shadow: 0 10px 24px -8px rgba(212,167,55,0.5);
+    transition: filter 0.2s, transform 0.2s;
+  }
+  .il-btn:hover { filter: brightness(1.06); transform: translateY(-1px); }
+  .il-btn.ghost { background: transparent; color: var(--brand); border: 1px solid rgba(212,167,55,0.45); box-shadow: none; }
+  .il-btn.ghost:hover { background: var(--brand-soft); }
+  .il-feed { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; min-width: 0; box-shadow: 0 24px 60px -20px rgba(0,0,0,0.5); }
+  .il-feed-head { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: rgba(212,167,55,0.06); border-bottom: 1px solid var(--border); font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text); }
+  .il-feed-head a { margin-left: auto; font-size: 0.8rem; font-weight: 700; color: var(--brand); text-decoration: none; text-transform: none; letter-spacing: 0; }
+  .il-feed-head a:hover { text-decoration: underline; }
+  .il-feed-body { padding: 4px 0; }
+  .il-feed-line { display: flex; align-items: center; gap: 10px; padding: 8px 16px; font-size: 0.85rem; color: var(--text); text-decoration: none; }
+  .il-feed-line:hover { background: var(--brand-soft); }
+  .il-feed-time { color: var(--muted); font-size: 0.75rem; flex-shrink: 0; min-width: 52px; font-variant-numeric: tabular-nums; }
+  .il-feed-ok { color: hsl(120, 60%, 55%); font-weight: 800; flex-shrink: 0; }
+  .il-feed-cat { color: var(--brand); font-size: 0.75rem; font-weight: 700; flex-shrink: 0; max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .il-feed-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+  .il-feed-save { color: var(--brand); font-weight: 800; flex-shrink: 0; }
+  .il-feed-foot { padding: 10px 16px; border-top: 1px solid var(--border); background: rgba(212,167,55,0.06); font-size: 0.8rem; color: var(--muted); }
+  .il-feed-foot b { color: var(--brand); }
+  .il-sec-title { font-size: 1.25rem; font-weight: 800; color: var(--text); margin: 0 0 0.3rem; display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; letter-spacing: -0.01em; }
+  .il-tag { font-size: 0.65rem; font-weight: 700; color: var(--muted); border: 1px solid var(--border); padding: 3px 10px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.05em; margin-left: auto; white-space: nowrap; }
+  .il-sec-desc { font-size: 0.88rem; color: var(--muted); margin: 0; }
+  .il-table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow-x: auto; margin-top: 1rem; margin-bottom: 3rem; }
+  table.il-table { width: 100%; border-collapse: collapse; min-width: 640px; }
+  .il-table thead th { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--border); background: rgba(212,167,55,0.05); white-space: nowrap; }
+  .il-table td { padding: 12px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  .il-table tbody tr:last-child td { border-bottom: none; }
+  .il-table tbody tr:hover td { background: rgba(212,167,55,0.04); }
+  .il-th-rank { width: 2.5rem; text-align: center; }
+  .il-th-name { text-align: left; }
+  .il-th-num { text-align: right; }
+  .il-rank { text-align: center; }
+  .il-rank-num { font-size: 0.82rem; font-weight: 700; color: var(--muted); }
+  .il-name-cell { display: flex; align-items: center; gap: 0.65rem; min-width: 0; }
+  .il-avatar { width: 36px; height: 36px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 800; color: #080b12; background: linear-gradient(135deg, #B8860B, #E8C547); flex-shrink: 0; overflow: hidden; }
+  .il-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .il-name-info { display: flex; flex-direction: column; gap: 0.1rem; min-width: 0; }
+  .il-name-link { color: var(--text); text-decoration: none; font-weight: 700; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .il-name-link:hover { color: var(--brand); text-decoration: underline; }
+  .il-name-meta { font-size: 0.68rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .il-num { text-align: right; font-size: 0.9rem; color: var(--muted); font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .il-rating { display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.85rem; font-weight: 700; color: var(--brand); }
+  @media (max-width: 900px) { .il-grid { grid-template-columns: 1fr; gap: 1.75rem; } }
 
   /* ── FILTERS ── */
   .filter-label {
@@ -984,7 +1037,8 @@ const structuredData = {
   const categoryFilter = document.getElementById('categoryFilter') as HTMLSelectElement | null;
   const ratingFilter   = document.getElementById('ratingFilter')   as HTMLSelectElement | null;
   const sortByEl       = document.getElementById('sortBy')         as HTMLSelectElement | null;
-  const grid           = document.getElementById('instructorGrid');
+  const grid           = document.getElementById('leaderboardBody');
+  const wrap           = document.getElementById('leaderboardWrap');
   const noResults      = document.getElementById('noResults');
   const resultCount    = document.getElementById('resultCount');
 
@@ -995,7 +1049,7 @@ const structuredData = {
     const minRating = parseFloat(ratingFilter.value) || 0;
     const sort      = sortByEl.value;
 
-    const cards = Array.from(grid.querySelectorAll<CardEl>('.inst-card'));
+    const cards = Array.from(grid.querySelectorAll<CardEl>('.il-row'));
 
     const visible = cards.filter((card) => {
       const cats   = card.dataset.categories.toLowerCase();
@@ -1017,10 +1071,10 @@ const structuredData = {
     cards.forEach((c) => (c.style.display = 'none'));
 
     if (visible.length === 0) {
-      if (grid)      grid.style.display      = 'none';
+      if (wrap)      wrap.style.display      = 'none';
       if (noResults) noResults.style.display = 'block';
     } else {
-      if (grid)      grid.style.display      = 'grid';
+      if (wrap)      wrap.style.display      = '';
       if (noResults) noResults.style.display = 'none';
       visible.forEach((c) => { c.style.display = ''; grid!.appendChild(c); });
     }
@@ -1033,6 +1087,39 @@ const structuredData = {
   categoryFilter?.addEventListener('change', filterAndSort);
   ratingFilter?.addEventListener('change', filterAndSort);
   sortByEl?.addEventListener('change', filterAndSort);
+
+  // ─────────────────────────────────────────────
+  // COUNT-UP hero stats
+  // ─────────────────────────────────────────────
+  function animateCount(el: Element): void {
+    const target = parseInt(el.getAttribute('data-il-count') || '0', 10);
+    if (isNaN(target)) return;
+    const dur = 900;
+    let start: number | null = null;
+    function step(ts: number): void {
+      if (!start) start = ts;
+      const p = Math.min(1, (ts - start) / dur);
+      el.textContent = String(Math.round(target * (1 - Math.pow(1 - p, 3))));
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function initCountUp(): void {
+    const nodes = document.querySelectorAll('[data-il-count]');
+    if (!('IntersectionObserver' in window)) {
+      nodes.forEach(animateCount);
+      return;
+    }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) { animateCount(e.target); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.3 });
+    nodes.forEach((n) => io.observe(n));
+  }
+
+  initCountUp();
 
   // ─────────────────────────────────────────────
   // GEO AI PERSONALISATION

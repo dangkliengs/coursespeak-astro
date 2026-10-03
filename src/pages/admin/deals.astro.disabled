@@ -1,535 +1,292 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import AdminProtection from "../../components/AdminProtection.astro";
-import AdminAuthGate from "../../components/AdminAuthGate";
+import AdminShell from "../../components/admin/AdminShell.astro";
 import { readDeals } from "../../lib/store";
 
 const allDeals = await readDeals();
+const now = Date.now();
 
-const pageTitle = "Manage Deals - Admin Dashboard";
-const pageDescription = "View, edit, and delete course deals on CourseSpeak.";
+const isExpired = (d: { expiresAt?: string }) => {
+  if (!d.expiresAt) return false;
+  const t = new Date(d.expiresAt).getTime();
+  return !isNaN(t) && t < now;
+};
+
+const rows = allDeals.map((d) => ({
+  id: d.id,
+  title: d.title,
+  image: d.image ?? "",
+  category: d.category,
+  subcategory: d.subcategory ?? "",
+  price: d.price,
+  originalPrice: d.originalPrice ?? 0,
+  coupon: d.coupon ?? "",
+  instructor: d.instructor ?? "",
+  updatedAt: d.updatedAt ?? d.createdAt ?? "",
+  expired: isExpired(d),
+}));
+
+const staleDays = (iso: string) => {
+  const t = new Date(iso).getTime();
+  if (!iso || isNaN(t)) return 0;
+  return Math.floor(Math.max(0, now - t) / 86400000);
+};
+
+const activeCount = rows.filter((r) => !r.expired).length;
+const expiredCount = rows.length - activeCount;
+const staleCount = rows.filter((r) => !r.expired && staleDays(r.updatedAt) >= 7).length;
 ---
 
-<Layout title={pageTitle} description={pageDescription}>
-  <AdminProtection>
-    <AdminAuthGate>
-      <div style={{ background: "var(--bg)", minHeight: "100vh", color: "var(--text)" }}>
-        <div style={{ marginBottom: "2rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <div>
-              <h1 style={{
-                fontSize: "2.5rem",
-                fontWeight: 700,
-                color: "#fff",
-                marginBottom: "0.5rem"
-              }}>
-                Manage Deals
-              </h1>
-              <p style={{
-                fontSize: "1.125rem",
-                color: "#a9b0c0"
-              }}>
-                {allDeals.length} total deals
-              </p>
-            </div>
-            <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
-              <a
-                href="/deals"
-                target="_blank"
-                style={{
-                  padding: "0.75rem 1.5rem",
-                  backgroundColor: "#10b981",
-                  color: "#fff",
-                  textDecoration: "none",
-                  borderRadius: "0.5rem",
-                  fontWeight: 600,
-                  border: "1px solid #10b981",
-                  transition: "all 0.2s ease"
-                }}
-                onmouseover="this.style.backgroundColor='#059669'"
-                onmouseout="this.style.backgroundColor='#10b981'"
-              >
-                View Posts/Deals →
-              </a>
-              <a href="/admin/deals/create" style={{
-                display: "inline-block",
-                padding: "0.75rem 1.5rem",
-                backgroundColor: "var(--brand)",
-                color: "#fff",
-                textDecoration: "none",
-                borderRadius: "0.5rem",
-                fontWeight: 600
-              }}>
-                + Create New Deal
-              </a>
-            </div>
-          </div>
+<AdminShell title="Deals" desc="Manage course deal listings" badge={`${rows.length} deals`}>
+  <div slot="actions">
+    <a class="adm-btn adm-btn-primary" href="/admin/deals/create">+ New Deal</a>
+  </div>
 
-          <!-- Search Form -->
-          <div style={{ marginBottom: "2rem" }}>
-            <div style={{
-              borderRadius: "1rem",
-              border: "1px solid rgba(91, 140, 255, 0.24)",
-              background: "linear-gradient(140deg, rgba(11, 13, 18, 0.98) 0%, rgba(18, 24, 40, 0.98) 55%, rgba(42, 64, 110, 0.38) 100%)",
-              boxShadow: "0 18px 36px rgba(8, 12, 26, 0.45)",
-              padding: "1.5rem"
-            }}>
-              <div style={{ display: "flex", gap: "1rem", alignItems: "flex-end", flexWrap: "wrap" }}>
-                <div style={{ flex: 1, minWidth: "200px" }}>
-                  <label for="searchInput" style={{ display: "block", color: "#fff", marginBottom: "0.5rem", fontWeight: 600 }}>
-                    Search Courses
-                  </label>
-                  <input
-                    type="text"
-                    id="searchInput"
-                    name="searchInput"
-                    placeholder="Search by title, provider, or category..."
-                    style={{
-                      width: "100%",
-                      padding: "0.75rem",
-                      backgroundColor: "rgba(255, 255, 255, 0.1)",
-                      border: "1px solid rgba(91, 140, 255, 0.24)",
-                      borderRadius: "0.5rem",
-                      color: "#fff",
-                      fontSize: "1rem"
-                    }}
-                    oninput="performSearch()"
-                    onkeypress="if(event.key === 'Enter') performSearch()"
-                  />
+  <div class="adm-stats">
+    <div class="adm-stat">
+      <div class="adm-stat-ic">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+      </div>
+      <div class="adm-stat-body"><div class="adm-stat-num">{rows.length.toLocaleString()}</div><div class="adm-stat-lbl">Total Deals</div></div>
+    </div>
+    <div class="adm-stat">
+      <div class="adm-stat-ic">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <div class="adm-stat-body"><div class="adm-stat-num">{activeCount.toLocaleString()}</div><div class="adm-stat-lbl">Active</div></div>
+    </div>
+    <div class="adm-stat">
+      <div class="adm-stat-ic">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div class="adm-stat-body"><div class="adm-stat-num">{expiredCount.toLocaleString()}</div><div class="adm-stat-lbl">Expired</div></div>
+    </div>
+    <div class="adm-stat">
+      <div class="adm-stat-ic">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <div class="adm-stat-body"><div class="adm-stat-num">{staleCount}</div><div class="adm-stat-lbl">Stale (7+ days)</div></div>
+    </div>
+  </div>
+
+  <div class="adm-card">
+    <div class="adm-toolbar">
+      <input class="adm-input" id="searchBox" type="search" placeholder="Search title, coupon code, category…" />
+      <select class="adm-select" id="catFilter" style="max-width:220px;">
+        <option value="">All categories</option>
+        {[...new Set(allDeals.map((d) => d.category).filter(Boolean))].sort().map((cat) => (
+          <option value={cat}>{cat}</option>
+        ))}
+      </select>
+      <select class="adm-select" id="statusFilter" style="max-width:180px;">
+        <option value="">All status</option>
+        <option value="active">Active ({activeCount})</option>
+        <option value="expired">Expired ({expiredCount})</option>
+      </select>
+      <span class="adm-count" id="countLabel"></span>
+    </div>
+    <div class="adm-table-wrap">
+      <table class="adm-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Coupon Code</th>
+            <th>Updated</th>
+            <th style="text-align:right;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="rows">
+          {rows.map((r) => (
+            <tr data-row
+                data-search={[r.title, r.category, r.subcategory, r.instructor, r.id, r.coupon].join(" ").toLowerCase()}
+                data-status={r.expired ? "expired" : "active"}
+                data-id={r.id}>
+              <td>
+                <div class="adm-course">
+                  {r.image ? (
+                    <img class="adm-thumb" src={r.image} alt="" loading="lazy" />
+                  ) : (
+                    <div class="adm-thumb" style="display:grid;place-items:center;">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    </div>
+                  )}
+                  <div style="min-width:0;">
+                    <a class="adm-link" href={`/deal/${r.id}`} target="_blank">{r.title}</a>
+                    <div class="adm-chip">ID: {r.id}</div>
+                  </div>
                 </div>
-                <div style={{ minWidth: "150px" }}>
-                  <label for="categoryFilter" style={{ display: "block", color: "#fff", marginBottom: "0.5rem", fontWeight: 600 }}>
-                    Category
-                  </label>
-                  <select
-                    id="categoryFilter"
-                    name="categoryFilter"
-                    style={{
-                      width: "100%",
-                      padding: "0.75rem",
-                      backgroundColor: "rgba(255, 255, 255, 0.1)",
-                      border: "1px solid rgba(91, 140, 255, 0.24)",
-                      borderRadius: "0.5rem",
-                      color: "#fff",
-                      fontSize: "1rem"
-                    }}
-                    onchange="filterDeals()"
-                  >
-                    <option value="">All Categories</option>
-                  </select>
+              </td>
+              <td>
+                {r.category}
+                {r.subcategory && <div class="adm-sub">{r.subcategory}</div>}
+              </td>
+              <td>
+                <span class="adm-price">${r.price ?? 0}{r.originalPrice ? <s>${r.originalPrice}</s> : null}</span>
+              </td>
+              <td>
+                {r.coupon ? (
+                  <code class="adm-coupon">{r.coupon}</code>
+                ) : (
+                  <span class="adm-muted">—</span>
+                )}
+              </td>
+              <td class="adm-muted">{r.updatedAt ? new Date(r.updatedAt).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" }) : "—"}</td>
+              <td>
+                <div class="adm-actions" style="justify-content:flex-end;">
+                  <a class="adm-btn adm-btn-ghost adm-btn-sm" href={`/admin/deals/edit/${r.id}`}>Edit</a>
+                  <button class="adm-btn adm-btn-danger adm-btn-sm" type="button" data-delete data-id={r.id}>Delete</button>
                 </div>
-                <button
-                  onclick="clearFilters()"
-                  style={{
-                    padding: "0.75rem 1.5rem",
-                    backgroundColor: "transparent",
-                    color: "#a9b0c0",
-                    border: "1px solid #a9b0c0",
-                    borderRadius: "0.5rem",
-                    fontWeight: 600,
-                    cursor: "pointer"
-                  }}
-                >
-                  Clear
-                </button>
-                <button
-                  onclick="performSearch()"
-                  style={{
-                    padding: "0.75rem 1.5rem",
-                    backgroundColor: "var(--brand)",
-                    color: "#fff",
-                    border: "1px solid var(--brand)",
-                    borderRadius: "0.5rem",
-                    fontWeight: 600,
-                    cursor: "pointer"
-                  }}
-                >
-                  Search
-                </button>
-              </div>
-              <div id="searchResults" style={{ marginTop: "1rem", color: "#a9b0c0", fontSize: "0.875rem" }}>
-                Showing all {allDeals.length} deals
-              </div>
-            </div>
-          </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <div class="adm-pagination" id="pager"></div>
+  </div>
+</AdminShell>
 
-          <div style={{
-            borderRadius: "1rem",
-            border: "1px solid rgba(91, 140, 255, 0.24)",
-            background: "linear-gradient(140deg, rgba(11, 13, 18, 0.98) 0%, rgba(18, 24, 40, 0.98) 55%, rgba(42, 64, 110, 0.38) 100%)",
-            boxShadow: "0 18px 36px rgba(8, 12, 26, 0.45)",
-            overflow: "hidden"
-          }}>
-            <div style={{ overflowX: "auto" }}>
-              <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                <thead>
-                  <tr style={{ borderBottom: "1px solid rgba(91, 140, 255, 0.24)" }}>
-                    <th style={{ padding: "1rem", textAlign: "left", color: "var(--brand)", fontWeight: 600 }}>Title</th>
-                    <th style={{ padding: "1rem", textAlign: "left", color: "var(--brand)", fontWeight: 600 }}>Provider</th>
-                    <th style={{ padding: "1rem", textAlign: "left", color: "var(--brand)", fontWeight: 600 }}>Category</th>
-                    <th style={{ padding: "1rem", textAlign: "left", color: "var(--brand)", fontWeight: 600 }}>Price</th>
-                    <th style={{ padding: "1rem", textAlign: "left", color: "var(--brand)", fontWeight: 600 }}>Date</th>
-                    <th style={{ padding: "1rem", textAlign: "left", color: "var(--brand)", fontWeight: 600 }}>Coupon</th>
-                    <th style={{ padding: "1rem", textAlign: "left", color: "var(--brand)", fontWeight: 600 }}>Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="dealsTableBody">
-                </tbody>
-              </table>
-            </div>
+<style is:global>
+  @media (max-width:1150px){
+    .adm-table th:nth-child(5),.adm-table td:nth-child(5){display:none;}
+  }
+  @media (max-width:950px){
+    .adm-table th:nth-child(2),.adm-table td:nth-child(2){display:none;}
+    .adm-link{max-width:220px;}
+  }
+  @media (max-width:720px){
+    .adm-link{max-width:140px;}
+    .adm-stat-num{font-size:1.25rem;}
+  }
+</style>
 
-            <div id="pagination" style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "0.5rem",
-              flexWrap: "wrap",
-              padding: "1.25rem",
-              borderTop: "1px solid rgba(91, 140, 255, 0.1)"
-            }}>
-            </div>
-          </div>
-        </div>
+<script>
+  const searchBox = document.getElementById("searchBox") as HTMLInputElement;
+  const catFilter = document.getElementById("catFilter") as HTMLSelectElement;
+  const statusFilter = document.getElementById("statusFilter") as HTMLSelectElement;
+  const countLabel = document.getElementById("countLabel") as HTMLElement;
+  const rows = Array.from(document.querySelectorAll<HTMLElement>("[data-row]"));
+  const pager = document.getElementById("pager") as HTMLElement;
+  const PAGE_SIZE = 50;
+  let currentPage = 1;
+  let matched: HTMLElement[] = [];
 
-      <!-- Hidden element to store deals data for JavaScript -->
-      <div id="deals-data" style="display: none;">{JSON.stringify(allDeals)}</div>
+  function applyFilters() {
+    const q = searchBox.value.trim().toLowerCase();
+    const cat = catFilter.value;
+    const status = statusFilter.value;
+    matched = rows.filter((row) => {
+      const text = row.dataset.search || "";
+      const rowCat = row.children[1]?.textContent?.trim() || "";
+      const matchQ = !q || text.includes(q);
+      const matchCat = !cat || rowCat.startsWith(cat);
+      const matchStatus = !status || row.dataset.status === status;
+      return matchQ && matchCat && matchStatus;
+    });
+    const totalPages = Math.max(1, Math.ceil(matched.length / PAGE_SIZE));
+    if (currentPage > totalPages) currentPage = totalPages;
+    renderPage();
+    countLabel.textContent = `${matched.length} / ${rows.length} shown`;
+    renderPager(totalPages);
+  }
 
-      <script>
-        console.log('Script loaded!');
+  function renderPage() {
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const end = start + PAGE_SIZE;
+    rows.forEach((row) => {
+      row.style.display = "none";
+    });
+    matched.slice(start, end).forEach((row) => {
+      row.style.display = "";
+    });
+  }
 
-        const PAGE_SIZE = 20;
-        let currentPage = 1;
-        let allDealsData: any[] = [];
+  function makePgBtn(label: string, page: number, opts: { disabled?: boolean; current?: boolean } = {}) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "adm-pg-btn" + (opts.current ? " current" : "");
+    b.textContent = label;
+    b.disabled = !!opts.disabled;
+    if (!opts.disabled && !opts.current) b.addEventListener("click", () => {
+      currentPage = page;
+      applyFilters();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+    return b;
+  }
 
-        const searchInput = document.getElementById('searchInput') as HTMLInputElement | null;
-        const categoryFilter = document.getElementById('categoryFilter') as HTMLSelectElement | null;
-        const tableBody = document.getElementById('dealsTableBody');
-        const searchResults = document.getElementById('searchResults');
-        const pagination = document.getElementById('pagination');
+  function makePgEllipsis() {
+    const s = document.createElement("span");
+    s.className = "adm-pg-info";
+    s.textContent = "…";
+    return s;
+  }
 
-        document.addEventListener('DOMContentLoaded', function() {
-          console.log('DOM loaded');
+  function renderPager(totalPages: number) {
+    pager.innerHTML = "";
+    if (totalPages <= 1) return;
+    const info = document.createElement("span");
+    info.className = "adm-pg-info";
+    info.textContent = `Page ${currentPage} of ${totalPages}`;
+    pager.appendChild(info);
+    pager.appendChild(makePgBtn("‹ Prev", currentPage - 1, { disabled: currentPage === 1 }));
+    const windowSize = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(windowSize / 2));
+    let endPage = Math.min(totalPages, startPage + windowSize - 1);
+    startPage = Math.max(1, endPage - windowSize + 1);
+    if (startPage > 1) {
+      pager.appendChild(makePgBtn("1", 1, { current: currentPage === 1 }));
+      if (startPage > 2) pager.appendChild(makePgEllipsis());
+    }
+    for (let p = startPage; p <= endPage; p++) {
+      pager.appendChild(makePgBtn(String(p), p, { current: p === currentPage }));
+    }
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) pager.appendChild(makePgEllipsis());
+      pager.appendChild(makePgBtn(String(totalPages), totalPages, { current: currentPage === totalPages }));
+    }
+    pager.appendChild(makePgBtn("Next ›", currentPage + 1, { disabled: currentPage === totalPages }));
+  }
 
-          console.log('Elements found:', {
-            searchInput: !!searchInput,
-            categoryFilter: !!categoryFilter,
-            tableBody: !!tableBody
-          });
+  searchBox.addEventListener("input", () => { currentPage = 1; applyFilters(); });
+  catFilter.addEventListener("change", () => { currentPage = 1; applyFilters(); });
+  statusFilter.addEventListener("change", () => { currentPage = 1; applyFilters(); });
+  applyFilters();
 
-          loadDataAndInitialize();
-        });
+  document.querySelectorAll<HTMLElement>(".adm-coupon").forEach((el) => {
+    el.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(el.textContent || "");
+        el.classList.add("copied");
+        const orig = el.textContent;
+        el.textContent = "Copied ✓";
+        setTimeout(() => {
+          el.textContent = orig;
+          el.classList.remove("copied");
+        }, 1200);
+      } catch {}
+    });
+  });
 
-        function loadDataAndInitialize() {
-          try {
-            const dealsElement = document.getElementById('deals-data');
-            if (dealsElement) {
-              allDealsData = JSON.parse(dealsElement.textContent);
-              console.log('Data loaded:', allDealsData.length, 'deals');
-            }
-            populateCategories();
-            currentPage = 1;
-            renderDeals();
-          } catch (error) {
-            console.error('Error loading data:', error);
-          }
-        }
-
-        function populateCategories() {
-          if (!categoryFilter) return;
-          const categories = Array.from(
-            new Set(
-              allDealsData
-                .map((d: any) => d.category)
-                .filter((c: any) => c && typeof c === 'string')
-            )
-          ).sort();
-          categories.forEach((cat: string) => {
-            const opt = document.createElement('option');
-            opt.value = cat;
-            opt.textContent = cat;
-            categoryFilter.appendChild(opt);
-          });
-        }
-
-        function getFilteredDeals() {
-          const term = (searchInput?.value || '').toLowerCase().trim();
-          const cat = categoryFilter?.value || '';
-
-          return allDealsData.filter((deal: any) => {
-            const matchTerm = !term ||
-              (deal.title && deal.title.toLowerCase().includes(term)) ||
-              (deal.provider && deal.provider.toLowerCase().includes(term)) ||
-              (deal.category && deal.category.toLowerCase().includes(term)) ||
-              (deal.coupon && deal.coupon.toLowerCase().includes(term));
-
-            const matchCat = !cat || (deal.category && deal.category === cat);
-
-            return matchTerm && matchCat;
-          });
-        }
-
-        function buildRowHtml(deal: any): string {
-          const esc = (s: any) => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-
-          return `
-            <td style="padding: 1rem; color: var(--text);">
-              <div style="max-width: 300px;">
-                <div style="font-weight: 600; margin-bottom: 0.25rem;">${esc(deal.title) || 'Untitled'}</div>
-                <div style="font-size: 0.875rem; color: #a9b0c0;">ID: ${esc(deal.id) || 'Unknown'}</div>
-              </div>
-            </td>
-            <td style="padding: 1rem; color: var(--text);">${esc(deal.provider) || 'Unknown'}</td>
-            <td style="padding: 1rem; color: var(--text);">
-              <div>
-                <div>${esc(deal.category) || 'Uncategorized'}</div>
-                ${deal.subcategory ? `<div style="font-size: 0.875rem; color: #a9b0c0;">${esc(deal.subcategory)}</div>` : ''}
-              </div>
-            </td>
-            <td style="padding: 1rem; color: var(--text);">
-              $${deal.price || '0'}
-              ${deal.originalPrice ? `<span style="text-decoration: line-through; color: #a9b0c0; margin-left: 0.5rem;">$${deal.originalPrice}</span>` : ''}
-            </td>
-            <td style="padding: 1rem; color: var(--text);">
-              <div style="font-size: 0.875rem;">
-                ${deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString() : (deal.createdAt ? new Date(deal.createdAt).toLocaleDateString() : 'Unknown')}
-              </div>
-            </td>
-            <td style="padding: 1rem; color: var(--text);">
-              <div style="
-                font-size: 0.875rem;
-                font-family: monospace;
-                background-color: rgba(91, 140, 255, 0.1);
-                padding: 0.25rem 0.5rem;
-                border-radius: 0.25rem;
-                display: inline-block;
-              ">
-                ${esc(deal.coupon) || 'N/A'}
-              </div>
-            </td>
-            <td style="padding: 1rem;">
-              <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                <a href="/deal/${deal.id || ''}" target="_blank" style="
-                  padding: 0.5rem 1rem;
-                  background-color: #10b981;
-                  color: #fff;
-                  text-decoration: none;
-                  border-radius: 0.375rem;
-                  font-size: 0.875rem;
-                  font-weight: 600;
-                  border: 1px solid #10b981;
-                ">View</a>
-                <a href="/admin/deals/edit/${deal.id || ''}" style="
-                  padding: 0.5rem 1rem;
-                  background-color: transparent;
-                  color: var(--brand);
-                  border: 1px solid var(--brand);
-                  text-decoration: none;
-                  border-radius: 0.375rem;
-                  font-size: 0.875rem;
-                  font-weight: 600;
-                ">Edit</a>
-                <button onclick="deleteDeal('${esc(deal.id) || ''}')" style="
-                  padding: 0.5rem 1rem;
-                  background-color: transparent;
-                  color: var(--destructive);
-                  border: 1px solid var(--destructive);
-                  border-radius: 0.375rem;
-                  font-size: 0.875rem;
-                  font-weight: 600;
-                  cursor: pointer;
-                ">Delete</button>
-              </div>
-            </td>
-          `;
-        }
-
-        function renderDeals() {
-          if (!tableBody || !searchResults) return;
-
-          const filtered = getFilteredDeals();
-          const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-
-          if (currentPage > totalPages) currentPage = totalPages;
-          if (currentPage < 1) currentPage = 1;
-
-          const start = (currentPage - 1) * PAGE_SIZE;
-          const pageItems = filtered.slice(start, start + PAGE_SIZE);
-
-          tableBody.innerHTML = '';
-
-          if (pageItems.length === 0) {
-            const emptyRow = document.createElement('tr');
-            emptyRow.innerHTML = `<td colspan="7" style="padding: 2rem; text-align: center; color: #a9b0c0;">No deals found</td>`;
-            tableBody.appendChild(emptyRow);
-          } else {
-            pageItems.forEach((deal: any) => {
-              const row = document.createElement('tr');
-              row.style.borderBottom = '1px solid rgba(91, 140, 255, 0.1)';
-              row.setAttribute('data-deal-id', String(deal.id || ''));
-              row.innerHTML = buildRowHtml(deal);
-              tableBody.appendChild(row);
-            });
-          }
-
-          searchResults.textContent = filtered.length === 0
-            ? 'No deals found'
-            : `Showing ${filtered.length} of ${allDealsData.length} deals (page ${currentPage} of ${totalPages})`;
-
-          renderPagination(totalPages, filtered.length, start, pageItems.length);
-        }
-
-        function renderPagination(totalPages: number, totalItems: number, start: number, count: number) {
-          if (!pagination) return;
-          pagination.innerHTML = '';
-
-          if (totalPages <= 1) return;
-
-          const info = document.createElement('span');
-          info.style.color = '#a9b0c0';
-          info.style.fontSize = '0.875rem';
-          info.style.marginRight = '0.5rem';
-          info.textContent = `${start + 1}-${start + count} of ${totalItems}`;
-          pagination.appendChild(info);
-
-          const btnStyle = (active: boolean) => `
-            padding: 0.5rem 0.9rem;
-            background-color: ${active ? 'var(--brand)' : 'transparent'};
-            color: ${active ? '#fff' : '#a9b0c0'};
-            border: 1px solid ${active ? 'var(--brand)' : 'rgba(91, 140, 255, 0.24)'};
-            border-radius: 0.375rem;
-            font-size: 0.875rem;
-            font-weight: 600;
-            cursor: pointer;
-            min-width: 2.5rem;
-          `;
-
-          const addBtn = (label: string, page: number, active = false, disabled = false) => {
-            const btn = document.createElement('button');
-            btn.textContent = label;
-            btn.setAttribute('style', btnStyle(active));
-            if (disabled) {
-              btn.disabled = true;
-              btn.style.opacity = '0.4';
-              btn.style.cursor = 'not-allowed';
-            } else {
-              btn.onclick = () => {
-                currentPage = page;
-                renderDeals();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              };
-            }
-            pagination.appendChild(btn);
-          };
-
-          addBtn('‹ Prev', currentPage - 1, false, currentPage === 1);
-
-          const pageNumbers: (number | string)[] = [];
-          if (totalPages <= 7) {
-            for (let i = 1; i <= totalPages; i++) pageNumbers.push(i);
-          } else {
-            pageNumbers.push(1);
-            const from = Math.max(2, currentPage - 1);
-            const to = Math.min(totalPages - 1, currentPage + 1);
-            if (from > 2) pageNumbers.push('...');
-            for (let i = from; i <= to; i++) pageNumbers.push(i);
-            if (to < totalPages - 1) pageNumbers.push('...');
-            pageNumbers.push(totalPages);
-          }
-
-          pageNumbers.forEach((p) => {
-            if (p === '...') {
-              const span = document.createElement('span');
-              span.textContent = '...';
-              span.style.color = '#a9b0c0';
-              span.style.padding = '0 0.25rem';
-              pagination.appendChild(span);
-            } else {
-              addBtn(String(p), p as number, p === currentPage);
-            }
-          });
-
-          addBtn('Next ›', currentPage + 1, false, currentPage === totalPages);
-        }
-
-        function performSearch() {
-          console.log('Searching...');
-          currentPage = 1;
-          renderDeals();
-        }
-
-        function filterDeals() {
-          console.log('Filtering by category...');
-          currentPage = 1;
-          renderDeals();
-        }
-
-        function clearFilters() {
-          console.log('Clearing filters');
-          if (searchInput) searchInput.value = '';
-          if (categoryFilter) categoryFilter.value = '';
-          currentPage = 1;
-          renderDeals();
-        }
-
-        function testSearch() {
-          console.log('Testing search function');
-          performSearch();
-        }
-
-        function deleteDeal(dealId: string) {
-          console.log('Deleting deal:', dealId);
-
-          if (!confirm('Are you sure you want to delete this deal? This action cannot be undone.')) {
-            return;
-          }
-
-          fetch(`/api/deals?id=${encodeURIComponent(dealId)}`, {
-            method: 'DELETE',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          })
-          .then(response => response.json())
-          .then(data => {
-            if (data.success) {
-              alert(`Deal deleted successfully! ID: ${data.deletedId}`);
-
-              allDealsData = allDealsData.filter((d: any) => d.id !== dealId);
-              renderDeals();
-
-              const countElement = document.querySelector('p');
-              if (countElement && countElement.textContent?.includes('total deals')) {
-                countElement.textContent = `${allDealsData.length} total deals`;
-              }
-
-              console.log('Deal deleted successfully:', data);
-            } else {
-              alert('Error deleting deal: ' + (data.error || 'Unknown error'));
-              console.error('Delete failed:', data);
-            }
-          })
-          .catch(error => {
-            console.error('Network error during delete:', error);
-            alert('Network error occurred while deleting deal. Please try again.');
-          });
-        }
-
-        // Add type declarations for global window
-        declare global {
-          interface Window {
-            performSearch: () => void;
-            filterDeals: () => void;
-            clearFilters: () => void;
-            testSearch: () => void;
-            deleteDeal: (dealId: string) => void;
-          }
-        }
-        window.performSearch = performSearch;
-        window.filterDeals = filterDeals;
-        window.clearFilters = clearFilters;
-        window.testSearch = testSearch;
-        window.deleteDeal = deleteDeal;
-        console.log('Functions exposed');
-      </script>
-    </AdminAuthGate>
-  </AdminProtection>
-</Layout>
+  document.querySelectorAll<HTMLButtonElement>("[data-delete]").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const dealId = btn.dataset.id || "";
+      const title = btn.closest("tr")?.querySelector(".adm-link")?.textContent || dealId;
+      if (!confirm(`Delete deal "${title}"?\n\nThis cannot be undone.`)) return;
+      btn.disabled = true;
+      btn.textContent = "…";
+      try {
+        const res = await fetch(`/api/deals?id=${encodeURIComponent(dealId)}`, { method: "DELETE" });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.error || "Delete failed");
+        btn.closest("tr")?.remove();
+        applyFilters();
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = "Delete";
+        alert(`Error: ${(err as Error).message}`);
+      }
+    });
+  });
+</script>

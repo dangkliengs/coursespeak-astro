@@ -1,11 +1,31 @@
 ---
 import { Image } from 'astro:assets';
 import { createInstructorSlug, parseInstructors } from '../lib/instructors';
+import { getInstructorImageByName } from '../lib/instructorProfiles';
+import instructorDirectory from '../data/instructorCounts.json';
 
 const { deal, eager = false } = Astro.props;
 
 const instructorsList = deal.instructor ? parseInstructors(deal.instructor) : [];
 const instructorProfileSlug = createInstructorSlug(instructorsList[0] ?? deal.instructor);
+
+// ===== Instructor header: foto + nama + flag bahasa =====
+const LANG_FLAGS: Record<string, string> = {
+  english: "🇺🇸", spanish: "🇪🇸", turkish: "🇹🇷", german: "🇩🇪", french: "🇫🇷",
+  portuguese: "🇧🇷", italian: "🇮🇹", arabic: "🇸🇦", indonesian: "🇮🇩", hindi: "🇮🇳",
+  japanese: "🇯🇵", korean: "🇰🇷", chinese: "🇨🇳", russian: "🇷🇺", dutch: "🇳🇱",
+  polish: "🇵🇱", thai: "🇹🇭", vietnamese: "🇻🇳", ukrainian: "🇺🇦", greek: "🇬🇷",
+};
+const firstInstructor = instructorsList[0] ?? "";
+const instructorImg = firstInstructor ? getInstructorImageByName(firstInstructor) : undefined;
+const instructorInitials = firstInstructor.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+const dealLang = String(deal.language || "").trim();
+const langFlag = LANG_FLAGS[dealLang.toLowerCase()] || "";
+const dirEntry = (instructorDirectory as unknown as Record<string, { name?: string; count?: number }>)[instructorProfileSlug];
+const instructorCoursesCount = typeof dirEntry?.count === "number" ? dirEntry.count : undefined;
+const insSub = typeof instructorCoursesCount === "number"
+  ? `${instructorCoursesCount} course${instructorCoursesCount === 1 ? "" : "s"}`
+  : (dealLang || deal.category || deal.provider || "Udemy");
 
 function formatDuration(duration: string) {
   if (!duration) return "";
@@ -73,6 +93,96 @@ const title = String(deal.title || "").replace(/&amp;/g, "&").replace(/&quot;/g,
   transition: "all 0.3s ease",
   position: "relative"
 }}>
+  {/* Instructor header — foto + nama + flag bahasa, di atas */}
+  <div class="deal-ins-header" style={{
+    display: "flex",
+    alignItems: "center",
+    gap: "0.75rem",
+    padding: "1.1rem 1.25rem 1rem"
+  }}>
+    {firstInstructor && (
+      <>
+        <a
+          href={`/instructor/${instructorProfileSlug}`}
+          aria-label={firstInstructor}
+          tabindex="-1"
+          style={{
+            width: "44px",
+            height: "44px",
+            flexShrink: 0,
+            borderRadius: "10px",
+            overflow: "hidden",
+            display: "block",
+            background: "var(--card-hover)",
+            border: "1px solid rgba(212,167,55,0.35)",
+            textDecoration: "none"
+          }}
+        >
+          {instructorImg ? (
+            <Image
+              src={instructorImg}
+              alt={firstInstructor}
+              width={44}
+              height={44}
+              loading="lazy"
+              decoding="async"
+              inferSize={false}
+              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+            />
+          ) : (
+            <span style={{
+              width: "100%", height: "100%",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontWeight: 800, fontSize: "0.95rem", color: "var(--brand)"
+            }} aria-hidden="true">{instructorInitials}</span>
+          )}
+        </a>
+        <div style={{ display: "flex", flexDirection: "column", minWidth: 0, flex: 1 }}>
+          {instructorsList.length === 1 ? (
+            <a
+              href={`/instructor/${instructorProfileSlug}`}
+              style={{
+                fontSize: "0.95rem", fontWeight: 800, color: "var(--text)",
+                lineHeight: 1.25, textDecoration: "none",
+                whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"
+              }}
+            >
+              {firstInstructor}
+            </a>
+          ) : (
+            <span style={{
+              fontSize: "0.95rem", fontWeight: 800, color: "var(--text)",
+              lineHeight: 1.25,
+              whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"
+            }}>
+              {instructorsList.map((n, i) => (
+                <Fragment key={n}>
+                  {i > 0 && ", "}
+                  <a
+                    href={`/instructor/${createInstructorSlug(n)}`}
+                    style={{ color: "inherit", textDecoration: "none" }}
+                  >
+                    {n}
+                  </a>
+                </Fragment>
+              ))}
+            </span>
+          )}
+          <span style={{ fontSize: "0.8rem", color: "var(--muted)", marginTop: "1px" }}>{insSub}</span>
+        </div>
+        {langFlag ? (
+          <span title={dealLang} role="img" aria-label={dealLang} style={{ fontSize: "1.35rem", lineHeight: 1, flexShrink: 0 }}>{langFlag}</span>
+        ) : dealLang ? (
+          <span title={dealLang} style={{
+            flexShrink: 0, fontSize: "0.7rem", fontWeight: 800, letterSpacing: "0.06em",
+            color: "var(--brand)", background: "var(--brand-soft)",
+            border: "1px solid rgba(212,167,55,0.35)", padding: "4px 8px", borderRadius: "6px"
+          }}>{dealLang.slice(0, 2).toUpperCase()}</span>
+        ) : null}
+      </>
+    )}
+  </div>
+
   {/* Image at top with timestamp badge */}
   <div style={{
     height: "180px",
@@ -138,7 +248,7 @@ const title = String(deal.title || "").replace(/&amp;/g, "&").replace(/&quot;/g,
   </div>
 
   {/* Content below image */}
-  <div style={{ padding: "1.5rem" }}>
+  <div style={{ padding: "1.25rem 1.5rem 1.5rem" }}>
     {/* Title */}
     <h3 style={{
       fontSize: "1.1rem",
@@ -158,37 +268,6 @@ const title = String(deal.title || "").replace(/&amp;/g, "&").replace(/&quot;/g,
         {title}
       </a>
     </h3>
-
-    {/* Instructor */}
-    {instructorsList.length > 0 && (
-      <div style={{
-        display: "flex",
-        alignItems: "center",
-        gap: "0.5rem",
-        marginBottom: "0.75rem"
-      }}>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--muted)">
-          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-        </svg>
-        {instructorsList.length === 1 ? (
-          <a
-            href={`/instructor/${instructorProfileSlug}`}
-            style={{
-              color: "var(--text)",
-              fontSize: "0.85rem",
-              fontWeight: 600,
-              textDecoration: "none"
-            }}
-          >
-            By {instructorsList[0]}
-          </a>
-        ) : (
-          <span style={{ color: "var(--text)", fontSize: "0.85rem", fontWeight: 600 }}>
-            By {instructorsList.join(", ")}
-          </span>
-        )}
-      </div>
-    )}
 
     {/* Description */}
     <p style={{
@@ -294,14 +373,14 @@ const title = String(deal.title || "").replace(/&amp;/g, "&").replace(/&quot;/g,
 
       {/* Verified Badge inline with price */}
       <div style={{
-        color: "var(--muted)",
+        color: "hsl(120, 60%, 55%)",
         fontSize: "0.7rem",
-        fontWeight: 500,
+        fontWeight: 700,
         display: "flex",
         alignItems: "center",
         gap: "0.25rem"
       }}>
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="var(--muted)">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="hsl(120, 60%, 55%)">
           <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
         </svg>
         Verified
@@ -355,3 +434,7 @@ const title = String(deal.title || "").replace(/&amp;/g, "&").replace(/&quot;/g,
     </a>
   </div>
 </div>
+
+<style>
+  .deal-ins-header a:hover { text-decoration: underline !important; }
+</style>

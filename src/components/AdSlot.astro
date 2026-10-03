@@ -106,14 +106,8 @@ const styleReserve = `min-height:${defaultMinHeight}px`;
           push();
           return;
         }
-        // Above-the-fold units: push immediately so the auction starts fast
-        try {
-          var rect = container.getBoundingClientRect();
-          if (rect.top < window.innerHeight * 1.2) {
-            push();
-            return;
-          }
-        } catch (e) {}
+        // Below-fold units: push only when actually entering the viewport
+        // (strict lazy — avoids "iframe below the fold" warnings)
         var io = new IntersectionObserver(
           function (entries) {
             for (var i = 0; i < entries.length; i++) {
@@ -124,7 +118,7 @@ const styleReserve = `min-height:${defaultMinHeight}px`;
               }
             }
           },
-          { rootMargin: "400px 0px" }
+          { rootMargin: "0px", threshold: 0 }
         );
         io.observe(container);
       })();

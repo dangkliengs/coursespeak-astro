@@ -5,6 +5,7 @@ import { readDeals } from "../../lib/store";
 import type { Deal } from "../../types/deal";
 
 import { parseInstructors, createInstructorSlug, instructorSlugLookupKeys } from "../../lib/instructors";
+import { getInstructorImageByName } from "../../lib/instructorProfiles";
 
 // Types
 interface InstructorData {
@@ -99,10 +100,13 @@ if (!instructorSlug) {
 }
 
 // Filter deals for this instructor (check if instructorName is in comma-separated list)
-const instructorCourses = allDeals.filter(d => {
-  const instructors = parseInstructors(d.instructor);
-  return instructors.includes(instructorName);
-});
+// Urutkan kursus berdasarkan enrollment (terbanyak dulu)
+const instructorCourses = allDeals
+  .filter(d => {
+    const instructors = parseInstructors(d.instructor);
+    return instructors.includes(instructorName);
+  })
+  .sort((a, b) => (b.students ?? 0) - (a.students ?? 0));
 
 // Calculate instructor stats (students data comes from deals.json)
 const totalStudents = instructorCourses.reduce((sum, c) => sum + (c.students || 0), 0);
@@ -138,6 +142,12 @@ function getMaxDiscount(courses: Deal[]): number {
 }
 const maxDisc = getMaxDiscount(instructorCourses);
 const hasFree = instructorCourses.some((c) => c.price === 0);
+const freeCount = instructorCourses.filter((c) => c.price === 0).length;
+
+// Initials fallback untuk portrait
+function getInitials(name: string): string {
+  return name.split(' ').filter(Boolean).map((n) => n[0]).join('').toUpperCase().slice(0, 2);
+}
 
 // SEO Data
 const currentDate = new Date();
@@ -150,6 +160,9 @@ const siteUrl = "https://coursespeak.com";
 const instructorUrl = `${siteUrl}/instructor/${instructorSlug}`;
 
 const cleanName = instructorName.replace(/[^\x20-\x7E]/g, '').trim();
+
+// Foto instructor (Udemy CDN), fallback ke avatar inisial
+const instructorImage = getInstructorImageByName(instructorName);
 
 const pageTitle = `${instructorName}'s — Udemy Coupon Codes ${currentMonth} ${currentYear} | CourseSpeak`;
 const pageDescription = `Access ${instructorData.courseCount} Udemy Coupon Codes by ${instructorName}. ${instructorData.totalStudents.toLocaleString()}+ students enrolled. Average rating ${instructorData.avgRating}★. Browse free online courses with 100% off coupons.`;
@@ -176,7 +189,7 @@ const faqs = [
 
 ---
 
-<Layout title={pageTitle} description={pageDescription} canonical={instructorUrl}>
+<Layout title={pageTitle} description={pageDescription} canonical={instructorUrl} image={instructorImage}>
   <Fragment slot="head">
     <script
       type="application/ld+json"
@@ -190,6 +203,15 @@ const faqs = [
               { '@type': 'ListItem', position: 2, name: 'Instructors', item: `${siteUrl}/instructors` },
               { '@type': 'ListItem', position: 3, name: cleanName, item: instructorUrl },
             ],
+          },
+          {
+            '@type': 'Person',
+            '@id': instructorUrl,
+            name: instructorName,
+            ...(instructorImage ? { image: instructorImage } : {}),
+            jobTitle: 'Udemy Instructor',
+            description: pageDescription,
+            url: instructorUrl,
           },
           {
             '@type': 'CollectionPage',
@@ -216,46 +238,51 @@ const faqs = [
   </Fragment>
 
   <main>
-    <section class="hero">
-      <div class="container">
-        <div class="hero-content anim-up">
-          <h1>
-            <span style="display:block;font-size:1rem;font-weight:700;color:var(--brand);margin-bottom:0.5rem;">
-             {instructorData.courseCount} Coupon Code {instructorData.courseCount === 1 ? '' : 's'} in {provider}  
-            </span>
-            <span class="hero-gradient-text" style="display:block;font-size:clamp(2rem,5vw,3.5rem)">
-              {instructorName}
-            </span>
-          </h1>
-          <p>{pageDescription}</p>
+    {/* ── HERO (headline + stats + portrait) ── */}
+    <section class="ih-hero">
+      <div class="container ih-grid">
+        <div class="ih-copy anim-up">
+          <p class="ih-eyebrow">
+            <span class="ih-blink" aria-hidden="true"></span>
+            {provider} · {instructorData.courseCount} Coupon Code{instructorData.courseCount === 1 ? '' : 's'}
+          </p>
+          <h1 class="ih-title">{instructorName}</h1>
+          <p class="ih-sub">{pageDescription}</p>
+          <div class="ih-stats">
+            <div class="ih-stat">
+              <div class="ih-stat-num"><span data-ih-count={instructorData.courseCount}>0</span></div>
+              <div class="ih-stat-lab">courses</div>
+            </div>
+            <div class="ih-stat">
+              <div class="ih-stat-num"><span data-ih-count={instructorData.totalStudents}>0</span>+</div>
+              <div class="ih-stat-lab">students</div>
+            </div>
+            <div class="ih-stat">
+              <div class="ih-stat-num">Up to <span data-ih-count={maxDisc}>0</span>%</div>
+              <div class="ih-stat-lab">max discount</div>
+            </div>
+          </div>
+          <div class="ih-toolbar">
+            <a class="ih-btn" href="#deals">View all {instructorData.courseCount} courses</a>
+            <a class="ih-btn ghost" href="/instructors">Browse all instructors</a>
+            <a class="ih-btn ghost" href="/deals">Today's new deals</a>
+          </div>
         </div>
-      </div>
-    </section>
-
-    <section style="padding-bottom:2rem;margin-top:-1rem">
-      <div class="container">
-        <div class="stat-grid">
-          <div class="stat-box">
-            <div class="stat-icon">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              {instructorData.avgRating}
-            </div>
-            <div class="stat-label">Avg Rating</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-icon">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-              {instructorData.totalStudents.toLocaleString()}
-            </div>
-            <div class="stat-label">Students</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-icon">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
-              Up to {maxDisc}%
-            </div>
-            <div class="stat-label">Max Discount</div>
-          </div>
+        <div class="ih-portrait">
+          <div class="ih-portrait-blob" aria-hidden="true"></div>
+          {instructorImage ? (
+            <img
+              class="ih-portrait-img"
+              src={instructorImage}
+              alt={instructorName}
+              width="220"
+              height="220"
+              loading="eager"
+              fetchpriority="high"
+            />
+          ) : (
+            <span class="ih-portrait-fb" aria-hidden="true">{getInitials(instructorName)}</span>
+          )}
         </div>
       </div>
     </section>
@@ -265,7 +292,10 @@ const faqs = [
         <div class="adv-grid">
           <div>
             <span class="section-title">Why {instructorName}</span>
-            <h2 class="section-heading" style="max-width:450px">Learn from a trusted instructor.</h2>
+            <h2 class="section-heading" style="max-width:450px;display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap;">
+              Learn from a trusted instructor.
+              {freeCount > 0 && <span class="ih-tag">{freeCount} free deal{freeCount === 1 ? '' : 's'}</span>}
+            </h2>
           </div>
           <p style="color:var(--text-secondary);font-size:1rem;line-height:1.7;margin:0">
             {instructorName} offers <strong>{instructorData.courseCount} verified course{instructorData.courseCount === 1 ? '' : 's'}</strong> on CourseSpeak. Browse top-rated courses with discounts up to <strong>{maxDisc}% off</strong>{hasFree ? ', including free courses' : ''}.
@@ -304,8 +334,15 @@ const faqs = [
       </div>
     </section>
 
-    <section class="section" style="padding-top:0;">
+    <section class="section" id="deals" style="padding-top:3rem;scroll-margin-top:5rem;">
       <div class="container">
+        <div class="ih-sec-head">
+          <h2 class="ih-sec-title">
+            All {instructorName} Courses with Verified Coupons
+            <span class="ih-tag">{instructorData.courseCount} courses</span>
+          </h2>
+          <p class="ih-sec-desc">Sorted by enrollment — every coupon manually checked before listing.</p>
+        </div>
         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.25rem;">
           {instructorCourses.map((course) => (
             <DealCard deal={course} />
@@ -315,21 +352,209 @@ const faqs = [
     </section>
 
     <section class="section" style="padding-top:0;">
-      <div class="container" style="max-width:800px;">
-        <span class="section-title">FAQ</span>
-        <h2 class="section-heading" style="margin:0 0 2rem;">Common Questions</h2>
-        <div class="faq-grid">
+      <div class="container">
+        <div class="ih-sec-head">
+          <h2 class="ih-sec-title">
+            Frequently asked questions
+            <span class="ih-tag">{faqs.length} questions</span>
+          </h2>
+        </div>
+        <div class="ih-faq-grid">
           {faqs.map((faq) => (
-            <details class="faq-item">
-              <summary>
-                {faq.q}
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="3" class="fi"><polyline points="6 9 12 15 18 9"/></svg>
-              </summary>
-              <div class="faq-answer">{faq.a}</div>
-            </details>
+            <div class="ih-faq-card">
+              <h3 class="ih-faq-q">{faq.q}</h3>
+              <p class="ih-faq-a">{faq.a}</p>
+            </div>
           ))}
         </div>
       </div>
     </section>
+
+    <section class="section" style="padding-top:0;">
+      <div class="container">
+        <div class="cta-box">
+          <p class="cta-eyebrow">More instructors to explore</p>
+          <h2>Discover top Udemy instructors</h2>
+          <p class="cta-subtext">Browse every verified instructor — all with manually checked coupon codes.</p>
+          <div class="cta-actions">
+            <a href="/instructors" class="ih-btn">Browse All Instructors →</a>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
+
+<style>
+  /* ── Instructor hero ── */
+  .ih-hero {
+    background: linear-gradient(135deg, #080b12 0%, #141a2a 60%, #1a1408 100%);
+    padding: 3.5rem 0 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .ih-hero::before {
+    content: '';
+    position: absolute; top: -100px; left: 12%;
+    width: 380px; height: 380px;
+    background: radial-gradient(circle, rgba(212,167,55,0.16) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .ih-hero::after {
+    content: '';
+    position: absolute; bottom: -120px; right: 8%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(232,197,71,0.10) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .ih-grid {
+    position: relative; z-index: 1;
+    display: grid; grid-template-columns: 1.05fr 1fr;
+    gap: 2.5rem; align-items: center;
+  }
+  .ih-copy { min-width: 0; }
+  .ih-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.75rem; font-weight: 800;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--brand);
+    background: var(--brand-soft);
+    border: 1px solid rgba(212,167,55,0.35);
+    border-radius: 999px; padding: 7px 16px;
+    margin: 0 0 1.1rem;
+  }
+  .ih-blink {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--brand); flex-shrink: 0;
+    animation: ihBlip 1.6s infinite;
+  }
+  @keyframes ihBlip { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .ih-title {
+    font-size: clamp(1.9rem, 4vw, 2.9rem);
+    font-weight: 800; line-height: 1.12;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin: 0 0 0.75rem;
+  }
+  .ih-sub {
+    font-size: 1.02rem; color: var(--text-secondary);
+    max-width: 560px; margin: 0 0 1.5rem; line-height: 1.65;
+  }
+  .ih-stats { display: flex; gap: 2rem; flex-wrap: wrap; }
+  .ih-stat { display: flex; flex-direction: column; }
+  .ih-stat-num {
+    font-size: 1.5rem; font-weight: 800; color: var(--brand);
+    font-variant-numeric: tabular-nums;
+  }
+  .ih-stat-lab {
+    font-size: 0.7rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+  .ih-toolbar { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.75rem; }
+  .ih-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; font-weight: 700; text-decoration: none;
+    padding: 12px 20px; border-radius: 10px;
+    background: linear-gradient(135deg, #B8860B 0%, #D4AF37 40%, #E8C547 60%, #D4AF37 100%);
+    color: #080b12; white-space: nowrap;
+    box-shadow: 0 10px 24px -8px rgba(212,167,55,0.5);
+    transition: filter 0.2s, transform 0.2s;
+  }
+  .ih-btn:hover { filter: brightness(1.06); transform: translateY(-1px); }
+  .ih-btn.ghost {
+    background: transparent; color: var(--brand);
+    border: 1px solid rgba(212,167,55,0.45); box-shadow: none;
+  }
+  .ih-btn.ghost:hover { background: var(--brand-soft); }
+  .ih-portrait {
+    display: flex; align-items: center; justify-content: center;
+    min-width: 0; position: relative; padding: 1rem 0;
+  }
+  .ih-portrait-blob {
+    position: absolute; width: min(320px, 90%); aspect-ratio: 1;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 35% 30%, rgba(212,167,55,0.30) 0%, transparent 55%),
+      radial-gradient(circle, rgba(232,197,71,0.16) 0%, transparent 62%),
+      radial-gradient(circle, rgba(212,167,55,0.10) 0%, transparent 70%);
+    border: 1px solid rgba(212,167,55,0.30);
+    pointer-events: none;
+  }
+  .ih-portrait-img {
+    position: relative; width: min(220px, 62%); aspect-ratio: 1;
+    border-radius: 50%; object-fit: cover;
+    border: 5px solid rgba(212,167,55,0.85);
+    box-shadow: 0 24px 60px -12px rgba(0,0,0,0.6), 0 0 40px -8px rgba(212,167,55,0.35);
+  }
+  .ih-portrait-fb {
+    position: relative; width: min(220px, 62%); aspect-ratio: 1;
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 3.5rem; color: #080b12;
+    background: linear-gradient(135deg, #B8860B 0%, #D4AF37 40%, #E8C547 100%);
+    border: 5px solid rgba(212,167,55,0.85);
+    box-shadow: 0 24px 60px -12px rgba(0,0,0,0.6);
+  }
+  /* ── Section head + tag ── */
+  .ih-sec-head { margin-bottom: 1.25rem; }
+  .ih-sec-title {
+    font-size: 1.25rem; font-weight: 800; color: var(--text);
+    margin: 0 0 0.3rem; display: flex; align-items: center;
+    gap: 0.6rem; flex-wrap: wrap; letter-spacing: -0.01em;
+  }
+  .ih-tag {
+    font-size: 0.65rem; font-weight: 700; color: var(--muted);
+    border: 1px solid var(--border); padding: 3px 10px;
+    border-radius: 999px; text-transform: uppercase;
+    letter-spacing: 0.05em; margin-left: auto; white-space: nowrap;
+  }
+  .ih-sec-desc { font-size: 0.88rem; color: var(--muted); margin: 0; }
+  /* ── FAQ kartu ── */
+  .ih-faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .ih-faq-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.1rem 1.15rem;
+    transition: border-color 0.2s;
+  }
+  .ih-faq-card:hover { border-color: rgba(212,167,55,0.45); }
+  .ih-faq-q { font-size: 0.95rem; font-weight: 700; color: var(--text); margin: 0 0 0.4rem; line-height: 1.4; }
+  .ih-faq-a { font-size: 0.85rem; color: var(--muted); line-height: 1.6; margin: 0; }
+  @media (max-width: 900px) {
+    .ih-grid { grid-template-columns: 1fr; gap: 1.75rem; }
+    .ih-faq-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  (function () {
+    function animate(el) {
+      var target = parseInt(el.getAttribute('data-ih-count') || '0', 10);
+      if (isNaN(target)) return;
+      var dur = 900;
+      var start = null;
+      function step(ts) {
+        if (!start) start = ts;
+        var p = Math.min(1, (ts - start) / dur);
+        el.textContent = String(Math.round(target * (1 - Math.pow(1 - p, 3))));
+        if (p < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+    function init() {
+      var nodes = document.querySelectorAll('[data-ih-count]');
+      if (!('IntersectionObserver' in window)) {
+        nodes.forEach(animate);
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { animate(e.target); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.3 });
+      nodes.forEach(function (n) { io.observe(n); });
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+    else init();
+  })();
+</script>
 </Layout>

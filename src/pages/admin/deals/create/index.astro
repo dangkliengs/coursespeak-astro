@@ -1,84 +1,12 @@
 ---
-import Layout from "../../../../layouts/Layout.astro";
-import AdminProtection from "../../../../components/AdminProtection.astro";
-import AdminAuthGate from "../../../../components/AdminAuthGate";
+import AdminShell from "../../../../components/admin/AdminShell.astro";
 
-const pageTitle = "Create New Deal - Admin Dashboard";
+const pageTitle = "Create New Deal";
 const pageDescription = "Create a new course deal on CourseSpeak.";
 ---
 
-<Layout title={pageTitle} description={pageDescription}>
-  <AdminProtection>
-    <AdminAuthGate>
-      <div style={{
-        background: "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",
-        minHeight: "100vh",
-        color: "#e2e8f0",
-        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-      }}>
-        <!-- Modern Header with Back Button -->
-        <div style={{
-          background: "rgba(15, 23, 42, 0.95)",
-          backdropFilter: "blur(20px)",
-          borderBottom: "1px solid rgba(91, 140, 255, 0.2)",
-          padding: "1rem 0",
-          position: "sticky",
-          top: 0,
-          zIndex: 50
-        }}>
-          <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "0 1rem" }}>
-            <div style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              gap: "1rem"
-            }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                <a
-                  href="/admin/deals"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.5rem",
-                    color: "#D4AF37",
-                    textDecoration: "none",
-                    fontWeight: 600,
-                    padding: "0.5rem 1rem",
-                    borderRadius: "0.5rem",
-                    transition: "all 0.2s ease",
-                    background: "rgba(212, 167, 55, 0.1)",
-                    border: "1px solid rgba(212, 167, 55, 0.2)"
-                  }}
-                  onmouseover="this.style.background='rgba(212, 167, 55, 0.2)'"
-                  onmouseout="this.style.background='rgba(212, 167, 55, 0.1)'"
-                >
-                  ← Back to Deals
-                </a>
-                <div style={{ height: "20px", width: "1px", background: "rgba(91, 140, 255, 0.3)" }}></div>
-                <h1 style={{
-                  fontSize: "1.5rem",
-                  fontWeight: 700,
-                  color: "#fff",
-                  margin: 0
-                }}>
-                  Create New Deal
-                </h1>
-              </div>
-              <div style={{
-                fontSize: "0.9rem",
-                color: "#94a3b8",
-                background: "rgba(71, 85, 105, 0.5)",
-                padding: "0.25rem 0.75rem",
-                borderRadius: "1rem",
-                border: "1px solid rgba(91, 140, 255, 0.2)"
-              }}>
-                New Deal
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "2rem 1rem" }}>
+<AdminShell title="Create New Deal" desc="Create a new course deal on CourseSpeak" parent="Deals" parentHref="/admin/deals" badge="New Deal">
+  <div>
           <!-- Main Form Container -->
           <form action="/api/deals" method="POST" id="createForm" style={{
             background: "rgba(15, 23, 42, 0.95)",
@@ -1073,15 +1001,15 @@ const pageDescription = "Create a new course deal on CourseSpeak.";
               <a href="/admin/deals" style={{
                 padding: "1rem 2rem",
                 backgroundColor: "transparent",
-                color: "#94a3b8",
-                border: "1px solid #94a3b8",
+                color: "#f07178",
+                border: "1px solid #f07178",
                 borderRadius: "0.5rem",
                 textDecoration: "none",
                 fontWeight: 600,
                 transition: "all 0.2s ease"
               }}
-              onmouseover="this.style.borderColor='var(--muted)'; this.style.color='var(--muted)'"
-              onmouseout="this.style.borderColor='#94a3b8'; this.style.color='#94a3b8'">
+              onmouseover="this.style.backgroundColor='#f07178'; this.style.color='#fff'"
+              onmouseout="this.style.backgroundColor='transparent'; this.style.color='#f07178'">
                 Cancel
               </a>
               <button type="submit" style={{
@@ -1102,7 +1030,6 @@ const pageDescription = "Create a new course deal on CourseSpeak.";
             </div>
           </form>
         </div>
-      </div>
 
       <script>
         // Tab switching functionality
@@ -1256,6 +1183,4 @@ const pageDescription = "Create a new course deal on CourseSpeak.";
           100% { background-position: 200% 0; }
         }
       </style>
-    </AdminAuthGate>
-  </AdminProtection>
-</Layout>
+</AdminShell>
