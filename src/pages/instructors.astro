@@ -242,17 +242,6 @@ const structuredData = {
             knowsAbout: inst.categories,
             description: `Expert Udemy instructor in ${inst.categories.join(', ')} with ${inst.courseCount} courses and ${inst.totalStudents.toLocaleString()} students.`,
             areaServed: ['United States', 'United Kingdom', 'India', 'Canada', 'Australia', 'Germany', 'France', 'Brazil', 'Japan', 'Global'],
-            ...(inst.avgRating
-              ? {
-                  aggregateRating: {
-                    '@type': 'AggregateRating',
-                    ratingValue: inst.avgRating,
-                    reviewCount: inst.totalReviews,
-                    bestRating: 5,
-                    worstRating: 1,
-                  },
-                }
-              : {}),
           },
         })),
       },
