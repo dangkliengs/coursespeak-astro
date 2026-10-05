@@ -221,6 +221,24 @@ const faqs = [
             mainEntity: {
               '@type': 'ItemList',
               numberOfItems: instructorData.courseCount,
+              itemListElement: instructorCourses.slice(0, 20).map((c, i) => ({
+                '@type': 'ListItem',
+                position: i + 1,
+                url: `${siteUrl}/deal/${c.id}`,
+                item: {
+                  '@type': 'Course',
+                  name: c.title,
+                  url: `${siteUrl}/deal/${c.id}`,
+                  ...(c.image ? { image: c.image } : {}),
+                  provider: { '@type': 'Organization', name: c.provider || 'Udemy' },
+                  offers: {
+                    '@type': 'Offer',
+                    price: String(c.price ?? '0'),
+                    priceCurrency: 'USD',
+                    availability: 'https://schema.org/InStock',
+                  },
+                },
+              })),
             },
           },
           {
