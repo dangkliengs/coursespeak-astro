@@ -308,7 +308,7 @@ const title = String(deal.title || "").replace(/&amp;/g, "&").replace(/&quot;/g,
       </div>
 
       {deal.subcategory && (
-        <a href={`/topics/${deal.subcategory.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-')}`} style={{
+        <a href={`/topics/${deal.subcategory.toLowerCase().replace(/c\s*\+\+/g, 'cpp').replace(/#/g, 'sharp').replace(/\+/g, 'plus').replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-')}/`} style={{
           display: "flex",
           alignItems: "center",
           gap: "0.25rem",

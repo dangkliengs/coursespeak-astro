@@ -29,8 +29,8 @@ const currentItems = filteredDeals.slice(startIndex, endIndex);
 const siteUrl = "https://coursespeak.com";
 const baseDealsPath = "/deals";
 const langQuery = languageFilter ? `?language=${encodeURIComponent(languageFilter)}` : '';
-const baseDealsUrl = `${siteUrl}${baseDealsPath}${langQuery}`;
-const currentUrl = currentPage === 1 ? baseDealsUrl : `${siteUrl}${baseDealsPath}/${currentPage}${langQuery}`;
+const baseDealsUrl = `${siteUrl}${baseDealsPath}/${langQuery}`;
+const currentUrl = currentPage === 1 ? baseDealsUrl : `${siteUrl}${baseDealsPath}/${currentPage}/${langQuery}`;
 const prevUrl = currentPage > 1
   ? (currentPage === 2 ? `${baseDealsPath}${langQuery}` : `${baseDealsPath}/${currentPage - 1}${langQuery}`)
   : null;
@@ -249,6 +249,7 @@ const structuredData = {
   title={pageTitle}
   description={pageDescription}
   canonical={currentUrl}
+  robots={languageFilter ? "noindex, follow" : undefined}
 >
   <Fragment slot="head">
     {prevUrlAbs && <link rel="prev" href={prevUrlAbs} />}

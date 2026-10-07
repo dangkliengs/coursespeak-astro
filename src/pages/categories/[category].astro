@@ -95,6 +95,8 @@ Array.from({ length: totalPages }, (_, i) => i + 1)
 
 const displayName = categoryDeals.length > 0 ? normName(categoryDeals[0].category) || 'Courses' : 'Courses';
 const categoryName = displayName;
+const catBaseUrl = `https://coursespeak.com/categories/${category}/`;
+const catCanonical = currentPage > 1 ? `${catBaseUrl}?page=${currentPage}` : catBaseUrl;
 
 // Get related categories for internal linking
 const allCategories = [...new Set(allDeals.map(deal => normName(deal.category)).filter(Boolean))].filter(cat => cat !== categoryName);
@@ -131,7 +133,11 @@ else {
 }
 ---
 
-<Layout title={`Best Free ${categoryName} Udemy Courses with Coupons (${currentMonth} ${currentYear})`} description={metaDescription}>
+<Layout title={`Best Free ${categoryName} Udemy Courses with Coupons (${currentMonth} ${currentYear})`} description={metaDescription} canonical={catCanonical} robots={currentPage > 1 ? "noindex, follow" : undefined}>
+  <Fragment slot="head">
+    {currentPage > 1 && <link rel="prev" href={currentPage === 2 ? catBaseUrl : `${catBaseUrl}?page=${currentPage - 1}`} />}
+    {currentPage < totalPages && <link rel="next" href={`${catBaseUrl}?page=${currentPage + 1}`} />}
+  </Fragment>
 
   <!-- Category Collection Schema -->
   <script type="application/ld+json" set:html={

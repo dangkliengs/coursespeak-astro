@@ -128,11 +128,20 @@ Array.from({ length: totalPages }, (_, i) => i + 1)
     if (idx > 0 && pageNum - arr[idx - 1] > 1) {
       pageItems.push({ type: 'ellipsis' });
     }
-    pageItems.push({ type: 'page', pageNum, href: `/topics/${topicSlug}?page=${pageNum}`, active: pageNum === currentPage });
+    pageItems.push({ type: 'page', pageNum, href: pageNum === 1 ? `/topics/${topicSlug}/` : `/topics/${topicSlug}/?page=${pageNum}`, active: pageNum === currentPage });
   });
 
 const displayName = topic.replace(/\b\w/g, l => l.toUpperCase());
 const topicName = displayName;
+
+// Self-referencing canonical: page 1 -> base with slash, page 2+ -> base + ?page=N
+// (Layout strips query by default, which caused ?page=2 to canonical to page 1 = Alternate)
+const topicBaseUrl = `https://coursespeak.com/topics/${topicSlug}/`;
+const topicCanonical = currentPage > 1 ? `${topicBaseUrl}?page=${currentPage}` : topicBaseUrl;
+const topicPrevUrl = currentPage > 1
+  ? (currentPage === 2 ? topicBaseUrl : `${topicBaseUrl}?page=${currentPage - 1}`)
+  : null;
+const topicNextUrl = currentPage < totalPages ? `${topicBaseUrl}?page=${currentPage + 1}` : null;
 
 // Get related subcategories (same category)
 const topicCategory = topicDeals.length > 0 ? normName(topicDeals[0].category) : null;
@@ -196,7 +205,11 @@ const faqs = [
 ];
 ---
 
-<Layout title={`Top Free ${topicName} Udemy Courses with Coupons (${currentMonth} ${currentYear})`} description={topicDescription} canonical={`https://coursespeak.com/topics/${topicSlug}`}>
+<Layout title={`Top Free ${topicName} Udemy Courses with Coupons (${currentMonth} ${currentYear})`} description={topicDescription} canonical={topicCanonical} robots={currentPage > 1 ? "noindex, follow" : undefined}>
+  <Fragment slot="head">
+    {topicPrevUrl && <link rel="prev" href={topicPrevUrl} />}
+    {topicNextUrl && <link rel="next" href={topicNextUrl} />}
+  </Fragment>
 
   <script type="application/ld+json" set:html={
     JSON.stringify([
@@ -347,7 +360,7 @@ const faqs = [
       {totalPages > 1 && (
         <nav aria-label="Pagination" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.75rem", padding: "1.5rem 0", marginTop: "1.5rem", borderTop: "1px solid var(--border)" }}>
           {currentPage > 1 ? (
-            <a href={`/topics/${topicSlug}?page=${currentPage - 1}`} style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--brand)", textDecoration: "none", padding: "0.4rem 0.85rem", borderRadius: "6px", border: "1px solid var(--border)" }}>← Prev</a>
+            <a href={currentPage - 1 === 1 ? `/topics/${topicSlug}/` : `/topics/${topicSlug}/?page=${currentPage - 1}`} style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--brand)", textDecoration: "none", padding: "0.4rem 0.85rem", borderRadius: "6px", border: "1px solid var(--border)" }}>← Prev</a>
           ) : (
             <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--muted)", opacity: 0.4, padding: "0.4rem 0.85rem" }}>← Prev</span>
           )}
@@ -363,7 +376,7 @@ const faqs = [
             )}
           </div>
           {currentPage < totalPages ? (
-            <a href={`/topics/${topicSlug}?page=${currentPage + 1}`} style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--brand)", textDecoration: "none", padding: "0.4rem 0.85rem", borderRadius: "6px", border: "1px solid var(--border)" }}>Next →</a>
+            <a href={`/topics/${topicSlug}/?page=${currentPage + 1}`} style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--brand)", textDecoration: "none", padding: "0.4rem 0.85rem", borderRadius: "6px", border: "1px solid var(--border)" }}>Next →</a>
           ) : (
             <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--muted)", opacity: 0.4, padding: "0.4rem 0.85rem" }}>Next →</span>
           )}

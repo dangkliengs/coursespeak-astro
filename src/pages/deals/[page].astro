@@ -27,8 +27,8 @@ const currentItems = allDeals.slice(startIndex, endIndex);
 // Pagination URLs
 const siteUrl = "https://coursespeak.com";
 const baseDealsPath = "/deals";
-const baseDealsUrl = `${siteUrl}${baseDealsPath}`;
-const currentUrl = `${baseDealsUrl}/${currentPage}`;
+const baseDealsUrl = `${siteUrl}${baseDealsPath}/`;
+const currentUrl = `${baseDealsUrl}${currentPage}/`;
 const prevUrl = currentPage === 2 ? baseDealsPath : `${baseDealsPath}/${currentPage - 1}`;
 const nextUrl = currentPage < totalPages ? `${baseDealsPath}/${currentPage + 1}` : null;
 const prevUrlAbs = `${siteUrl}${prevUrl}`;

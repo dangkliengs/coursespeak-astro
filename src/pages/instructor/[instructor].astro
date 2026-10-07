@@ -44,7 +44,7 @@ export async function getStaticPaths() {
   const seen = new Set();
   
   for (const [name, courses] of instructorMap.entries()) {
-    if (courses.length >= 3) {
+    if (courses.length >= 1) {
       const slug = createInstructorSlug(name);
       
       if (!seen.has(slug)) {
@@ -157,7 +157,7 @@ const currentMonth = monthNames[currentDate.getMonth()];
 const currentYear = currentDate.getFullYear();
 
 const siteUrl = "https://coursespeak.com";
-const instructorUrl = `${siteUrl}/instructor/${instructorSlug}`;
+const instructorUrl = `${siteUrl}/instructor/${instructorSlug}/`;
 
 const cleanName = instructorName.replace(/[^\x20-\x7E]/g, '').trim();
 

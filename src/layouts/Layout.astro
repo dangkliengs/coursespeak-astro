@@ -25,7 +25,17 @@ const {
 } = Astro.props;
 
 const siteUrl = import.meta.env.SITE || "https://coursespeak.com";
-const canonicalURL = canonical || new URL(Astro.url.pathname, siteUrl).href;
+// Normalize canonical to always have trailing slash (matches sitemap + trailingSlash:'always')
+// so Google doesn't flag Crawled URL (with /) as Alternate to canonical (without /).
+function ensureTrailingSlash(u: string): string {
+  try {
+    const url = new URL(u, siteUrl);
+    if (!url.pathname.endsWith('/')) url.pathname += '/';
+    return url.href;
+  } catch { return u.endsWith('/') ? u : u + '/'; }
+}
+const rawCanonical = canonical || new URL(Astro.url.pathname, siteUrl).href;
+const canonicalURL = ensureTrailingSlash(rawCanonical);
 
 // Default og:image for pages that don't supply one (prevents missing social preview).
 const useDefaultImage = !image;
