@@ -279,9 +279,30 @@ const title = String(deal.title || "").replace(/&amp;/g, "&").replace(/&quot;/g,
       </div>
     </div>
 
-    {/* CTA dihapus untuk mengurangi bounce rate:
-        user diarahkan ke halaman detail internal (/deal/id) via judul,
-        bukan langsung keluar ke URL eksternal. */}
+    {/* CTA Button */}
+    <a
+      href={deal.url || `/deal/${deal.id}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{
+        display: "block",
+        width: "100%",
+        padding: "0.875rem",
+        background: "linear-gradient(135deg, #D4AF37 0%, #C5A028 100%)",
+        color: "var(--bg)",
+        textDecoration: "none",
+        borderRadius: "12px",
+        textAlign: "center",
+        fontWeight: 700,
+        fontSize: "1rem",
+        transition: "all 0.3s ease",
+        border: "none",
+        cursor: "pointer",
+        boxShadow: "0 4px 16px -4px rgba(255, 215, 0, 0.4)"
+      }}
+    >
+      {p === 0 ? "🎉 Enroll for FREE" : "🚀 Get Premium Deal"}
+    </a>
   </div>
 </div>
 
@@ -289,5 +310,10 @@ const title = String(deal.title || "").replace(/&amp;/g, "&").replace(/&quot;/g,
   div:hover {
     transform: translateY(-4px);
     box-shadow: 0 20px 40px -8px rgba(255, 215, 0, 0.25), 0 8px 16px -4px rgba(0, 0, 0, 0.15) !important;
+  }
+
+  div:hover a:last-child {
+    background: linear-gradient(135deg, #C5A028 0%, #FF8C00 100%) !important;
+    box-shadow: 0 6px 20px -4px rgba(255, 165, 0, 0.5) !important;
   }
 </style>

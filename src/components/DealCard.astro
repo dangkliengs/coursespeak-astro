@@ -1,7 +1,6 @@
 ---
 import { Image } from 'astro:assets';
 import { createInstructorSlug, parseInstructors } from '../lib/instructors';
-import { slugifyCategory } from '../lib/slug';
 import { getInstructorImageByName } from '../lib/instructorProfiles';
 import instructorDirectory from '../data/instructorCounts.json';
 
@@ -30,27 +29,26 @@ const insSub = typeof instructorCoursesCount === "number"
 
 function formatDuration(duration: string) {
   if (!duration) return "";
-
+  
   return duration
     .replace(/(\d+)h/g, '$1 hours')
     .replace(/(\d+)m/g, '$1 minutes')
     .replace(/\s+/g, ' ');
 }
 
-function formatCompact(n: number) {
-  if (!isFinite(n)) return "0";
-  if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
-  if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "K";
-  return String(n);
-}
+function formatRelativeTime(dateString: string) {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffDays = Math.floor(diffHours / 24);
 
-function formatMonthYear(dateString: string) {
-  try {
-    const d = new Date(dateString);
-    if (isNaN(d.getTime())) return "Recently";
-    return d.toLocaleDateString("en-US", { month: "short", year: "numeric" });
-  } catch {
-    return "Recently";
+  if (diffHours < 1) {
+    return "Updated recently";
+  } else if (diffHours < 24) {
+    return `Updated ${diffHours} hour${diffHours === 1 ? '' : 's'} ago`;
+  } else {
+    return `Updated ${diffDays} day${diffDays === 1 ? '' : 's'} ago`;
   }
 }
 
@@ -82,35 +80,25 @@ const p = typeof deal.price === "number" && isFinite(deal.price) && deal.price >
 const opRaw = typeof deal.originalPrice === "number" && isFinite(deal.originalPrice) ? deal.originalPrice : 119.99;
 const op = opRaw > p ? opRaw : 119.99;
 const r = typeof deal.rating === "number" && isFinite(deal.rating) ? deal.rating : genRating(key);
-const studentsVal = typeof deal.students === "number" && isFinite(deal.students) ? deal.students : genStudents(key);
-const studentsShort = formatCompact(studentsVal);
 const hasDiscount = op > p && p > 0;
 const discountPct = hasDiscount ? Math.round(100 - (p / op) * 100) : null;
 const title = String(deal.title || "").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&apos;|&#8217;/g, "'").replace(/&ndash;|&#8211;/g, " & ").replace(/\s{2,}/g, " ").trim();
-const updatedLabel = deal.updatedAt ? formatMonthYear(deal.updatedAt) : "Recently";
-const durationLabel = deal.duration ? formatDuration(deal.duration) : "—";
-const topicHref = deal.subcategory
-  ? `/topics/${deal.subcategory.toLowerCase().replace(/c\s*\+\+/g, 'cpp').replace(/#/g, 'sharp').replace(/\+/g, 'plus').replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-')}/`
-  : null;
-const categoryHref = deal.category ? `/categories/${slugifyCategory(deal.category)}/` : null;
 ---
 
 <div style={{
   background: "var(--card)",
-  borderRadius: "12px",
+  borderRadius: "16px",
   border: "1px solid var(--border)",
   overflow: "hidden",
   transition: "all 0.3s ease",
-  position: "relative",
-  display: "flex",
-  flexDirection: "column"
+  position: "relative"
 }}>
-  {/* Instructor header — foto + nama + jumlah kursus + flag */}
+  {/* Instructor header — foto + nama + flag bahasa, di atas */}
   <div class="deal-ins-header" style={{
     display: "flex",
     alignItems: "center",
     gap: "0.75rem",
-    padding: "1rem 1.1rem"
+    padding: "1.1rem 1.25rem 1rem"
   }}>
     {firstInstructor && (
       <>
@@ -119,14 +107,14 @@ const categoryHref = deal.category ? `/categories/${slugifyCategory(deal.categor
           aria-label={firstInstructor}
           tabindex="-1"
           style={{
-            width: "48px",
-            height: "48px",
+            width: "44px",
+            height: "44px",
             flexShrink: 0,
-            borderRadius: "6px",
+            borderRadius: "10px",
             overflow: "hidden",
             display: "block",
             background: "var(--card-hover)",
-            border: "1px solid var(--border)",
+            border: "1px solid rgba(212,167,55,0.35)",
             textDecoration: "none"
           }}
         >
@@ -134,8 +122,8 @@ const categoryHref = deal.category ? `/categories/${slugifyCategory(deal.categor
             <Image
               src={instructorImg}
               alt={firstInstructor}
-              width={48}
-              height={48}
+              width={44}
+              height={44}
               loading="lazy"
               decoding="async"
               inferSize={false}
@@ -145,7 +133,7 @@ const categoryHref = deal.category ? `/categories/${slugifyCategory(deal.categor
             <span style={{
               width: "100%", height: "100%",
               display: "flex", alignItems: "center", justifyContent: "center",
-              fontWeight: 800, fontSize: "1rem", color: "var(--brand)"
+              fontWeight: 800, fontSize: "0.95rem", color: "var(--brand)"
             }} aria-hidden="true">{instructorInitials}</span>
           )}
         </a>
@@ -154,7 +142,7 @@ const categoryHref = deal.category ? `/categories/${slugifyCategory(deal.categor
             <a
               href={`/instructor/${instructorProfileSlug}`}
               style={{
-                fontSize: "1rem", fontWeight: 700, color: "var(--text)",
+                fontSize: "0.95rem", fontWeight: 800, color: "var(--text)",
                 lineHeight: 1.25, textDecoration: "none",
                 whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"
               }}
@@ -163,7 +151,7 @@ const categoryHref = deal.category ? `/categories/${slugifyCategory(deal.categor
             </a>
           ) : (
             <span style={{
-              fontSize: "1rem", fontWeight: 700, color: "var(--text)",
+              fontSize: "0.95rem", fontWeight: 800, color: "var(--text)",
               lineHeight: 1.25,
               whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"
             }}>
@@ -180,10 +168,10 @@ const categoryHref = deal.category ? `/categories/${slugifyCategory(deal.categor
               ))}
             </span>
           )}
-          <span style={{ fontSize: "0.9rem", color: "var(--muted)", marginTop: "1px" }}>{insSub}</span>
+          <span style={{ fontSize: "0.8rem", color: "var(--muted)", marginTop: "1px" }}>{insSub}</span>
         </div>
         {langFlag ? (
-          <span title={dealLang} role="img" aria-label={dealLang} style={{ fontSize: "1.6rem", lineHeight: 1, flexShrink: 0 }}>{"\u2009"}{langFlag}</span>
+          <span title={dealLang} role="img" aria-label={dealLang} style={{ fontSize: "1.35rem", lineHeight: 1, flexShrink: 0 }}>{langFlag}</span>
         ) : dealLang ? (
           <span title={dealLang} style={{
             flexShrink: 0, fontSize: "0.7rem", fontWeight: 800, letterSpacing: "0.06em",
@@ -195,10 +183,9 @@ const categoryHref = deal.category ? `/categories/${slugifyCategory(deal.categor
     )}
   </div>
 
-  {/* Image — bersih: hanya %OFF kanan-atas + Verified kiri-bawah */}
-
+  {/* Image at top with timestamp badge */}
   <div style={{
-    height: "200px",
+    height: "180px",
     background: `linear-gradient(135deg, var(--brand-soft) 0%, var(--accent-soft) 100%)`,
     display: "flex",
     alignItems: "center",
@@ -206,7 +193,7 @@ const categoryHref = deal.category ? `/categories/${slugifyCategory(deal.categor
     position: "relative"
   }}>
     {deal.image ? (
-      <Image
+      <Image 
         src={deal.image}
         alt={title}
         width={400}
@@ -225,210 +212,226 @@ const categoryHref = deal.category ? `/categories/${slugifyCategory(deal.categor
       </svg>
     )}
 
-    {/* % OFF — kanan atas (data asli coursespeak) */}
-    {hasDiscount && discountPct !== null && (
-      <div style={{
-        position: "absolute",
-        top: 0,
-        right: "12px",
-        background: "#C1272D",
-        color: "white",
-        padding: "7px 12px",
-        fontSize: "0.85rem",
-        fontWeight: 800,
-        zIndex: 2
-      }}>
-        {discountPct}% OFF
-      </div>
-    )}
+    {/* Timestamp Badge on Image */}
+    <div style={{
+      position: "absolute",
+      top: "1rem",
+      right: "1rem",
+      background: "rgba(0, 0, 0, 0.8)",
+      color: "white",
+      padding: "0.25rem 0.5rem",
+      borderRadius: "4px",
+      fontSize: "0.7rem",
+      fontWeight: 600,
+      backdropFilter: "blur(4px)"
+    }}>
+      {deal.updatedAt ? formatRelativeTime(deal.updatedAt) : "Updated recently"}
+    </div>
+
+    {/* FREE Badge if applicable */}
     {p === 0 && (
       <div style={{
         position: "absolute",
-        top: 0,
-        right: "12px",
-        background: "#C1272D",
-        color: "white",
-        padding: "7px 12px",
-        fontSize: "0.85rem",
-        fontWeight: 800,
-        zIndex: 2
+        top: "1rem",
+        left: "1rem",
+        background: "var(--brand)",
+        color: "var(--bg)",
+        padding: "0.25rem 0.75rem",
+        borderRadius: "999px",
+        fontSize: "0.75rem",
+        fontWeight: 700,
+        zIndex: 10
       }}>
-        100% FREE
+        FREE
       </div>
     )}
-
-    {/* Verified — kiri bawah (data asli, dipertahankan agar lengkap) */}
-    <div style={{
-      position: "absolute",
-      bottom: "12px",
-      left: "12px",
-      background: "rgba(22, 163, 74, 0.95)",
-      color: "white",
-      padding: "0.25rem 0.6rem",
-      borderRadius: "999px",
-      fontSize: "0.7rem",
-      fontWeight: 700,
-      display: "flex",
-      alignItems: "center",
-      gap: "0.25rem",
-      zIndex: 2
-    }}>
-      <svg width="10" height="10" viewBox="0 0 24 24" fill="white">
-        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-      </svg>
-      Verified
-    </div>
   </div>
 
-  {/* Body center ala referensi */}
-  <div style={{ padding: "1.25rem 1.25rem 1.4rem", textAlign: "center", display: "flex", flexDirection: "column", flex: 1 }}>
+  {/* Content below image */}
+  <div style={{ padding: "1.25rem 1.5rem 1.5rem" }}>
     {/* Title */}
     <h3 style={{
-      fontSize: "1.05rem",
-      fontWeight: 800,
+      fontSize: "1.1rem",
+      fontWeight: 700,
       color: "var(--text)",
-      margin: "0 0 0.65rem",
-      lineHeight: 1.35,
+      marginBottom: "0.5rem",
+      lineHeight: 1.4,
       display: "-webkit-box",
       WebkitLineClamp: 2,
       WebkitBoxOrient: "vertical",
-      overflow: "hidden",
-      minHeight: "2.8em"
+      overflow: "hidden"
     }}>
-      <a href={`/deal/${deal.id}`} style={{ color: "inherit", textDecoration: "none" }}>
+      <a href={`/deal/${deal.id}`} style={{
+        color: "inherit",
+        textDecoration: "none"
+      }}>
         {title}
       </a>
     </h3>
 
-    {/* Description — dipertahankan agar data lengkap (referensi tidak ada, tapi coursespeak butuh) */}
+    {/* Description */}
     <p style={{
       color: "var(--muted)",
-      fontSize: "0.85rem",
-      margin: "0 0 0.7rem",
+      fontSize: "0.9rem",
+      marginBottom: "1rem",
       lineHeight: 1.5,
       display: "-webkit-box",
-      WebkitLineClamp: 2,
+      WebkitLineClamp: 3,
       WebkitBoxOrient: "vertical",
       overflow: "hidden"
     }}>
       {deal.description || "Master this in-demand skill with comprehensive training from industry experts."}
     </p>
 
-    {/* Breadcrumb: Category › Subcategory — satu baris center, dua link internal */}
-    {(categoryHref || topicHref) && (
-      <div style={{ marginBottom: "0.7rem", display: "flex", justifyContent: "center", alignItems: "center", gap: "0.4rem", flexWrap: "wrap" }}>
-        {categoryHref && (
-          <a href={categoryHref} style={{
-            color: "var(--muted)",
-            textDecoration: "none",
-            fontSize: "0.75rem",
-            fontWeight: 700,
-            letterSpacing: "0.02em"
-          }} title={`Browse ${deal.category} courses`}>
-            {deal.category}
-          </a>
-        )}
-        {categoryHref && topicHref && (
-          <span aria-hidden="true" style={{ color: "var(--muted)", opacity: 0.6, fontSize: "0.75rem" }}>›</span>
-        )}
-        {topicHref && (
-          <a href={topicHref} style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "0.3rem",
-            color: "var(--brand)",
-            textDecoration: "none",
-            fontSize: "0.75rem",
-            fontWeight: 700,
-            letterSpacing: "0.02em",
-            padding: "0.3rem 0.65rem",
-            borderRadius: "999px",
-            background: "var(--brand-soft)",
-            border: "1px solid rgba(212,167,55,0.3)"
-          }} title={`Browse ${deal.subcategory} courses`}>
-            {deal.subcategory}
-          </a>
-        )}
-      </div>
-    )}
-
-    {/* Rating: 5 bintang + angka rating saja.
-        Angka students TIDAK diklaim sebagai reviews di sini —
-        students sudah tampil jujur di stats 3 kolom di bawah. */}
+    {/* Rating, Students & Subcategory - Single Row */}
     <div style={{
       display: "flex",
       alignItems: "center",
-      justifyContent: "center",
-      gap: "0.5rem",
-      marginBottom: "0.9rem",
-      flexWrap: "wrap"
+      justifyContent: "space-between",
+      marginBottom: "1rem"
     }}>
-      <span style={{ display: "inline-flex", gap: "3px", alignItems: "center" }} aria-hidden="true">
-        {[0, 1, 2, 3, 4].map((i) => (
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--brand)">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+      <div style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "0.5rem"
+      }}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--brand)">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+        <span style={{
+          color: "var(--muted)",
+          fontSize: "0.85rem",
+          fontWeight: 600
+        }} title={`${r.toFixed(1)} out of 5 stars from ${typeof deal.students === "number" && isFinite(deal.students) ? deal.students : genStudents(key)}+ students`}>
+          {r.toFixed(1)} ({typeof deal.students === "number" && isFinite(deal.students) ? deal.students : genStudents(key)}+ students)
+        </span>
+      </div>
+
+      {deal.subcategory && (
+        <a href={`/topics/${deal.subcategory.toLowerCase().replace(/c\s*\+\+/g, 'cpp').replace(/#/g, 'sharp').replace(/\+/g, 'plus').replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-')}/`} style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "0.25rem",
+          color: "var(--brand)",
+          textDecoration: "none",
+          fontSize: "0.8rem",
+          fontWeight: 600,
+          padding: "0.25rem 0.5rem",
+          borderRadius: "4px",
+          background: "var(--card-hover)",
+          transition: "all 0.3s ease"
+        }} title={`Browse ${deal.subcategory} courses`}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/>
           </svg>
-        ))}
-      </span>
-      <span
-        style={{ color: "var(--muted)", fontSize: "0.9rem", fontWeight: 600 }}
-        title={`${r.toFixed(1)} out of 5 · ${studentsVal.toLocaleString("en-US")} students`}
-        aria-label={`Rated ${r.toFixed(1)} out of 5`}
-      >
-        {r.toFixed(1)}
-      </span>
+          {deal.subcategory}
+        </a>
+      )}
     </div>
 
-    {/* Stats 3 kolom: students | content | updated */}
-    <div style={{
-      display: "grid",
-      gridTemplateColumns: "1fr 1fr 1fr",
-      borderTop: "1px solid var(--border)",
-      borderBottom: "1px solid var(--border)",
-      padding: "0.9rem 0"
-    }}>
-      <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-        <span style={{ fontSize: "1.05rem", fontWeight: 800, color: "var(--text)" }} title={`${studentsVal.toLocaleString("en-US")} students`}>{studentsShort}</span>
-        <span style={{ fontSize: "0.85rem", color: "var(--muted)" }}>students</span>
-      </div>
-      <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-        <span style={{ fontSize: "1.05rem", fontWeight: 800, color: "var(--text)" }}>{durationLabel}</span>
-        <span style={{ fontSize: "0.85rem", color: "var(--muted)" }}>content</span>
-      </div>
-      <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-        <span style={{ fontSize: "1.05rem", fontWeight: 800, color: "var(--text)" }}>{updatedLabel}</span>
-        <span style={{ fontSize: "0.85rem", color: "var(--muted)" }}>updated</span>
-      </div>
-    </div>
-
-    {/* Price center */}
+    {/* Price, Discount & Verified */}
     <div style={{
       display: "flex",
-      alignItems: "baseline",
-      justifyContent: "center",
-      gap: "0.6rem",
-      paddingTop: "1rem",
-      marginTop: "auto"
+      alignItems: "center",
+      justifyContent: "space-between",
+      marginBottom: "1rem"
     }}>
-      {hasDiscount && (
-        <span style={{
-          textDecoration: "line-through",
-          color: "var(--muted)",
-          fontSize: "1rem",
-          fontWeight: 600
-        }}>
-          ${op.toFixed(2)}
-        </span>
-      )}
-      <span style={{
-        fontSize: "1.3rem",
-        fontWeight: 800,
-        color: "var(--text)",
-        letterSpacing: "0.02em"
+      <div style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "0.5rem"
       }}>
-        {p === 0 ? "FREE" : `$${p.toFixed(2)}`}
-      </span>
+        <span style={{
+          fontSize: "1.2rem",
+          fontWeight: 700,
+          color: "var(--brand)"
+        }}>
+          {p === 0 ? "FREE" : `$${p.toFixed(2)}`}
+        </span>
+        {hasDiscount && (
+          <>
+            <span style={{
+              textDecoration: "line-through",
+              color: "var(--muted)",
+              fontSize: "0.9rem"
+            }}>
+              ${op.toFixed(2)}
+            </span>
+            <span style={{
+              background: "var(--destructive)",
+              color: "white",
+              padding: "0.25rem 0.5rem",
+              borderRadius: "4px",
+              fontSize: "0.75rem",
+              fontWeight: 700
+            }}>
+              {discountPct}% OFF
+            </span>
+          </>
+        )}
+      </div>
+
+      {/* Verified Badge inline with price */}
+      <div style={{
+        color: "hsl(120, 60%, 55%)",
+        fontSize: "0.7rem",
+        fontWeight: 700,
+        display: "flex",
+        alignItems: "center",
+        gap: "0.25rem"
+      }}>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="hsl(120, 60%, 55%)">
+          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+        </svg>
+        Verified
+      </div>
     </div>
+
+    {/* Duration */}
+    {deal.duration && (
+      <div style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "0.35rem",
+        marginBottom: "1rem"
+      }}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+        <span style={{
+          color: "var(--muted)",
+          fontSize: "0.8rem",
+          fontWeight: 500
+        }}>
+          Course Duration: {formatDuration(deal.duration)}
+        </span>
+      </div>
+    )}
+
+    {/* Button */}
+    <a
+      href={deal.url || `/deal/${deal.id}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{
+        display: "block",
+        width: "100%",
+        padding: "0.75rem 1.5rem",
+        background: "var(--brand)",
+        color: "var(--bg)",
+        textDecoration: "none",
+        borderRadius: "8px",
+        textAlign: "center",
+        fontWeight: 600,
+        fontSize: "0.9rem",
+        transition: "all 0.3s ease",
+        border: "none",
+        cursor: "pointer"
+      }}
+    >
+      {p === 0 ? "Enroll for Free" : "Get Coupon"}
+    </a>
   </div>
 </div>
 
