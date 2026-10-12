@@ -3,6 +3,7 @@ import { useEffect, useRef, useMemo, useState } from 'react';
 import { renderMarkdownToHtml } from "../lib/markdown";
 import { extractDifficultyLevel, slugifyCategory } from "../lib/utils";
 import { createInstructorSlug, parseInstructors } from "../lib/instructors";
+import instructorsJson from "../data/instructors.json";
 import { buildFAQs } from "../lib/faqs";
 import ActionsPanel from "./ActionsPanel";
 import RelatedList from "./RelatedList";
@@ -33,6 +34,14 @@ interface Deal {
     learn?: string[];
     skills?: string[];
     faqs?: { q: string; a: string }[];
+}
+
+const instructorProfiles = instructorsJson as Record<string, { image?: string }>;
+
+function getInstructorImageUrl(name: string): string | undefined {
+    const slug = createInstructorSlug(name);
+    const normalized = slug.normalize("NFKD").replace(/[̀-ͯ]/g, "");
+    return instructorProfiles[slug]?.image ?? instructorProfiles[normalized]?.image;
 }
 
 export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, relatedDeals?: any[] }) {
@@ -573,7 +582,9 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 {/* Reviewer & Quote row */}
                                 <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", marginBottom: "1.25rem" }}>
                                     <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flex: 1, minWidth: "200px", padding: "0.75rem 1rem", background: "rgba(212, 167, 55, 0.04)", border: "1px solid rgba(212, 167, 55, 0.12)", borderRadius: "10px" }}>
-                                        <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "linear-gradient(135deg, var(--brand), var(--brand-hover))", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--border)", fontWeight: 700, fontSize: "0.9rem", flexShrink: 0 }}>JS</div>
+                                        <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "linear-gradient(135deg, var(--brand), var(--brand-hover))", overflow: "hidden", flexShrink: 0, border: "1px solid rgba(212, 167, 55, 0.3)" }}>
+                                            <img src="/images/author.jpg" alt="Josh Smith" width={40} height={40} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                                        </div>
                                         <div>
                                             <div style={{ fontWeight: 600, color: "var(--text)", fontSize: "0.85rem" }}>Josh Smith</div>
                                             <div style={{ color: "var(--muted)", fontSize: "0.75rem" }}>Lead Course Reviewer</div>
@@ -659,19 +670,19 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                     )}
 
                     {/* ── Personal Plan CTA ── */}
-                    <div style={{ margin: "0 0 2rem" }}>
+                    <div className="deal-cta" style={{ margin: "0 0 2rem" }}>
                         <div className="cta-box">
                             <span className="cta-eyebrow">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                     <path d="M12 14.9l6.36-3.7-.7-1.2L12 13.14 6.34 10l-.7 1.2z"/>
                                 </svg>
                                 Udemy Personal Plan
                             </span>
-                            <h2>Go Unlimited with <span style={{ color: "var(--brand)" }}>Udemy Personal Plan</span><br />26,000+ Premium Courses, One Subscription</h2>
-                            <p className="cta-subtext">One flat price, unlimited learning. Level up every month without buying courses one by one — and cancel anytime.</p>
+                            <h2>Go Unlimited with <span style={{ color: "var(--brand)" }}>Udemy Personal Plan</span> — 26,000+ Premium Courses</h2>
+                            <p className="cta-subtext">One flat price, unlimited learning. Cancel anytime.</p>
                             <div className="cta-actions">
-                                <a href="https://trk.udemy.com/c/6564357/4039145/39854" target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-lg" style={{ borderRadius: "999px", padding: "1rem 2.5rem" }}>
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M5 21h14"/></svg>
+                                <a href="https://trk.udemy.com/c/6564357/4039145/39854" target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-lg">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M5 21h14"/></svg>
                                     Start Free Trial
                                 </a>
                             </div>
@@ -695,14 +706,22 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 Background information on <strong style={{ color: "var(--text)" }}>{instructorsList.join(", ")}</strong>, the instructor{instructorsList.length > 1 ? "s" : ""} responsible for this course on <strong>{deal.provider || "Udemy"}</strong>.
                             </p>
                             <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-                                {instructorsList.map((name) => (
+                                {instructorsList.map((name) => {
+                                    const instructorImg = getInstructorImageUrl(name);
+                                    return (
                                     <div key={name} style={{ background: "var(--bg)", border: "1px solid var(--border)", borderRadius: "16px", overflow: "hidden" }}>
                                         <div style={{ padding: "1.5rem 1.5rem 1rem", display: "flex", gap: "1rem", flexWrap: "wrap", alignItems: "center" }}>
-                                            <div style={{ width: "52px", height: "52px", borderRadius: "50%", background: "linear-gradient(135deg, var(--brand), var(--brand-hover))", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                                                <span style={{ color: "var(--text)", fontSize: "1.1rem", fontWeight: 700 }}>
-                                                    {name.split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase()}
-                                                </span>
-                                            </div>
+                                            {instructorImg ? (
+                                                <div style={{ width: "52px", height: "52px", borderRadius: "50%", overflow: "hidden", flexShrink: 0, border: "1px solid var(--border)" }}>
+                                                    <img src={instructorImg} alt={name} width={52} height={52} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                                                </div>
+                                            ) : (
+                                                <div style={{ width: "52px", height: "52px", borderRadius: "50%", background: "linear-gradient(135deg, var(--brand), var(--brand-hover))", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                                                    <span style={{ color: "var(--text)", fontSize: "1.1rem", fontWeight: 700 }}>
+                                                        {name.split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase()}
+                                                    </span>
+                                                </div>
+                                            )}
                                             <div style={{ flex: 1, minWidth: "180px" }}>
                                                 <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--text)" }}>
                                                     {name}
@@ -754,7 +773,8 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                             </div>
                                         </div>
                                     </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         </section>
                     )}
@@ -1092,6 +1112,15 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
 
             <style>{`
                 .deal-layout { grid-template-columns: 1fr 340px; }
+
+                .deal-cta .cta-box{ padding:1.25rem 1.5rem; border-radius:12px; }
+                .deal-cta .cta-box h2{ font-size:1.1rem; margin:0 0 0.5rem; }
+                .deal-cta .cta-eyebrow{ padding:0.25rem 0.7rem; font-size:0.7rem; margin:0 0 0.6rem; }
+                .deal-cta .cta-subtext{ font-size:0.85rem; margin:0 auto 0.75rem; }
+                .deal-cta .cta-actions{ margin-bottom:0.75rem; }
+                .deal-cta .cta-actions .btn-lg{ padding:0.55rem 1.5rem; font-size:0.85rem; border-radius:999px; }
+                .deal-cta .cta-features{ gap:1rem; }
+                .deal-cta .cta-features span{ font-size:0.75rem; }
                 .prose h1, .prose h2, .prose h3 { color: #fff; margin-top: 1.5em; margin-bottom: 0.5em; }
                 .prose p { margin-bottom: 1em; }
                 .prose ul, .prose ol { margin-bottom: 1em; padding-left: 1.5em; list-style: disc; }
