@@ -2,299 +2,214 @@
 import Layout from "../layouts/Layout.astro";
 
 const canonicalUrl = "https://coursespeak.com/success-stories";
-const pageTitle = "Success Stories | Real Career Transformations with Free Udemy Courses";
-const pageDescription = "Read inspiring success stories from learners who transformed their careers using free Udemy courses from CourseSpeak. Real people, real results, zero cost.";
+const currentYear = new Date().getFullYear();
+const pageTitle = `The Success Story of Udemy ${currentYear} — Founders, Business Model & Growth`;
+const pageDescription = `The success story of Udemy: its origin, founders Eren Bali, Gagan Biyani and Oktay Caglar, how Udemy works, Udemy business model, Udemy revenue model, India growth and funding.`;
 const lastModified = new Date().toISOString().split('T')[0];
-
-const successStories = [
-  {
-    name: "Sarah Johnson",
-    role: "Web Developer",
-    course: "Complete Web Development Bootcamp",
-    rating: 5,
-    review: "Thanks to CourseSpeak's Udemy coupons, I got access to premium web development courses for free. Now I'm working as a full-stack developer!",
-    avatar: "/images/avatars/sarah-johnson.jpg",
-    achievement: "Landed job at Google",
-    salaryIncrease: "150%"
-  },
-  {
-    name: "Michael Chen",
-    role: "Data Scientist",
-    course: "Python for Data Science & Machine Learning",
-    rating: 5,
-    review: "The free Udemy coupons from CourseSpeak helped me transition from marketing to data science. Best investment in my career!",
-    avatar: "/images/avatars/michael-chen.jpg",
-    achievement: "Promoted to Senior Data Scientist",
-    salaryIncrease: "80%"
-  },
-  {
-    name: "Emily Rodriguez",
-    role: "UX Designer",
-    course: "UI/UX Design Masterclass",
-    rating: 5,
-    review: "I accessed premium design courses completely free through CourseSpeak. The quality and value exceeded my expectations!",
-    avatar: "/images/avatars/emily-rodriguez.jpg",
-    achievement: "Started own design agency",
-    salaryIncrease: "200%"
-  },
-  {
-    name: "David Kim",
-    role: "Mobile Developer",
-    course: "React Native Complete Course",
-    rating: 5,
-    review: "CourseSpeak's verified Udemy coupons saved me hundreds of dollars while learning mobile app development. Highly recommended!",
-    avatar: "/images/avatars/david-kim.jpg",
-    achievement: "Published 3 successful apps",
-    salaryIncrease: "120%"
-  },
-  {
-    name: "Lisa Thompson",
-    role: "Digital Marketer",
-    course: "Digital Marketing Complete Course",
-    rating: 5,
-    review: "Free Udemy courses from CourseSpeak helped me advance my marketing career. The course quality was exceptional!",
-    avatar: "/images/avatars/lisa-thompson.jpg",
-    achievement: "Marketing Director at Fortune 500",
-    salaryIncrease: "90%"
-  },
-  {
-    name: "James Wilson",
-    role: "DevOps Engineer",
-    course: "Docker & Kubernetes Masterclass",
-    rating: 5,
-    review: "Thanks to CourseSpeak, I learned DevOps skills through free Udemy coupons and landed my dream job with a 40% salary increase!",
-    avatar: "/images/avatars/james-wilson.jpg",
-    achievement: "DevOps Lead at Tech Startup",
-    salaryIncrease: "140%"
-  },
-  {
-    name: "Amanda Foster",
-    role: "Product Manager",
-    course: "Product Management Certification",
-    rating: 5,
-    review: "CourseSpeak's free courses helped me transition from customer support to product management. Life-changing experience!",
-    avatar: "/images/avatars/amanda-foster.jpg",
-    achievement: "Product Manager at Meta",
-    salaryIncrease: "110%"
-  },
-  {
-    name: "Robert Martinez",
-    role: "Cloud Architect",
-    course: "AWS Solutions Architect",
-    rating: 5,
-    review: "I became AWS certified through free courses from CourseSpeak. Now I'm leading cloud architecture projects!",
-    avatar: "/images/avatars/james-wilson.jpg",
-    achievement: "AWS Certified Solutions Architect",
-    salaryIncrease: "85%"
-  },
-  {
-    name: "Sophie Turner",
-    role: "AI Engineer",
-    course: "Machine Learning A-Z",
-    rating: 5,
-    review: "CourseSpeak made advanced AI education accessible. I'm now working on cutting-edge ML projects!",
-    avatar: "/images/avatars/amanda-foster.jpg",
-    achievement: "AI Researcher at OpenAI",
-    salaryIncrease: "160%"
-  }
-];
-
-const storiesLd = successStories.map((s, i) => ({
-  "@type": "ListItem",
-  "position": i + 1,
-  "item": {
-    "@type": "Review",
-    "author": { "@type": "Person", "name": s.name },
-    "itemReviewed": { "@type": "Course", "name": s.course },
-    "reviewBody": s.review,
-    "reviewRating": { "@type": "Rating", "ratingValue": s.rating }
-  }
-}));
 ---
-
 <Layout title={pageTitle} description={pageDescription} type="article" canonical={canonicalUrl}>
 
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "WebPage",
-        "@id": canonicalUrl,
+        "@type": "Article",
+        "@id": `${canonicalUrl}#article`,
         "url": canonicalUrl,
-        "name": pageTitle,
+        "headline": `The Success Story of Udemy ${currentYear}`,
         "description": pageDescription,
-        "isPartOf": { "@id": "https://coursespeak.com" },
-        "datePublished": "2023-01-01",
+        "datePublished": "2020-11-24",
         "dateModified": lastModified,
         "inLanguage": "en-US",
-        "mainEntity": {
-          "@type": "ItemList",
-          "itemListElement": storiesLd
-        }
+        "author": { "@type": "Person", "name": "Josh Smith", "url": "https://coursespeak.com/about" },
+        "publisher": { "@type": "Organization", "@id": "https://coursespeak.com/#organization", "name": "CourseSpeak", "url": "https://coursespeak.com" },
+        "about": "Udemy"
       },
       {
-        "@type": "Person",
-        "@id": "https://coursespeak.com/#author",
-        "name": "Josh Smith",
-        "sameAs": ["https://x.com/courses_peak"]
-      },
-      {
-        "@type": "FAQPage",
-        "@id": canonicalUrl + "#faq",
-        "mainEntity": [
-          { "@type": "Question", "name": "Are these success stories real?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, these are real testimonials from learners who used CourseSpeak to find free Udemy courses. We verify each story before publishing to ensure authenticity." } },
-          { "@type": "Question", "name": "How can I share my own success story?", "acceptedAnswer": { "@type": "Answer", "text": "Contact us through our support page with your story, the course you took, and how it helped you. Selected stories may be featured." } },
-          { "@type": "Question", "name": "How do I get free Udemy courses?", "acceptedAnswer": { "@type": "Answer", "text": "Browse our deals page for verified 100% off Udemy coupons. No account or payment needed — just click, enroll, and start learning for free." } },
-          { "@type": "Question", "name": "Do I need to pay for anything?", "acceptedAnswer": { "@type": "Answer", "text": "No, all coupons listed on CourseSpeak are verified to give you 100% off the course price. There are no hidden fees or charges." } },
-          { "@type": "Question", "name": "How long does it take to see results?", "acceptedAnswer": { "@type": "Answer", "text": "Results vary by course and individual effort. Many learners report career changes within 3 to 6 months of completing a focused learning path." } }
-        ]
-      },
-      {
-        "@type": "Organization",
-        "@id": "https://coursespeak.com/#organization",
-        "name": "CourseSpeak",
-        "url": "https://coursespeak.com",
-        "logo": "https://coursespeak.com/logo.svg",
-        "sameAs": [
-          "https://x.com/courses_peak",
-          "https://www.facebook.com/CourseSpeakOfficial/"
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://coursespeak.com" },
+          { "@type": "ListItem", "position": 2, "name": "Success Story of Udemy", "item": canonicalUrl }
         ]
       }
     ]
   })} />
 
-  <div style={{ minHeight: "100vh", color: "var(--text)" }}>
-
-    {/* ── HERO ── */}
-    <section style={{ padding: "4rem 1rem 2rem", textAlign: "center" }}>
-      <div style={{ maxWidth: "900px", margin: "0 auto" }}>
-        <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          Real Results
+  <div style="min-height:100vh;color:var(--text);">
+    <section style={{ padding:"4rem 1rem 2rem",textAlign:"center" }}>
+      <div style={{ maxWidth:"1100px",margin:"0 auto" }}>
+        <div style={{ display:"inline-flex",alignItems:"center",gap:"0.5rem",background:"rgba(212,167,55,0.1)",padding:"0.35rem 0.85rem",borderRadius:"20px",marginBottom:"0.75rem",fontSize:"0.75rem",fontWeight:700,color:"var(--brand)",textTransform:"uppercase",letterSpacing:"0.06em" }}>
+          Company Profile
         </div>
-        <h1 style={{ fontSize: "clamp(1.8rem, 4.5vw, 2.8rem)", fontWeight: 800, lineHeight: 1.2, margin: "0 auto 0.75rem" }}>
-          <span style={{ background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Success Stories</span>
+        <h1 style={{ fontSize:"clamp(1.8rem,4.5vw,2.8rem)",fontWeight:800,lineHeight:1.2,margin:"0 auto 0.75rem" }}>
+          <span style={{ background:"linear-gradient(135deg,var(--brand) 0%,hsl(35,90%,68%) 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text" }}>The Success Story of Udemy</span>
         </h1>
-        <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "650px", margin: "0 auto 1.5rem", lineHeight: 1.6 }}>
-          Discover how real learners transformed their careers using free Udemy courses from CourseSpeak. From zero to hero, these stories prove that quality education doesn't have to cost a fortune.
+        <p style={{ color:"var(--muted)",fontSize:"1rem",maxWidth:"680px",margin:"0 auto 1.5rem",lineHeight:1.6 }}>
+          The success story of Udemy is the story of turning a single idea — that quality education should be affordable, accessible and self-paced — into a global learning marketplace used by over 40 million learners. This is how the success story of Udemy unfolded.
         </p>
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "1rem", flexWrap: "wrap", fontSize: "0.8rem", color: "var(--muted)" }}>
-          <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-            By <a href="https://x.com/courses_peak" target="_blank" rel="noopener noreferrer" style="color:var(--text); text-decoration:none;"><strong>Josh Smith</strong></a>
-          </span>
-          <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
-            Updated <time datetime={lastModified}>{new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})}</time>
-          </span>
-          <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
-            3 min read
-          </span>
-        </div>
+        <img src="/images/udemy-success-story.png" alt="The success story of Udemy graphic with founders and growth milestones" width="1200" height="600" loading="eager" decoding="async" style={{ width:"100%",height:"auto",maxWidth:"900px",borderRadius:"14px",border:"1px solid var(--border)",margin:"1.5rem auto 0",display:"block" }} />
       </div>
     </section>
 
-    {/* ── SUCCESS STORIES GRID ── */}
-    <article style={{ padding: "1rem 1rem 4rem" }}>
-      <div style={{ maxWidth: "900px", margin: "0 auto" }}>
-        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:1rem;">
-          {successStories.map(story => (
-            <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.5rem; position:relative;">
-              <div style={{
-                position: "absolute", top: "0.75rem", right: "0.75rem",
-                background: "var(--brand)", color: "var(--bg)",
-                padding: "0.2rem 0.6rem", borderRadius: "999px",
-                fontSize: "0.7rem", fontWeight: 700
-              }}>
-                +{story.salaryIncrease}
-              </div>
+    <article aria-label="The Success Story of Udemy" style="padding:3rem 1rem 4rem;">
+      <div class="pp-grid">
+        <main class="article-body">
 
-              <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:1rem;">
-                <img src={story.avatar} alt={story.name} loading="lazy" width="48" height="48"
-                  style="width:48px; height:48px; border-radius:50%; object-fit:cover; border:2px solid var(--brand);" />
-                <div>
-                  <h4 style="color:var(--text); font-size:0.95rem; font-weight:700; margin:0 0 0.2rem;">{story.name}</h4>
-                  <p style="color:var(--muted); font-size:0.8rem; margin:0;">{story.role}</p>
-                </div>
-              </div>
-
-              <p style="color:var(--accent); font-size:0.75rem; font-weight:600; margin-bottom:0.75rem;">
-                {story.achievement}
-              </p>
-
-              <div style="display:flex; gap:0.15rem; margin-bottom:0.75rem;">
-                {[...Array(5)].map((_, i) => (
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill={i < story.rating ? "var(--brand)" : "var(--border)"}>
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                  </svg>
-                ))}
-              </div>
-
-              <p style="color:var(--muted); font-size:0.85rem; line-height:1.6; margin-bottom:0.75rem; font-style:italic;">
-                &ldquo;{story.review}&rdquo;
-              </p>
-
-              <div style="background:var(--input); padding:0.5rem; border-radius:8px; font-size:0.78rem; color:var(--accent); font-weight:600; text-align:center;">
-                {story.course}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* ── FAQ ── */}
-        <section aria-labelledby="faq-heading" style="margin-bottom:2rem; margin-top:2.5rem;">
-          <h2 id="faq" class="section-heading">Frequently Asked Questions</h2>
-          <div style="display:flex; flex-direction:column; gap:0.75rem;">
-            {[
-              { q: "Are these success stories real?", a: "Yes, these are real testimonials from learners who used CourseSpeak to find free Udemy courses. We verify each story before publishing to ensure authenticity." },
-              { q: "How can I share my own success story?", a: "We'd love to hear from you! Contact us through our support page with your story, the course you took, and how it helped you. Selected stories may be featured." },
-              { q: "How do I get free Udemy courses?", a: "Browse our deals page for verified 100% off Udemy coupons. No account or payment needed — just click, enroll, and start learning for free." },
-              { q: "Do I need to pay for anything?", a: "No, all coupons listed on CourseSpeak are verified to give you 100% off the course price. There are no hidden fees or charges." },
-              { q: "How long does it take to see results?", a: "Results vary by course and individual effort. Many learners report career changes within 3–6 months of completing a focused learning path." },
-            ].map(faq => (
-              <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.25rem 1.5rem;">
-                <h3 style="font-size:0.95rem; font-weight:700; color:var(--text); margin:0 0 0.5rem; display:flex; align-items:center; gap:0.5rem;">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                  {faq.q}
-                </h3>
-                <p style="font-size:0.85rem; color:var(--muted); line-height:1.7; margin:0;">{faq.a}</p>
-              </div>
-            ))}
-          </div>
+        <section id="about" style="margin-bottom:3rem;">
+          <h2 class="section-heading">About Udemy</h2>
+          <blockquote style="border-left:4px solid var(--brand);padding:0.75rem 1.25rem;margin:0 0 1.25rem;background:var(--card);border-radius:8px;color:var(--text);font-style:italic;">
+            “We’re confident that continuous learning — for learning new skills or upskilling to find new employment — is table stakes for the modern world.”
+            <br /><span style={{ fontSize:"0.85rem",color:"var(--muted)",fontStyle:"normal" }}>— Irwin Anand, Managing Director for Udemy, India</span>
+          </blockquote>
+          <p>
+            Udemy is an EduTech company that runs a global online learning marketplace, and the success story of Udemy begins exactly there: providing self-paced, non-degree education focused on both hard and soft skills. The success story of Udemy is built on offering thousands of courses across categories such as finance, development, business, IT and software, design, marketing, lifestyle, photography, music, health and academics, while also hosting content in more than 65 languages.
+          </p>
+          <p>
+            A key part of the success story of Udemy is scale: the platform serves over 40 million learners, more than 50,000 instructors, and is available across over 180 countries. Udemy also operates <a href="/deals">Udemy for Business</a>-style subscriptions and government upskilling programs, diversifying the success story of Udemy beyond individual course sales.
+          </p>
         </section>
 
-        {/* ── CTA ── */}
-        <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:2rem; text-align:center;">
-          <h2 style="font-size:1.3rem; font-weight:800; color:var(--text); margin-bottom:0.5rem;">
-            Start Your Success Story
-          </h2>
-          <p style="color:var(--muted); font-size:0.9rem; margin-bottom:1.5rem; max-width:440px; margin-left:auto; margin-right:auto; line-height:1.6;">
-            Join thousands of learners who transformed their careers with free Udemy courses. Your success story starts here.
+        <section id="how-works" style="margin-bottom:3rem;">
+          <h2 class="section-heading">How Does Udemy Work?</h2>
+          <p>
+            The success story of Udemy is the story of a marketplace model. Courses are created by instructors — usually subject-matter experts — and the platform handles discovery, payments, and delivery. The success story of Udemy rests on on-demand courses that learners can start and finish whenever they want, including video lectures, slides, text, quizzes, assignments and coding exercises.
           </p>
-          <div style="display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
-            <a href="/deals" style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.7rem 1.6rem; background:var(--brand); color:var(--bg); text-decoration:none; border-radius:8px; font-weight:700; font-size:0.9rem;">
-              Browse Free Deals
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+          <p>
+            Another advantage inside the success story of Udemy is discoverability: learners can preview trailers or finish the first lecture before buying, which lowers the risk of a bad purchase and helped the success story of Udemy grow through word of mouth. See also our <a href="/udemy-coupons-guide">Udemy coupons guide</a> for how learners access these courses cheaper.
+          </p>
+        </section>
+
+        <section id="founders" style="margin-bottom:3rem;">
+          <h2 class="section-heading">Udemy Founders</h2>
+          <p>
+            The success story of Udemy was set in motion in 2010 by three founders: Eren Bali, Gagan Biyani and Oktay Caglar. The success story of Udemy later came under the leadership of Gregg Coccari from February 2019, guiding the success story of Udemy into its global expansion phase.
+          </p>
+        </section>
+
+        <section id="origin" style="margin-bottom:3rem;">
+          <h2 class="section-heading">The Origin of Udemy</h2>
+          <p>
+            The origin chapter of the success story of Udemy starts with Eren Bali learning on a single internet-connected computer and winning national math Olympiads in Turkey. After working as a freelance web developer, he built a live virtual classroom in 2007 and brought the idea to Silicon Valley with Biyani and Caglar, where the success story of Udemy nearly failed 30 times with investors before the platform raised its first $1 million.
+          </p>
+          <blockquote style="border-left:4px solid var(--brand);padding:0.75rem 1.25rem;margin:0 0 1.25rem;background:var(--card);border-radius:8px;color:var(--text);font-style:italic;">
+            “It was an extremely tough start. None of us had family money… I was a consultant and flew cross-country every week.”
+            <br /><span style={{ fontSize:"0.85rem",color:"var(--muted)",fontStyle:"normal" }}>— Gagan Biyani, co-founder of Udemy</span>
+          </blockquote>
+          <p>
+            Udemy launched publicly in May 2010 with both free and paid courses taught by experts — the moment the success story of Udemy became a real marketplace rather than a side project, setting the stage for the success story of Udemy that followed.
+          </p>
+        </section>
+
+        <section id="business" style="margin-bottom:3rem;">
+          <h2 class="section-heading">Udemy Business Model</h2>
+          <ul>
+            <li>The success story of Udemy's business model is built on charging instructors a fee for every sale made on the platform.</li>
+            <li>That fee ranges from 3 to 75 percent depending on how the learner was acquired.</li>
+            <li>Alongside course sales, the success story of Udemy also charges an annual subscription that gives businesses and employees access to the firm's content, such as the <a href="/udemy-personal-plan">Udemy Personal Plan</a> style model.</li>
+          </ul>
+        </section>
+
+        <section id="revenue" style="margin-bottom:3rem;">
+          <h2 class="section-heading">Udemy Revenue Model</h2>
+          <p>
+            The success story of Udemy runs two course types — free and paid — where free courses drive value and word-of-mouth marketing while paid courses generate revenue. The core of the success story of Udemy's revenue model is the fee charged from students and instructors for hosting courses, with a simple split: 50% to the platform when it promotes the course, 50% to the instructor, 100% to the instructor when the instructor markets it themselves, and a 25/50/25 split when affiliate links are involved.
+          </p>
+          <p>
+            The second pillar of the success story of Udemy's revenue model is Udemy for Business, sold as Team and Enterprise annual plans — the engine behind the fastest-growing chapter of the success story of Udemy.
+          </p>
+        </section>
+
+        <section id="india" style="margin-bottom:3rem;">
+          <h2 class="section-heading">Udemy Growth in India</h2>
+          <blockquote style="border-left:4px solid var(--brand);padding:0.75rem 1.25rem;margin:0 0 1.25rem;background:var(--card);border-radius:8px;color:var(--text);font-style:italic;">
+            “India has consistently been one of the top markets for Udemy… We have seen a huge rate of growth in online learning in India during the Covid situation.”
+            <br /><span style={{ fontSize:"0.85rem",color:"var(--muted)",fontStyle:"normal" }}>— Irwin Anand, Managing Director, Udemy</span>
+          </blockquote>
+          <p>
+            India is one of the brightest chapters in the success story of Udemy, with enrollments reportedly rising by 200 percent during the lockdown period as people upskilled from home. The success story of Udemy there also reflects strong demand for Udemy for Business, which at the time reached roughly $100 million in annual recurring revenue — a milestone in the success story of Udemy.
+          </p>
+        </section>
+
+        <section id="funding" style="margin-bottom:3rem;">
+          <h2 class="section-heading">Udemy Funding</h2>
+          <p>
+            The success story of Udemy also includes a strong funding chapter: the platform reached a valuation of about $2 billion after its Series E round led by Benesse Holdings, and later engaged in talks to raise around $100 million in a fresh private round that would push its valuation past $3 billion. In total the success story of Udemy raised multiple rounds, including about $50 million (roughly Rs 371 crore) from global EdTech and growth funds such as Learn Capital.
+          </p>
+        </section>
+
+        <section id="conclusion" style="margin-bottom:2rem;">
+          <h2 class="section-heading">Conclusion</h2>
+          <blockquote style="border-left:4px solid var(--brand);padding:0.75rem 1.25rem;margin:0 0 1.25rem;background:var(--card);border-radius:8px;color:var(--text);font-style:italic;">
+            “Udemy’s rapid growth shows us the level of demand from students, instructors and companies for affordable skills training.”
+            <br /><span style={{ fontSize:"0.85rem",color:"var(--muted)",fontStyle:"normal" }}>— Gregg Coccari, CEO of Udemy</span>
+          </blockquote>
+          <p>
+            The success story of Udemy shows how a mission — improving lives through learning — can scale into a global platform. The success story of Udemy is far from over, and for learners it also means access to free and low-cost courses worth exploring via <a href="/deals">free Udemy deals</a>.
+          </p>
+          <div style={{ textAlign:"center",marginTop:"1.5rem",display:"flex",gap:"0.75rem",justifyContent:"center",flexWrap:"wrap" }}>
+            <a href="/deals" style={{ display:"inline-flex",alignItems:"center",gap:"0.5rem",padding:"0.75rem 1.75rem",background:"var(--brand)",color:"var(--bg)",textDecoration:"none",borderRadius:"8px",fontWeight:700,fontSize:"0.9rem" }}>
+              Browse Free Udemy Deals
             </a>
-            <a href="/udemy-coupons-guide" style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.7rem 1.6rem; color:var(--text); text-decoration:none; border-radius:8px; font-weight:700; font-size:0.9rem; border:2px solid var(--border);">
+            <a href="/udemy-coupons-guide" style={{ display:"inline-flex",alignItems:"center",gap:"0.5rem",padding:"0.75rem 1.75rem",color:"var(--text)",textDecoration:"none",borderRadius:"8px",fontWeight:700,fontSize:"0.9rem",border:"2px solid var(--border)" }}>
               Udemy Coupons Guide
             </a>
           </div>
-        </div>
+        </section>
+
+        </main>
+        <aside class="pp-sidebar">
+          <div class="pp-toc">
+            <h4>On this page</h4>
+            <ol>
+              {[
+                ["#about","About Udemy"],
+                ["#how-works","How it works"],
+                ["#founders","Founders"],
+                ["#origin","Origin"],
+                ["#business","Business model"],
+                ["#revenue","Revenue model"],
+                ["#india","Growth in India"],
+                ["#funding","Funding"],
+                ["#conclusion","Conclusion"],
+              ].map(([h,l])=>(<li><a href={h}>{l}</a></li>))}
+            </ol>
+          </div>
+          <div class="pp-cta">
+            <p>Explore free and discounted Udemy courses.</p>
+            <a href="/deals">Browse Deals →</a>
+          </div>
+          <div class="pp-trust">
+            <span>✓ Research-based article</span>
+            <span>✓ Updated {currentYear}</span>
+            <span>✓ Internal resources</span>
+          </div>
+        </aside>
       </div>
     </article>
-
   </div>
 
   <style>
-    .section-heading {
-      font-size: clamp(1.15rem, 2.5vw, 1.45rem);
-      font-weight: 800;
-      color: var(--text);
-      margin-bottom: 0.9rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 2px solid var(--border);
-    }
+    .container { max-width:1200px; margin:0 auto; }
+    .pp-grid { display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:2.5rem; max-width:1200px; margin:0 auto; align-items:start; }
+    .pp-sidebar { position:sticky; top:88px; display:flex; flex-direction:column; gap:1rem; }
+    .pp-toc { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1rem 1.1rem; }
+    .pp-toc h4 { margin:0 0 0.6rem; font-size:0.9rem; font-weight:800; color:var(--text); }
+    .pp-toc ol { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0.3rem; }
+    .pp-toc a { font-size:0.82rem; color:var(--brand); text-decoration:none; }
+    .pp-cta { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1rem 1.1rem; text-align:center; }
+    .pp-cta p { font-size:0.8rem; color:var(--muted); margin:0 0 0.75rem; line-height:1.5; }
+    .pp-cta a { display:inline-block; background:var(--brand); color:var(--bg); text-decoration:none; font-weight:700; font-size:0.85rem; padding:0.6rem 1.2rem; border-radius:8px; }
+    .pp-trust { display:flex; flex-direction:column; gap:0.35rem; font-size:0.75rem; color:var(--muted); }
+    .article-body { font-size:0.95rem; line-height:1.75; color:var(--muted); }
+    .article-body p { margin-bottom:1rem; }
+    .article-body p:last-child { margin-bottom:0; }
+    .article-body ul, .article-body ol { padding-left:1.5rem; margin-bottom:1.25rem; }
+    .article-body li { margin-bottom:0.5rem; }
+    .article-body strong { color:var(--text); }
+    .article-body a { color:var(--brand); text-decoration:underline; }
+    .section-heading { font-size:clamp(1.2rem,2.5vw,1.5rem); font-weight:800; color:var(--text); margin-bottom:1rem; padding-bottom:0.5rem; border-bottom:2px solid var(--border); }
+    @media (max-width:960px) { .pp-grid { grid-template-columns:1fr; } .pp-sidebar { position:static; order:-1; } }
   </style>
+
 </Layout>
+---

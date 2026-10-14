@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600" role="img" aria-label="Udemy Personal Plan coupon">
+  <defs>
+    <linearGradient id="p-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#080b12"/>
+      <stop offset="100%" stop-color="#1a1f2e"/>
+    </linearGradient>
+    <linearGradient id="p-gold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#B8860B"/>
+      <stop offset="50%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#E8C547"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="600" rx="28" fill="url(#p-bg)"/>
+  <rect x="40" y="40" width="1120" height="520" rx="24" fill="none" stroke="url(#p-gold)" stroke-width="3"/>
+  <text x="90" y="150" font-family="Arial, sans-serif" font-size="58" font-weight="800" fill="#ffffff">Udemy Personal Plan</text>
+  <rect x="90" y="200" width="440" height="74" rx="14" fill="url(#p-gold)"/>
+  <text x="310" y="250" text-anchor="middle" font-family="Arial, sans-serif" font-size="40" font-weight="800" fill="#080b12">Up to 40% OFF</text>
+  <g font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#E8C547">
+    <text x="90" y="340">• 26,000+ curated courses</text>
+    <text x="90" y="400">• From $13 per month (annual)</text>
+    <text x="90" y="460">• 7-day free trial (select countries)</text>
+  </g>
+  <text x="90" y="525" font-family="Arial, sans-serif" font-size="22" fill="#a09888">Coupon auto-applied • Cancel anytime</text>
+</svg>

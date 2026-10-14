@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600" role="img" aria-label="About CourseSpeak">
+  <defs>
+    <linearGradient id="a-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#080b12"/>
+      <stop offset="100%" stop-color="#1a1f2e"/>
+    </linearGradient>
+    <linearGradient id="a-gold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#B8860B"/>
+      <stop offset="50%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#E8C547"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="600" rx="28" fill="url(#a-bg)"/>
+  <rect x="40" y="40" width="1120" height="520" rx="24" fill="none" stroke="url(#a-gold)" stroke-width="3"/>
+  <text x="90" y="130" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#D4AF37" letter-spacing="4">ABOUT COURSESPEAK</text>
+  <text x="90" y="200" font-family="Arial, sans-serif" font-size="58" font-weight="800" fill="#ffffff">Making Education Accessible</text>
+  <text x="90" y="265" font-family="Arial, sans-serif" font-size="58" font-weight="800" fill="#E8C547">for Everyone</text>
+  <text x="90" y="330" font-family="Arial, sans-serif" font-size="24" fill="#a09888">Verified free Udemy coupons • 150K+ learners • Daily updates</text>
+  <g font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#ffffff">
+    <text x="90" y="415">• 50,000+ free courses featured</text>
+    <text x="90" y="465">• 100% verified coupon codes</text>
+    <text x="90" y="515">• Trusted by learners in 180+ countries</text>
+  </g>
+</svg>

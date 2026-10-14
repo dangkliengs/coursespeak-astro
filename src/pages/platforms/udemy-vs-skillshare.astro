@@ -130,7 +130,7 @@ const jsonLd = {
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
   <section style={{ padding: "4rem 1rem 2rem", textAlign: "center" }}>
-    <div style={{ maxWidth: "900px", margin: "0 auto" }}>
+    <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
       <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
         <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
         Head-to-Head Comparison — Updated {monthYear}
@@ -169,36 +169,11 @@ const jsonLd = {
     </div>
   </section>
 
-  <nav style={{ background: "var(--card)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)", padding: "1.5rem 1rem" }}>
-    <div class="container" style={{ maxWidth: "900px" }}>
-      <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.3rem 0.75rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.68rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
-        On this page
-      </div>
-      <ol class="toc">
-        {[
-          ["#overview", "Quick verdict"],
-          ["#pricing", "Pricing compared"],
-          ["#certificates", "Certificates"],
-          ["#free", "Free course options"],
-          ["#format", "Course length & format"],
-          ["#proscons", "Pros and cons"],
-          ["#which", "Which one for your goal?"],
-          ["#faq", "FAQ"],
-        ].map(([href, label], i) => (
-          <li>
-            <a href={href as string}>
-              <span>{i + 1}.</span>
-              {label as string}
-            </a>
-          </li>
-        ))}
-      </ol>
-    </div>
-  </nav>
+
 
   <article style={{ padding: "3rem 1rem 4rem" }}>
-    <div class="container prose" style={{ maxWidth: "900px" }}>
+    <div class="pp-grid">
+      <main class="article-body prose">
 
       <div id="overview" class="verdict">
         <strong>Quick verdict:</strong> Choose <strong>Udemy</strong> for deep, structured courses that are often free with 100% off coupons and that you keep for life — plus a completion certificate. Choose <strong>Skillshare</strong> for short, inspiring creative classes on a subscription, when you value community and quick projects over depth and credentials.
@@ -312,39 +287,32 @@ const jsonLd = {
         {related.map((r) => <a href={`/platforms/${r.slug}`}>{r.label}</a>)}
       </div>
 
+      </main>
+
+      <aside class="pp-sidebar">
+        <div class="pp-toc">
+          <h4>On this page</h4>
+          <ol>
+                <li><a href="#overview">Quick verdict</a></li>
+                <li><a href="#pricing">Pricing compared</a></li>
+                <li><a href="#certificates">Certificates</a></li>
+                <li><a href="#free">Free course options</a></li>
+                <li><a href="#format">Course length & format</a></li>
+                <li><a href="#proscons">Pros and cons</a></li>
+                <li><a href="#which">Which one for your goal?</a></li>
+                <li><a href="#faq">FAQ</a></li>
+          </ol>
+        </div>
+        <div class="pp-cta">
+          <p>Find verified free Udemy coupons updated daily.</p>
+          <a href="/deals">Browse Deals →</a>
+        </div>
+        <div class="pp-trust">
+          <span>✓ Verified coupons</span>
+          <span>✓ Daily updates</span>
+          <span>✓ 100% free access</span>
+        </div>
+      </aside>
     </div>
   </article>
-
-  <section style={{ padding: "4rem 1rem", background: "var(--bg-secondary)" }}>
-    <div class="container" style={{ maxWidth: "900px" }}>
-      <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
-        <h2 class="section-heading" id="faq">Udemy vs Skillshare FAQ</h2>
-        <p style={{ color: "var(--muted)", maxWidth: "600px", margin: "0.5rem auto 0" }}>Quick answers to the questions we hear most.</p>
-      </div>
-      <div class="faq-grid">
-        {faqs.map((faq) => (
-          <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "14px", padding: "1.25rem 1.5rem" }}>
-            <h3 style={{ margin: "0 0 0.5rem", fontSize: "1rem", color: "var(--text)", fontWeight: 700 }}>{faq.q}</h3>
-            <p style={{ margin: 0, color: "var(--muted)", lineHeight: 1.7, fontSize: "0.95rem" }}>{faq.a}</p>
-          </div>
-        ))}
-      </div>
-      <div style={{ marginTop: "2.5rem" }}>
-        <AuthorCard />
-      </div>
-      <div style={{ textAlign: "center", marginTop: "3rem" }}>
-        <p style={{ color: "var(--muted)", marginBottom: "1rem" }}>Ready to start learning for free?</p>
-        <a href="/deals" style={{
-          display: "inline-flex", alignItems: "center", gap: "0.5rem",
-          padding: "0.875rem 2rem", borderRadius: "12px",
-          background: "var(--brand)", color: "#1a1814",
-          textDecoration: "none", fontWeight: 700, fontSize: "1rem",
-          boxShadow: "0 4px 20px -4px hsla(45,95%,58%,0.4)"
-        }}>
-          Browse Free Udemy Coupons
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
-        </a>
-      </div>
-    </div>
-  </section>
 </Layout>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600" role="img" aria-label="Success story of Udemy">
+  <defs>
+    <linearGradient id="s-bg2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#080b12"/>
+      <stop offset="100%" stop-color="#1a1f2e"/>
+    </linearGradient>
+    <linearGradient id="s-gold2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#B8860B"/>
+      <stop offset="50%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#E8C547"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="600" rx="28" fill="url(#s-bg2)"/>
+  <rect x="40" y="40" width="1120" height="520" rx="24" fill="none" stroke="url(#s-gold2)" stroke-width="3"/>
+  <text x="90" y="130" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#D4AF37" letter-spacing="4">SUCCESS STORY</text>
+  <text x="90" y="195" font-family="Arial, sans-serif" font-size="58" font-weight="800" fill="#ffffff">The Success Story of Udemy</text>
+  <text x="90" y="250" font-family="Arial, sans-serif" font-size="24" fill="#a09888">From a Silicon Valley side project to a global marketplace</text>
+  <g font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#E8C547">
+    <text x="90" y="330">• Founded 2010 by Eren Bali, Gagan Biyani, Oktay Caglar</text>
+    <text x="90" y="385">• 40M+ learners • 50k instructors • 180+ countries</text>
+    <text x="90" y="440">• Revenue: course fees + business subscriptions</text>
+    <text x="90" y="495">• $2B valuation • India +200% growth</text>
+  </g>
+</svg>
