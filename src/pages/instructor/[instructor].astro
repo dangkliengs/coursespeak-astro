@@ -545,12 +545,12 @@ const faqs = [
 
 <script>
   (function () {
-    function animate(el) {
+    function animate(el: Element) {
       var target = parseInt(el.getAttribute('data-ih-count') || '0', 10);
       if (isNaN(target)) return;
       var dur = 900;
-      var start = null;
-      function step(ts) {
+      var start: number | null = null;
+      function step(ts: number) {
         if (!start) start = ts;
         var p = Math.min(1, (ts - start) / dur);
         el.textContent = String(Math.round(target * (1 - Math.pow(1 - p, 3))));

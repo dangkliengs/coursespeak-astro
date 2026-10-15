@@ -21,7 +21,24 @@ const instructorImg = firstInstructor ? getInstructorImageByName(firstInstructor
 const instructorInitials = firstInstructor.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
 const dealLang = String(deal.language || "").trim();
 const langFlag = LANG_FLAGS[dealLang.toLowerCase()] || "";
-const dirEntry = (instructorDirectory as unknown as Record<string, { name?: string; count?: number }>)[instructorProfileSlug];
+function normalizeInstructorKey(value: string): string {
+  return value
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .substring(0, 100);
+}
+
+const instructorCountDirectory = instructorDirectory as unknown as Record<string, { name?: string; count?: number }>;
+const targetInstructorKey = normalizeInstructorKey(firstInstructor || '');
+const dirEntry = Object.entries(instructorCountDirectory).find(([key, val]) =>
+  normalizeInstructorKey(key) === targetInstructorKey ||
+  normalizeInstructorKey(val?.name ?? '') === targetInstructorKey
+)?.[1];
 const instructorCoursesCount = typeof dirEntry?.count === "number" ? dirEntry.count : undefined;
 const insSub = typeof instructorCoursesCount === "number"
   ? `${instructorCoursesCount} course${instructorCoursesCount === 1 ? "" : "s"}`

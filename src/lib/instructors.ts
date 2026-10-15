@@ -1,4 +1,15 @@
 /**
+ * Remove invisible/zero-width characters that come from scraped data
+ * (e.g. "Ligency\u200b" or "Ligency \u200b" should both become "Ligency").
+ */
+function stripInvisible(value: string): string {
+  return value
+    .replace(/[\u200B-\u200D\u2060\uFEFF\u00AD]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/**
  * Split instructor list on commas that separate people.
  * Commas inside parentheses (e.g. "Faisal Memon (EmbarkX), Jane Doe") are not separators.
  */
@@ -20,7 +31,7 @@ export function parseInstructors(instructorField: string | undefined): string[] 
   }
   parts.push(instructorField.slice(start));
 
-  return parts.map((s) => s.trim()).filter((s) => s.length > 0);
+  return parts.map(stripInvisible).filter((s) => s.length > 0);
 }
 
 /**
