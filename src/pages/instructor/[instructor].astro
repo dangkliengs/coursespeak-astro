@@ -5,6 +5,7 @@ import { readDeals } from "../../lib/store";
 import type { Deal } from "../../types/deal";
 
 import { parseInstructors, createInstructorSlug, instructorSlugLookupKeys } from "../../lib/instructors";
+import { slugifyCategory } from "../../lib/utils";
 import { getInstructorImageByName } from "../../lib/instructorProfiles";
 
 // Types
@@ -165,7 +166,28 @@ const cleanName = instructorName.replace(/[^\x20-\x7E]/g, '').trim();
 const instructorImage = getInstructorImageByName(instructorName);
 
 const pageTitle = `${instructorName}'s — Udemy Coupon Codes ${currentMonth} ${currentYear} | CourseSpeak`;
-const pageDescription = `Access ${instructorData.courseCount} Udemy Coupon Codes by ${instructorName}. ${instructorData.totalStudents.toLocaleString()}+ students enrolled. Average rating ${instructorData.avgRating}★. Browse free online courses with 100% off coupons.`;
+// Top 3 kategori terbanyak — lebih SEO daripada angka ratusan ribu students.
+const topCats = (() => {
+  const freq = new Map<string, number>();
+  for (const c of instructorCourses) {
+    const cat = (c.category || "").trim();
+    if (cat) freq.set(cat, (freq.get(cat) ?? 0) + 1);
+  }
+  return [...freq.entries()]
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .map(([c]) => c)
+    .slice(0, 3);
+})();
+function joinList(items: string[]) {
+  if (items.length <= 2) return items.join(" & ");
+  return `${items.slice(0, -1).join(", ")} & ${items[items.length - 1]}`;
+}
+const pageDescription = [
+  `Verified ${instructorData.courseCount} Udemy Coupon Code${instructorData.courseCount === 1 ? "" : "s"} by ${instructorName}.`,
+  topCats.length ? `Top topics: ${joinList(topCats)}.` : "",
+  instructorData.avgRating > 0 ? `Average instructor rating ${instructorData.avgRating}★.` : "",
+  "Browse free online courses with 100% off coupons.",
+].filter(Boolean).join(" ");
 
 // FAQ Data
 const faqs = [
@@ -373,6 +395,34 @@ const faqs = [
       <div class="container">
         <div class="ih-sec-head">
           <h2 class="ih-sec-title">
+            About {instructorName}'s courses
+            <span class="ih-tag">CourseSpeak guide</span>
+          </h2>
+        </div>
+        <div class="ih-about">
+          <p>
+            <strong>{instructorName}</strong> offers <strong>{instructorData.courseCount} verified Udemy coupon code{instructorData.courseCount === 1 ? "" : "s"}</strong> on CourseSpeak{topCats.length ? <> — mostly in <strong>{joinList(topCats)}</strong></> : " across multiple topics"}{instructorData.avgRating > 0 ? <> with an average instructor rating of <strong>{instructorData.avgRating}★</strong></> : ""}{maxDisc > 0 ? <> and discounts up to <strong>{maxDisc}% off</strong></> : ""}{freeCount > 0 ? <> — including <strong>{freeCount} completely free deal{freeCount === 1 ? "" : "s"}</strong></> : ""}.
+            {topCats.length ? <> A solid pick for {topCats[0]} learners in {currentMonth} {currentYear}.</> : ""}
+          </p>
+          <p>
+            Every coupon on this page is manually checked before listing, so you never waste time on expired codes.
+            New deals from {instructorName} appear here automatically — grab them before the Udemy coupon expires.
+          </p>
+          <div class="ih-about-links">
+            <a class="ih-btn" href="#deals">View all {instructorData.courseCount} courses ↓</a>
+            {topCats.map((c) => (
+              <a class="ih-btn ghost" href={`/categories/${slugifyCategory(c)}`}>{c} coupons →</a>
+            ))}
+            <a class="ih-btn ghost" href="/instructors">All instructors →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0;">
+      <div class="container">
+        <div class="ih-sec-head">
+          <h2 class="ih-sec-title">
             Frequently asked questions
             <span class="ih-tag">{faqs.length} questions</span>
           </h2>
@@ -384,19 +434,6 @@ const faqs = [
               <p class="ih-faq-a">{faq.a}</p>
             </div>
           ))}
-        </div>
-      </div>
-    </section>
-
-    <section class="section" style="padding-top:0;">
-      <div class="container">
-        <div class="cta-box">
-          <p class="cta-eyebrow">More instructors to explore</p>
-          <h2>Discover top Udemy instructors</h2>
-          <p class="cta-subtext">Browse every verified instructor — all with manually checked coupon codes.</p>
-          <div class="cta-actions">
-            <a href="/instructors" class="ih-btn">Browse All Instructors →</a>
-          </div>
         </div>
       </div>
     </section>
@@ -489,24 +526,24 @@ const faqs = [
     min-width: 0; position: relative; padding: 1rem 0;
   }
   .ih-portrait-blob {
-    position: absolute; width: min(320px, 90%); aspect-ratio: 1;
-    border-radius: 50%;
+    position: absolute; width: min(300px, 82%); aspect-ratio: 1;
+    border-radius: 28px;
+    transform: rotate(-6deg);
     background:
-      radial-gradient(circle at 35% 30%, rgba(212,167,55,0.30) 0%, transparent 55%),
-      radial-gradient(circle, rgba(232,197,71,0.16) 0%, transparent 62%),
-      radial-gradient(circle, rgba(212,167,55,0.10) 0%, transparent 70%);
+      linear-gradient(135deg, rgba(212,167,55,0.22) 0%, rgba(212,167,55,0.04) 70%),
+      radial-gradient(circle at 35% 30%, rgba(232,197,71,0.16) 0%, transparent 60%);
     border: 1px solid rgba(212,167,55,0.30);
     pointer-events: none;
   }
   .ih-portrait-img {
     position: relative; width: min(220px, 62%); aspect-ratio: 1;
-    border-radius: 50%; object-fit: cover;
+    border-radius: 24px; object-fit: cover;
     border: 5px solid rgba(212,167,55,0.85);
     box-shadow: 0 24px 60px -12px rgba(0,0,0,0.6), 0 0 40px -8px rgba(212,167,55,0.35);
   }
   .ih-portrait-fb {
     position: relative; width: min(220px, 62%); aspect-ratio: 1;
-    border-radius: 50%;
+    border-radius: 24px;
     display: inline-flex; align-items: center; justify-content: center;
     font-weight: 800; font-size: 3.5rem; color: #080b12;
     background: linear-gradient(135deg, #B8860B 0%, #D4AF37 40%, #E8C547 100%);
@@ -537,6 +574,15 @@ const faqs = [
   .ih-faq-card:hover { border-color: rgba(212,167,55,0.45); }
   .ih-faq-q { font-size: 0.95rem; font-weight: 700; color: var(--text); margin: 0 0 0.4rem; line-height: 1.4; }
   .ih-faq-a { font-size: 0.85rem; color: var(--muted); line-height: 1.6; margin: 0; }
+  /* ── About / SEO content ── */
+  .ih-about {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.5rem 1.6rem;
+  }
+  .ih-about p { color: var(--text-secondary); font-size: 0.98rem; line-height: 1.75; margin: 0 0 1rem; }
+  .ih-about p:last-of-type { margin-bottom: 1.25rem; }
+  .ih-about strong { color: var(--text); }
+  .ih-about-links { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center; }
   @media (max-width: 900px) {
     .ih-grid { grid-template-columns: 1fr; gap: 1.75rem; }
     .ih-faq-grid { grid-template-columns: 1fr; }
@@ -550,10 +596,16 @@ const faqs = [
       if (isNaN(target)) return;
       var dur = 900;
       var start: number | null = null;
+      // Format compact ala card (363330 -> "363.3K"), konsisten di seluruh situs.
+      function fmt(n: number) {
+        if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
+        if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "K";
+        return String(n);
+      }
       function step(ts: number) {
         if (!start) start = ts;
         var p = Math.min(1, (ts - start) / dur);
-        el.textContent = String(Math.round(target * (1 - Math.pow(1 - p, 3))));
+        el.textContent = fmt(Math.round(target * (1 - Math.pow(1 - p, 3))));
         if (p < 1) requestAnimationFrame(step);
       }
       requestAnimationFrame(step);

@@ -19,6 +19,11 @@ function resolveDealsFilePath(): string {
 const DEALS_FILE = resolveDealsFilePath();
 const DEALS_DIR = path.dirname(DEALS_FILE);
 
+/** Absolute path file deals.json (menghormati env DEALS_PATH). */
+export function getDealsFilePath(): string {
+  return DEALS_FILE;
+}
+
 /**
  * ==================== TIMEZONE HELPER (ASIA/JAKARTA) ====================
  * All date operations now consistently use Asia/Jakarta (WIB) timezone.

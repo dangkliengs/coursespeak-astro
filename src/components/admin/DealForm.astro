@@ -1,0 +1,374 @@
+---
+import type { Deal } from "@/types/deal";
+
+interface Props {
+  deal?: Deal;
+}
+
+const { deal } = Astro.props;
+const isEdit = !!deal;
+
+const pad = (n: number) => String(n).padStart(2, "0");
+function toLocalInput(iso?: string): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return "";
+  const wib = new Date(d.getTime() + 7 * 3600000);
+  return `${wib.getUTCFullYear()}-${pad(wib.getUTCMonth() + 1)}-${pad(wib.getUTCDate())}T${pad(wib.getUTCHours())}:${pad(wib.getUTCMinutes())}`;
+}
+
+const fmtDT = (iso?: string) => {
+  if (!iso) return "-";
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return "-";
+  return d.toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" });
+};
+
+const submitLabel = isEdit ? "Save Changes" : "Create Deal";
+---
+
+<form id="dealForm" class="adm-form" data-is-edit={String(isEdit)} data-deal-id={deal?.id ?? ""} novalidate>
+  <div class="adm-tabs">
+    <button type="button" class="adm-tab active" data-tab="basic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Basic Info</button>
+    <button type="button" class="adm-tab" data-tab="pricing"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Pricing & Stats</button>
+    <button type="button" class="adm-tab" data-tab="tracking"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Coupon & Tracking</button>
+    <button type="button" class="adm-tab" data-tab="content"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Content</button>
+  </div>
+
+  <!-- ======================= BASIC ======================= -->
+  <div class="adm-tab-panel active" data-panel="basic">
+    <div class="adm-card">
+      <h3 class="adm-subhead"><span class="bar"></span>Basic Information</h3>
+      <div class="adm-grid">
+        {isEdit && (
+          <div>
+            <label class="adm-label" for="dealId">Deal ID</label>
+            <input class="adm-input code" id="dealId" type="text" value={deal?.id ?? ""} readonly disabled />
+            <span class="adm-hint">ID 4-digit dibuat otomatis saat create, tidak bisa diubah.</span>
+          </div>
+        )}
+        <div>
+          <label class="adm-label" for="title">Course Title *</label>
+          <input class="adm-input" id="title" name="title" type="text" required placeholder="Advanced React Patterns & Performance" value={deal?.title ?? ""} />
+        </div>
+        <div class="adm-grid adm-grid-2">
+          <div>
+            <label class="adm-label" for="provider">Provider</label>
+            <input class="adm-input" id="provider" name="provider" type="text" value={deal?.provider ?? "Udemy"} readonly />
+          </div>
+          <div>
+            <label class="adm-label" for="category">Category *</label>
+            <input class="adm-input" id="category" name="category" type="text" required placeholder="Development" value={deal?.category ?? ""} />
+          </div>
+          <div>
+            <label class="adm-label" for="subcategory">Subcategory</label>
+            <input class="adm-input" id="subcategory" name="subcategory" type="text" placeholder="Web Development" value={deal?.subcategory ?? ""} />
+          </div>
+          <div>
+            <label class="adm-label" for="instructor">Instructor</label>
+            <input class="adm-input" id="instructor" name="instructor" type="text" placeholder="Maya Chen" value={deal?.instructor ?? ""} />
+          </div>
+        </div>
+        <div>
+          <label class="adm-label" for="url">Course URL (with coupon code) *</label>
+          <input class="adm-input code" id="url" name="url" type="url" required placeholder="https://trk.udemy.com/.../?couponCode=CODE" value={deal?.url ?? ""} />
+        </div>
+        <div>
+          <label class="adm-label" for="coupon">Coupon Code</label>
+          <input class="adm-input code" id="coupon" name="coupon" type="text" placeholder="VOUCHER202608" value={deal?.coupon ?? ""} />
+        </div>
+        <div>
+          <label class="adm-label" for="image">Thumbnail URL</label>
+          <input class="adm-input code" id="image" name="image" type="url" placeholder="https://img-c.udemycdn.com/course/480x270/..." value={deal?.image ?? ""} />
+          <span class="adm-hint">Otomatis dipakai juga untuk share sosmed (OG). Isi thumbnail saja cukup.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================= PRICING ======================= -->
+  <div class="adm-tab-panel" data-panel="pricing">
+    <div class="adm-card">
+      <h3 class="adm-subhead"><span class="bar"></span>Pricing & Statistics</h3>
+      <div class="adm-grid adm-grid-2">
+        <div>
+          <label class="adm-label" for="price">Current Price (USD) *</label>
+          <input class="adm-input" id="price" name="price" type="number" step="0.01" min="0" required value={deal?.price ?? ""} />
+        </div>
+        <div>
+          <label class="adm-label" for="originalPrice">Original Price (USD)</label>
+          <input class="adm-input" id="originalPrice" name="originalPrice" type="number" step="0.01" min="0" value={deal?.originalPrice ?? ""} />
+          <span class="adm-hint">Discount % dihitung otomatis.</span>
+        </div>
+        <div>
+          <label class="adm-label" for="rating">Rating (0–5)</label>
+          <input class="adm-input" id="rating" name="rating" type="number" step="0.1" min="0" max="5" value={deal?.rating ?? ""} />
+        </div>
+        <div>
+          <label class="adm-label" for="students">Students</label>
+          <input class="adm-input" id="students" name="students" type="number" min="0" value={deal?.students ?? ""} />
+        </div>
+        <div>
+          <label class="adm-label" for="duration">Duration</label>
+          <input class="adm-input" id="duration" name="duration" type="text" placeholder="18.5 hours" value={deal?.duration ?? ""} />
+        </div>
+        <div>
+          <label class="adm-label" for="level">Level</label>
+          <select class="adm-select" id="level" name="level">
+            <option value="">All Levels (default)</option>
+            {["Beginner", "Intermediate", "Advanced", "All Levels"].map((lvl) => (
+              <option value={lvl} selected={deal?.level === lvl}>{lvl}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label class="adm-label" for="language">Language</label>
+          <input class="adm-input" id="language" name="language" type="text" placeholder="English" value={deal?.language ?? ""} />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================= TRACKING ======================= -->
+  <div class="adm-tab-panel" data-panel="tracking">
+    <div class="adm-card">
+      <h3 class="adm-subhead"><span class="bar"></span>Coupon & Tracking</h3>
+      <div class="adm-grid adm-grid-2">
+        <div>
+          <label class="adm-label" for="expiresAt">Coupon Expiry (WIB)</label>
+          <input class="adm-input" id="expiresAt" name="expiresAt" type="datetime-local" value={toLocalInput(deal?.expiresAt)} />
+          <span class="adm-hint">Disimpan dalam zona Asia/Jakarta (WIB).</span>
+        </div>
+        <div>
+          <label class="adm-label" for="createdAt">Created At</label>
+          <input class="adm-input" id="createdAt" type="text" value={fmtDT(deal?.createdAt)} readonly disabled />
+        </div>
+        <div>
+          <label class="adm-label" for="updatedAt">Last Updated</label>
+          <input class="adm-input" id="updatedAt" type="text" value={fmtDT(deal?.updatedAt)} readonly disabled />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================= CONTENT ======================= -->
+  <div class="adm-tab-panel" data-panel="content">
+    <div class="adm-card">
+      <h3 class="adm-subhead"><span class="bar"></span>Course Content</h3>
+      <div class="adm-grid">
+        <div>
+          <label class="adm-label" for="description">Short Description</label>
+          <textarea class="adm-textarea" id="description" name="description" rows="3" placeholder="One-two sentence summary shown in listings." style="margin-top:.45rem;">{deal?.description ?? ""}</textarea>
+          <span class="adm-hint">Ringkasan 1–2 kalimat untuk listing. Untuk teks panjang resmi gunakan kolom Full Description di bawah.</span>
+        </div>
+        <div>
+          <label class="adm-label" for="learn">What you'll learn (one per line)</label>
+          <textarea class="adm-textarea" id="learn" name="learn" rows="6" placeholder={"Build production-ready React apps\nOptimize render performance"}>{deal?.learn?.join("\n") ?? ""}</textarea>
+        </div>
+        <div>
+          <label class="adm-label" for="requirements">Requirements (one per line)</label>
+          <textarea class="adm-textarea" id="requirements" name="requirements" rows="4" placeholder={"Basic JavaScript knowledge\nA computer with internet"}>{deal?.requirements?.join("\n") ?? ""}</textarea>
+        </div>
+        <div>
+          <label class="adm-label" for="contentRaw">Full Description (official)</label>
+          <div class="rte-paste" id="contentRaw" contenteditable="true" spellcheck="false" aria-label="Paste description here"></div>
+          <span class="adm-hint">Copy langsung dari halaman Udemy (blok teksnya, bukan view-source) — bold, bullet &amp; link ikut persis. Atau tempel HTML mentah. Tidak perlu edit manual.</span>
+          <div class="adm-label" style="margin-top:.9rem;">Live Preview (hasil tersimpan)</div>
+          <div class="rte-preview" id="rtePreview" aria-live="polite"></div>
+          <textarea id="content" name="content" hidden>{deal?.content ?? ""}</textarea>
+        </div>
+        <p class="adm-note" style="margin:0;">FAQs halaman deal dibuat otomatis dari data (harga, rating, durasi, garansi) — tidak perlu diisi manual.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="adm-form-foot">
+    <span id="formStatus" class="adm-form-status"></span>
+    <a class="adm-btn adm-btn-outline" href="/admin/deals">Cancel</a>
+    <button class="adm-btn adm-btn-primary" type="submit">{submitLabel}</button>
+  </div>
+</form>
+
+<style>
+  .rte-paste { min-height: 160px; max-height: 420px; overflow-y: auto; background: var(--adm-surface); border: 1px solid var(--adm-border); border-radius: 8px; padding: 12px 14px; color: var(--adm-text); line-height: 1.7; font-size: 0.92rem; }
+  .rte-paste:focus { outline: none; border-color: var(--adm-accent-border); }
+  .rte-paste:empty::before { content: "Copy langsung dari halaman Udemy ke sini — bold, bullet & link ikut persis…"; color: var(--adm-faint); }
+  .rte-paste ul, .rte-paste ol { padding-left: 1.5rem; margin: 0 0 0.9em; }
+  .rte-paste p { margin: 0 0 0.9em; }
+  .rte-preview { min-height: 120px; max-height: 420px; overflow-y: auto; background: var(--adm-surface); border: 1px solid var(--adm-border); border-radius: 8px; padding: 12px 14px; color: var(--adm-text); line-height: 1.7; font-size: 0.92rem; }
+  .rte-preview h2 { font-size: 1.25rem; margin: 1em 0 0.5em; }
+  .rte-preview h3 { font-size: 1.1rem; margin: 1em 0 0.5em; }
+  .rte-preview p { margin: 0 0 0.9em; }
+  .rte-preview ul, .rte-preview ol { margin: 0 0 0.9em; padding-left: 1.5rem; }
+  .rte-preview li { margin-bottom: 0.3em; }
+  .rte-preview a { color: var(--adm-accent); }
+  .rte-empty { color: var(--adm-faint); }
+</style>
+
+<script>
+  const form = document.getElementById("dealForm") as HTMLFormElement;
+  const isEdit = form.dataset.isEdit === "true";
+  const currentId: string | null = form.dataset.dealId || null;
+  const statusEl = document.getElementById("formStatus");
+
+  function setStatus(text: string, kind = "") {
+    if (statusEl) {
+      statusEl.textContent = text;
+      statusEl.className = `adm-form-status ${kind}`.trim();
+      statusEl.style.color = kind === "adm-ok" ? "var(--adm-ok)" : kind === "adm-err" ? "var(--adm-danger)" : "";
+    }
+  }
+
+  function showTab(name: string) {
+    document.querySelectorAll<HTMLElement>(".adm-tab").forEach((t) => t.classList.toggle("active", t.dataset.tab === name));
+    document.querySelectorAll<HTMLElement>(".adm-tab-panel").forEach((p) => p.classList.toggle("active", p.dataset.panel === name));
+  }
+
+  document.querySelectorAll<HTMLButtonElement>(".adm-tab").forEach((btn) => {
+    btn.addEventListener("click", () => showTab(btn.dataset.tab || "basic"));
+  });
+
+  const rawBox = document.getElementById("contentRaw") as HTMLElement | null;
+  const outBox = document.getElementById("content") as HTMLTextAreaElement | null;
+  const previewBox = document.getElementById("rtePreview") as HTMLElement | null;
+
+  function escHtml(s: string): string {
+    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  // Bersihkan atribut kotor langsung di dalam box (style/class/data-*, script).
+  function sanitizeBox() {
+    if (!rawBox) return;
+    rawBox.querySelectorAll("script, style, iframe, form, button, input, select").forEach((n) => n.remove());
+    rawBox.querySelectorAll("*").forEach((n) => {
+      Array.from(n.attributes).forEach((a) => {
+        const k = a.name.toLowerCase();
+        const keep =
+          (n.tagName === "A" && k === "href") ||
+          (n.tagName === "IMG" && (k === "src" || k === "alt"));
+        if (!keep) n.removeAttribute(a.name);
+      });
+    });
+  }
+
+  function sanitizeHtml(dirty: string): string {
+    const doc = new DOMParser().parseFromString(dirty, "text/html");
+    doc.querySelectorAll("script, style, iframe, form, button, input, select").forEach((n) => n.remove());
+    doc.querySelectorAll("*").forEach((n) => {
+      Array.from(n.attributes).forEach((a) => {
+        const k = a.name.toLowerCase();
+        const keep =
+          (n.tagName === "A" && k === "href") ||
+          (n.tagName === "IMG" && (k === "src" || k === "alt"));
+        if (!keep) n.removeAttribute(a.name);
+      });
+    });
+    return doc.body.innerHTML.trim();
+  }
+
+  // Teks biasa → struktur HTML (baris -, *, •, 1. menjadi list).
+  function formatContent(raw: string): string {
+    const t = raw.trim();
+    if (!t) return "";
+    if (/<(p|div|ul|ol|li|h[1-4]|br|strong|em|b|i|u|a|span)[\s>]/i.test(t)) {
+      return sanitizeHtml(t);
+    }
+    let html = "";
+    let list: string | null = null;
+    let para: string[] = [];
+    const closeList = () => { if (list) { html += `</${list}>`; list = null; } };
+    const flushPara = () => { if (para.length) { html += `<p>${para.join("<br>")}</p>`; para = []; } };
+    for (const rawLine of t.split("\n")) {
+      const line = rawLine.trim();
+      if (!line) { closeList(); flushPara(); continue; }
+      const ulm = line.match(/^([\-*•·▪▶+])\s+(.*)$/);
+      const olm = line.match(/^(\d+)[\.\)]\s+(.*)$/);
+      if (ulm) {
+        if (list !== "ul") { closeList(); flushPara(); html += "<ul>"; list = "ul"; }
+        html += `<li>${escHtml(ulm[2])}</li>`;
+        continue;
+      }
+      if (olm) {
+        if (list !== "ol") { closeList(); flushPara(); html += "<ol>"; list = "ol"; }
+        html += `<li>${escHtml(olm[2])}</li>`;
+        continue;
+      }
+      closeList();
+      para.push(escHtml(line));
+    }
+    closeList();
+    flushPara();
+    return html;
+  }
+
+  function refreshPreview() {
+    if (!rawBox || !outBox || !previewBox) return;
+    const hasNew = (rawBox.textContent || "").trim().length > 0;
+    let html: string;
+    if (hasNew) {
+      html = rawBox.querySelector("li, ul, ol, a, strong, b, em, i, h1, h2, h3")
+        ? sanitizeHtml(rawBox.innerHTML)
+        : formatContent(rawBox.innerText || "");
+      outBox.value = html;
+    } else {
+      html = outBox.value;
+    }
+    previewBox.innerHTML = html || '<span class="rte-empty">Pratinjau kosong — tempel deskripsi di atas.</span>';
+  }
+
+  rawBox?.addEventListener("paste", () => {
+    // Biarkan browser menempel format asli (bold/bullet/link),
+    // lalu bersihkan atribut kotor setelahnya.
+    setTimeout(() => { sanitizeBox(); refreshPreview(); }, 0);
+  });
+  rawBox?.addEventListener("input", refreshPreview);
+  refreshPreview();
+
+  const NUMERIC = new Set(["price", "originalPrice", "rating", "students"]);
+  const ARRAYS = new Set(["learn", "requirements"]);
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    refreshPreview();
+    const payload: Record<string, unknown> = {};
+
+    for (const [key, value] of new FormData(form).entries()) {
+      const raw = value.toString().trim();
+      if (ARRAYS.has(key)) {
+        const items = raw.split("\n").map((l) => l.replace(/\r$/, "").trim()).filter(Boolean);
+        if (items.length) payload[key] = items;
+      } else if (NUMERIC.has(key)) {
+        const num = parseFloat(raw);
+        if (!isNaN(num)) payload[key] = num;
+      } else if (key === "expiresAt" && raw) {
+        payload[key] = `${raw}:00+07:00`;
+      } else if (raw) {
+        payload[key] = raw;
+      }
+    }
+
+    if (!payload.provider) payload.provider = "Udemy";
+
+    setStatus("Saving…", "adm-warn");
+    const submitBtn = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    if (submitBtn) submitBtn.disabled = true;
+
+    try {
+      const url = isEdit ? `/api/deals?id=${encodeURIComponent(String(currentId))}` : "/api/deals";
+      const res = await fetch(url, {
+        method: isEdit ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Request failed");
+      }
+      setStatus("Saved ✓", "adm-ok");
+      setTimeout(() => (window.location.href = "/admin/deals"), 400);
+    } catch (err) {
+      setStatus(`Error: ${(err as Error).message}`, "adm-err");
+      if (submitBtn) submitBtn.disabled = false;
+    }
+  });
+</script>

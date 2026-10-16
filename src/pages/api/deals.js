@@ -26,7 +26,22 @@ export async function POST({ request }) {
 
     const newDeal = await request.json();
 
-    // Generate unique 4-digit ID if not provided
+    // Field yang tidak perlu diinput manual — jangan simpan dari form
+    delete newDeal.discount;
+    delete newDeal.skills;
+    delete newDeal.faqs;
+    delete newDeal.seoTitle;
+    delete newDeal.seoDescription;
+    delete newDeal.seoOgImage;
+    delete newDeal.curriculum;
+
+    if (!newDeal.title || !newDeal.url || !newDeal.category || typeof newDeal.price !== 'number') {
+      return new Response(JSON.stringify({ error: 'Title, URL, category, and price are required' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+    if (!newDeal.provider) newDeal.provider = 'Udemy';
     if (!newDeal.id) {
       const existingIds = deals.map(deal => deal.id);
       let newId;
@@ -60,6 +75,64 @@ export async function POST({ request }) {
       headers: {
         'Content-Type': 'application/json',
       },
+    });
+  }
+}
+
+export async function PUT({ request }) {
+  try {
+    const url = new URL(request.url);
+    const dealId = url.searchParams.get('id');
+
+    if (!dealId) {
+      return new Response(JSON.stringify({ error: 'Deal ID is required' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    const patch = await request.json();
+    // Field yang tidak perlu diinput manual — jangan simpan dari form
+    delete patch.id;
+    delete patch.discount;
+    delete patch.skills;
+    delete patch.faqs;
+    delete patch.seoTitle;
+    delete patch.seoDescription;
+    delete patch.seoOgImage;
+    delete patch.curriculum;
+    delete patch.createdAt;
+
+    if (!patch.provider) patch.provider = 'Udemy';
+
+    const deals = await readDeals();
+    const idx = deals.findIndex((d) => d.id === dealId);
+    if (idx === -1) {
+      return new Response(JSON.stringify({ error: 'Deal not found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    const updated = {
+      ...deals[idx],
+      ...patch,
+      id: dealId,
+      updatedAt: new Date().toISOString(),
+    };
+    deals[idx] = updated;
+
+    await writeDeals(deals);
+
+    return new Response(JSON.stringify(updated), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (error) {
+    console.error('[API] Error updating deal:', error);
+    return new Response(JSON.stringify({ error: 'Failed to update deal' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
     });
   }
 }
