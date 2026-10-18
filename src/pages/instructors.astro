@@ -76,7 +76,7 @@ const instructors: Instructor[] = Array.from(instructorMap.values())
     avgRating: Number(inst.avgRating.toFixed(1)),
     avgDiscount: Math.round(inst.avgDiscount),
   }))
-  .sort((a, b) => b.totalStudents - a.totalStudents);
+  .sort((a, b) => b.courses.length - a.courses.length);
 
 // ─────────────────────────────────────────────
 // INSTRUCTOR IMAGES (registry foto instructor)
@@ -399,7 +399,7 @@ const structuredData = {
         <h2 class="il-sec-title" id="leaderboard" style={{ scrollMarginTop: '5rem' }}>
           Top Instructors with Verified Coupons <span class="il-tag">{instructors.length} ranked</span>
         </h2>
-        <p class="il-sec-desc" style={{ marginBottom: '1rem' }}>Sorted by students — every code manually checked before listing.</p>
+        <p class="il-sec-desc" style={{ marginBottom: '1rem' }}>Sorted by courses — every code manually checked before listing.</p>
 
         <div class="il-table-wrap" id="leaderboardWrap">
           <table class="il-table">
