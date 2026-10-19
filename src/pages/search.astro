@@ -1,8 +1,104 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import DealCard from '../components/DealCard.astro';
+import { readDeals } from '../lib/store';
+
+const q = Astro.url.searchParams.get('q') ?? '';
+const page = Math.max(1, parseInt(Astro.url.searchParams.get('page') ?? '1', 10));
+const PAGE_SIZE = 12;
+
+const allDeals = await readDeals();
+const query = q.trim().toLowerCase();
+
+const filteredDeals = allDeals.filter((deal) =>
+  String(deal.title || "").toLowerCase().includes(query) ||
+  String(deal.description || "").toLowerCase().includes(query) ||
+  String(deal.category || "").toLowerCase().includes(query) ||
+  String(deal.instructor || "").toLowerCase().includes(query) ||
+  String(deal.subcategory || "").toLowerCase().includes(query)
+);
+
+const totalPages = Math.ceil(filteredDeals.length / PAGE_SIZE);
+const currentPage = Math.min(page, totalPages || 1);
+const startIndex = (currentPage - 1) * PAGE_SIZE;
+const currentItems = filteredDeals.slice(startIndex, startIndex + PAGE_SIZE);
+
+const siteUrl = "https://coursespeak.com";
+const currentUrl = `${siteUrl}/search?q=${encodeURIComponent(q)}`;
+const langQuery = q ? `&q=${encodeURIComponent(q)}` : '';
+const prevUrl = currentPage > 1 ? (currentPage === 2 ? `/search${langQuery}` : `/search?page=${currentPage - 1}${langQuery}`) : null;
+const nextUrl = currentPage < totalPages ? `/search?page=${currentPage + 1}${langQuery}` : null;
+
+const currentMonth = new Date().toLocaleDateString('en-US', { month: 'long' });
+const currentYear = new Date().getFullYear();
+
+const pageTitle = query
+  ? `"${q}" — Udemy Courses with Verified Coupons | CourseSpeak`
+  : `Search Udemy Courses — Verified Coupons & Deals | CourseSpeak`;
+
+const pageDescription = query
+  ? `Found ${filteredDeals.length} verified Udemy courses matching "${q}" with exclusive coupons. Browse deals taught by expert instructors — up to 100% off.`
+  : `Search verified Udemy course coupons and deals. Browse discounts across programming, web development, data science, marketing, and more. Updated daily.`;
+
 ---
 
-<Layout title="Search Udemy Courses — Verified Coupons & Deals | CourseSpeak" robots="noindex, follow">
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  canonical={currentUrl}
+  robots={query ? "noindex, follow" : undefined}
+>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "SearchResultsPage",
+    "@id": `${currentUrl}#search-results`,
+    "url": currentUrl,
+    "name": pageTitle,
+    "description": pageDescription,
+    "isPartOf": { "@id": siteUrl },
+    "about": query ? { "@type": "Thing", "name": q } : { "@type": "Thing", "name": "Udemy Coupons" },
+    "mainEntity": {
+      "@type": "ItemList",
+      "name": `Search results for "${q || "Udemy courses"}"`,
+      "numberOfItems": filteredDeals.length,
+      "itemListElement": currentItems.map((deal, index) => ({
+        "@type": "ListItem",
+        "position": startIndex + index + 1,
+        "item": {
+          "@type": "Course",
+          "name": deal.title,
+          "description": deal.description || `Get ${deal.title} at up to 100% off with a verified coupon code on CourseSpeak.`,
+          "url": `${siteUrl}/deal/${deal.id}`,
+          "image": deal.image,
+          "inLanguage": deal.language || "en-US",
+          "provider": {
+            "@type": "Organization",
+            "name": deal.provider || "Udemy",
+            "url": "https://www.udemy.com"
+          },
+          "offers": {
+            "@type": "Offer",
+            "price": String(deal.price ?? "0"),
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock",
+            "priceValidUntil": deal.expiresAt || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+            "seller": { "@type": "Organization", "name": "CourseSpeak", "url": siteUrl }
+          },
+          ...(deal.rating ? {
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": deal.rating.toString(),
+              "bestRating": "5",
+              "worstRating": "1",
+              "ratingCount": Math.max(1, Math.round(deal.students ?? 1000))
+            }
+          } : {})
+        }
+      }))
+    }
+  })} />
+
   <!-- Hero -->
   <section class="search-hero">
     <div class="hero-grid-bg"></div>
@@ -12,56 +108,132 @@ import Layout from '../layouts/Layout.astro';
         Live Deals — Updated Daily
       </div>
       <h1 id="search-title" class="hero-title">
-        Search Udemy Courses
+        {query ? `"${q}"` : 'Search Udemy Courses'}
       </h1>
-      <p id="search-description" class="hero-desc" style="display:none"></p>
+      {query ? (
+        <p class="hero-desc">
+          Found <strong>{filteredDeals.length}</strong> verified Udemy courses matching <strong>"{q}"</strong> with exclusive coupons.
+        </p>
+      ) : (
+        <p class="hero-desc">
+          Find verified Udemy coupon codes and deals across programming, web development, data science, marketing, and more — updated daily.
+        </p>
+      )}
     </div>
   </section>
 
   <!-- Results section -->
   <section class="results-section">
     <div class="container">
-
-      <!-- Loading -->
-      <div id="search-loading" class="state-box" style="display:none">
-        <div class="loading-spinner"></div>
-        <p class="state-title">Searching courses…</p>
-        <p class="state-sub">Finding the best verified coupons for you</p>
-      </div>
-
-      <!-- Grid -->
-      <div id="search-results" class="results-grid"></div>
-
-      <!-- No results -->
-      <div id="no-results" class="no-results-wrap" style="display:none">
-        <div class="no-results-card">
-          <div class="no-results-icon">🔍</div>
-          <h2 id="no-results-title" class="no-results-heading">No Courses Found</h2>
-          <p class="no-results-body">
-            We couldn't find any courses with verified coupons for that search.
-            Try <strong>free courses</strong>, <strong>discount codes</strong>, or browse popular categories below.
-          </p>
-          <div class="no-results-actions">
-            <a href="/search?q=free" class="action-btn action-green">🎁 Free Courses</a>
-            <a href="/search?q=coupon" class="action-btn action-amber">💰 Discount Codes</a>
-          </div>
-          <div class="category-grid">
-            <a href="/categories/development"   class="cat-btn">💻 Development</a>
-            <a href="/categories/business"      class="cat-btn cat-green">💼 Business</a>
-            <a href="/categories/design"        class="cat-btn cat-amber">🎨 Design</a>
-            <a href="/categories/it-and-software" class="cat-btn cat-blue">💾 IT & Software</a>
+      {filteredDeals.length === 0 && (
+        <div class="no-results-wrap">
+          <div class="no-results-card">
+            <div class="no-results-icon">🔍</div>
+            <h2 class="no-results-heading">No Courses Found</h2>
+            <p class="no-results-body">
+              We couldn't find any courses with verified coupons for {query ? `<strong>"{q}"</strong>` : 'that search'}.
+              Try <strong>free courses</strong>, <strong>discount codes</strong>, or browse popular categories below.
+            </p>
+            <div class="no-results-actions">
+              <a href="/search?q=free" class="action-btn action-green">🎁 Free Courses</a>
+              <a href="/search?q=coupon" class="action-btn action-amber">💰 Discount Codes</a>
+            </div>
+            <div class="category-grid">
+              <a href="/categories/development" class="cat-btn">💻 Development</a>
+              <a href="/categories/business" class="cat-btn cat-green">💼 Business</a>
+              <a href="/categories/design" class="cat-btn cat-amber">🎨 Design</a>
+              <a href="/categories/it-and-software" class="cat-btn cat-blue">💾 IT & Software</a>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
-      <!-- Pagination -->
-      <div id="search-navigation" class="pagination" style="display:none">
-        <button id="prev-page" class="page-btn page-btn-ghost">← Previous</button>
-        <span id="page-info" class="page-info"></span>
-        <button id="next-page" class="page-btn page-btn-primary">Next →</button>
-      </div>
+      {filteredDeals.length > 0 && (
+        <>
+          <div class="results-header" style="margin-bottom: 1.5rem;">
+            <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+              {query ? `Search results for "${q}"` : 'Latest Deals'}
+            </div>
+            <h2 style={{ fontSize: "1.6rem", fontWeight: 800, color: "var(--text)", margin: "0.35rem 0 0.3rem" }}>
+              {query ? `"${q}" — Udemy Courses with Verified Coupons` : `Latest Udemy Promo Codes, Coupons & Deals ${currentMonth} ${currentYear}`}
+            </h2>
+            <p style={{ fontSize: "0.9rem", color: "var(--muted)", maxWidth: "650px", margin: "0", lineHeight: 1.6 }}>
+              Browse {filteredDeals.length} verified Udemy courses {query ? `matching "${q}"` : ''} with exclusive coupons — up to 100% off. Updated {currentMonth} {currentYear}.
+            </p>
+          </div>
+
+          <div class="results-grid">
+            {currentItems.map((deal) => (
+              <DealCard deal={deal} />
+            ))}
+          </div>
+
+          {totalPages > 1 && (
+            <nav aria-label="Pagination" class="pagination">
+              {prevUrl ? (
+                <a href={prevUrl} class="page-btn page-btn-ghost">← Prev</a>
+              ) : (
+                <span class="page-btn page-btn-ghost" aria-disabled="true">← Prev</span>
+              )}
+              <div class="page-numbers">
+                {(() => {
+                  const items = [];
+                  const window = 2;
+                  let lastAdded = 0;
+                  for (let p = 1; p <= totalPages; p++) {
+                    const inWindow = p >= currentPage - window && p <= currentPage + window;
+                    if (p === 1 || p === totalPages || inWindow) {
+                      if (lastAdded > 0 && p - lastAdded > 1) {
+                        items.push(<span class="page-ellipsis">…</span>);
+                      }
+                      items.push(
+                        p === currentPage
+                          ? <span class="page-btn page-active">{p}</span>
+                          : <a href={`/search?page=${p}${langQuery}`} class="page-btn page-btn-ghost">{p}</a>
+                      );
+                      lastAdded = p;
+                    }
+                  }
+                  return items;
+                })()}
+              </div>
+              {nextUrl ? (
+                <a href={nextUrl} class="page-btn page-btn-primary">Next →</a>
+              ) : (
+                <span class="page-btn page-btn-primary" aria-disabled="true">Next →</span>
+              )}
+              <span class="page-info">Page {currentPage} of {totalPages} · {filteredDeals.length} results</span>
+            </nav>
+          )}
+        </>
+      )}
     </div>
   </section>
+
+  {query === '' && (
+    <section class="search-cta" style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "12px", padding: "3rem 1.5rem", marginTop: "3rem" }}>
+      <div class="container" style={{ maxWidth: "900px", margin: "0 auto" }}>
+        <div style={{ textAlign: "center", marginBottom: "2rem" }}>
+          <h2 style={{ fontSize: "clamp(1.5rem, 4vw, 2rem)", fontWeight: 800, color: "var(--text)", marginBottom: "0.75rem" }}>Browse All Udemy Coupons</h2>
+          <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "600px", margin: "0 auto", lineHeight: 1.6 }}>
+            Explore verified Udemy coupon codes across all categories — programming, web development, data science, design, marketing, and more.
+          </p>
+        </div>
+        <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
+          <a href="/deals" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", padding: "0.85rem 1.5rem", background: "var(--brand)", color: "#080b12", fontWeight: 700, fontSize: "0.95rem", textDecoration: "none", borderRadius: "8px" }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h18v2H3V3zm0 4h18v2H3V7zm0 4h18v2H3v-2zM3 13h18v-2H3v2zm0 4h18v-2H3v2z"/></svg>
+            All Deals
+          </a>
+          <a href="/categories" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", padding: "0.85rem 1.5rem", background: "var(--card-hover)", border: "1px solid var(--border)", color: "var(--text)", fontWeight: 600, fontSize: "0.95rem", textDecoration: "none", borderRadius: "8px" }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            Categories
+          </a>
+        </div>
+      </div>
+    </section>
+  )}
+
 </Layout>
 
 <style>
@@ -163,45 +335,6 @@ import Layout from '../layouts/Layout.astro';
     min-height: 60vh;
   }
 
-  /* Loading */
-  .state-box {
-    text-align: center;
-    padding: 4rem 0;
-  }
-
-  .loading-spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid var(--border);
-    border-top-color: var(--green);
-    border-radius: 50%;
-    margin: 0 auto 1.5rem;
-    animation: spin 0.8s linear infinite;
-  }
-
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .state-title {
-    color: var(--amber);
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin: 0 0 0.4rem;
-  }
-
-  .state-sub {
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    margin: 0;
-  }
-
-  /* Results grid */
-  .results-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: 1.75rem;
-    margin-bottom: 3rem;
-  }
-
   /* No results */
   .no-results-wrap {
     display: flex;
@@ -292,6 +425,14 @@ import Layout from '../layouts/Layout.astro';
   .cat-amber { border-color: rgba(197,160,40,0.2); color: #C5A028; }
   .cat-blue  { border-color: rgba(212,167,55,0.2); color: var(--blue); }
 
+  /* Results grid */
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.75rem;
+    margin-bottom: 3rem;
+  }
+
   /* Pagination */
   .pagination {
     display: flex;
@@ -303,6 +444,7 @@ import Layout from '../layouts/Layout.astro';
     border: 1px solid var(--border);
     border-radius: var(--radius-card);
     margin-top: 2rem;
+    flex-wrap: wrap;
   }
 
   .page-btn {
@@ -313,9 +455,12 @@ import Layout from '../layouts/Layout.astro';
     cursor: pointer;
     transition: all 0.2s;
     border: 1px solid;
+    text-decoration: none;
+    display: inline-block;
   }
 
-  .page-btn:disabled {
+  .page-btn:disabled,
+  .page-btn[aria-disabled="true"] {
     opacity: 0.35;
     cursor: not-allowed;
   }
@@ -326,7 +471,7 @@ import Layout from '../layouts/Layout.astro';
     color: var(--text-secondary);
   }
 
-  .page-btn-ghost:not(:disabled):hover {
+  .page-btn-ghost:not(:disabled):not([aria-disabled="true"]):hover {
     background: rgba(255,255,255,0.05);
     color: var(--text-primary);
   }
@@ -337,426 +482,36 @@ import Layout from '../layouts/Layout.astro';
     color: #0a1a0f;
   }
 
-  .page-btn-primary:not(:disabled):hover {
+  .page-btn-primary:not(:disabled):not([aria-disabled="true"]):hover {
     background: var(--green-dark);
+  }
+
+  .page-active {
+    background: var(--green);
+    border-color: var(--green-dark);
+    color: #0a1a0f;
+    cursor: default;
+  }
+
+  .page-ellipsis {
+    padding: 0.65rem 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-secondary);
   }
 
   .page-info {
     color: var(--text-secondary);
     font-size: 0.9rem;
     font-weight: 600;
-    min-width: 120px;
+    min-width: 140px;
     text-align: center;
   }
 
   @media (max-width: 640px) {
     .results-grid { grid-template-columns: 1fr; }
     .no-results-card { padding: 2rem 1.25rem; }
+    .pagination { gap: 0.5rem; padding: 1rem 1rem; }
+    .page-numbers { display: none; }
   }
-</style>
-
-<script>
-  interface Deal {
-    id: string;
-    title: string;
-    description?: string;
-    category?: string;
-    subcategory?: string;
-    instructor?: string;
-    price?: number;
-    originalPrice?: number;
-    rating?: number;
-    students?: number;
-    image?: string;
-    updatedAt?: string;
-  }
-
-  let currentPage = 1;
-  const ITEMS_PER_PAGE = 12;
-  let allDeals: Deal[] = [];
-
-  // ── helpers ──────────────────────────────────────────────────────────────
-
-  function esc(s: string): string {
-    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
-  }
-
-  function renderCard(deal: Deal): string {
-    const price        = deal.price ?? 0;
-    const originalPrice = deal.originalPrice ?? 0;
-    const hasDiscount  = originalPrice > 0 && price < originalPrice;
-    const discount     = hasDiscount ? Math.round(100 - (price / originalPrice) * 100) : 0;
-    const isFree       = price === 0;
-    const rating       = deal.rating ?? 0;
-    const students     = deal.students ?? 0;
-    const updatedLabel = deal.updatedAt
-      ? new Date(deal.updatedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-      : 'Recently updated';
-    const safeTitle = esc(deal.title || '');
-    const safeDesc = esc(deal.description || '');
-    const safeInstructor = esc(deal.instructor || '');
-    const safeSubcat = esc(deal.subcategory || '');
-
-    const imgHtml = deal.image
-      ? `<img src="${esc(deal.image)}" alt="${safeTitle}" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:0.75rem 0.75rem 0 0;">`
-      : `<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:3rem;opacity:0.3;">📚</div>`;
-
-    const badgeHtml = isFree
-      ? `<div class="rc-badge rc-badge-free">🎁 FREE</div>`
-      : hasDiscount
-        ? `<div class="rc-badge rc-badge-hot">🔥 ${discount}% OFF</div>`
-        : '';
-
-    const subcatSlug = safeSubcat.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-');
-    const subcatHtml = deal.subcategory
-      ? `<a href="/topics/${subcatSlug}" class="rc-subcat">${safeSubcat}</a>`
-      : '';
-
-    return `
-      <article class="rc-card">
-        <div class="rc-img-wrap">
-          ${imgHtml}
-          ${badgeHtml}
-          <span class="rc-date">${esc(updatedLabel)}</span>
-        </div>
-        <div class="rc-body">
-          <h2 class="rc-title">
-            <a href="/deal/${deal.id}" class="rc-title-link">${safeTitle}</a>
-          </h2>
-          ${safeInstructor
-            ? `<p class="rc-instructor">By <strong>${safeInstructor}</strong></p>`
-            : ''}
-          <p class="rc-desc">${safeDesc}</p>
-          <div class="rc-meta">
-            <span class="rc-rating">★ ${rating.toFixed(1)} · ${students.toLocaleString()} students</span>
-            ${subcatHtml}
-          </div>
-          <div class="rc-actions">
-            <a href="/deal/${deal.id}" class="rc-btn-primary">🎯 Get Coupon</a>
-            ${safeInstructor
-              ? `<a href="/search?q=${encodeURIComponent(safeInstructor + ' free')}" class="rc-btn-secondary">Free Only</a>`
-              : ''}
-          </div>
-        </div>
-      </article>`;
-  }
-
-  function getEmptyStateHtml(query: string): string {
-    return `<div style="grid-column:1/-1;display:flex;justify-content:center;padding:2rem 0;">
-      <div style="text-align:center;max-width:420px;background:#151921;border:1px solid rgba(255,255,255,0.07);border-radius:1.25rem;padding:2.5rem 2rem;">
-        <div style="font-size:2.5rem;margin-bottom:1rem;">🔍</div>
-        <h3 style="color:var(--text);margin:0 0 0.5rem;font-size:1.3rem;">Enter a Search Term</h3>
-        <p style="color:#94a3b8;font-size:0.95rem;line-height:1.6;margin:0;">
-          Search for courses, instructors, or topics to find verified coupons and exclusive deals.
-        </p>
-      </div>
-    </div>`;
-  }
-
-  // ── display ───────────────────────────────────────────────────────────────
-
-  function displayResults(): void {
-    const container = document.getElementById('search-results');
-    const noResults = document.getElementById('no-results');
-    const nav       = document.getElementById('search-navigation');
-
-    if (!container) return;
-
-    if (allDeals.length === 0) {
-      container.innerHTML = '';
-      if (noResults) noResults.style.display = 'flex';
-      if (nav) nav.style.display = 'none';
-      return;
-    }
-
-    const start = (currentPage - 1) * ITEMS_PER_PAGE;
-    const page  = allDeals.slice(start, start + ITEMS_PER_PAGE);
-
-    container.innerHTML = page.map(renderCard).join('');
-    if (noResults) noResults.style.display = 'none';
-    if (nav) nav.style.display = allDeals.length > ITEMS_PER_PAGE ? 'flex' : 'none';
-  }
-
-  function updatePagination(): void {
-    const prevBtn  = document.getElementById('prev-page') as HTMLButtonElement | null;
-    const nextBtn  = document.getElementById('next-page') as HTMLButtonElement | null;
-    const pageInfo = document.getElementById('page-info');
-    const total    = Math.ceil(allDeals.length / ITEMS_PER_PAGE);
-
-    if (prevBtn) {
-      prevBtn.disabled = currentPage === 1;
-    }
-    if (nextBtn) {
-      nextBtn.disabled = currentPage >= total;
-    }
-    if (pageInfo) {
-      pageInfo.textContent = `Page ${currentPage} of ${total} · ${allDeals.length} results`;
-    }
-  }
-
-  function goToPage(page: number): void {
-    const total = Math.ceil(allDeals.length / ITEMS_PER_PAGE);
-    if (page < 1 || page > total) return;
-    currentPage = page;
-    displayResults();
-    updatePagination();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  // ── search ────────────────────────────────────────────────────────────────
-
-  async function performSearch(): Promise<void> {
-    const params  = new URLSearchParams(window.location.search);
-    const query   = params.get('q') ?? '';
-
-    const container  = document.getElementById('search-results');
-    const noResults  = document.getElementById('no-results');
-    const nav        = document.getElementById('search-navigation');
-    const loading    = document.getElementById('search-loading');
-    const titleEl    = document.getElementById('search-title');
-    const descEl     = document.getElementById('search-description');
-
-    if (!query) {
-      if (container) container.innerHTML = getEmptyStateHtml('');
-      if (noResults) noResults.style.display = 'none';
-      if (nav) nav.style.display = 'none';
-      if (loading) loading.style.display = 'none';
-      return;
-    }
-
-    // Show loading state
-    if (loading) loading.style.display = 'block';
-    if (container) container.innerHTML = '';
-    if (noResults) noResults.style.display = 'none';
-    if (nav) nav.style.display = 'none';
-
-    try {
-      const res   = await fetch('/api/deals');
-      const deals = (await res.json()) as Deal[];
-
-      const q = query.toLowerCase();
-      allDeals = deals.filter((deal) =>
-        deal.title.toLowerCase().includes(q) ||
-        (deal.description?.toLowerCase().includes(q) ?? false) ||
-        (deal.category?.toLowerCase().includes(q)    ?? false) ||
-        (deal.instructor?.toLowerCase().includes(q)  ?? false) ||
-        (deal.subcategory?.toLowerCase().includes(q) ?? false)
-      );
-
-      currentPage = 1;
-
-      if (titleEl) {
-        titleEl.textContent = `"${query}" — Udemy Courses with Verified Coupons`;
-      }
-      document.title = `${query} Udemy Coupons — ${allDeals.length} Results | CourseSpeak`;
-
-      if (descEl) {
-        descEl.style.display = 'block';
-        descEl.textContent = `Found ${allDeals.length} verified ${query} courses with exclusive coupons. Browse deals taught by expert instructors — up to 100% off. Limited-time offers!`;
-      }
-
-      displayResults();
-      updatePagination();
-    } catch (err) {
-      console.error('Search error:', err);
-      if (container) {
-        container.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem 0;">
-          <div style="background:var(--bg-card);border:1px solid rgba(107,29,26,0.3);border-radius:1.25rem;padding:2rem;max-width:400px;margin:0 auto;">
-            <p style="color:var(--accent-burgundy);font-size:1.1rem;font-weight:600;margin:0 0 0.5rem;">⚠️ Search Error</p>
-            <p style="color:var(--text-secondary);margin:0;">Unable to load results. Please try again later.</p>
-          </div>
-        </div>`;
-      }
-    } finally {
-      if (loading) loading.style.display = 'none';
-    }
-  }
-
-  // ── init ──────────────────────────────────────────────────────────────────
-
-  document.addEventListener('DOMContentLoaded', () => {
-    const prevBtn = document.getElementById('prev-page') as HTMLButtonElement | null;
-    const nextBtn = document.getElementById('next-page') as HTMLButtonElement | null;
-
-    prevBtn?.addEventListener('click', () => goToPage(currentPage - 1));
-    nextBtn?.addEventListener('click', () => goToPage(currentPage + 1));
-
-    performSearch();
-  });
-</script>
-
-<!-- Card styles (injected once, used by JS-generated HTML) -->
-<style is:global>
-  .rc-card {
-    background: #151921;
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 1.25rem;
-    overflow: hidden;
-    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .rc-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 16px 40px rgba(0,0,0,0.45);
-    border-color: rgba(212,167,55,0.35);
-  }
-
-  .rc-img-wrap {
-    height: 180px;
-    position: relative;
-    background: var(--bg-card);
-    overflow: hidden;
-  }
-
-  .rc-badge {
-    position: absolute;
-    top: 0.75rem;
-    left: 0.75rem;
-    padding: 0.25rem 0.7rem;
-    border-radius: 2rem;
-    font-size: 0.75rem;
-    font-weight: 700;
-  }
-
-  .rc-badge-free {
-    background: rgba(212,167,55,0.18);
-    border: 1px solid rgba(212,167,55,0.4);
-    color: #E8C547;
-  }
-
-  .rc-badge-hot {
-    background: rgba(107,29,26,0.18);
-    border: 1px solid rgba(107,29,26,0.4);
-    color: #c97a76;
-  }
-
-  .rc-date {
-    position: absolute;
-    bottom: 0.6rem;
-    right: 0.6rem;
-    background: rgba(0,0,0,0.65);
-    color: #94a3b8;
-    font-size: 0.72rem;
-    font-weight: 500;
-    padding: 0.2rem 0.5rem;
-    border-radius: 0.4rem;
-    backdrop-filter: blur(4px);
-  }
-
-  .rc-body {
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-  }
-
-  .rc-title {
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: var(--text);
-    margin: 0 0 0.5rem;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    line-height: 1.45;
-  }
-
-  .rc-title-link {
-    color: inherit;
-    text-decoration: none;
-  }
-
-  .rc-title-link:hover { color: #22c55e; }
-
-  .rc-instructor {
-    font-size: 0.85rem;
-    color: #94a3b8;
-    margin: 0 0 0.75rem;
-  }
-
-  .rc-instructor strong { color: var(--muted); }
-
-  .rc-desc {
-    font-size: 0.88rem;
-    color: #94a3b8;
-    line-height: 1.55;
-    margin: 0 0 1rem;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    flex: 1;
-  }
-
-  .rc-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-  }
-
-  .rc-rating {
-    font-size: 0.82rem;
-    color: #94a3b8;
-    font-weight: 500;
-  }
-
-  .rc-subcat {
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: var(--green);
-    background: rgba(212,167,55,0.08);
-    border: 1px solid rgba(212,167,55,0.2);
-    padding: 0.2rem 0.6rem;
-    border-radius: 2rem;
-    text-decoration: none;
-  }
-
-  .rc-subcat:hover { background: rgba(212,167,55,0.15); }
-
-  .rc-actions {
-    display: flex;
-    gap: 0.75rem;
-  }
-
-  .rc-btn-primary {
-    flex: 1;
-    display: block;
-    padding: 0.75rem 1rem;
-    background: #22c55e;
-    color: #0a1a0f;
-    font-weight: 700;
-    font-size: 0.9rem;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 0.7rem;
-    transition: background 0.2s, transform 0.15s;
-  }
-
-  .rc-btn-primary:hover {
-    background: var(--brand);
-    transform: translateY(-1px);
-  }
-
-  .rc-btn-secondary {
-    display: block;
-    padding: 0.75rem 1rem;
-    background: rgba(245,158,11,0.1);
-    border: 1px solid rgba(245,158,11,0.25);
-    color: var(--brand);
-    font-weight: 600;
-    font-size: 0.85rem;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 0.7rem;
-    white-space: nowrap;
-    transition: background 0.2s;
-  }
-
-  .rc-btn-secondary:hover { background: rgba(245,158,11,0.2); }
 </style>

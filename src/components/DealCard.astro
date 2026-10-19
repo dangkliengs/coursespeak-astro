@@ -222,11 +222,12 @@ const topicHref = subSlug ? `/topics/${subSlug}` : "";
     )}
     <div class="cpn-stars" role="img" aria-label={`Rated ${r.toFixed(1)} out of 5`}>
       <span class="cpn-stars-icons" aria-hidden="true">
-        {Array.from({ length: 5 }).map(() => (
+        {Array.from({ length: 1 }).map(() => (
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
         ))}
       </span>
       <span class="cpn-stars-text" title={`${r.toFixed(1)} out of 5 · ${studentsNum.toLocaleString("en-US")} students`}>{r.toFixed(1)}</span>
+      <span class="cpn-stars-source" aria-hidden="true">(rating on Udemy)</span>
     </div>
     <dl class="cpn-stats">
       <div class="cpn-stat">
@@ -384,6 +385,7 @@ const topicHref = subSlug ? `/topics/${subSlug}` : "";
   .cpn-stars { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 0.9rem; flex-wrap: wrap; }
   .cpn-stars-icons { display: inline-flex; align-items: center; gap: 3px; color: var(--brand); }
   .cpn-stars-text { color: var(--muted); font-size: 0.9rem; font-weight: 600; }
+  .cpn-stars-source { color: var(--muted); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.02em; }
 
   .cpn-stats {
     display: grid; grid-template-columns: 1fr 1fr 1fr;
