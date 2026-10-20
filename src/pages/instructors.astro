@@ -83,7 +83,7 @@ const instructors: Instructor[] = Array.from(instructorMap.values())
 // ─────────────────────────────────────────────
 const instructorImages = new Map<string, string>();
 for (const inst of instructors) {
-  const img = getInstructorImageByName(inst.name);
+  const img = await getInstructorImageByName(inst.name);
   if (img) instructorImages.set(createInstructorSlug(inst.name), img);
 }
 

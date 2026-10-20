@@ -72,7 +72,10 @@ function getInitials(name: string): string {
               </td>
               <td class="adm-muted">{ins.count} course{ins.count === 1 ? '' : 's'}</td>
               <td>
-                <input class="adm-input code adm-img-input" type="url" data-image-input value={ins.image || ""} placeholder="https://img-c.udemycdn.com/user/…" />
+                <input class="adm-input code adm-img-input" type="url" data-image-input value={ins.image || ""} placeholder="Image URL" />
+              </td>
+              <td style="min-width:220px;">
+                <textarea class="adm-input code adm-about-input" data-about-input rows="2" placeholder="Bio / about…">{ins.about || ""}</textarea>
               </td>
               <td>
                 <div class="adm-actions" style="justify-content:flex-end;">
@@ -201,8 +204,11 @@ function getInitials(name: string): string {
     }
   }
 
-  async function saveImage(slug: string, input: HTMLInputElement, btn: HTMLButtonElement, row: HTMLElement) {
-    const image = input.value.trim();
+  async function saveProfile(slug: string, row: HTMLElement, btn: HTMLButtonElement) {
+    const imageInput = row.querySelector<HTMLInputElement>("[data-image-input]");
+    const aboutInput = row.querySelector<HTMLTextAreaElement>("[data-about-input]");
+    const image = imageInput?.value.trim() || "";
+    const about = aboutInput?.value.trim() || "";
     if (image && !/^https?:\/\//i.test(image)) {
       alert("Image must be a valid http(s) URL");
       return;
@@ -213,7 +219,7 @@ function getInitials(name: string): string {
       const res = await fetch("/api/instructors", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slug, image }),
+        body: JSON.stringify({ slug, image, about }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Save failed");
@@ -231,18 +237,18 @@ function getInitials(name: string): string {
   document.querySelectorAll<HTMLButtonElement>("[data-save]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const row = btn.closest("tr") as HTMLElement;
-      const input = row.querySelector<HTMLInputElement>("[data-image-input]");
-      if (!input) return;
-      saveImage(btn.dataset.slug || "", input, btn, row);
+      saveProfile(btn.dataset.slug || "", row, btn);
     });
   });
 
   document.querySelectorAll<HTMLButtonElement>("[data-clear]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const row = btn.closest("tr") as HTMLElement;
-      const input = row.querySelector<HTMLInputElement>("[data-image-input]");
-      if (input) input.value = "";
-      saveImage(btn.dataset.slug || "", input || (row.querySelector("input") as HTMLInputElement), btn, row);
+      const imageInput = row.querySelector<HTMLInputElement>("[data-image-input]");
+      const aboutInput = row.querySelector<HTMLTextAreaElement>("[data-about-input]");
+      if (imageInput) imageInput.value = "";
+      if (aboutInput) aboutInput.value = "";
+      saveProfile(btn.dataset.slug || "", row, btn);
     });
   });
 </script>

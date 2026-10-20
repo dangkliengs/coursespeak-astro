@@ -52,21 +52,25 @@ if (import.meta.env.PROD) {
 
 const relatedDeals = (() => {
   const others = allDeals.filter((d) => d.id !== deal.id);
-  // 1. Same subcategory first (both must have one — avoids subcategory-less
-  //    courses like 6807 matching every rare subcategory via category fallback).
-  const sameSub = others.filter(
-    (d) => deal.subcategory && d.subcategory && d.subcategory === deal.subcategory
-  );
-  // 2. Top up with same-category courses sorted by quality so rare
-  //    subcategories (e.g. RHCE with 1 course) still get 4 diverse results.
-  const sameSubIds = new Set(sameSub.map((d) => d.id));
-  const sameCat = others
-    .filter((d) => d.category === deal.category && !sameSubIds.has(d.id))
+  // 1. Same subcategory first — only mix within the exact subcategory so a
+  //    Salesforce course never gets compared against DevOps or Cloud.
+  if (deal.subcategory) {
+    return others
+      .filter((d) => d.subcategory && d.subcategory === deal.subcategory)
+      .sort(
+        (a, b) =>
+          (b.rating || 0) - (a.rating || 0) || (b.students || 0) - (a.students || 0)
+      )
+      .slice(0, 4);
+  }
+  // 2. No subcategory? Fall back to same broad category sorted by quality.
+  return others
+    .filter((d) => d.category === deal.category)
     .sort(
       (a, b) =>
         (b.rating || 0) - (a.rating || 0) || (b.students || 0) - (a.students || 0)
-    );
-  return [...sameSub, ...sameCat].slice(0, 4);
+    )
+    .slice(0, 4);
 })();
 
 const discountPercentage = deal.originalPrice && deal.price && deal.originalPrice > deal.price

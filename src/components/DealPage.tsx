@@ -444,7 +444,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 coupon: deal.coupon,
                                 expiresAt: deal.expiresAt
                             }}
-                            similarDeals={relatedDeals.slice(0, 1).map(r => ({
+                            similarDeals={relatedDeals.slice(0, 3).map(r => ({
                                 id: r.id,
                                 title: r.title,
                                 provider: r.provider,

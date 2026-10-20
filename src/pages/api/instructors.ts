@@ -1,4 +1,4 @@
-import { listInstructors, setInstructorImage } from '../../lib/instructorProfiles';
+import { listInstructors, setInstructorProfile } from '../../lib/instructorProfiles';
 
 const json = (data: unknown, status = 200) =>
   new Response(JSON.stringify(data), {
@@ -28,12 +28,13 @@ export async function PUT({ request }: { request: Request }) {
 
     const image = typeof body.image === 'string' ? body.image.trim() : '';
     const name = typeof body.name === 'string' ? body.name.trim() : undefined;
+    const about = typeof body.about === 'string' ? body.about.trim() : undefined;
 
     if (image && !/^https?:\/\//i.test(image)) {
       return json({ error: 'Image must be a valid http(s) URL' }, 400);
     }
 
-    const profile = await setInstructorImage(slug, image, name);
+    const profile = await setInstructorProfile(slug, { image, name, about });
     return json(profile);
   } catch (error) {
     console.error('[API] Error updating instructor:', error);

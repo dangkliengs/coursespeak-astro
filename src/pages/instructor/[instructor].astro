@@ -6,7 +6,7 @@ import type { Deal } from "../../types/deal";
 
 import { parseInstructors, createInstructorSlug, instructorSlugLookupKeys } from "../../lib/instructors";
 import { slugifyCategory } from "../../lib/utils";
-import { getInstructorImageByName } from "../../lib/instructorProfiles";
+import { getInstructorImageByName, getInstructorProfile } from "../../lib/instructorProfiles";
 
 // Types
 interface InstructorData {
@@ -162,8 +162,10 @@ const instructorUrl = `${siteUrl}/instructor/${instructorSlug}/`;
 
 const cleanName = instructorName.replace(/[^\x20-\x7E]/g, '').trim();
 
-// Foto instructor (Udemy CDN), fallback ke avatar inisial
-const instructorImage = getInstructorImageByName(instructorName);
+// Foto dan bio instructor (dari registry instructors.json)
+const instructorImage = await getInstructorImageByName(instructorName);
+const instructorProfile = await getInstructorProfile(instructorSlug);
+const instructorBio = instructorProfile?.about;
 
 const pageTitle = `${instructorName}'s — Udemy Coupon Codes ${currentMonth} ${currentYear} | CourseSpeak`;
 // Top 3 kategori terbanyak — lebih SEO daripada angka ratusan ribu students.
@@ -395,20 +397,33 @@ const faqs = [
       <div class="container">
         <div class="ih-sec-head">
           <h2 class="ih-sec-title">
-            About {instructorName}'s courses
-            <span class="ih-tag">CourseSpeak guide</span>
+            About {instructorName}
+            <span class="ih-tag">Instructor bio</span>
           </h2>
         </div>
         <div class="ih-about">
-          <p>
-            <strong>{instructorName}</strong> offers <strong>{instructorData.courseCount} verified Udemy coupon code{instructorData.courseCount === 1 ? "" : "s"}</strong> on CourseSpeak{topCats.length ? <> — mostly in <strong>{joinList(topCats)}</strong></> : " across multiple topics"}{instructorData.avgRating > 0 ? <> with an average instructor rating of <strong>{instructorData.avgRating}★</strong></> : ""}{maxDisc > 0 ? <> and discounts up to <strong>{maxDisc}% off</strong></> : ""}{freeCount > 0 ? <> — including <strong>{freeCount} completely free deal{freeCount === 1 ? "" : "s"}</strong></> : ""}.
-            {topCats.length ? <> A solid pick for {topCats[0]} learners in {currentMonth} {currentYear}.</> : ""}
-          </p>
-          <p>
-            Every coupon on this page is manually checked before listing, so you never waste time on expired codes.
-            New deals from {instructorName} appear here automatically — grab them before the Udemy coupon expires.
-          </p>
-          <div class="ih-about-links">
+          {instructorBio ? (
+            <>
+              <div style={{ whiteSpace: "pre-line", marginBottom: "1rem", fontSize: "0.98rem", lineHeight: 1.75, color: "var(--text-secondary)" }}>
+                {instructorBio}
+              </div>
+              <div style={{ marginTop: "1rem", paddingTop: "1rem", borderTop: "1px solid var(--border)", fontSize: "0.85rem", color: "var(--muted)" }}>
+                Bio sourced from Udemy instructor profile.
+              </div>
+            </>
+          ) : (
+            <>
+              <p>
+                <strong>{instructorName}</strong> offers <strong>{instructorData.courseCount} verified Udemy coupon code{instructorData.courseCount === 1 ? "" : "s"}</strong> on CourseSpeak{topCats.length ? <> — mostly in <strong>{joinList(topCats)}</strong></> : " across multiple topics"}{instructorData.avgRating > 0 ? <> with an average instructor rating of <strong>{instructorData.avgRating}★</strong></> : ""}{maxDisc > 0 ? <> and discounts up to <strong>{maxDisc}% off</strong></> : ""}{freeCount > 0 ? <> — including <strong>{freeCount} completely free deal{freeCount === 1 ? "" : "s"}</strong></> : ""}.
+                {topCats.length ? <> A solid pick for {topCats[0]} learners in {currentMonth} {currentYear}.</> : ""}
+              </p>
+              <p>
+                Every coupon on this page is manually checked before listing, so you never waste time on expired codes.
+                New deals from {instructorName} appear here automatically — grab them before the Udemy coupon expires.
+              </p>
+            </>
+          )}
+          <div class="ih-about-links" style={{ marginTop: "1rem", flexWrap: "wrap" }}>
             <a class="ih-btn" href="#deals">View all {instructorData.courseCount} courses ↓</a>
             {topCats.map((c) => (
               <a class="ih-btn ghost" href={`/categories/${slugifyCategory(c)}`}>{c} coupons →</a>

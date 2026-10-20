@@ -7,6 +7,7 @@ import { readDeals } from './store';
 export interface InstructorProfile {
   name?: string;
   image?: string;
+  about?: string;
 }
 
 type ProfilesMap = Record<string, InstructorProfile>;
@@ -30,26 +31,28 @@ export function readInstructorProfiles(): ProfilesMap {
   return profiles;
 }
 
-export function getInstructorProfile(slug: string): InstructorProfile | undefined {
+export async function getInstructorProfile(slug: string): Promise<InstructorProfile | undefined> {
+  const fileProfiles = await readProfilesFile();
+  const merged = { ...profiles, ...fileProfiles };
   return (
-    profiles[slug] ??
-    profiles[normalizedSlug(slug)] ??
+    merged[slug] ??
+    merged[normalizedSlug(slug)] ??
     undefined
   );
 }
 
 /** Resolve image for an instructor slug, with diacritics-normalized fallback. */
-export function getInstructorImage(slug: string): string | undefined {
-  const image = getInstructorProfile(slug)?.image;
+export async function getInstructorImage(slug: string): Promise<string | undefined> {
+  const image = (await getInstructorProfile(slug))?.image;
   return image ? image : undefined;
 }
 
 /** Resolve image directly from display name (handles speak vs wyn slug differences). */
-export function getInstructorImageByName(name: string): string | undefined {
+export async function getInstructorImageByName(name: string): Promise<string | undefined> {
   const slug = createInstructorSlug(name);
   return (
-    getInstructorImage(slug) ??
-    getInstructorImage(normalizedSlug(name)) ??
+    await getInstructorImage(slug) ??
+    await getInstructorImage(normalizedSlug(name)) ??
     undefined
   );
 }
@@ -87,7 +90,7 @@ export async function listInstructors(): Promise<InstructorListEntry[]> {
       if (!slug) continue;
       const existing = map.get(slug);
       if (existing) existing.count += 1;
-      else map.set(slug, { slug, name, count: 1, image: merged[slug]?.image });
+      else map.set(slug, { slug, name, count: 1, image: merged[slug]?.image, about: merged[slug]?.about });
     }
   }
   return Array.from(map.values()).sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
@@ -95,12 +98,30 @@ export async function listInstructors(): Promise<InstructorListEntry[]> {
 
 /** Save/clear an instructor photo in the registry file (used by /api/instructors). */
 export async function setInstructorImage(slug: string, image: string, name?: string): Promise<InstructorProfile> {
+  return setInstructorProfile(slug, { image, name });
+}
+
+/** Save/clear instructor profile fields (photo, name, about) in the registry file. */
+export async function setInstructorProfile(slug: string, patch: {
+  image?: string | null;
+  name?: string | null;
+  about?: string | null;
+}): Promise<InstructorProfile> {
   const fileProfiles = await readProfilesFile();
   const existing = fileProfiles[slug] || {};
-  if (image) existing.image = image;
-  else delete existing.image;
-  if (name) existing.name = name;
-  if (!existing.image && !existing.name) delete fileProfiles[slug];
+  if (patch.image !== undefined) {
+    if (patch.image) existing.image = patch.image;
+    else delete existing.image;
+  }
+  if (patch.name !== undefined) {
+    if (patch.name) existing.name = patch.name;
+    else delete existing.name;
+  }
+  if (patch.about !== undefined) {
+    if (patch.about) existing.about = patch.about;
+    else delete existing.about;
+  }
+  if (!existing.image && !existing.name && !existing.about) delete fileProfiles[slug];
   else fileProfiles[slug] = existing;
   await fs.mkdir(path.dirname(profilesFile), { recursive: true });
   await fs.writeFile(profilesFile, JSON.stringify(fileProfiles, null, 2) + '\n', 'utf8');

@@ -111,7 +111,7 @@ const LANG_FLAGS: Record<string, string> = {
 const instructorsList = deal.instructor ? parseInstructors(deal.instructor) : [];
 const firstInstructor = instructorsList[0] ?? "";
 const instructorProfileSlug = createInstructorSlug(firstInstructor);
-const instructorImg = firstInstructor ? getInstructorImageByName(firstInstructor) : undefined;
+const instructorImg = firstInstructor ? await getInstructorImageByName(firstInstructor) : undefined;
 const instructorInitials = firstInstructor.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
 // Hitung live dari deals.json — automatis ikut bertambah setiap ada coupon baru.
 const instructorCoursesCount = await getInstructorCourseCount(firstInstructor || '');
