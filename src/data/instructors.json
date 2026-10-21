@@ -172,10 +172,12 @@
     "image": "https://img-c.udemycdn.com/user/200_H/31334738_a13c_3.jpg"
   },
   "ligency": {
-    "image": "https://img-c.udemycdn.com/user/200_H/150405524_94b0_9.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/150405524_94b0_9.jpg",
+    "about": "Join 4M+ learners who study with Ligency.\n\nWith a 4.6 instructor rating, >1M reviews, and 127 courses in 12 languages, we help engineers, leaders, and teams master the skills that power today’s AI revolution - then ship real results.\n\nWe start where the real world starts: with large language models and the products they power. You’ll learn the foundations of AI and Generative AI (gen AI), then ship production-grade systems - chatbots, copilots, automations, and AI agents. We go deep on LLM engineering: retrieval (RAG), evaluation, observability, safety, and the patterns teams use to run agentic systems at scale.\n\nOur stack is practical and current. You’ll prototype fast with Python, LangChain, and LangGraph; explore models from OpenAI, Gemini, and Claude (including Claude Code); fine-tune and serve with Hugging Face and Ollama; and take it to production on AWS - from Bedrock to event-driven services. Need automation? We wire it together with n8n, clean interfaces, and CI/CD. Along the way you’ll master prompt engineering that holds up under load.\n\nWhere this leads: roles that ship. AI Engineer and LLM Engineer for those who love building; platform and MLOps paths for those drawn to reliability at scale; product and leadership tracks for the people moving Agentic AI from slide decks to business outcomes. The through-line is the same: learn fast, build faster, measure everything, iterate.\n\nStart with our best selling course:\n\nAI Coder: Complete Claude Code & Coding Agents Course - build complete products at speed with AI coding agents like Claude Code, Cursor, Copilot and Codex, no coding background required.\n\nAI Engineer Core Track: LLM Engineering, RAG, QLoRA, Agents - a hands-on path from your first prompt to production patterns: 20+ models, RAG, QLoRA fine-tuning, and agents with LangChain/LangGraph.\n\nAI Engineer Agentic Track: The Complete Agent & MCP Course - design, orchestrate, and deploy robust AI agents across OpenAI Agents SDK, CrewAI, LangGraph and MCP.\n\nAI Engineer Production Track: Deploy LLMs & Agents at Scale - scaling patterns for pipelines, monitoring, and enterprise rollout on AWS with Bedrock, Google Cloud Platform, Azure and MLOps.\n\nAI Builder: Create Agents, Voice Agents & Automations in n8n - wire up low-code AI agents, voice agents and business automations in n8n with ElevenLabs, RAG and MCP.\n\nPractical Guide to AI Agents & Agentic AI with Claude Cowork - build six working no-code AI agents on your real tools (Gmail, Slack, Notion, Calendar) with Claude Cowork and MCP.\n\nAI Leader: Generative AI & Agentic AI for Leaders & Founders - a concise playbook for strategy, governance, and ROI with Generative AI and agents.\n\nIf your goal is to level up quickly and ship something real, join us. Learn the concepts, touch the tools, build the thing - then take it to users. That’s the Ligency way."
   },
   "ed-donner": {
-    "image": "https://img-c.udemycdn.com/user/200_H/276658919_02e6_2.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/276658919_02e6_2.jpg",
+    "about": "Ed Donner is a coder, speaker and leader in the field of Agentic AI, Forward Deployed Engineering and LLMs. He’s the co-founder and CTO of AI startup Nebula, a former Managing Director at JPMorgan Chase, and a well-regarded lecturer on LLMs and Agents with over a million enrollments across 194 countries. He previously founded AI startup untapt, acquired in 2021, after a 15 year career in technology on Wall street. He holds a patent in a deep learning matching model, and an MA in Physics from Oxford. When he’s not at work experimenting with LLMs, Ed can usually be found at home.. experimenting with LLMs."
   },
   "rahul-shetty-academy": {
     "image": "https://img-c.udemycdn.com/user/200_H/5997742_a60f_54.jpg",
@@ -299,7 +301,8 @@
     "image": "https://img-c.udemycdn.com/user/200_H/10978442_cf0f_16.jpg"
   },
   "michael-james": {
-    "image": "https://img-c.udemycdn.com/user/200_H/22594000_70f6_4.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/22594000_70f6_4.jpg",
+    "about": "Michael James (PSM I, PSM II, PSM III, PSPO 1, PSPO II, SPS certified)\n\nBusiness and Leadership Instructor\n\nHi Michael James here. I'm a UK Business and Leadership Instructor specializing in Agile/Scrum, Data Management and Data Science Leadership.\n\nI've been working with Big Data and sensitive large national datasets for almost 20 years and leading on software development projects.\n\nI've have a BA (Hons) Degree in Business Management.\n\nI really enjoy teaching people the business and leadership skills that have taken me years to acquire."
   },
   "video-school": {
     "image": "https://img-c.udemycdn.com/user/200_H/19701574_95d1_13.jpg"
@@ -399,7 +402,8 @@
     "image": "https://img-c.udemycdn.com/user/200_H/33231436_2824_3.jpg"
   },
   "digital-music-masters": {
-    "image": "https://img-c.udemycdn.com/user/200_H/45765646_eef7.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/45765646_eef7.jpg",
+    "about": "DMM was Founded by Tomas George in Early 2018.\n\nWe are an online community and academy that's aimed at teaching budding artists and producers how to get the best out of what they have at home.\n\nDigital Music Masters specialises in creating practical music production content and resources for producers, songwriters, and video makers."
   },
   "edouard-renard": {
     "image": "https://img-c.udemycdn.com/user/200_H/33594360_59af_12.jpg"
@@ -414,10 +418,12 @@
     "image": "https://img-c.udemycdn.com/user/200_H/58408772_dca4.jpg"
   },
   "tomas-george": {
-    "image": "https://img-c.udemycdn.com/user/200_H/23566298_e66f_4.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/23566298_e66f_4.jpg",
+    "about": "Hi, Tomas here. I'm a UK Music Producer, Composer, Audio Engineer and Video Maker.\n\nI've been producing and writing music for over twenty years. I have an MMus Masters Degree in Music Production and a BA (Hons) Degree in Music Composition.\n\nI really enjoy writing and producing all types of music, but I especially love teaching it online.\n\nSince 2016, I've been creating online courses that over 400,000 students worldwide have taken.\n\nMy courses teach the skills to help you learn and improve at music and audio production."
   },
   "ian-alexander": {
-    "image": "https://img-c.udemycdn.com/user/200_H/49549822_3deb_5.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/49549822_3deb_5.jpg",
+    "about": "Hi there, it's Ian Alexander. I'm a UK based Audio Engineer, with over fifteen years of experience. I also create Music Production courses and teach online.\n\nIan has created some of the most popular DAW training courses online, having taught tens of thousands of Music Production students. He has multiple Best-Selling courses with thousands of 5* ratings.\n\nIan produces music, with releases on BMG and is also an active Mixing and Mastering Engineer.\nHe has both a Bachelors and Masters degree in Music Production."
   },
   "kalyan-reddy-daida": {
     "image": "https://img-c.udemycdn.com/user/200_H/31551648_223b_6.jpg"
@@ -546,7 +552,8 @@
     "image": "https://img-c.udemycdn.com/user/200_H/16661812_b24c.jpg"
   },
   "peter-darling": {
-    "image": "https://img-c.udemycdn.com/user/200_H/34403618_5a55.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/34403618_5a55.jpg",
+    "about": "Hi, Peter here. I'm a UK Songwriter, Composer and Multi-Instrumentalist.\n\nI've been professionally writing music and have been involved in the music industry for over fifteen years and I have a Masters Degree in Music Composition and a BA (Hons) Degree in Popular Music.\n\nI've had my work used on TV and international advertising campaigns, as well as being playing on national and international radio.\n\nI have performed worldwide with various artists and ensembles, and I'm also a Lecturer in Songwriting and Composition at one of the top conservatoires in the UK.\n\nI'm really excited to teach you some of the skills that I've learnt from my career and help you improve in your Songwriting today!"
   },
   "jeremiah-minner": {
     "image": "https://img-c.udemycdn.com/user/200_H/287184607_745f.jpg"
@@ -627,7 +634,8 @@
     "image": "https://img-c.udemycdn.com/user/200_H/2025260_e5f5_2.jpg"
   },
   "wealthy-education": {
-    "image": "https://img-c.udemycdn.com/user/200_H/8411060_7fde_4.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/8411060_7fde_4.jpg",
+    "about": "We are very grateful to all the students for taking our investing and trading courses on Udemy.\n\nTry one of our courses today to learn the BEST way to earn extra passive income online through trading and investing!\n\nWe specialize in financial trading, stock market investing, financial management, accounting and personal finance. We are dedicated to assisting students worldwide in achieving their financial goals, helping them become successful in their lives, and bringing them by far the best learning experience.\n\nWe have been providing E-learning courses on the most essential subjects for achieving success in today's highly competitive environments, such as Personal Development, Finance & Investing, and Business Management & Development. We have always been assuring the quality of our courses, and we always guarantee the learning benefits for our students.\n\nOur mission is simple. We are committed to helping you start investing profitably in the stock market, thereby you can build a better financial life and live a more satisfying retirement.\n\nLet's start your investment journey with us!\n\n\"Learn More, Live Better.\" - Wealthy Education"
   },
   "certificaciones-en-tecnologa": {
     "image": "https://img-c.udemycdn.com/user/200_H/53628100_adf2_10.jpg"
@@ -970,5 +978,13 @@
   },
   "pankaj-shukla": {
     "image": "https://img-c.udemycdn.com/user/200_H/9293_89f9_2.jpg"
+  },
+  "derar-alhussein": {
+    "image": "https://img-c.udemycdn.com/user/200_H/103087611_3d14_2.jpg",
+    "about": "Derar Alhussein | 10x Databricks Certified\n\nSenior Data Engineer, Databricks MVP, and O’Reilly Author\n\nSenior data engineer with a master’s degree in data mining, based and working in Dubai. I have over 10 years of experience working on software and data projects, including large-scale data projects on Databricks.\n\nI'm the author of the O’Reilly book “Databricks Certified Data Engineer Associate Study Guide: In-Depth Guidance and Practice”. Get a FREE pdf copy to the early release of the book on my LinkedIn.\n\nI'm a Databricks MVP and hold 10 certifications from Databricks (check them on my website)\n\nFeel free to connect with me on LinkedIn to stay updated on more content and exclusive opportunities."
+  },
+  "francis-carlisle": {
+    "image": "https://img-c.udemycdn.com/user/200_H/28681264_43b0_4.jpg",
+    "about": "Hello. My name is Francis, I'm from the UK, and I'm the founder of Last Minute English.\n\n\n\nLast Minute English creates online video courses to help you improve your spoken and written English, with a particular focus on English exams like the IELTS, TOEIC, and Duolingo. We also help you reach advanced level English with specialist courses on Grammar, Vocabulary, Fluency and more.\n\n\n\nI'm a qualified IELTS Examiner. I previously lived in China (9 years) and Colombia (2 years), and now live in Manchester, UK. My experience and my passion is helping students to get high scores in their IELTS exam. I believe that understanding is the key to success in the IELTS exam, so my IELTS courses teach:\n\n\n1) HOW the IELTS examiner decides your score\n\n2) WHAT you can do to meet the IELTS examiner's requirements\n\n\n\nI'm also a keen language learner, and have achieved fluency in Mandarin Chinese and Spanish. If you are interested in learning beginner Chinese, check out my two Chinese courses- you can even try one for free"
   }
 }
