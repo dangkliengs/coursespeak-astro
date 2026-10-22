@@ -359,10 +359,12 @@
     "image": "https://img-c.udemycdn.com/user/200_H/37969484_bca7_9.jpg"
   },
   "fernando-herrera": {
-    "image": "https://img-c.udemycdn.com/user/200_H/11767934_4361_2.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/11767934_4361_2.jpg",
+    "about": "Soy un analista programador de sistemas de computo, con poco más de 20 años en el mundo del desarrollo de aplicaciones frontend y backend.\n\nDurante mis últimos años me he dedicado a la enseñanza en línea,  mientras trabajo en una empresa en Canadá.\n\nMe encanta enseñar y programar, son mis dos pasatiempos favoritos que a su vez, es mi trabajo."
   },
   "dt-devtalles": {
-    "image": "https://img-c.udemycdn.com/user/200_H/267457580_ae55.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/267457580_ae55.jpg",
+    "about": "DevTalles es una plataforma educativa en línea creada por Fernando Herrera que se especializa en cursos de desarrollo web y programación. Ofrece una variedad de cursos en tecnologías populares como React, Angular, Vue.js, TypeScript, SQL, y herramientas de inteligencia artificial. Estos cursos están diseñados tanto para principiantes como para desarrolladores avanzados que deseen profundizar sus conocimientos y adquirir habilidades competitivas."
   },
   "cyvitrix-learning": {
     "image": "https://img-c.udemycdn.com/user/200_H/231862686_9990_19.jpg",
@@ -549,7 +551,8 @@
     "image": "https://img-c.udemycdn.com/user/200_H/68307376_a283_6.jpg"
   },
   "victor-robles": {
-    "image": "https://img-c.udemycdn.com/user/200_H/16661812_b24c.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/16661812_b24c.jpg",
+    "about": "Soy desarrollador web en una empresa y llevo inmerso en el mundo de la programación y la informática desde los 15 años.\n\nMe encanta programar y todo lo relacionado con Internet y las nuevas tecnologías, crear cosas y enseñar a los demás.\n\nSoy casi completamente autodidacta, por eso voy a ofrecerte muchos de mis conocimientos para que tú puedas aprender más fácilmente y más rápido de lo yo lo hice y hago cada día.\n\nPuedes saber más de mi trabajo en el blog victorroblesweb y en mis perfiles en las diferentes redes sociales"
   },
   "peter-darling": {
     "image": "https://img-c.udemycdn.com/user/200_H/34403618_5a55.jpg",
@@ -598,7 +601,8 @@
     "image": "https://img-c.udemycdn.com/user/200_H/315707583_04bb.jpg"
   },
   "juan-pablo-de-la-torre-valdez": {
-    "image": "https://img-c.udemycdn.com/user/200_H/4748648_5109_2.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/4748648_5109_2.jpg",
+    "about": "¡Soy diseñador y programador web desde hace 19 años! (2006)\n\nNo te aburriré ni te contaré la típica historia de que soy programador desde los 6 años porque eso sería mentir.\n\nEmpecé a los 18 años y la programación cambió mi vida.\n\nAprendí con tutoriales en video, por eso creo en este formato de enseñanza; el problema es que muchos cursos hablaban con términos confusos, extraños y no creaban un proyecto real, es por eso que enseño Creando Proyectos Reales.\n\nPor años he trabajado con WordPress, Drupal, PHP, JavaScript, Laravel, Node.js, Express, React, Angular, Vue, Ruby on Rails, Django, React Native, Flutter en diferentes empresas de mi Ciudad y para algunos clientes de forma Freelancer, pero cuando conocí a Udemy descubrí que podia realizar los cursos creando proyectos reales que tanta falta hacían, por lo tanto renuncie a mi trabajo y deje mi agencia de diseño Freelancer para comenzar Código Con Juan en Udemy."
   },
   "joseph-heidari": {
     "image": "https://img-c.udemycdn.com/user/200_H/246996744_3bf2.jpg"
@@ -929,7 +933,8 @@
     "image": "https://img-c.udemycdn.com/user/200_H/59988169_14c5.jpg"
   },
   "santiago-hernndez": {
-    "image": "https://img-c.udemycdn.com/user/200_H/43210112_41c0.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/43210112_41c0.jpg",
+    "about": "Santiago Hernández is a computer engineer from the University of Salamanca, holding a master's degree in Information and Communications Security from the European University. His professional experience spans various roles in the fields of Cybersecurity and Artificial Intelligence at companies such as Endesa, Telefónica/11paths, and BBVA. Additionally, he is a university lecturer at UEM, UCLM, and UCAM in several postgraduate programs related to Artificial Intelligence and Information Security, and a frequent speaker at specialized conferences. Among the conferences where he has participated as a speaker are BlackHat Europe, ToorCon San Diego, Navaja Negra, Noconname, Cybercamp, CCN-CERT, and others."
   },
   "lauro-fialho-mller": {
     "image": "https://img-c.udemycdn.com/user/200_H/12092014_d319.jpg"
@@ -986,5 +991,9 @@
   "francis-carlisle": {
     "image": "https://img-c.udemycdn.com/user/200_H/28681264_43b0_4.jpg",
     "about": "Hello. My name is Francis, I'm from the UK, and I'm the founder of Last Minute English.\n\n\n\nLast Minute English creates online video courses to help you improve your spoken and written English, with a particular focus on English exams like the IELTS, TOEIC, and Duolingo. We also help you reach advanced level English with specialist courses on Grammar, Vocabulary, Fluency and more.\n\n\n\nI'm a qualified IELTS Examiner. I previously lived in China (9 years) and Colombia (2 years), and now live in Manchester, UK. My experience and my passion is helping students to get high scores in their IELTS exam. I believe that understanding is the key to success in the IELTS exam, so my IELTS courses teach:\n\n\n1) HOW the IELTS examiner decides your score\n\n2) WHAT you can do to meet the IELTS examiner's requirements\n\n\n\nI'm also a keen language learner, and have achieved fluency in Mandarin Chinese and Spanish. If you are interested in learning beginner Chinese, check out my two Chinese courses- you can even try one for free"
+  },
+  "eduardo-nazareno-anselmi": {
+    "image": "https://img-c.udemycdn.com/user/200_H/37465748_0153_6.jpg",
+    "about": "Soy un apasionado de la tecnología y desde hace 20 años trabajo como administrador de sistemas y en los últimos años me he sumado al team de Cloud Engineer and DevOps, siempre al día con la tecnología y sus tendencias, pero sin descuidar las viejas buenas prácticas que nunca pasaran de moda.\n\nIngeniero en sistemas de información egresado de la Universidad Tecnológica Nacional y certificado en AWS, Terraform, Kubernetes, Red Hat, Microsoft, Fortinet y Mikrotik. Siempre actualizándome y aprendiendo de esta hermosa carrera que no tiene fin y he logrado con esto juntar mi pasión con mi profesión."
   }
 }
