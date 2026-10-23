@@ -36,7 +36,8 @@
     "image": "https://img-c.udemycdn.com/user/200_H/4897424_a25c_13.jpg"
   },
   "bryan-krausen": {
-    "image": "https://img-c.udemycdn.com/user/200_H/46688028_ebc5_9.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/46688028_ebc5_9.jpg",
+    "about": "Bryan Krausen is a Udemy Instructor Partner, Udemy Community Champion, and top-rated Udemy Instructor. He is also a HashiCorp Ambassador and AWS Community Builder and has been involved with the IT community for 20+ years.\n\nBryan Krausen's career spans over 25 years in enterprise IT and includes data centers, networking, security, cloud, and consulting. Bryan was the principal architect at two leading consultancies, a testament to his deep understanding of the field. His expertise lies in cloud technologies, where he excels in designing, implementing, and optimizing client solutions. He leverages platforms like Amazon Web Services (AWS) and a suite of industry-leading tools, including HashiCorp Vault, Terraform, Consul, Nomad, and Packer, to deliver top-notch results. Additional skills include deployment and integrations with GitHub, Kubernetes, Nomad, and much more.\n\nBeyond consulting, he shares his knowledge through publications and speaking engagements, having authored three (3) books and delivered training to over 250,000 students. Bryan often shares insights at community events, including HashiConf, HashiTalks, HashiCorp User Groups, and other major tech conferences.\n\nAll course material can be found on GitHub."
   },
   "imran-teli": {
     "image": "https://img-c.udemycdn.com/user/200_H/143478232_13ee_3.jpg"
@@ -298,17 +299,20 @@
     "image": "https://img-c.udemycdn.com/user/200_H/7502042_2710_3.jpg"
   },
   "anton-voroniuk": {
-    "image": "https://img-c.udemycdn.com/user/200_H/10978442_cf0f_16.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/10978442_cf0f_17.jpg",
+    "about": "Hi, I’m Anton Voroniuk, and I’m here to help you unlock the power of AI and digital marketing. Over the past 17 years, I’ve trained over 1,000,000 students worldwide as a Google Academy Trainer and AI enthusiast.\n\nMy passion for AI has been a long journey. Since 2017, I’ve worked with Google and Facebook as a Premier Partner Agency, staying ahead of the curve in AI-driven marketing. I’m also Google Cloud Certified as a Generative AI Leader, which recognizes my expertise in applying cutting-edge AI tools to real-world business challenges.\n\nThat passion led me to create SkillsBooster Academy, a place where professionals like you can learn how to use AI to save time, grow your business, and achieve your goals faster.\n\nIf you’re ready to master AI and stay ahead of the competition, join me at SkillsBooster Academy. Let’s take your skills to the next level and see you in the next course!"
   },
   "michael-james": {
     "image": "https://img-c.udemycdn.com/user/200_H/22594000_70f6_4.jpg",
     "about": "Michael James (PSM I, PSM II, PSM III, PSPO 1, PSPO II, SPS certified)\n\nBusiness and Leadership Instructor\n\nHi Michael James here. I'm a UK Business and Leadership Instructor specializing in Agile/Scrum, Data Management and Data Science Leadership.\n\nI've been working with Big Data and sensitive large national datasets for almost 20 years and leading on software development projects.\n\nI've have a BA (Hons) Degree in Business Management.\n\nI really enjoy teaching people the business and leadership skills that have taken me years to acquire."
   },
   "video-school": {
-    "image": "https://img-c.udemycdn.com/user/200_H/19701574_95d1_13.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/19701574_95d1_13.jpg",
+    "about": "Learn creative skills, from absolute beginner to advanced mastery. \n\nVideo School exists to help you succeed in life. Each course has been hand-tailored to teach a specific skill from photography and video to art, design and business.\n\nWhether you’re trying to learn a new skill from scratch, or want to refresh your memory on something you’ve learned in the past, you’ve come to the right place.\n\nEducation makes the world a better place. Make your world better with new skills!\n\nOur courses can be watched 24/7 wherever you are. Most are fully downloadable so you can take them with you. You can also view them on mobile devices with the Udemy mobile app.\n\nAll courses have a 30-day money-back guarantee so that you can check it out, make sure it’s the right course for you, and get a refund if it’s not!"
   },
   "phil-ebiner": {
-    "image": "https://img-c.udemycdn.com/user/200_H/317821_3cb5_13.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/317821_3cb5_13.jpg",
+    "about": "Hi! I'm an educator, photographer, filmmaker, and founder of Video School and Photography & Friends. Through my online courses and creative community, I’ve helped millions of students around the world learn practical skills in photography, video production, design, and more. My goal is to make creative skills feel accessible, useful, and encouraging, whether you’re picking up a camera for the first time or looking to take your work to the next level.\n\nMy teaching style is clear, supportive, and hands-on. I break complex topics into simple steps, explain the “why” behind each technique, and share real-world examples you can immediately apply. As a photographer and filmmaker, I believe great creative work is not just about gear or settings, but about storytelling, intention, observation, and connection. My goal is to help you feel confident, inspired, and capable of bringing your own creative ideas to life."
   },
   "paul-siegel": {
     "image": "https://img-c.udemycdn.com/user/200_H/79939000_a4b9_2.jpg"
@@ -485,7 +489,8 @@
     "image": "https://img-c.udemycdn.com/user/200_H/168079506_7ef6.jpg"
   },
   "sean-bradley": {
-    "image": "https://img-c.udemycdn.com/user/200_H/71645904_bdf2_2.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/71645904_bdf2_2.jpg",
+    "about": "Hello, I'm Sean Bradley, for over 25 years I have been an IT engineer building and managing real time, low latency, high availability, asynchronous, multi threaded, remotely managed, fully automated, monitored solutions in the education, aeronautical, banking, drone, gaming, telecommunications and AI industries. I have also created and written hundreds of Open Source GitHub Repositories, Medium articles, YouTube video tutorials and published several books an Amazon."
   },
   "robin-jesper": {
     "image": "https://img-c.udemycdn.com/user/200_H/36921905_7a32_7.jpg"
@@ -752,7 +757,8 @@
     "image": "https://img-c.udemycdn.com/user/200_H/23183888_24d1_3.jpg"
   },
   "dmytro-vasyliev": {
-    "image": "https://img-c.udemycdn.com/user/200_H/172884989_75a0_14.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/172884989_75a0_14.jpg",
+    "about": "I’m a Senior Frontend Engineer with 10+ years of experience shipping real products — currently at Doccle, a Belgian platform with 2.5 million users, where I lead the React migration.\n\nOn Udemy, I’ve taught 220k+ students across 19 courses covering React, Next.js, Node.js, and AI coding tools like Claude Code, Github Copilot, Cursor, Windsurf and others.\n\nI don’t teach theory. I teach what works in production."
   },
   "viraj-shetty": {
     "image": "https://img-c.udemycdn.com/user/200_H/21501444_775e.jpg"
@@ -995,5 +1001,21 @@
   "eduardo-nazareno-anselmi": {
     "image": "https://img-c.udemycdn.com/user/200_H/37465748_0153_6.jpg",
     "about": "Soy un apasionado de la tecnología y desde hace 20 años trabajo como administrador de sistemas y en los últimos años me he sumado al team de Cloud Engineer and DevOps, siempre al día con la tecnología y sus tendencias, pero sin descuidar las viejas buenas prácticas que nunca pasaran de moda.\n\nIngeniero en sistemas de información egresado de la Universidad Tecnológica Nacional y certificado en AWS, Terraform, Kubernetes, Red Hat, Microsoft, Fortinet y Mikrotik. Siempre actualizándome y aprendiendo de esta hermosa carrera que no tiene fin y he logrado con esto juntar mi pasión con mi profesión."
+  },
+  "gabe-maentz": {
+    "image": "https://img-c.udemycdn.com/user/200_H/143753128_efea_2.jpg",
+    "about": "Gabe serves as a consultant for River Point Technology, where he draws on experience working for both IT startup and Fortune 500 global corporations. In addition to his focus on cloud architecture, Gabe has managed multi-datacenter, virtualization and networking strategies in addition to being recognized as a HashiCorp Certified Instructor, HashiCorp Ambassador and VMware vExpert.\n\nGabe resides in Pittsburgh, PA with his wife Marion and their four children, and is a founding member of the vBrisket community."
+  },
+  "thalita-milan": {
+    "image": "https://img-c.udemycdn.com/user/200_H/71041768_5c7b.jpg",
+    "about": "Hi, I'm Thalita. I'm a Marketing Automaton consultant and trainer with 14+ years of experience in Digital Marketing. I've been working as an independent HubSpot consultant & trainer since 2018. I've helped more than 20000 people learn HubSpot for their jobs and businesses.\n\nI love helping professionals upskill and businesses scale through Marketing Automation and smart tech. When not working, I love running, hiking, and all things outdoors.\n\nPlease note that I am an independent HubSpot Consultant and my courses and services are not verified or endorsed by HubSpot Inc."
+  },
+  "eugene-voroniuk": {
+    "image": "https://img-c.udemycdn.com/user/200_H/144380098_f71b_2.jpg",
+    "about": "Hello there! I'm Eugene Voroniuk, a seasoned product designer with 14 years in the tech industry. Currently, working @ Miro. And also being Wix alumni. So now, I'm dedicated to crafting top-notch SaaS web and mobile apps that address the needs of millions of users worldwide.\n\nBeyond design, I'm captivated by AI-generated art, innovative tools for digital creators, and street photography. When I'm not shaping pixels, you'll find me jamming on electronic drums or engaging with inspiring minds. Let's connect and create something remarkable together!"
+  },
+  "eugene-vyborov": {
+    "image": "https://img-c.udemycdn.com/user/200_H/306332537_2019.jpg",
+    "about": "I’m Eugene, and I’ve spent my life building and scaling businesses.\n\n\n\nTwo of those (YayPay and WebiNerds) led to successful exits. Now, I invest in exciting companies and build tools that shape the future of work.\n\n\n\nI’m a tech entrepreneur, AI geek, and someone who believes that the biggest shift in work is happening right now.\n\n\n\nThat’s exactly why I built Ability AI.\n\n\n\nWe are a Ukrainian-born martech company that specializes in full-cycle paid marketing and business process automation using AI Agents."
   }
 }
