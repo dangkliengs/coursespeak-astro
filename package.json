@@ -15,13 +15,13 @@
     "deploy": "node scripts/auto-switch.js prod && astro build"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.10",
-    "@astrojs/node": "^11.1.8",
-    "@astrojs/react": "^7.1.0",
+    "@astrojs/check": "^0.9.12",
+    "@astrojs/node": "^11.1.9",
+    "@astrojs/react": "^7.1.1",
     "@astrojs/sitemap": "^3.7.4",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
-    "astro": "^7.4.0",
+    "astro": "^7.4.2",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "remark": "^15.0.1",
