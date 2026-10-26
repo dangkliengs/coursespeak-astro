@@ -16,6 +16,7 @@ type Deal = {
   expiresAt?: string;
   image?: string;
   category?: string;
+  subcategory?: string;
   updatedAt?: string;
 };
 
@@ -39,14 +40,21 @@ export default function CourseComparison({ currentDeal, similarDeals }: CourseCo
 
   const deals = [currentDeal, ...similarDeals.slice(0, 3)];
 
+  // SEO keyword: prefer the specific topic (subcategory) over the broad category
+  const keyword = (currentDeal.subcategory || currentDeal.category || "").trim();
+  const heading = keyword
+    ? `${keyword} Course Comparison Side by Side`
+    : "Udemy Course Comparison Side by Side";
+  const subject = keyword || `${currentDeal.provider || "Udemy"} courses`;
+
   return (
-    <section style={{ marginTop: "3rem", marginBottom: "3rem" }}>
+    <section aria-labelledby="course-comparison-heading" style={{ marginTop: "3rem", marginBottom: "3rem" }}>
       <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.5rem" }}>
         <span style={{ width: "6px", height: "32px", background: "var(--brand)", borderRadius: "9999px" }} aria-hidden="true" />
-        <h2 style={{ fontSize: "1.5rem", fontWeight: 700, color: "#fff", margin: 0 }}>Course Comparison</h2>
+        <h2 id="course-comparison-heading" style={{ fontSize: "1.4rem", fontWeight: 700, color: "#fff", margin: 0 }}>{heading}</h2>
       </div>
       <p style={{ fontSize: "0.95rem", color: "var(--muted)", marginBottom: "2rem" }}>
-        Compare {deals.length} Udemy courses side by side — rating, price, duration, and active coupon.
+        Compare {deals.length} {keyword ? `${keyword} courses` : subject} side by side — rating, price, duration, and active coupon.
       </p>
 
       <div style={{ borderRadius: "12px", border: "1px solid var(--border)", overflow: "hidden", background: "var(--bg)" }}>

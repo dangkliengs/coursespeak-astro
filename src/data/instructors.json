@@ -18,7 +18,8 @@
     "image": "https://img-c.udemycdn.com/user/200_H/31303958_8529_3.jpg"
   },
   "kodekloud-training": {
-    "image": "https://img-c.udemycdn.com/user/200_H/61457358_a661_18.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/61457358_a661_18.jpg",
+    "about": "KodeKloud is an online training institution aimed at providing quality, hands-on training in DevOps and Automation Technologies such Docker, Kubernetes, OpenShift, Ansible, Chef, Puppet and many more. KodeKloud have authored multiple courses on DevOps, Cloud and Automation technologies and teach over 500,000+ Students worldwide. Our courses focus on providing students with an interactive and hands-on experience in learning new technology that makes learning really interesting."
   },
   "neil-anderson": {
     "image": "https://img-c.udemycdn.com/user/200_H/31767132_ff0c_5.jpg"
@@ -27,7 +28,8 @@
     "image": "https://img-c.udemycdn.com/user/200_H/34123448_bea6.jpg"
   },
   "krishai-technologies-private-limited": {
-    "image": "https://img-c.udemycdn.com/user/200_H/273001308_1379_3.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/273001308_1379_3.jpg",
+    "about": "Krish AI Technologies is at the forefront of education in the fields of Data Science, Machine Learning, Generative AI, Deep Learning, and related technologies. Founded by industry veteran Krish Naik, who has over 13 years of experience in the data analytics industry and more than 7 years of teaching expertise, our mission is to equip learners with the skills and knowledge required to excel in the rapidly evolving tech landscape.\n\nOur Expertise: At Krish AI Technologies, we specialize in a comprehensive range of subjects within the realm of artificial intelligence and data science, including:\n\nData Science: From foundational concepts to advanced techniques, we cover all aspects of data analysis, statistical modeling, and data visualization.\n\nMachine Learning: Our curriculum spans the full spectrum of machine learning algorithms, including supervised and unsupervised learning, clustering techniques, and advanced predictive modeling.\n\nGenerative AI: We provide in-depth training on the latest generative AI models and techniques, helping students understand and implement cutting-edge technologies.\n\nDeep Learning: Our courses delve into the mathematical intuition and practical applications of deep learning, covering neural networks, CNNs, RNNs, and more.\n\nNatural Language Processing (NLP): We offer comprehensive training in NLP, including text preprocessing, sentiment analysis, language modeling, and various NLP projects."
   },
   "tia-training": {
     "image": "https://img-c.udemycdn.com/user/200_H/4897424_a25c_13.jpg"
@@ -43,7 +45,8 @@
     "image": "https://img-c.udemycdn.com/user/200_H/143478232_13ee_3.jpg"
   },
   "madan-reddy": {
-    "image": "https://img-c.udemycdn.com/user/200_H/74055578_a7f0_2.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/74055578_a7f0_2.jpg",
+    "about": "Madan Reddy is the founder of eazybytes, who boasts over 15 years of experience creating and distributing enterprise web applications using Java, Spring, SpringBoot, Microservices, React, Angular, Cloud & Generative AI. He is consistently enthusiastic about staying current and imparting his knowledge with others. With his remarkable talent for simplifying complex concepts, he has been able to instruct novice software developers for many years, and has recently extended his knowledge to Udemy, where he has created top-rated courses. Through his teachings on Udemy, he intends to impart the knowledge he has acquired to other software engineers and college students."
   },
   "scott-duffy": {
     "image": "https://img-c.udemycdn.com/user/200_H/58935_f800_5.jpg"
@@ -119,7 +122,8 @@
     "image": "https://img-c.udemycdn.com/user/200_H/56803600_8c8b_3.jpg"
   },
   "prof-ryan-ahmed": {
-    "image": "https://img-c.udemycdn.com/user/200_H/23449198_c519_34.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/23449198_c519_34.jpg",
+    "about": "I'm Dr. Ryan Ahmed, professor, engineer, and founder of Stemplicity, where we help people get past the hype and actually build things with AI, Agentic AI, Cloud, and Data Science.\n\nOver the past 10 years, I've taught 1 million learners across 160 countries — 700,000+ enrolled in my Udemy courses, 260,000+ subscribers on the \"Prof. Ryan Ahmed\" YouTube channel, and 120,000+ on Coursera. I also run corporate AI training for teams at HSBC, RBC, Discover, and Barclays across the US, Canada, and the UK. I held leadership roles at GM, Samsung, and Stellantis in Canada and the U.S., working on electric and autonomous vehicle technologies.\n\nI hold a MASc, PhD, and MBA from McMaster University. I’m also a licensed Professional Engineer and a Stanford-certified program manager with over 60+ published research papers in AI and battery systems.\n\nBut credentials are the least interesting part. Here's what I actually believe: \"AI is the biggest opportunity of our lifetime\", and most people are sitting it out because they think they need to code or have a PhD. You don't. If you're willing to show up and try, I'll help you get good at this."
   },
   "365-careers": {
     "image": "https://img-c.udemycdn.com/user/200_H/8280056_7887_3.jpg"
@@ -128,7 +132,8 @@
     "image": "https://img-c.udemycdn.com/user/200_H/9230936_41ae_12.jpg"
   },
   "shubham-sarda": {
-    "image": "https://img-c.udemycdn.com/user/200_H/54081036_f1d2_3.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/54081036_f1d2_3.jpg",
+    "about": "Shubham is a software developer with a passion for teaching. He has worked with many funded startups, self-projects and as a top-rated freelancer on marketplaces.\n\nShubham has taught programming and marketing to over 100,000 students online and offline as an Instructor.\n\nShubham has mastered explaining very complex topics in the simplest manner that is easy to understand and follow. His video courses are also used by companies to train their employees and by colleges to prepare their students and upgrade skills according to industry requirements.\n\nEnroll now, and I will see you inside the course!"
   },
   "christopher-nett": {
     "image": "https://img-c.udemycdn.com/user/200_H/247507994_c419_8.jpg"
@@ -137,13 +142,15 @@
     "image": "https://img-c.udemycdn.com/user/200_H/164759774_4222.jpg"
   },
   "krystian-wojtarowicz": {
-    "image": "https://img-c.udemycdn.com/user/200_H/221983214_5710_5.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/221983214_5710_5.jpg",
+    "about": "Hi, I’m Krystian, an instructor passionate about helping people master the future of technology through Artificial Intelligence, automations, and AI-powered creativity.\n\n\n\nMy goal is simple: to make complex topics easy and enjoyable to learn.\n\n\n\nMy mission is to equip you with the precise skills you need to enhance your work, save time, and unleash your creative potential.\n\n\n\nI believe in teaching step-by-step, with short and focused lessons that cut through the noise and deliver only what’s most useful. You won’t find endless theory in my courses - instead, you’ll gain hands-on skills you can apply immediately.\n\n\n\nWhether you’re here to boost your career, grow your business, or explore AI-powered creativity, my courses are designed to guide you every step of the way.\n\n\n\nJoin thousands of learners already building their skills with me, and let’s take your knowledge to the next level together."
   },
   "damian-danelczyk-adaptifyai-ou": {
     "image": "https://img-c.udemycdn.com/user/200_H/100635336_1d96_4.jpg"
   },
   "dfa-course-academy": {
-    "image": "https://img-c.udemycdn.com/user/200_H/240876498_48e1_2.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/240876498_48e1_2.jpg",
+    "about": "Learn Outstanding Skills, From Total Beginner To Master In Specific Field!\n\nDFA Course Academy was founded to help anyone on the path to success.\n\nNo matter if you are a total beginner or an advanced person, we provide the most comprehensive knowledge step-by-step to make it easy to understand.\n\nWisdom - comes not from age, but from education and learning."
   },
   "damian-danelczyk": {
     "image": "https://img-c.udemycdn.com/user/200_H/145555064_0bb6_2.jpg"
@@ -158,10 +165,12 @@
     "image": "https://img-c.udemycdn.com/user/200_H/227092942_31e6_6.jpg"
   },
   "ankit-mistry": {
-    "image": "https://img-c.udemycdn.com/user/200_H/30225_9479_10.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/30225_9479_10.jpg",
+    "about": "I am Ankit Mistry, with a Master’s degree from IIT Kharagpur specializing in Machine Learning and Artificial Intelligence. I bring over 8 years of industry experience as a Software Developer in a leading private investment bank, along with deep expertise in AI, automation, and cloud technologies.\n\nOver time, I transitioned into full-time teaching, where I focus on practical, real-world skills in AI and cloud computing. My courses are designed to be highly hands-on, helping learners build real projects rather than just understanding theory.\n\nI specialize in teaching:\n\n- AI tools like Claude, Generative AI, and AI Agents\n\n- Automation workflows and real-world AI applications\n\n- Cloud platforms including Azure, and Google Cloud\n\n- Data analysis and machine learning\n\nMy latest courses focus on cutting-edge topics like Claude AI, AI automation, and building intelligent agents, ensuring you stay ahead in the rapidly evolving AI landscape.\n\nWith over 266,000+ students and thousands of reviews, my goal is to help you gain practical skills that directly impact your career."
   },
   "ajay-gadhave": {
-    "image": "https://img-c.udemycdn.com/user/200_H/47652246_c7f0.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/47652246_c7f0.jpg",
+    "about": "Dear Data lovers,\n\nThank you for taking the time to read this message.\n\nMy name is Ajay Gadhave, I am passionate about Cloud Computing, Data Engineering and Machine Learning.\n\nMy love to teach various subjects like Data Engineering, Cloud Computing, Machine Learning, Python programming, and Data Science.\n\nI trust that you will find value in my course, and I am confident it will contribute to your professional growth.\n\n\n\nBest regards,\n\nAjay Gadhave"
   },
   "alexander-oni": {
     "image": "https://img-c.udemycdn.com/user/200_H/5258384_0c1a_9.jpg"
@@ -296,7 +305,8 @@
     "image": "https://img-c.udemycdn.com/user/200_H/24142574_6069.jpg"
   },
   "arjun-janananda": {
-    "image": "https://img-c.udemycdn.com/user/200_H/7502042_2710_3.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/7502042_2710_3.jpg",
+    "about": "I am an engineer and the founder-CTO of Huviair Technologies.\n\nI have a deep understanding of  Computer Programming, Artificial Intelligence, Image Processing and Drone data analytics\nWith this expertise and being in the industry for more than 15 years, I have created industry-leading software products, widely embraced for their innovation and effectiveness."
   },
   "anton-voroniuk": {
     "image": "https://img-c.udemycdn.com/user/200_H/10978442_cf0f_17.jpg",
@@ -481,7 +491,8 @@
     "image": "https://img-c.udemycdn.com/user/200_H/50117550_548e.jpg"
   },
   "mayank-aggarwal": {
-    "image": "https://img-c.udemycdn.com/user/200_H/276974049_edde.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/276974049_edde.jpg",
+    "about": "I’m Mayank Aggarwal, a Senior Machine Learning Engineer with expertise in Software Development, AI, Big Data, Machine Learning, and System Design. I’ve had the opportunity to work with top companies like Goldman Sachs, OYO, and iNeuron, where I contributed to developing AI-driven solutions and scalable data systems in real-world applications.\n\nWith years of industry experience, I’m passionate about teaching and mentoring. I have designed and delivered hands-on courses on platforms like Udemy and YouTube, reaching over 50,000 students. My teaching approach focuses on breaking down complex topics in Data Science, Machine Learning, and Big Data to make them accessible and actionable for everyone.\n\nI aim to help learners gain practical, industry-ready skills by focusing on real-world problem-solving, making AI, DSA, and Big Data easy to understand and implement."
   },
   "tim-buchalka": {
     "image": "https://img-c.udemycdn.com/user/200_H/599932_71aa_5.jpg"
@@ -891,10 +902,12 @@
     "image": "https://img-c.udemycdn.com/user/200_H/192513272_1aac.jpg"
   },
   "anna-kolenkina": {
-    "image": "https://img-c.udemycdn.com/user/200_H/45107262_26fa.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/45107262_26fa.jpg",
+    "about": "I help professionals and fresh graduates to learn digital skills, start new careers, and advance in their roles.\n\nI started my journey in the IT industry and software product management 15 years ago by being an IT and management consultant and transitioning to a full-on startup Product Manager and Product Director. I've built products from scratch for different industries – commodities trading, logistics, natural language processing, and e-learning – and also for different markets, from Europe to Asia.\n\nI have an MBA from the National University of Singapore and a Master's in Applied Informatics.\n\nBefore joining online education, I shared my expertise and knowledge with only a few people - my co-workers and mentees. With Udemy, I'd like to scale and productize my experience to help many more people. I place great value on keeping my lessons not only informative but also interesting and engaging. For this reason, I make sure to include enough resources, examples, and exercises for students to download and work with.\n\nI look forward to having you in my classes!"
   },
   "futureversity-school": {
-    "image": "https://img-c.udemycdn.com/user/200_H/232035354_1154_2.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/232035354_1154_2.jpg",
+    "about": "The FutureVersity School is an online learning platform focused on creating video courses in areas like product design, product management, AI, and generative AI.\n\nWe focus on creating an insightful, easy-to-understand, and engaging course curriculum for you.\n\nThat's why all our courses include a mix of theory and fundamental knowledge, project-based work, as well as up-to-date examples from the industry and subject matter experts.\n\nAnd, of course, there is always a 30-day money-back guarantee for all our courses, so there's no reason to hesitate!\n\nJoin the tribe and learn the skills of the future, today!"
   },
   "houssem-dellai": {
     "image": "https://img-c.udemycdn.com/user/200_H/23968564_9d36_2.jpg"
@@ -1018,5 +1031,21 @@
   "eugene-vyborov": {
     "image": "https://img-c.udemycdn.com/user/200_H/306332537_2019.jpg",
     "about": "I’m Eugene, and I’ve spent my life building and scaling businesses.\n\n\n\nTwo of those (YayPay and WebiNerds) led to successful exits. Now, I invest in exciting companies and build tools that shape the future of work.\n\n\n\nI’m a tech entrepreneur, AI geek, and someone who believes that the biggest shift in work is happening right now.\n\n\n\nThat’s exactly why I built Ability AI.\n\n\n\nWe are a Ukrainian-born martech company that specializes in full-cycle paid marketing and business process automation using AI Agents."
+  },
+  "expertease-global": {
+    "image": "https://img-c.udemycdn.com/user/200_H/117143476_5c14_4.jpg",
+    "about": "ExpertEase Global – Practical Skills. Proven Experts. Real-World Results.\n\nAt ExpertEase Global, we deliver practical, high-impact learning designed to drive real-world results. With over 200,000+ students enrolled and more than 5,600 five-star reviews, we’ve helped learners worldwide gain skills that matter. We bridge the gap between theory and practice. Our team of experienced educators, engineers, and industry experts deliver high-impact courses that equip learners with practical skills in high-demand fields.\n\nOur expert instructors come from diverse industries — including engineering, design, education, project management, content creation, fitness, digital marketing & Much More — and bring real-world experience into every course.\n\n\n\nWhy Choose ExpertEase?\n\nOur courses are meticulously designed with your professional development in mind. At ExpertEase, we do more than educate; we transform your learning experience. Each program is crafted with the involvement of subject matter experts, ensuring the highest quality content that actually Works ! We employ the best teaching methodologies to make learning engaging, effective, and applicable to real-world scenarios.\n\nOur instructors have a proven track record of enhancing the educational journey for students from various backgrounds, including university-level learners and professionals seeking career advancement.\n\n\n\nWe specialize in practical training across various fields including:\n\n- AI Tools, ChatGPT & Prompt Engineering\n\n- HVAC, Plumbing, Engineering & Data Center Design\n\n- Interior Design, Graphic Design & Canva\n\n- Public Speaking, Time Management & Productivity\n\n- Fitness, Career Development & Personal Growth\n\n- Project Management, Microsoft Power Platform, Automation & Content Creation\n\n\n\nEvery course is:\n\n- Designed by industry professionals.\n\n- Focused on actionable skills - not just theory.\n\n- Built to save you time and accelerate your growth\n\nWhether you're an aspiring professional, recent graduate, manager, technical specialist, or lifelong learner, you’ll find practical courses to advance your career with confidence.\n\n\n\nJoin Our Global Community:\n\nWith over 200,000+ enrolled members worldwide, ExpertEase has a vast and vibrant community. Our expertly crafted courses save you countless hours of research, delivering concise, impactful learning that drives real-world success.\n\nTaught By Experts...Learned With Ease.\n\nJoin ExpertEase today and experience the difference. Let us help you achieve your professional goals through practical, industry-specific learning. Welcome aboard!"
+  },
+  "yash-thakker": {
+    "image": "https://img-c.udemycdn.com/user/200_H/29885566_2fd2.jpg",
+    "about": "AI practitioner, product builder, and educator with 12+ years\n\nof experience in Generative AI, LLMs, and AI-powered SaaS development.\n\n\n\nI'm the founder of AISOLO Technologies, where I build and ship\n\nAI products used globally across marketing, productivity, and enterprise\n\nautomation. My background spans Fintech, Edtech, Martech, and Regtech.\n\n\n\nMy courses focus on practical, applied AI: prompt engineering, AI agents,\n\nChatGPT and Claude workflows, content automation, and business AI strategy.\n\nEvery course is built around real implementation, not theory.\n\n\n\nI also run corporate AI training and intensive bootcamps for professionals\n\ntransitioning into AI roles."
+  },
+  "silviu-marisca": {
+    "image": "https://img-c.udemycdn.com/user/200_H/5274990_13b2_12.jpg",
+    "about": "10x Udemy Bestselling Instructor\n\n3x Udemy Highest Rated Instructor\n\n10+ years of teaching experience\n\n\n\nI am thrilled to connect with you. My name is Silviu, and I am a dedicated professional and global instructor with a mission: to bridge the gap between academic theory and real-world business practice.\n\n\n\nMy academic journey is anchored by a Postgraduate in Management from the prestigious Sciences PO Paris, a globally recognized institution known for its rigorous approach to public affairs and international business. This education provided me with a world-class framework in strategic thinking, global economics, and effective organizational leadership - the very principles that underpin the structure and quality of my courses.\n\n\n\nFollowing my studies, I embarked on a dynamic corporate career, accumulating 10 years of intensive work experience across diverse sectors. My specialization lies in the critical fields of Business Analysis (BA) and Project Management (PM). During this time, I've worked on projects ranging from multi-million dollar software implementations to organizational restructuring initiatives.\n\n\n\nMy greatest professional joy is teaching, and I am profoundly proud of the community we have built together. I have had the privilege of teaching more than 250,000 students all over the world, representing a diverse tapestry of cultures, professional backgrounds, and career aspirations. This vast experience has given me a unique perspective on the learning needs of a global workforce.\n\n\n\nMy teaching philosophy is simple: complex topics do not require complex explanations. I focus on clarity, practical examples, and engaging delivery to ensure that the material not only makes sense but sticks with you long after the lecture is over.\n\n\n\nMy journey as an instructor is driven by the desire to see you succeed.\n\n\n\nI look forward to welcoming you into my classroom. Let's work together to transform your professional knowledge, unlock your full potential, and turn your career aspirations into reality.\n\n\n\nJoin one of my courses today, and let's build your success story."
+  },
+  "kazi-ariyan": {
+    "image": "https://img-c.udemycdn.com/user/200_H/15663854_c950_2.jpg",
+    "about": "Hi! I'm Kazi Ariyan. I'm a web developer with a serious love for teaching I am a founder of eLe easy Learning and a passionate Web Developer, Programmer & Instructor.\n\nI am working online for the last 7 years and have created several successful websites running on the internet. I try to create a project-based course that helps you to learn professionally and make you fell as a complete developer. easy learning exists to help you succeed in life.\n\nEach course has been hand-tailored to teach a specific skill. I hope you agree! Whether you’re trying to learn a new skill from scratch or want to refresh your memory on something you’ve learned in the past, you’ve come to the right place.\n\nEducation makes the world a better place. Make your world better with new skills."
   }
 }

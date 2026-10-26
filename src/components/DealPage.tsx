@@ -126,7 +126,27 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
         .map(s => s.replace(/\r/g, "").trim())
         .filter(Boolean);
 
-    const beginnerFriendly = reqHighlights.some(r => /no|beginner|none|without|any|basic|familiar|experience/i.test(r));
+    // Word-boundary match: a loose pattern like /no|beginner|.../ also matches "no"
+    // inside words such as "knowledge", which flips the meaning of the sentence.
+    const BEGINNER_HINT = /\b(no|none|without|beginner|basic|familiar|any)\b/i;
+    const beginnerFriendly = reqHighlights.some(r => BEGINNER_HINT.test(r));
+    const beginnerProof = reqHighlights.find(r => BEGINNER_HINT.test(r));
+    const audienceNote = reqHighlights.length === 0
+        ? null
+        : beginnerFriendly && beginnerProof
+            ? `It is beginner-friendly — ${beginnerProof.charAt(0).toLowerCase()}${beginnerProof.slice(1)}`
+            : `It assumes some prior knowledge: ${reqHighlights.slice(0, 2).join("; ")}`;
+
+    // Primary SEO keyword for this deal page (specific topic first, then broad category)
+    const seoKeyword = (deal.subcategory || deal.category || "").trim() || deal.provider || "Udemy";
+
+    const expiresLabel = deal.expiresAt
+        ? new Date(deal.expiresAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+        : null;
+
+    const verifiedLabel = deal.updatedAt
+        ? new Date(deal.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+        : new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
     const handleCopyCoupon = () => {
         if (deal.coupon && typeof navigator !== 'undefined' && navigator.clipboard) {
@@ -262,6 +282,56 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
 
                 {/* ─── LEFT COLUMN ─── */}
                 <main>
+
+                    {/* Coupon Summary (SEO) — AI-style callout card, à la Udemy "Article Summary" */}
+                    <section aria-labelledby="coupon-summary-heading" style={{ position: "relative", overflow: "hidden", border: "1px solid rgba(212, 167, 55, 0.28)", borderRadius: "18px", padding: "1.5rem", background: "linear-gradient(135deg, rgba(212, 167, 55, 0.10) 0%, rgba(212, 167, 55, 0.03) 45%, var(--bg) 100%)", marginBottom: "2rem" }}>
+                        {/* decorative glow */}
+                        <span aria-hidden="true" style={{ position: "absolute", top: "-60px", right: "-40px", width: "180px", height: "180px", borderRadius: "50%", background: "radial-gradient(circle, rgba(212,167,55,0.22) 0%, rgba(212,167,55,0) 70%)", pointerEvents: "none" }}></span>
+
+                        <div style={{ display: "flex", alignItems: "center", gap: "0.9rem", marginBottom: "0.9rem", flexWrap: "wrap", position: "relative" }}>
+                            <div aria-hidden="true" style={{ width: "42px", height: "42px", borderRadius: "12px", background: "linear-gradient(135deg, var(--brand), var(--brand-hover))", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: "0 4px 14px rgba(212, 167, 55, 0.35)" }}>
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="#080b12">
+                                    <path d="M11 2.5l1.75 4.4 4.4 1.75-4.4 1.75L11 14.8l-1.75-4.4L4.85 8.65l4.4-1.75L11 2.5z"/>
+                                    <path d="M18.5 13.5l.95 2.35 2.35.95-2.35.95-.95 2.35-.95-2.35-2.35-.95 2.35-.95.95-2.35z"/>
+                                </svg>
+                            </div>
+                            <h2 id="coupon-summary-heading" style={{ fontSize: "1.4rem", fontWeight: 700, color: "var(--text)", margin: 0, flex: "1 1 260px", lineHeight: 1.3 }}>
+                                {seoKeyword} Course Coupon — {discountPct > 0 ? `${discountPct}% Off` : "Free"} (Verified)
+                            </h2>
+                            <span style={{ fontSize: "0.65rem", fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: "#080b12", background: "var(--brand)", padding: "5px 10px", borderRadius: "9999px", whiteSpace: "nowrap" }}>
+                                Quick Summary
+                            </span>
+                        </div>
+
+                        <p style={{ fontSize: "0.95rem", lineHeight: 1.75, color: "var(--text-secondary)", margin: 0, position: "relative" }}>
+                            This {seoKeyword} course coupon covers{" "}
+                            <strong style={{ color: "var(--text)" }}>{deal.title}</strong>
+                            {deal.instructor ? ` by ${deal.instructor}` : ""} on {deal.provider || "Udemy"}:{" "}
+                            {price === 0
+                                ? `it drops the regular $${originalPrice.toFixed(2)} price to free for a limited time`
+                                : `it reduces the regular $${originalPrice.toFixed(2)} price to $${price.toFixed(2)} — a saving of $${savings.toFixed(2)}${discountPct > 0 ? ` (${discountPct}% off)` : ""}`}.{" "}
+                            {deal.duration
+                                ? `You get ${deal.duration} of on-demand video, lifetime access, and a certificate of completion`
+                                : "You get lifetime access and a certificate of completion"}
+                            {deal.rating ? `, and the course is rated ${deal.rating.toFixed(1)} out of 5 by ${deal.students ? deal.students.toLocaleString() : "verified"} students` : ""}.{" "}
+                            {audienceNote && <>{audienceNote}.{" "}</>}
+                            Press REDEEM COUPON to apply the discount automatically — the code{" "}
+                            {expiresLabel
+                                ? (countdown ? `is verified active and expires on ${expiresLabel}` : `expired on ${expiresLabel}, so confirm it at checkout`)
+                                : `was last verified on ${verifiedLabel}`}.
+                        </p>
+
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", flexWrap: "wrap", marginTop: "1.1rem", paddingTop: "0.85rem", borderTop: "1px solid rgba(212, 167, 55, 0.18)", fontSize: "0.78rem", color: "var(--muted)", position: "relative" }}>
+                            <span>
+                                Built from verified {deal.provider || "Udemy"} course data · Last checked{" "}
+                                <time dateTime={deal.updatedAt ? new Date(deal.updatedAt).toISOString() : new Date().toISOString()}>{verifiedLabel}</time>
+                            </span>
+                            <span style={{ display: "inline-flex", alignItems: "center", gap: "6px", color: "var(--brand)", fontWeight: 700 }}>
+                                <span aria-hidden="true" style={{ width: "7px", height: "7px", borderRadius: "50%", background: countdown ? "#22c55e" : "#f59e0b" }}></span>
+                                {countdown ? "Coupon active" : "Check coupon"}
+                            </span>
+                        </div>
+                    </section>
 
                     {/* Key Takeaways */}
                     <section aria-labelledby="key-takeaways-heading" style={{ border: "1px solid var(--border)", padding: "1.5rem", borderRadius: "2.5rem", background: "var(--bg)", marginBottom: "2rem" }}>
@@ -442,7 +512,9 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 duration: deal.duration,
                                 url: deal.url,
                                 coupon: deal.coupon,
-                                expiresAt: deal.expiresAt
+                                expiresAt: deal.expiresAt,
+                                category: deal.category,
+                                subcategory: deal.subcategory
                             }}
                             similarDeals={relatedDeals.slice(0, 3).map(r => ({
                                 id: r.id,
@@ -455,7 +527,9 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 duration: r.duration,
                                 url: r.url,
                                 coupon: r.coupon,
-                                expiresAt: r.expiresAt
+                                expiresAt: r.expiresAt,
+                                category: r.category,
+                                subcategory: r.subcategory
                             }))}
                         />
                     )}
@@ -625,15 +699,15 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                         </div>
                     </section>
 
-                    {/* Course Rating Summary */}
+                    {/* Course Rating & Reviews */}
                     {deal.rating && (
                         <section aria-labelledby="ratings-heading" style={{ borderTop: "1px solid var(--border)", paddingTop: "2rem", marginBottom: "2rem" }}>
                             <h2 id="ratings-heading" style={{ fontSize: "1.4rem", fontWeight: 700, color: "var(--text)", marginBottom: "0.75rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
                                 <span style={{ width: "6px", height: "32px", background: "var(--brand)", borderRadius: "9999px" }} aria-hidden="true"></span>
-                                Course Rating Summary
+                                Course Rating &amp; Reviews
                             </h2>
                             <p style={{ fontSize: "0.9rem", color: "var(--muted)", marginBottom: "1.5rem" }}>
-                                This course holds an aggregate rating of {deal.rating?.toFixed(1) || "4.8"} out of 5 based on {deal.students?.toLocaleString() || "1,489"} student reviews on {deal.provider || "Udemy"}. The distribution below shows the approximate percentage of students who gave each star rating.
+                                This {seoKeyword} course holds an aggregate rating of {deal.rating?.toFixed(1) || "4.8"} out of 5 based on {deal.students?.toLocaleString() || "1,489"} student reviews on {deal.provider || "Udemy"}. The distribution below shows the approximate percentage of students who gave each star rating.
                             </p>
                             <div style={{ display: "flex", alignItems: "center", gap: "2rem", flexWrap: "wrap" }}>
                                 <div style={{ textAlign: "center", minWidth: "100px" }}>
@@ -781,27 +855,35 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
 
                     {/* FAQs */}
                     {autoFAQs.length > 0 && (
-                        <section aria-labelledby="faq-heading" style={{ borderTop: "1px solid var(--border)", paddingTop: "2rem", marginBottom: "2rem" }}>
+                        <section aria-labelledby="faq-heading" style={{ border: "1px solid var(--border)", padding: "1.5rem", borderRadius: "2.5rem", background: "var(--bg)", marginBottom: "2rem" }}>
                             <h2 id="faq-heading" style={{ fontSize: "1.4rem", fontWeight: 700, color: "var(--text)", marginBottom: "0.75rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
                                 <span style={{ width: "6px", height: "32px", background: "var(--brand)", borderRadius: "9999px" }} aria-hidden="true"></span>
-                                Frequently Asked Questions
+                                {seoKeyword} Course FAQs — Coupon, Price &amp; Reviews
                             </h2>
                             <p style={{ fontSize: "0.9rem", color: "var(--muted)", marginBottom: "1.5rem" }}>
-                                The following questions and answers cover the most common queries about this course, its coupon code, pricing, and enrollment process. All answers are based on verified data from {deal.provider || "Udemy"} as of {deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}.
+                                Answers to the most common questions about this {seoKeyword} course: whether the coupon is still valid, what it costs, how long the course runs, what you will learn, the prerequisites, the certificate, and how students rate it. All answers are built from verified {deal.provider || "Udemy"} data as of <time dateTime={deal.updatedAt ? new Date(deal.updatedAt).toISOString() : new Date().toISOString()}>{deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>.
                             </p>
                             <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-                                {autoFAQs.map((faq, idx) => (
-                                    <div key={idx} style={{ border: "1px solid #2d3748", borderRadius: "8px", overflow: "hidden" }}>
+                                {autoFAQs.map((faq, idx) => {
+                                    const isOpen = expandedFAQ === idx;
+                                    const closedBg = "transparent";
+                                    const openBg = "rgba(212, 167, 55, 0.10)";
+                                    const hoverBg = "rgba(212, 167, 55, 0.05)";
+                                    return (
+                                    <div key={idx} style={{ border: `1px solid ${isOpen ? "rgba(212, 167, 55, 0.35)" : "var(--border)"}`, borderRadius: "12px", overflow: "hidden", background: "var(--card)", transition: "border-color 0.2s, box-shadow 0.2s", boxShadow: isOpen ? "0 6px 18px rgba(212, 167, 55, 0.10)" : "none" }}>
                                         <button
-                                            onClick={() => setExpandedFAQ(expandedFAQ === idx ? null : idx)}
-                                            aria-expanded={expandedFAQ === idx}
+                                            onClick={() => setExpandedFAQ(isOpen ? null : idx)}
+                                            aria-expanded={isOpen}
                                             aria-controls={`faq-answer-${idx}`}
                                             id={`faq-question-${idx}`}
+                                            onMouseEnter={(e) => { if (!isOpen) e.currentTarget.style.background = hoverBg; }}
+                                            onMouseLeave={(e) => { e.currentTarget.style.background = isOpen ? openBg : closedBg; }}
                                             style={{
                                                 width: "100%",
-                                                padding: "1rem 1.25rem",
-                                                background: expandedFAQ === idx ? "var(--border)" : "var(--border)",
+                                                padding: "0.95rem 1.15rem",
+                                                background: isOpen ? openBg : closedBg,
                                                 border: "none",
+                                                borderLeft: `4px solid ${isOpen ? "var(--brand)" : "transparent"}`,
                                                 textAlign: "left",
                                                 cursor: "pointer",
                                                 display: "flex",
@@ -810,24 +892,31 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                                 fontSize: "0.95rem",
                                                 fontWeight: 600,
                                                 color: "var(--text)",
-                                                gap: "1rem"
+                                                gap: "1rem",
+                                                transition: "background 0.2s"
                                             }}
                                         >
-                                            <span>{faq.q}</span>
-                                            <span aria-hidden="true" style={{ transition: "transform 0.2s", transform: expandedFAQ === idx ? "rotate(180deg)" : "rotate(0deg)", flexShrink: 0 }}>▼</span>
+                                            <span style={{ display: "flex", alignItems: "center", gap: "0.75rem", minWidth: 0 }}>
+                                                <span aria-hidden="true" style={{ fontSize: "0.68rem", fontWeight: 800, color: "var(--brand)", background: "rgba(212, 167, 55, 0.15)", border: "1px solid rgba(212, 167, 55, 0.28)", borderRadius: "6px", padding: "3px 7px", minWidth: "26px", textAlign: "center", lineHeight: 1.3, flexShrink: 0 }}>
+                                                    {String(idx + 1).padStart(2, "0")}
+                                                </span>
+                                                <span style={{ lineHeight: 1.45 }}>{faq.q}</span>
+                                            </span>
+                                            <span aria-hidden="true" style={{ transition: "transform 0.2s, color 0.2s", transform: isOpen ? "rotate(180deg)" : "rotate(0deg)", flexShrink: 0, color: "var(--brand)", fontSize: "0.75rem" }}>▼</span>
                                         </button>
-                                        {expandedFAQ === idx && (
+                                        {isOpen && (
                                             <div
                                                 id={`faq-answer-${idx}`}
                                                 role="region"
                                                 aria-labelledby={`faq-question-${idx}`}
-                                                style={{ padding: "1rem 1.25rem", background: "var(--bg)", borderTop: "1px solid #2d3748" }}
+                                                style={{ padding: "1rem 1.15rem 1.1rem", background: "rgba(212, 167, 55, 0.04)", borderTop: "1px solid var(--border)" }}
                                             >
-                                                <p style={{ color: "var(--text-secondary)", lineHeight: 1.65, fontSize: "0.9rem", margin: 0 }}>{faq.a}</p>
+                                                <p style={{ color: "var(--text-secondary)", lineHeight: 1.7, fontSize: "0.9rem", margin: 0, borderLeft: "2px solid rgba(212, 167, 55, 0.4)", paddingLeft: "0.85rem" }}>{faq.a}</p>
                                             </div>
                                         )}
                                     </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         </section>
                     )}
