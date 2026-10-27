@@ -76,7 +76,8 @@
     "image": "https://img-c.udemycdn.com/user/200_H/30035496_b180_2.jpg"
   },
   "imran-afzal": {
-    "image": "https://img-c.udemycdn.com/user/200_H/37802628_874d_14.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/37802628_874d_14.jpg",
+    "about": "Imran Afzal is the CEO of UTCLI Solutions, a best-selling IT instructor, career coach, and technology educator who has trained over 1 million students worldwide. His teaching focuses on helping professionals build real-world skills in IT career growth, Linux, cloud computing, systems administration, and AI productivity.\n\nWith 25+ years of experience in enterprise IT, leadership, and training, Imran has worked across Fortune 500 environments in finance, fashion, media, and technology. His professional journey began in 2001 at Time Warner in New York City and includes major projects involving data center migrations, VMware deployments, monitoring tools, Linux/UNIX systems, Windows Server, and Amazon cloud migrations.\n\n\n\nThrough his Udemy courses, YouTube channel “Learn with Imran Afzal,” corporate training, and career coaching programs, Imran teaches students how to learn practical technology skills, grow their confidence, prepare for IT jobs, and stay ahead in a fast-changing world where AI is transforming the workplace. His mission is simple: make technology easier to understand and help people build careers they are proud of.\n\n\n\nImran holds a Computer Information Systems degree from Baruch College, CUNY, and an MBA from NYIT. He is certified in Linux System Administration, VMware, UNIX, and Windows Server. Since 2010, his courses and mentoring have helped thousands of professionals improve their skills, transition into IT, and land better job opportunities.\n\n\n\nBeyond technology, Imran is passionate about education and community service. He is also the founder of a nonprofit school for children from Pre-K through 10th grade."
   },
   "dan-mill": {
     "image": "https://img-c.udemycdn.com/user/200_H/226772868_e5a5_8.jpg"
@@ -391,7 +392,8 @@
     "image": "https://img-c.udemycdn.com/user/200_H/13363166_a747.jpg"
   },
   "bhrugen-patel": {
-    "image": "https://img-c.udemycdn.com/user/200_H/81389659_ee92_5.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/81389659_ee92_5.jpg",
+    "about": "I am a passionate and creative software engineer with a strong focus on simplicity and thorough details. I have been programming since high school and I have been involved with multiple web and desktop using .net.\n\nI have a master's of science degree in computer science and a Bachelor of Computer Engineering. I also have many years of experience with .NET C# and .NET MVC. I enjoy teaching along with my full-time job.\n\nFor me, the most important part about writing and teaching code is to eliminate the hardships of every student out there who is willing to learn but cannot find adequate resource which is easy to understand. Coding is a way to be creative and have fun!"
   },
   "neal-davis": {
     "image": "https://img-c.udemycdn.com/user/200_H/23565832_b988_5.jpg"
@@ -1047,5 +1049,9 @@
   "kazi-ariyan": {
     "image": "https://img-c.udemycdn.com/user/200_H/15663854_c950_2.jpg",
     "about": "Hi! I'm Kazi Ariyan. I'm a web developer with a serious love for teaching I am a founder of eLe easy Learning and a passionate Web Developer, Programmer & Instructor.\n\nI am working online for the last 7 years and have created several successful websites running on the internet. I try to create a project-based course that helps you to learn professionally and make you fell as a complete developer. easy learning exists to help you succeed in life.\n\nEach course has been hand-tailored to teach a specific skill. I hope you agree! Whether you’re trying to learn a new skill from scratch or want to refresh your memory on something you’ve learned in the past, you’ve come to the right place.\n\nEducation makes the world a better place. Make your world better with new skills."
+  },
+  "abbas-mehmood": {
+    "image": "https://img-c.udemycdn.com/user/200_H/124462222_fa7d_4.jpg",
+    "about": "I am working in IT since 2005 in various roles , I started my career as System Engineer and later worked as a developer. Couple of years after working as .net developer I finally changed my career to be Data Base Administrator which was my specialization in my MS . I did MS in CS from CUNY. In last 15 years I have worked with Government and Private organization in different capacities mostly working on Data Base administration and development."
   }
 }
