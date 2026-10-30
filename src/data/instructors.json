@@ -333,7 +333,8 @@
     "image": "https://img-c.udemycdn.com/user/200_H/523368_7e83_12.jpg"
   },
   "dr-satyajit-pattnaik": {
-    "image": "https://img-c.udemycdn.com/user/200_H/174695870_71f7_2.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/174695870_71f7_2.jpg",
+    "about": "Dr. Satyajit Pattnaik is a seasoned Data/AI professional based in Hong Kong, renowned for transforming complex data into actionable insights. With over 40,000 followers on LinkedIn and 115,000+ subscribers on YouTube, he combines his expertise in generative ai, machine learning, deep learning, and analytics to mentor aspiring data analysts, scientists & AI engineers.\n\nA graduate of the Swiss School of Business and Management, Satyajit has spearheaded innovative research in voice-based patient classification, achieving remarkable accuracy rates.\n\nHe has trained over 200,000 professionals, including his YouTube channel, where he shares valuable insights and tutorials. Satyajit is also an advocate for generative AI, having conducted workshops that empower learners to harness cutting-edge technologies. His passion for education and commitment to the data community make him a valuable resource for anyone looking to advance their skills in data analytics."
   },
   "six-sigma-academy-amsterdam-ssaa": {
     "image": "https://img-c.udemycdn.com/user/200_H/27870418_4655_13.jpg"
@@ -603,7 +604,8 @@
     "image": "https://img-c.udemycdn.com/user/200_H/123994436_cb08_3.jpg"
   },
   "nitish-shete": {
-    "image": "https://img-c.udemycdn.com/user/200_H/144776630_22ab_4.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/144776630_22ab_4.jpg",
+    "about": "Nitish is a Solutions Architect with 16 years of expertize in Enterprize Integration, Cloud Development and AI integration .\n\nHe has worked for multiple Fortune 500 clients to help them on their Integration, API and AI modernization journey.\n\nHe is certified in multiple technologies related to Integration, Cloud, APIs and  Data Engineering: 4x Boomi | 3x GCP | 1x Azure | 1x Mulesoft | 1x IBM | 1x Snowflake | 2x UiPath"
   },
   "gianni-bruno": {
     "image": "https://img-c.udemycdn.com/user/200_H/35832030_8615_6.jpg"
@@ -929,7 +931,8 @@
     "image": "https://img-c.udemycdn.com/user/200_H/133177966_103b_5.jpg"
   },
   "satyajit-pattnaik": {
-    "image": "https://img-c.udemycdn.com/user/200_H/272248394_88ae_3.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/272248394_88ae_3.jpg",
+    "about": "Zep Tech Solutions is a leading EdTech provider specializing in data analytics, business intelligence, data science, and artificial intelligence. With over 9 years of teaching experience, we have established ourselves as a trusted partner for students and organizations alike.\n\nOur team of expert trainers brings a wealth of knowledge and practical experience to the classroom, ensuring that our courses are not only informative but also relevant to the current job market. We take pride in our ability to tailor our training programs to meet the unique needs of each learner, fostering an engaging and inclusive learning environment.\n\nAt Zep Tech Solutions, we believe in the power of education to transform careers and drive innovation. Our extensive experience working with a diverse range of students and organizations has equipped us to deliver high-quality training that empowers individuals to excel in their fields."
   },
   "shanmukh-sattiraju": {
     "image": "https://img-c.udemycdn.com/user/200_H/49553796_6ae0_4.jpg"
@@ -1068,5 +1071,9 @@
   "laurence-svekis": {
     "image": "https://img-c.udemycdn.com/user/200_H/5581552_b409_27.jpg",
     "about": "Hi, I’m Laurence Svekis, and I’m here to help you learn smarter, build real skills, and confidently use AI and modern tools to create amazing things.\n\nI’m a Google Developer Expert (GDE), international speaker, author, and educator specializing in AI-powered learning, Google Workspace automation, and practical development with Google Apps Script and JavaScript. I’ve been teaching online since 2002 and have helped over two million students worldwide develop real-world skills through hands-on courses, books, and workshops.\n\nMy passion is learning with AI—using AI not as a shortcut, but as a powerful learning partner. I focus on helping learners understand how things work, how to apply AI responsibly, and how to build tools that solve real problems. Many of my courses explore how AI can act as a tutor, assistant, or productivity booster inside everyday tools like Google Docs, Sheets, and Workspace.\n\nI’m especially known for:\n\nGoogle Apps Script & Google Workspace automation\n\nBuilding AI-powered assistants and learning tools\n\nJavaScript for real-world applications\n\nUsing AI to improve learning, productivity, and workflows\n\nI started programming in 1990 and built my first website in 1998. Since then, I’ve worked on countless applications, automation projects, and educational platforms—but teaching has always been at the center of what I do. I love breaking down complex topics into clear, practical steps so you can learn by doing, not just watching.\n\nMy courses are designed to:\n\nBe hands-on and practical\n\nFocus on real-world use cases\n\nHelp you build confidence, not just knowledge\n\nShow you how to use AI as a learning accelerator\n\nTechnology opens doors—but only if you know how to use it. My goal is to help you gain that confidence, build useful skills, and take advantage of the incredible opportunities that modern technology and AI provide.\n\nIf you’re ready to learn, experiment, and build—you’re in the right place."
+  },
+  "code-decode": {
+    "image": "https://img-c.udemycdn.com/user/200_H/186747822_3c6c.jpg",
+    "about": "Code Decode is a team of working IT professionals. We all are working in MNC's across the world. Our goal is to educate the candidates and make them eligible enough to crack interviews. We also aim to make them technically strong so that they can survive after joining new IT companies efficiently."
   }
 }
