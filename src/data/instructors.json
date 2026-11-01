@@ -50,7 +50,8 @@
     "about": "Madan Reddy is the founder of eazybytes, who boasts over 15 years of experience creating and distributing enterprise web applications using Java, Spring, SpringBoot, Microservices, React, Angular, Cloud & Generative AI. He is consistently enthusiastic about staying current and imparting his knowledge with others. With his remarkable talent for simplifying complex concepts, he has been able to instruct novice software developers for many years, and has recently extended his knowledge to Udemy, where he has created top-rated courses. Through his teachings on Udemy, he intends to impart the knowledge he has acquired to other software engineers and college students."
   },
   "scott-duffy": {
-    "image": "https://img-c.udemycdn.com/user/200_H/58935_f800_5.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/58935_f800_5.jpg",
+    "about": "Hi there, my name is Scott Duffy. And I love making complex technical topics easy to understand. \n\n    This has been the basis of my entire career – as a developer, as a development manager, as a software architect – over the past 20 years. I spend half my time in the world of business, explaining complex technical topics to business owners and stakeholders so that they can understand and agree with my approach to solving their business problems with technical solutions. And the other half with developers, explaining the business reasons behind decisions and ensuring that any decisions made on the technical side don't restrict the business in unexpected ways. \n\n    And I'm here on Udemy to teach what I know in an approachable way. I started teaching courses in 2014, and have taught over 1,600,000 students. I am grateful every day for being able to connect with so many students in almost every country around the world.\n\n    I'm a certified Enterprise Architect and certified cloud architect. I have been developing with Microsoft technologies for 20 years, starting with Classic ASP, and all the versions of .NET. We now live in the cloud era, with Microsoft Azure being prevalent in most large enterprises. I'm certified as an Azure Architect and Developer too. As well as AWS Solution Architect Associate (SAA)."
   },
   "phillip-burton": {
     "image": "https://img-c.udemycdn.com/user/200_H/12861544_ccc3_4.jpg"
@@ -330,7 +331,8 @@
     "image": "https://img-c.udemycdn.com/user/200_H/79939000_a4b9_2.jpg"
   },
   "sandeep-kumar-quality-gurus-inc": {
-    "image": "https://img-c.udemycdn.com/user/200_H/523368_7e83_12.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/523368_7e83_12.jpg",
+    "about": "I am Sandeep Kumar, founder of Quality Gurus Inc. and creator of multiple quality management, Six Sigma, Lean, auditing, and ASQ exam preparation courses. Over the years, I have helped more than 300,000 professionals build practical quality skills and prepare for professional certifications. This community is designed for quality professionals, Six Sigma practitioners, auditors, engineers, supervisors, managers, and anyone serious about career growth in quality. Inside the community, members can learn practical tools, ask questions, discuss real workplace challenges, prepare for ASQ exams, and connect with others on the same professional journey. My teaching style is simple, practical, and focused on helping you understand concepts clearly so you can apply them with confidence. Whether you are preparing for CQE, CQA, CMQ/OE, CSSGB, CSSBB, CQIA, CCQM, CSQP or another quality-related certification, this community will help you stay focused, motivated, and supported."
   },
   "dr-satyajit-pattnaik": {
     "image": "https://img-c.udemycdn.com/user/200_H/174695870_71f7_2.jpg",
@@ -1075,5 +1077,9 @@
   "code-decode": {
     "image": "https://img-c.udemycdn.com/user/200_H/186747822_3c6c.jpg",
     "about": "Code Decode is a team of working IT professionals. We all are working in MNC's across the world. Our goal is to educate the candidates and make them eligible enough to crack interviews. We also aim to make them technically strong so that they can survive after joining new IT companies efficiently."
+  },
+  "pawe-krakowiak": {
+    "image": "https://img-c.udemycdn.com/user/200_H/48092200_9aab_8.jpg",
+    "about": "Python Developer/AI Enthusiast/Data Scientist/Stockbroker\n\n\nEnthusiast of new technologies, particularly in the areas of artificial intelligence, the Python language, big data and cloud solutions. Graduate of postgraduate studies at the Polish-Japanese Academy of Information Technology in the field of Computer Science and Big Data specialization. Master's degree graduate in Financial and Actuarial Mathematics at the Faculty of Mathematics and Computer Science at the University of Lodz. Former PhD student at the faculty of mathematics. Since 2015, a licensed Securities Broker with the right to provide investment advisory services (license number 3073). Lecturer at the GPW Foundation, conducting training for investors in the field of technical analysis, behavioral finance, and principles of managing a portfolio of financial instruments.\n\nFounder at e-smartdata"
   }
 }
