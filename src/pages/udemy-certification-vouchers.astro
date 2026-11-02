@@ -7,8 +7,8 @@ const lastModified = new Date().toISOString().split("T")[0];
 const updatedLong = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 const canonicalUrl = "https://coursespeak.com/udemy-certification-vouchers";
 
-const pageTitle = `Udemy Exam Vouchers ${currentYear}: Save 10% on 35 Exams | CourseSpeak`;
-const pageDescription = `Buy 35 official Udemy certification exam vouchers in ${currentYear} — CompTIA Security+ SY0-701, AWS SAA-C03 & CLF-C02, Microsoft AZ-900 & AZ-104. Save ~10% vs retail, valid 9+ months, Second Chance retake included. Pearson VUE scheduling.`;
+const pageTitle = `Udemy Exam Vouchers ${currentYear}: 35 Voucher Products, Save ~10% | CourseSpeak`;
+const pageDescription = `Buy 35 official Udemy certification exam vouchers in ${currentYear} — CompTIA Security+ SY0-701, AWS SAA-C03 & CLF-C02, Microsoft AZ-900 & AZ-104. Save ~10% vs retail, valid 9+ months, Second Chance and Retake Assurance bundles available. Pearson VUE scheduling.`;
 
 const faqs = [
   { q: "How do Udemy certification exam vouchers work?", a: "A voucher is a prepaid exam seat. You buy it on Udemy for roughly 10% less than the retail exam fee, receive a voucher code in My learning → Certifications, then enter that code at checkout when you schedule the exam on the provider's site — Pearson VUE for AWS and Microsoft, CompTIA's scheduler for CompTIA. Exams can be taken online with a proctor or in person at a test center." },
@@ -61,9 +61,9 @@ const topPicks = [comptiaVouchers[0], awsVouchers[2], microsoftVouchers[0], comp
     <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "700px", margin: "0 auto 1.5rem", lineHeight: 1.7 }}>
       A voucher is a prepaid exam seat: buy it on Udemy for less than retail, get a code in
       <em> My learning → Certifications</em>, and paste it at checkout when you schedule with Pearson VUE or CompTIA.
-      This page tracks <strong style={{ color: "var(--text)" }}>35 official vouchers</strong> — 15 CompTIA, 12 AWS, 8 Microsoft —
-      each valid at least 9 months with a retake safety net. Udemy launched its end-to-end certification journey in
-      February 2026 (12 AWS vouchers, 10M+ prep enrollments in the prior year); CompTIA vouchers followed on Udemy in
+      This page tracks <strong style={{ color: "var(--text)" }}>35 official voucher products</strong> — 15 CompTIA, 12 AWS, 8 Microsoft —
+      each valid at least 9 months, with optional Second Chance / Retake Assurance bundles on most. Udemy launched its end-to-end certification journey in
+      February 2026 (12 AWS voucher products, 10M+ prep enrollments in the prior year); CompTIA vouchers followed on Udemy in
       August 2025 at ~10% off retail exam prices.
     </p>
     <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center", flexWrap: "wrap" }}>
@@ -113,18 +113,19 @@ const topPicks = [comptiaVouchers[0], awsVouchers[2], microsoftVouchers[0], comp
       <p style={{ color: "var(--muted)", fontSize: "0.9rem", maxWidth: "640px", margin: "0.5rem auto 0" }}>Indicative retail fees (Americas, 2026) versus the ~10% Udemy voucher saving. Confirm the live price on each voucher page — pricing varies by region.</p>
     </div>
     <div class="table-wrap"><table class="compare-table">
-      <thead><tr><th>Exam</th><th>Code</th><th>Retail (approx)</th><th>Via Udemy</th><th>Retake cover</th></tr></thead>
+      <thead><tr><th>Exam</th><th>Code</th><th>Retail (approx)</th><th>Via Udemy</th><th>Retake option</th></tr></thead>
       <tbody>
-        <tr><td>CompTIA Security+</td><td>SY0-701</td><td>~$404</td><td>~10% less</td><td>Second Chance</td></tr>
+        <tr><td>CompTIA Security+</td><td>SY0-701</td><td>~$404</td><td>~10% less</td><td>Second Chance bundle</td></tr>
         <tr><td>CompTIA A+ (per core)</td><td>Core 1 / Core 2</td><td>~$253</td><td>~10% less</td><td>—</td></tr>
-        <tr><td>CompTIA Network+</td><td>N10-009</td><td>~$358</td><td>~10% less</td><td>Second Chance</td></tr>
-        <tr><td>AWS Cloud Practitioner</td><td>CLF-C02</td><td>$100</td><td>~10% less</td><td>Second Chance</td></tr>
-        <tr><td>AWS Associate (SAA-C03 etc.)</td><td>SAA-C03</td><td>$150</td><td>~10% less</td><td>Second Chance</td></tr>
-        <tr><td>AWS Professional / Specialty</td><td>SAP / DOP / SCS</td><td>$300</td><td>~10% less</td><td>Second Chance</td></tr>
+        <tr><td>CompTIA Network+</td><td>N10-009</td><td>~$358</td><td>~10% less</td><td>Second Chance bundle</td></tr>
+        <tr><td>AWS Cloud Practitioner</td><td>CLF-C02</td><td>$100</td><td>$90 voucher-only</td><td>Second Chance bundle $115.50</td></tr>
+        <tr><td>AWS Associate (SAA-C03 etc.)</td><td>SAA-C03</td><td>$150</td><td>$135 voucher-only</td><td>Second Chance bundle $177.80</td></tr>
+        <tr><td>AWS Professional / Specialty</td><td>SAP-C03 / DOP-C02 / SCS-C03</td><td>$300</td><td>$270 voucher-only</td><td>Second Chance bundle $348.80</td></tr>
         <tr><td>Microsoft Fundamentals</td><td>AZ-900 / DP-900</td><td>~$99</td><td>10% off</td><td>—</td></tr>
-        <tr><td>Microsoft Associate / Expert</td><td>AZ-104 / AZ-500 / AZ-305</td><td>~$165</td><td>10% off</td><td>Retake Assurance</td></tr>
+        <tr><td>Microsoft Associate / Expert</td><td>AZ-104 / AZ-500 / AZ-305</td><td>~$165</td><td>10% off</td><td>Retake Assurance bundle</td></tr>
       </tbody>
     </table></div>
+    <p style={{ color: "var(--muted)", fontSize: "0.8rem", margin: "0.75rem 0 0", lineHeight: 1.6 }}>Voucher-only prices shown; Second Chance and Retake Assurance are optional bundles that cost more. US list prices; regional pricing varies.</p>
   </div>
 </section>
 
@@ -185,7 +186,7 @@ const topPicks = [comptiaVouchers[0], awsVouchers[2], microsoftVouchers[0], comp
       <h2 class="section-heading">Which Exam First? A Practical Order</h2>
     </div>
     <div style={{ display: "grid", gap: "0.9rem" }}>
-      {[["Start here (no experience)", "CompTIA Tech+ → A+ → Network+ · AWS Cloud Practitioner CLF-C02 · Microsoft AZ-900. Any of these validates fundamentals to employers within 4–8 weeks of study."], ["First cloud job", "AWS Solutions Architect Associate SAA-C03 or Microsoft AZ-104. Both are the most-requested cloud certs in job posts and pair directly with hands-on labs."], ["Security track", "Security+ SY0-701 → CySA+ → PenTest+ → SecurityX. This is the DoD-8570-recognized ladder many SOC analyst roles require."], ["Data & AI track", "CompTIA Data+ → AWS Data Engineer Associate → AWS ML Specialty, or Microsoft DP-900 → AI-102. Pick one cloud and go deep rather than collecting fundamentals."]].map(([t, d]) => (
+      {[["Start here (no experience)", "CompTIA Tech+ → A+ → Network+ · AWS Cloud Practitioner CLF-C02 · Microsoft AZ-900. Any of these validates fundamentals to employers within 4–8 weeks of study."], ["First cloud job", "AWS Solutions Architect Associate SAA-C03 or Microsoft AZ-104. Both are the most-requested cloud certs in job posts and pair directly with hands-on labs."], ["Security track", "Security+ SY0-701 → CySA+ → PenTest+ → SecurityX. This is the DoD-8570-recognized ladder many SOC analyst roles require."], ["Data & AI track", "CompTIA Data+ → AWS Data Engineer Associate → AWS ML Engineer Associate (MLA-C02), or Microsoft DP-900 → AI-102. Pick one cloud and go deep rather than collecting fundamentals."]].map(([t, d]) => (
         <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "12px", padding: "1.25rem 1.4rem" }}>
           <h3 style={{ margin: "0 0 0.35rem", fontSize: "0.98rem" }}>{t}</h3>
           <p style={{ margin: 0, color: "var(--muted)", fontSize: "0.9rem", lineHeight: 1.7 }}>{d}</p>

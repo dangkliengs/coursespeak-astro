@@ -12,6 +12,8 @@ function img(file: string) {
   return `/assets/images/vouchers/${file}.svg`;
 }
 
+export type VoucherStatus = "active" | "updated" | "retiring" | "retired";
+
 export interface Voucher {
   code: string;
   title: string;
@@ -21,6 +23,8 @@ export interface Voucher {
   blurb: string;
   url: string;
   badge?: string;
+  note?: string;
+  status?: VoucherStatus;
 }
 
 export const comptiaVouchers: Voucher[] = [
@@ -42,18 +46,18 @@ export const comptiaVouchers: Voucher[] = [
 ];
 
 export const awsVouchers: Voucher[] = [
-  { code: "CLF-C02", title: "AWS Certified Cloud Practitioner Exam Voucher", category: "Foundational", provider: "aws", image: img("aws-certified-cloud-practitioner"), blurb: "Foundational exams. Voucher + Second Chance ≥9 mo. Retail $100.", url: v("aws-certified-cloud-practitioner") },
-  { code: "AIF-C01", title: "AWS Certified AI Practitioner Exam Voucher", category: "Foundational", provider: "aws", image: img("aws-certified-ai-practitioner"), blurb: "Foundational exams. Valid ≥9 months. Retail $100.", url: v("aws-certified-ai-practitioner"), badge: "New" },
-  { code: "SAA-C03", title: "AWS Solutions Architect – Associate Exam Voucher", category: "Associate", provider: "aws", image: img("aws-certified-solutions-architect-associate"), blurb: "All Associate exams. Valid ≥9 months. Retail $150.", url: v("aws-certified-solutions-architect-associate") },
-  { code: "Developer", title: "AWS Developer – Associate Exam Voucher", category: "Associate", provider: "aws", image: img("aws-certified-developer-associate"), blurb: "All Associate exams. Voucher + Second Chance ≥9 mo.", url: v("aws-certified-developer-associate") },
-  { code: "Data", title: "AWS Data Engineer – Associate Exam Voucher", category: "Associate", provider: "aws", image: img("aws-certified-data-engineer-associate"), blurb: "All Associate exams. Voucher + Second Chance ≥9 mo.", url: v("aws-certified-data-engineer-associate") },
-  { code: "Operations", title: "AWS CloudOps Engineer – Associate Exam Voucher", category: "Associate", provider: "aws", image: img("aws-certified-cloudops-engineer-associate"), blurb: "All Associate exams. Voucher + Second Chance ≥9 mo.", url: v("aws-certified-cloudops-engineer-associate") },
-  { code: "Machine Learning", title: "AWS ML Engineer – Associate Exam Voucher", category: "Associate", provider: "aws", image: img("aws-certified-machine-learning-engineer-associate"), blurb: "All Associate exams. Voucher + Second Chance ≥9 mo.", url: v("aws-certified-machine-learning-engineer-associate") },
-  { code: "Architect", title: "AWS Solutions Architect – Professional Exam Voucher", category: "Professional", provider: "aws", image: img("aws-certified-solutions-architect-professional"), blurb: "Pro & Specialty exams. Valid ≥9 months. Retail $300.", url: v("aws-certified-solutions-architect-professional") },
-  { code: "DevOps", title: "AWS DevOps Engineer – Professional Exam Voucher", category: "Professional", provider: "aws", image: img("aws-certified-devops-engineer-professional"), blurb: "Pro & Specialty exams. + Second Chance. Retail $300.", url: v("aws-certified-devops-engineer-professional") },
-  { code: "Security", title: "AWS Security – Specialty Exam Voucher", category: "Specialty", provider: "aws", image: img("aws-certified-security-specialty"), blurb: "Pro & Specialty exams. + Second Chance. Retail $300.", url: v("aws-certified-security-specialty") },
-  { code: "Machine Learning", title: "AWS Machine Learning – Specialty Exam Voucher", category: "Specialty", provider: "aws", image: img("aws-certified-machine-learning-specialty"), blurb: "Pro & Specialty exams. + Second Chance. Retail $300.", url: v("aws-certified-machine-learning-specialty") },
-  { code: "Networking", title: "AWS Advanced Networking – Specialty Exam Voucher", category: "Specialty", provider: "aws", image: img("aws-certified-advanced-networking-specialty"), blurb: "Pro & Specialty exams. Valid ≥9 months. Retail $300.", url: v("aws-certified-advanced-networking-specialty") },
+  { code: "CLF-C02", title: "AWS Certified Cloud Practitioner Exam Voucher", category: "Foundational", provider: "aws", image: img("aws-certified-cloud-practitioner"), blurb: "Foundational. Voucher only $90 (retail $100); Second Chance bundle $115.50. Valid ≥9 months.", url: v("aws-certified-cloud-practitioner"), status: "active" },
+  { code: "AIF-C01", title: "AWS Certified AI Practitioner Exam Voucher", category: "Foundational", provider: "aws", image: img("aws-certified-ai-practitioner"), blurb: "Foundational. Voucher only $90 (retail $100); Second Chance bundle $115.50. Valid ≥9 months.", url: v("aws-certified-ai-practitioner"), status: "active" },
+  { code: "SAA-C03", title: "AWS Solutions Architect – Associate Exam Voucher", category: "Associate", provider: "aws", image: img("aws-certified-solutions-architect-associate"), blurb: "Associate. Voucher only $135 (retail $150); Second Chance bundle $177.80. Covers all Associate exams.", url: v("aws-certified-solutions-architect-associate"), status: "active" },
+  { code: "DVA-C03", title: "AWS Developer – Associate Exam Voucher", category: "Associate", provider: "aws", image: img("aws-certified-developer-associate"), blurb: "Associate. DVA-C02 through Nov 30, 2026; DVA-C03 from Dec 1. Voucher only $135; Second Chance bundle $177.80.", url: v("aws-certified-developer-associate"), badge: "Updated", note: "DVA-C02 last day Nov 30, 2026. DVA-C03 registration opened Oct 27; GA Dec 1.", status: "updated" },
+  { code: "DEA-C01", title: "AWS Data Engineer – Associate Exam Voucher", category: "Associate", provider: "aws", image: img("aws-certified-data-engineer-associate"), blurb: "Associate. Voucher only $135 (retail $150); Second Chance bundle $177.80. Covers all Associate exams.", url: v("aws-certified-data-engineer-associate"), status: "active" },
+  { code: "SOA-C03", title: "AWS CloudOps Engineer – Associate Exam Voucher", category: "Associate", provider: "aws", image: img("aws-certified-cloudops-engineer-associate"), blurb: "Associate. Formerly SysOps Administrator. Voucher only $135; Second Chance bundle $177.80. Covers all Associate exams.", url: v("aws-certified-cloudops-engineer-associate"), status: "active" },
+  { code: "MLA-C02", title: "AWS ML Engineer – Associate Exam Voucher", category: "Associate", provider: "aws", image: img("aws-certified-machine-learning-engineer-associate"), blurb: "Associate. MLA-C02 beta is open at $75; GA Jan 14, 2027. Voucher only $135 for the standard exam; Second Chance bundle $177.80.", url: v("aws-certified-machine-learning-engineer-associate"), badge: "Beta", note: "MLA-C01 English retired Sept 28, 2026. MLA-C02 beta runs now; standard exam pricing starts Jan 14, 2027. The Associate voucher is tier-wide.", status: "updated" },
+  { code: "SAP-C03", title: "AWS Solutions Architect – Professional Exam Voucher", category: "Professional", provider: "aws", image: img("aws-certified-solutions-architect-professional"), blurb: "Professional. SAP-C02 through Nov 16, 2026; SAP-C03 from Nov 17. Voucher only $270; Second Chance bundle $348.80.", url: v("aws-certified-solutions-architect-professional"), badge: "Updated", note: "SAP-C02 last day Nov 16, 2026. SAP-C03 registration opened Oct 27; GA Nov 17.", status: "updated" },
+  { code: "DOP-C02", title: "AWS DevOps Engineer – Professional Exam Voucher", category: "Professional", provider: "aws", image: img("aws-certified-devops-engineer-professional"), blurb: "Professional. Voucher only $270 (retail $300); Second Chance bundle $348.80. Valid ≥9 months.", url: v("aws-certified-devops-engineer-professional"), status: "active" },
+  { code: "SCS-C03", title: "AWS Security – Specialty Exam Voucher", category: "Specialty", provider: "aws", image: img("aws-certified-security-specialty"), blurb: "Specialty. The active AWS Specialty exam. Voucher only $270; Second Chance bundle $348.80. Valid ≥9 months.", url: v("aws-certified-security-specialty"), status: "active" },
+  { code: "MLS-C01", title: "AWS Machine Learning – Specialty Exam Voucher (legacy listing)", category: "Specialty", provider: "aws", image: img("aws-certified-machine-learning-specialty"), blurb: "Exam retired March 31, 2026. This Professional/Specialty voucher is tier-wide and can still be used for any active Pro/Specialty exam.", url: v("aws-certified-machine-learning-specialty"), badge: "Retired", note: "MLS-C01 retired Mar 31, 2026. The voucher remains usable across the Pro/Specialty tier.", status: "retired" },
+  { code: "ANS-C01", title: "AWS Advanced Networking – Specialty Exam Voucher", category: "Specialty", provider: "aws", image: img("aws-certified-advanced-networking-specialty"), blurb: "Retiring Dec 31, 2026 — no replacement announced. Voucher is tier-wide and can be used for any active Pro/Specialty exam.", url: v("aws-certified-advanced-networking-specialty"), badge: "Retiring", note: "ANS-C01 last day Dec 31, 2026. No replacement exam announced.", status: "retiring" },
 ];
 
 export const microsoftVouchers: Voucher[] = [
@@ -71,7 +75,7 @@ export const allVouchers = [...comptiaVouchers, ...awsVouchers, ...microsoftVouc
 
 export const providerMeta = {
   comptia: { name: "CompTIA", count: 15, color: "#C20D00", page: "/udemy-comptia-exam-vouchers", image: "/assets/images/vouchers/provider-comptia.svg", desc: "Security+ SY0-701, A+ Core 1 & 2, Network+ N10-009, CySA+, PenTest+, Linux+, CloudNetX, DataAI, SecurityX + 6 more." },
-  aws: { name: "AWS", count: 12, color: "#FF9900", page: "/udemy-aws-exam-vouchers", image: "/assets/images/vouchers/provider-aws.svg", desc: "Cloud Practitioner CLF-C02, Solutions Architect SAA-C03, Developer, DevOps, Security & ML. Pearson VUE scheduling." },
+  aws: { name: "AWS", count: 12, color: "#FF9900", page: "/udemy-aws-exam-vouchers", image: "/assets/images/vouchers/provider-aws.svg", desc: "Cloud Practitioner CLF-C02, Solutions Architect SAA-C03, Professional SAP-C03, Developer DVA-C03, Security SCS-C03. 12 voucher products, 10 current exams. Pearson VUE scheduling." },
   microsoft: { name: "Microsoft", count: 8, color: "#00A4EF", page: "/udemy-microsoft-exam-vouchers", image: "/assets/images/vouchers/provider-microsoft.svg", desc: "AZ-900, DP-900, AZ-104, AZ-500, AI-102, AZ-305, AZ-800, MD-102. Flat 10% off + Retake Assurance." },
 };
 
@@ -84,9 +88,9 @@ export const comptiaGroupBlurbs: Record<string, string> = {
 
 export const awsGroupBlurbs: Record<string, string> = {
   "Foundational": "The zero-experience starting point. Cloud Practitioner CLF-C02 and AI Practitioner AIF-C01 need only 1-3 weeks of study and have no prerequisites.",
-  "Associate": "The job-getter tier and the most requested AWS certs in job listings. Solutions Architect SAA-C03 is the flagship; Developer, Data Engineer, CloudOps, and ML Engineer go role-specific.",
-  "Professional": "Advanced architect and DevOps roles for experienced practitioners. Take one of these after an Associate cert, not before.",
-  "Specialty": "Deep specialist exams for experienced engineers. Security, Machine Learning, and Advanced Networking are among the highest-paid AWS certifications.",
+  "Associate": "The job-getter tier and the most requested AWS certs in job listings. Solutions Architect SAA-C03 is the flagship; Developer moves to DVA-C03 on Dec 1, Data Engineer DEA-C01 and CloudOps SOA-C03 are current, and ML Engineer MLA-C02 is in beta until its Jan 14, 2027 GA.",
+  "Professional": "Advanced architect and DevOps roles for experienced practitioners. SAP-C03 replaced SAP-C02 on Nov 17, 2026; DOP-C02 remains current. Take one after an Associate cert, not before.",
+  "Specialty": "Security SCS-C03 is the active Specialty exam. Machine Learning Specialty retired March 31, 2026, and Advanced Networking retires Dec 31, 2026 — their voucher listings remain tier-wide, so they still work for any active Pro/Specialty exam.",
 };
 
 export const microsoftGroupBlurbs: Record<string, string> = {
