@@ -17,7 +17,8 @@
     "about": "I'm Frank Kane, a former senior manager at Amazon and IMDb, and the founder of Sundog Education. I've helped over a million students worldwide learn AI, machine learning, AWS, and other valuable technical skills.\n\nWant to go beyond watching courses and start building real AI systems? I also host the AI Engineering Guild, a community where developers work on monthly AI projects, collaborate with their peers, and join me for live discussions about AI engineering, emerging technologies, and career development.\n\nAfter nine years at Amazon and IMDb, where I led engineering teams and helped shape technologies backed by 26 issued patents, I founded Sundog Education to make complex technical topics accessible to everyone.\n\nOur teaching style is to simplify complex concepts - once you cut through all the notation and jargon, most of AI and machine learning is pretty easy to understand. We make these advanced topics accessible to anyone with a modest technical background, always using plain English and examples to drive it home. We make learning easy, hands-on, and fun."
   },
   "mumshad-mannambeth": {
-    "image": "https://img-c.udemycdn.com/user/200_H/31303958_8529_3.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/31303958_8529_3.jpg",
+    "about": "Mumshad is an IT Solutions Architect and specializes in Cloud Native Computing, Automation and DevOps. He is the founder of KodeKloud - a hands-on learning platform and a Certified Kubernetes Training Partner. He is passionate about learning new technology and teaching. He believes the best way to learn is to learn by doing and in a fun way.  Mumshad has authored multiple courses on DevOps, Cloud and Automation technologies. His courses focus on providing students with an interactive and hands-on experience in learning new technology that makes learning really interesting."
   },
   "kodekloud-training": {
     "image": "https://img-c.udemycdn.com/user/200_H/61457358_a661_18.jpg",
@@ -112,7 +113,8 @@
     "image": "https://img-c.udemycdn.com/user/200_H/41384972_fbb7_2.jpg"
   },
   "scott-barrett": {
-    "image": "https://img-c.udemycdn.com/user/200_H/84263376_7b7d_36.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/84263376_7b7d_36.jpg",
+    "about": "Hello, I'm Scott, a developer with a passion for teaching. \n\nI've helped Hundreds of Thousands of students learn to code and change their lives by becoming developers.\n\nMy courses make learning to code fun and make hard concepts easy to understand. \n\nHow do I do this?  By using animations!\n\nAnimating the code and the concepts makes everything more visually engaging which allows students to learn more material - in less time - with higher retention (a pretty good combination).\n\nI will use these visuals to guide you, step-by-step, through the entire course.\n\nMy courses also include dozens-and-dozens of Coding Exercises.  So you can immediately put everything into practice as soon as you learn it (a very important step).\n\nI have made several Free Sample Videos available for each course so you can see the difference the animations make. \n\nAlso, I am very active on the Q&A, so I will be with you every_step_of _the_way.\n\nI look forward to seeing you in the course.\n\nLet's get started!  :-)"
   },
   "nikolai-schuler": {
     "image": "https://img-c.udemycdn.com/user/200_H/99103732_8c1e_4.jpg"
@@ -207,7 +209,8 @@
     "about": "My name is Piyush Garg, and I'm a full-stack developer, educator, and content creator dedicated to helping developers level up their careers.\n\nWith over 325,000 subscribers on YouTube, 80,000+ followers on LinkedIn, and 30,000+ on X (formerly Twitter), I've built a strong tech community by teaching real-world coding skills through project-based learning. I've worked across the stack using Node.js, React, Docker, AWS, Redis, WebRTC, and more—translating that experience into high-impact, beginner-to-advanced content that’s both practical and industry-relevant.\n\nMy teaching style is hands-on, fast-paced, and focused on building real projects—not just theory. Whether you're just getting started or looking to deepen your skills, my goal is to make you confident and job-ready.\n\nJoin me on Udemy to build powerful applications, understand complex systems, and learn by doing."
   },
   "eden-marco": {
-    "image": "https://img-c.udemycdn.com/user/200_H/30508036_0f4a_4.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/30508036_0f4a_4.jpg",
+    "about": "I’m a passionate Software Engineer with years of experience in back-end development and cloud architecture. I was one of the first engineers at Orca Security, where I helped shape the company’s core technology, and today I work as a GenAI Architect at Google Cloud, helping organizations design and deploy advanced generative AI and cloud-native solutions.\n\n\n\nI’m also proud to be a LangChain Ambassador, actively contributing to the open-source community and helping developers build powerful LLM applications using the LangChain ecosystem.\n\n\n\nI hold a Bachelor’s degree in Computer Science from the Technion, and I’ve always had a deep passion for teaching and mentorship. I  taught Functional Programming and Introduction to Computer Science at Reichman University, where I guided the next generation of software engineers.\n\n\n\nMy courses are built on real-world experience and designed to give you practical, production-ready skills"
   },
   "haris-ali-khan": {
     "image": "https://img-c.udemycdn.com/user/200_H/239666752_15ea.jpg"
@@ -502,7 +505,8 @@
     "image": "https://img-c.udemycdn.com/user/200_H/278531_86c0_4.jpg"
   },
   "karan-gupta": {
-    "image": "https://img-c.udemycdn.com/user/200_H/50117550_548e.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/50117550_548e.jpg",
+    "about": "Meet Karan Gupta, a DevOps Engineer renowned for crafting scalable and reliable infrastructure solutions. With notable expertise in cloud technologies, Karan proudly holds certifications as an 4xAWS and a Certified Kubernetes Administrator, a testament to his unwavering commitment to excellence in the field. Has guided more that 5k students in person trainings.\n\nFrom startups to enterprise-level organizations, Karan has been an instrumental partner in designing and implementing CI/CD pipelines tailored to meet each client's unique requirements. His dedication to automating build processes, orchestrating deployments, and integrating cutting-edge technologies like Kubernetes and AWS has been paramount in driving continuous improvement and innovation. He has published over 10 research papers for the betterment of society using technology.\n\nIn his spare time, he love gymming and travelling to the new destinations."
   },
   "mayank-aggarwal": {
     "image": "https://img-c.udemycdn.com/user/200_H/276974049_edde.jpg",

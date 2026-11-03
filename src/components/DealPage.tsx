@@ -48,7 +48,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
     const instructorsList = parseInstructors(deal.instructor);
 
     const bodyContent = deal.content || deal.description || "";
-    
+
     const isHtmlContent = bodyContent.includes('<') && bodyContent.includes('>');
     const htmlContent = useMemo(() => {
         if (isHtmlContent) {
@@ -75,13 +75,13 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
     const [countdown, setCountdown] = useState<{ days: number; hours: number; minutes: number; seconds: number } | null>(null);
 
     const markdownRef = useRef<HTMLDivElement>(null);
-    
+
     useEffect(() => {
         if (markdownRef.current && htmlContent) {
             markdownRef.current.innerHTML = htmlContent;
         }
     }, [htmlContent]);
-    
+
     useEffect(() => {
         if (!deal.expiresAt) return;
         const updateCountdown = () => {
@@ -690,7 +690,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                     <strong style={{ color: "var(--brand)" }}>New to redeeming coupons?</strong>{" "}
                                     Visit our <a href="/how-to-redeem-coupon" style={{ color: "var(--brand)", textDecoration: "underline" }}>step-by-step guide</a> for detailed instructions on how to apply coupon codes.
                                     <span style={{ display: "block", marginTop: "4px", color: "var(--muted)", fontSize: "0.78rem" }}>
-                                        Coupon last verified {deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : "recently"}. 
+                                        Coupon last verified {deal.updatedAt ? new Date(deal.updatedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : "recently"}.
                                         {discountPct > 0 ? `At $${price.toFixed(2)} you save $${savings.toFixed(2)} compared to the standard $${originalPrice.toFixed(2)} price, ` : `This course is currently free, `}
                                         and {deal.provider || "Udemy"} coupons are time-limited — redeem as soon as possible.
                                     </span>
@@ -752,7 +752,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 </svg>
                                 Udemy Personal Plan
                             </span>
-                            <h2>Go Unlimited with <span style={{ color: "var(--brand)" }}>Udemy Personal Plan</span> — 26,000+ Premium Courses</h2>
+                            <h2>Go Unlimited with <span style={{ color: "var(--brand)" }}>Udemy Personal Plan</span> — 28,000+ Premium Courses</h2>
                             <p className="cta-subtext">One flat price, unlimited learning. Cancel anytime.</p>
                             <div className="cta-actions">
                                 <a href="https://trk.udemy.com/c/6564357/3708489/39854" target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-lg">
@@ -761,7 +761,7 @@ export default function DealPage({ deal, relatedDeals = [] }: { deal: Deal, rela
                                 </a>
                             </div>
                             <div className="cta-features">
-                                <span><span className="cta-dot"></span>26,000+ courses</span>
+                                <span><span className="cta-dot"></span>28,000+ courses</span>
                                 <span><span className="cta-dot"></span>7-day free trial</span>
                                 <span><span className="cta-dot"></span>Cancel anytime</span>
                                 <span><span className="cta-dot"></span>From $20/month</span>

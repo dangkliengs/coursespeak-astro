@@ -1,0 +1,622 @@
+/* Voucher page v2: split hero + high-visibility voucher listings */
+
+.vp-hero {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+  background:
+    radial-gradient(820px 420px at 6% -12%, rgba(212, 167, 55, 0.16), transparent 64%),
+    radial-gradient(640px 360px at 100% 6%, rgba(212, 167, 55, 0.07), transparent 62%),
+    linear-gradient(180deg, #080b12 0%, #0a0e17 100%);
+}
+
+.vp-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.026) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.026) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.72), transparent 82%);
+  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.72), transparent 82%);
+}
+
+.vp-hero-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.06fr) minmax(340px, 0.94fr);
+  gap: 2.5rem;
+  align-items: center;
+  max-width: 1180px;
+  padding-top: 2.35rem;
+  padding-bottom: 2.15rem;
+}
+
+.vp-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.34rem 0.78rem;
+  border: 1px solid rgba(212, 167, 55, 0.24);
+  border-radius: 999px;
+  background: rgba(212, 167, 55, 0.08);
+  color: var(--brand);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.vp-hero h1 {
+  margin: 0.8rem 0 0;
+  font-size: clamp(1.95rem, 3.2vw, 2.7rem);
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  line-height: 1.07;
+  color: var(--text);
+}
+
+.vp-gradient {
+  background: linear-gradient(135deg, var(--brand) 0%, #f5d76e 52%, #c5a028 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.vp-title-sub {
+  display: block;
+  margin-top: 0.45rem;
+  color: var(--text);
+  font-size: clamp(1.12rem, 1.75vw, 1.5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.vp-lede {
+  max-width: 620px;
+  margin: 0.85rem 0 0;
+  color: var(--text-secondary);
+  font-size: 0.96rem;
+  line-height: 1.62;
+}
+
+.vp-lede strong {
+  color: var(--text);
+}
+
+.vp-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.42rem;
+  margin-top: 0.9rem;
+}
+
+.vp-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.36rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(15, 20, 32, 0.72);
+  color: var(--text-secondary);
+  font-size: 0.73rem;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.vp-chip strong {
+  color: var(--brand);
+  font-weight: 800;
+}
+
+.vp-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.15rem;
+}
+
+.vp-hero-actions .btn-lg {
+  padding: 0.78rem 1.65rem;
+  font-size: 0.92rem;
+}
+
+.vp-meta {
+  margin: 0.95rem 0 0;
+  color: var(--muted);
+  font-size: 0.72rem;
+  line-height: 1.55;
+}
+
+.vp-meta a {
+  color: var(--brand);
+}
+
+.vp-disclosure {
+  margin: 0.4rem 0 0;
+  color: var(--muted);
+  font-size: 0.67rem;
+  line-height: 1.45;
+}
+
+.vp-disclosure a {
+  color: var(--brand);
+}
+
+.vp-hero-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(212, 167, 55, 0.35);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(15, 20, 32, 0.98), rgba(9, 13, 21, 0.98));
+  box-shadow:
+    0 28px 80px -40px rgba(0, 0, 0, 0.95),
+    0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+}
+
+.vp-hero-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--brand), transparent);
+  opacity: 0.9;
+}
+
+.vp-hero-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.05rem 1.15rem 0.85rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.vp-kicker {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: var(--brand);
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.vp-hero-card-head strong {
+  display: block;
+  color: var(--text);
+  font-size: 0.94rem;
+  line-height: 1.35;
+}
+
+.vp-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding-top: 0.15rem;
+  color: #4ade80;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.vp-live::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.12);
+}
+
+.vp-quick-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.9rem;
+  align-items: center;
+  padding: 0.82rem 1.15rem;
+  border-bottom: 1px solid var(--border);
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.vp-quick-row:hover {
+  background: rgba(212, 167, 55, 0.055);
+}
+
+.vp-quick-info {
+  min-width: 0;
+}
+
+.vp-quick-info strong {
+  display: block;
+  overflow: hidden;
+  color: var(--text);
+  font-size: 0.84rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vp-quick-info span {
+  display: block;
+  overflow: hidden;
+  margin-top: 0.12rem;
+  color: var(--muted);
+  font-size: 0.7rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vp-quick-price {
+  text-align: right;
+}
+
+.vp-quick-price strong {
+  display: block;
+  color: var(--brand);
+  font-size: 0.88rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.vp-quick-price span {
+  display: block;
+  margin-top: 0.1rem;
+  color: var(--muted);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.vp-hero-card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1.15rem 0.85rem;
+}
+
+.vp-hero-card-foot span {
+  color: var(--muted);
+  font-size: 0.68rem;
+  line-height: 1.45;
+}
+
+.vp-hero-card-foot a {
+  color: var(--brand);
+  font-size: 0.76rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* Voucher listing */
+
+.vp-listing {
+  padding: 1.9rem 0 2.8rem;
+}
+
+.vp-section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 1.1rem;
+}
+
+.vp-section-head .section-title {
+  margin-bottom: 0.35rem;
+}
+
+.vp-section-head h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+.vp-section-head p {
+  max-width: 740px;
+  margin: 0.4rem 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.vp-head-link {
+  flex-shrink: 0;
+  padding-bottom: 0.15rem;
+  border-bottom: 1px solid rgba(212, 167, 55, 0.35);
+  color: var(--brand);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.vp-voucher-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.95rem;
+}
+
+.vp-voucher-grid > * {
+  flex: 0 1 calc(25% - 0.72rem);
+  max-width: calc(25% - 0.72rem);
+}
+
+.vp-voucher-grid--3 > * {
+  flex-basis: calc(33.333% - 0.64rem);
+  max-width: calc(33.333% - 0.64rem);
+}
+
+.vp-voucher-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  background: var(--card);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.vp-voucher-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(212, 167, 55, 0.55);
+  box-shadow: 0 16px 36px -24px rgba(212, 167, 55, 0.35);
+}
+
+.vp-voucher-media {
+  overflow: hidden;
+  background: #fff;
+  aspect-ratio: 16 / 9;
+}
+
+.vp-voucher-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.vp-voucher-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.8rem 0.85rem 0.85rem;
+}
+
+.vp-voucher-code {
+  color: var(--brand);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.vp-voucher-title {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.86rem;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.vp-voucher-blurb {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 0.1rem 0 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.vp-voucher-note {
+  margin: 0.1rem 0 0;
+  padding-left: 0.45rem;
+  border-left: 2px solid var(--brand);
+  color: var(--muted);
+  font-size: 0.7rem;
+  line-height: 1.45;
+}
+
+.vp-voucher-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 0.55rem;
+}
+
+.vp-voucher-price {
+  color: var(--text);
+  font-size: 0.76rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.vp-voucher-price span {
+  display: block;
+  margin-top: 0.1rem;
+  color: var(--muted);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.vp-voucher-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.38rem 0.55rem;
+  border: 1px solid rgba(212, 167, 55, 0.28);
+  border-radius: 7px;
+  background: rgba(212, 167, 55, 0.1);
+  color: var(--brand);
+  font-size: 0.68rem;
+  font-weight: 800;
+  white-space: nowrap;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.vp-voucher-card:hover .vp-voucher-cta {
+  background: var(--brand);
+  color: #080b12;
+}
+
+.vp-list-note {
+  max-width: 860px;
+  margin: 1rem 0 0;
+  color: var(--muted);
+  font-size: 0.84rem;
+  line-height: 1.65;
+}
+
+/* Compact anchor row used in place of the old TOC box */
+
+.vp-anchor-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0 0 1.5rem;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: var(--card);
+}
+
+.vp-anchor-bar a {
+  padding: 0.32rem 0.55rem;
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.76rem;
+  line-height: 1.35;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.vp-anchor-bar a:hover {
+  background: rgba(212, 167, 55, 0.09);
+  color: var(--brand);
+}
+
+@media (max-width: 1100px) {
+  .vp-hero-grid {
+    grid-template-columns: minmax(0, 1.04fr) minmax(300px, 0.96fr);
+    gap: 2rem;
+  }
+
+  .vp-voucher-grid > * {
+    flex-basis: calc(33.333% - 0.64rem);
+    max-width: calc(33.333% - 0.64rem);
+  }
+}
+
+@media (max-width: 900px) {
+  .vp-hero-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding-top: 2.1rem;
+    padding-bottom: 2rem;
+  }
+
+  .vp-hero-grid > div:first-child {
+    display: contents;
+  }
+
+  .vp-hero .vp-eyebrow {
+    order: 1;
+    align-self: flex-start;
+  }
+
+  .vp-hero h1 {
+    order: 2;
+  }
+
+  .vp-hero .vp-lede {
+    order: 3;
+  }
+
+  .vp-hero .vp-chips {
+    order: 4;
+    align-self: flex-start;
+  }
+
+  .vp-hero .vp-hero-actions {
+    order: 5;
+  }
+
+  .vp-hero-grid > .vp-hero-card {
+    order: 7;
+    max-width: 560px;
+    margin-top: 1.1rem;
+  }
+
+  .vp-hero .vp-meta {
+    order: 8;
+  }
+
+  .vp-hero .vp-disclosure {
+    order: 6;
+  }
+
+  .vp-section-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+}
+
+@media (max-width: 760px) {
+  .vp-voucher-grid > * {
+    flex-basis: calc(50% - 0.48rem);
+    max-width: calc(50% - 0.48rem);
+  }
+
+  .vp-hero h1 {
+    font-size: clamp(1.9rem, 8vw, 2.5rem);
+  }
+
+  .vp-title-sub {
+    font-size: clamp(1.08rem, 4.5vw, 1.35rem);
+  }
+
+  .vp-hero-actions .btn {
+    flex: 1 1 auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .vp-voucher-grid > *,
+  .vp-voucher-grid--3 > * {
+    flex-basis: 100%;
+    max-width: 100%;
+  }
+
+  .vp-quick-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.6rem;
+    padding: 0.72rem 0.9rem;
+  }
+
+  .vp-hero-card-head,
+  .vp-hero-card-foot {
+    padding-left: 0.9rem;
+    padding-right: 0.9rem;
+  }
+}

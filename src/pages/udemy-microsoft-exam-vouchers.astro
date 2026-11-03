@@ -1,98 +1,593 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { microsoftVouchers, microsoftGroupBlurbs, ALL_VOUCHERS_URL } from "../data/vouchers";
+import "../styles/voucher-v2.css";
+import {
+  microsoftVouchers,
+  microsoftCatalog,
+  microsoftFamilyOrder,
+  microsoftFamilyBlurbs,
+  ALL_VOUCHERS_URL,
+  voucherPrice,
+} from "../data/vouchers";
 const currentYear = new Date().getFullYear();
 const lastModified = new Date().toISOString().split("T")[0];
 const updatedLong = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 const canonicalUrl = "https://coursespeak.com/udemy-microsoft-exam-vouchers";
-const pageTitle = `Udemy Microsoft Exam Vouchers ${currentYear}: Save 10% | CourseSpeak`;
-const pageDescription = `All 8 official Microsoft exam vouchers on Udemy ${currentYear} — AZ-900, DP-900, AZ-104, AZ-500, AI-102, AZ-305, AZ-800, MD-102. Flat 10% off ~$99–$165 retail, valid 9+ months, Retake Assurance on Associate & Expert exams.`;
-const groups: Record<string, typeof microsoftVouchers> = {};
-for (const vv of microsoftVouchers) { (groups[vv.category] ||= []).push(vv); }
-const faqs = [
-  { q: "Which Microsoft vouchers are sold on Udemy?", a: "All 8: Fundamentals (AZ-900 Azure Fundamentals, DP-900 Azure Data Fundamentals), Associate (AZ-104 Administrator, AZ-500 Security Engineer, AI-102 AI Engineer, AZ-800 Windows Server Hybrid Administrator, MD-102 Endpoint Administrator), and Expert (AZ-305 Solutions Architect Expert). Every voucher saves a flat 10% off the retail fee." },
-  { q: "What is Retake Assurance on Microsoft exams?", a: "The Microsoft version of the retake safety net. Buy the Exam Voucher + Retake bundle and, if you fail, you can re-sit the same exam under Microsoft's certification exam policies. It must be bought together with the voucher — never separately — covers one extra attempt, and is not refunded if you pass first try." },
-  { q: "How do I schedule a Microsoft exam with a voucher?", a: "Sign in with your Microsoft account, which routes you to Pearson VUE (Microsoft's test provider). Paste the voucher code from My learning → Certifications at the payment step. Exams run online proctored or in person, and vouchers are valid only in the country of purchase." },
-  { q: "AZ-900 vs DP-900 vs AI-900 — which fundamental first?", a: "AZ-900 for general cloud roles and administrators, DP-900 for data analysts and database-adjacent roles, AI-900 (paired via prep courses) for anyone moving toward AI-102. All three need 2–4 weeks of study; AZ-900 carries the most weight with employers." },
-  { q: "Do I need a prep course if I buy the voucher?", a: "The voucher only pays for the exam seat — it teaches nothing. Microsoft exams are scenario-heavy; most first-time candidates fail without structured prep. Scott Duffy's AZ-104 and AZ-900 courses are long-running bestsellers. Use CourseSpeak coupon deals to get training for a few dollars, then spend the real money on the voucher." },
-  { q: "Can coupons discount the voucher?", a: "No — coupons never apply to vouchers, though Udemy credits do. Coupons do apply to the prep courses below the voucher on each Udemy page." },
+const pageTitle = `Udemy Microsoft Exam Vouchers ${currentYear}: 50 Pages, 33 Exams`;
+const pageDescription = `All 50 live Udemy Microsoft voucher pages in ${currentYear}, audited: 33 current exams, 1 retiring and 16 retired pages flagged. AZ-900, AZ-104, AZ-305 prices and the 2026 exam reset.`;
+
+const quickPicks = [
+  { voucher: microsoftVouchers[0], label: "Azure fundamentals · entry" },
+  { voucher: microsoftVouchers[2], label: "Azure administrator · core" },
+  { voucher: microsoftVouchers[7], label: "Azure solutions architect" },
 ];
+
+const msTotal = microsoftCatalog.length;
+const msCurrent = microsoftCatalog.filter((x) => x.status === "current").length;
+const msRetiring = microsoftCatalog.filter((x) => x.status === "retiring").length;
+const msRetired = microsoftCatalog.filter((x) => x.status === "retired").length;
+
+const familyGroups = microsoftFamilyOrder
+  .map((family) => ({ family, entries: microsoftCatalog.filter((x) => x.family === family) }))
+  .filter((g) => g.entries.length > 0);
+
+function statusStyle(status: string) {
+  if (status === "current") return { background: "rgba(34,197,94,0.14)", color: "#15803d" };
+  if (status === "retiring") return { background: "rgba(217,119,6,0.14)", color: "#b45309" };
+  return { background: "rgba(192,57,43,0.14)", color: "#c0392b" };
+}
+function statusLabel(status: string) {
+  if (status === "current") return "Current";
+  if (status === "retiring") return "Retiring";
+  return "Retired";
+}
+
+const faqs = [
+  { q: "How many Microsoft vouchers are on Udemy?", a: "Udemy has 50 live Microsoft voucher pages as of November 3, 2026. Only 33 of those map to current exams. One more, MS-102, is still bookable until November 30, 2026. The remaining 16 are retired or legacy pages that Udemy has not removed, including AI-900, DP-100, AI-102, AZ-204, AZ-500, AZ-800, AZ-801, PL-200, PL-400, PL-500, PL-600, MB-240, MB-280, MB-335, MB-700 and 62-193." },
+  { q: "Which Microsoft exams can I actually book today?", a: "Thirty-three current exams: Fundamentals (AZ-900, DP-900, SC-900, PL-900, GH-900); Azure (AZ-104, AZ-305, AZ-400, AZ-700, AZ-120, AZ-140); Data and AI (DP-300, DP-420, DP-600, DP-700); Security (SC-200, SC-300, SC-401, SC-100); Microsoft 365 (MD-102, MS-700, MS-721); Power Platform (PL-300); Dynamics 365 (MB-230, MB-310, MB-330, MB-500, MB-800, MB-820); and GitHub (GH-100, GH-200, GH-300, GH-500). MS-102 is the one retiring exam still bookable." },
+  { q: "How much do Microsoft vouchers cost on Udemy?", a: "Fundamentals exams list at $99 and cost about $89.10 on Udemy. Associate, Expert and Specialty exams list at $165 and cost about $148.50. These are US list prices observed on November 3, 2026. Local currency and regional pricing vary, so confirm the live price at checkout." },
+  { q: "Is Retake Assurance included in the Microsoft voucher price?", a: "No. Retake Assurance is an optional add-on that must be bought with the original voucher. It is available on select exams only, not every Microsoft voucher page — AZ-104, MD-102, SC-200 and DP-300 showed it at review, while AZ-900 and DP-900 did not. It covers one extra attempt on the same voucher code and is not refunded if you pass first time." },
+  { q: "Which Microsoft exams retired in 2026?", a: "Fifteen role-based exams retired between June 1 and October 30, 2026: AI-900, DP-100, AI-102, AZ-204, AZ-500, AZ-800, AZ-801, PL-200, PL-400, PL-500, PL-600, MB-240, MB-280, MB-335 and MB-700. The legacy Microsoft Certified Educator exam 62-193 is also retired. MS-102 retires on November 30, 2026." },
+  { q: "Can I use an old voucher for the replacement exam?", a: "No. Microsoft vouchers are exam-specific. An AI-900 voucher cannot book AI-901, an AZ-500 voucher cannot book SC-500, and an AZ-800 or AZ-801 voucher cannot book AZ-802. If you already hold a voucher for a retiring exam, sit that exam before the last date. If you have not bought yet, do not buy the old page." },
+  { q: "What replaces AZ-500?", a: "SC-500 replaces AZ-500, which retired on August 31, 2026. SC-500 is aimed at security engineering rather than Azure administration. Udemy did not have an SC-500 voucher page at review, so you may need to book direct with Microsoft or wait for Udemy to list it." },
+  { q: "What replaces AI-102?", a: "AI-103, the Azure AI Apps and Agents Developer Associate, replaces AI-102. AI-102 retired on June 30, 2026, and AI-103 launched on June 19, 2026. Udemy still sells the AI-102 page but did not have an AI-103 voucher page at review. Do not buy the AI-102 voucher for AI-103." },
+  { q: "What replaces AZ-800 and AZ-801?", a: "AZ-802 replaces both exams. AZ-800 and AZ-801 retired on September 30, 2026, and AZ-802 consolidates them into one exam for the renamed Windows Server Administrator Associate certification. Udemy did not have an AZ-802 voucher page at review." },
+  { q: "What happens to MS-102 after November 30, 2026?", a: "MS-102 retires on November 30, 2026. If you sit and pass before that date, the certification stays on your transcript. AB-650 is the replacement path, but it is an Associate-level exam, not a like-for-like Expert swap. Buy the MS-102 voucher only if you can book and sit the exam before the retirement date." },
+  { q: "Why are retired Microsoft voucher pages still live on Udemy?", a: "Udemy keeps the pages live, but that does not mean the exam is bookable. Microsoft controls the exam catalogue and Pearson VUE refuses bookings for retired exams. The page is a legacy listing, not a current recommendation. Always check the exam code against Microsoft Learn before paying." },
+  { q: "Which Microsoft voucher should I buy first?", a: "Choose the fundamentals exam that matches your target role: AZ-900 for Azure and cloud, DP-900 for data, SC-900 for security, PL-900 for Power Platform, or GH-900 for GitHub. Then move to a role-based exam: AZ-104 for Azure administration, SC-200 for security operations, DP-700 for data engineering, PL-300 for Power BI, or MD-102 for endpoint management." },
+  { q: "AZ-900 vs DP-900 vs AI-900 — which fundamental first?", a: "AZ-900 for general cloud and administrator roles, DP-900 for data and analytics roles. AI-900 is no longer an option: it retired on June 30, 2026 and was replaced by AI-901. AI-900 prep courses still teach useful fundamentals, but do not buy the AI-900 voucher. All fundamentals exams need about 2–4 weeks of study and have no prerequisites." },
+  { q: "Is AI-900 still valid?", a: "No. AI-900 retired on June 30, 2026. AI-901 is the current replacement, and Udemy did not have an AI-901 voucher page at review. A passed AI-900 certification stays on your transcript, but you cannot book the exam any more." },
+  { q: "How do I schedule a Microsoft exam with a voucher?", a: "Sign in to Microsoft Learn, open Profile → Credentials → Certifications, and choose the exam to schedule with Pearson VUE. Pick an online OnVUE slot or a test centre, then paste the voucher code from My learning → Certifications at the payment step. The voucher is valid only in the country of purchase, and the name on your Microsoft profile must match your photo ID." },
+  { q: "Can I reschedule or cancel a Microsoft exam?", a: "Microsoft's standard policy requires you to reschedule or cancel at least 24 hours before the appointment, or the fee or voucher may be forfeited. Some Microsoft bundle and event voucher terms use a stricter 72-hour rule. Read the terms attached to your voucher, and never no-show — a no-show can forfeit the voucher entirely." },
+  { q: "Can I get a refund on an Udemy Microsoft voucher?", a: "No. Udemy Microsoft vouchers and Retake Assurance are non-refundable and non-transferable. Cancelling an exam appointment affects the appointment under Microsoft and Pearson VUE policy, not the voucher purchase. Confirm the exam code is current before paying." },
+  { q: "Do Microsoft vouchers and certifications expire?", a: "Udemy Microsoft vouchers are valid for at least nine months, and the expiry date cannot be extended. Microsoft Fundamentals certifications do not expire. Associate and Expert certifications are valid for one year and can be renewed through a free online assessment before they lapse. The exam retirement date can shorten a voucher's useful life." },
+  { q: "Can I use an Udemy coupon on a Microsoft voucher?", a: "No. Udemy coupons and promo codes never apply to exam vouchers, though Udemy credits can sometimes be applied at checkout. Coupons do apply to the prep courses, which is where the real saving stacks: a discounted course plus a discounted voucher beats full-price training plus a retail exam fee." },
+  { q: "Are Udemy Microsoft vouchers legitimate?", a: "Yes. Udemy is the seller; Microsoft owns the certification and Pearson VUE delivers the exam. The code appears in My learning → Certifications and is redeemed in the Microsoft/Pearson VUE checkout. Buy from the official Udemy listing, avoid codes sold by direct message or bank transfer, and verify the exam code is current before paying." },
+];
+
 const jsonLd = { "@context": "https://schema.org", "@graph": [
-  { "@type": "WebPage", "@id": `${canonicalUrl}#webpage`, url: canonicalUrl, name: pageTitle, description: pageDescription, isPartOf: { "@id": "https://coursespeak.com/#website" }, inLanguage: "en-US", datePublished: "2025-01-01", dateModified: lastModified, author: { "@id": "https://coursespeak.com/#author" } },
+  { "@type": "WebPage", "@id": `${canonicalUrl}#webpage`, url: canonicalUrl, name: pageTitle, description: pageDescription, image: "https://coursespeak.com/images/og/og-microsoft-vouchers.png", isPartOf: { "@id": "https://coursespeak.com/#website" }, inLanguage: "en-US", datePublished: "2025-01-01", dateModified: lastModified, author: { "@id": "https://coursespeak.com/#author" }, breadcrumb: { "@id": `${canonicalUrl}#breadcrumb` } },
   { "@type": "BreadcrumbList", "@id": `${canonicalUrl}#breadcrumb`, itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: "https://coursespeak.com" }, { "@type": "ListItem", position: 2, name: "Exam Vouchers", item: "https://coursespeak.com/udemy-certification-vouchers" }, { "@type": "ListItem", position: 3, name: "Microsoft", item: canonicalUrl }] },
-  { "@type": "ItemList", name: `Microsoft Exam Vouchers ${currentYear}`, numberOfItems: microsoftVouchers.length, itemListElement: microsoftVouchers.map((vv, i) => ({ "@type": "ListItem", position: i + 1, url: vv.url, name: `${vv.title} (${vv.code})` })) },
-  { "@type": "FAQPage", mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
+  { "@type": "ItemList", name: `Microsoft Exam Vouchers ${currentYear}`, numberOfItems: microsoftCatalog.length, itemListElement: microsoftCatalog.map((e, i) => ({ "@type": "ListItem", position: i + 1, url: e.url, name: `${e.name} (${e.code})` })) },
+  { "@type": "FAQPage", "@id": `${canonicalUrl}#faq`, mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
   { "@type": "Person", "@id": "https://coursespeak.com/#author", name: "Josh Smith", jobTitle: "Founder & Editor, CourseSpeak", url: "https://coursespeak.com/about" },
 ]};
 ---
-<Layout title={pageTitle} description={pageDescription} canonical={canonicalUrl} type="article" image="/assets/images/vouchers/provider-microsoft.svg" ogImageType="image/svg+xml">
+<Layout title={pageTitle} description={pageDescription} canonical={canonicalUrl} type="article" image="/images/og/og-microsoft-vouchers.png">
 <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 <style>
   .voucher-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,border-color .2s}
   .voucher-card:hover{transform:translateY(-3px);border-color:var(--brand)}
   .voucher-card img{width:100%;height:140px;object-fit:cover;background:#fff}
-  @media(max-width:768px){.grid-3{grid-template-columns:1fr!important}}
+  .compare-table{width:100%;border-collapse:collapse;font-size:.86rem;background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  .compare-table th,.compare-table td{padding:.7rem .9rem;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+  .compare-table thead th{background:var(--bg-secondary);font-weight:700}
+  .compare-table tbody tr:last-child td{border-bottom:0}
+  .table-wrap{overflow-x:auto;border-radius:12px}
+  .catalog-table{font-size:.82rem}
+  .catalog-table td:nth-child(5){min-width:210px}
+  .status-pill{display:inline-block;padding:.2rem .5rem;border-radius:999px;font-size:.7rem;font-weight:800;letter-spacing:.03em;text-transform:uppercase}
+  .legend{display:flex;gap:.5rem;flex-wrap:wrap;margin:.75rem 0 1.5rem}
+  .toc{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.45rem 1rem;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem}
+  .toc a{color:var(--muted);text-decoration:none;font-size:.86rem;line-height:1.5}
+  .toc a:hover{color:var(--brand)}
+  .callout{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--brand);border-radius:0 12px 12px 0;padding:1rem 1.15rem}
+  .choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+  .choice-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.2rem 1.3rem}
+  .choice-card h3{margin:0 0 .35rem;font-size:1.02rem}
+  .choice-card p{margin:.4rem 0;color:var(--muted);font-size:.86rem;line-height:1.6}
+  .choice-card .price{color:var(--brand);font-weight:800;font-size:1.15rem}
+  .related-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem}
+  .related-grid a{display:block;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.85rem 1rem;text-decoration:none}
+  .related-grid strong{display:block;color:var(--text);font-size:.9rem}
+  .related-grid span{display:block;color:var(--muted);font-size:.8rem;margin-top:.2rem}
+  @media(max-width:768px){.grid-3,.choice-grid,.related-grid,.toc{grid-template-columns:1fr!important}.compare-table{min-width:760px}}
 </style>
-<section style={{ padding: "4rem 1rem 2rem", textAlign: "center" }}>
-  <div style={{ maxWidth: "880px", margin: "0 auto" }}>
-    <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Microsoft Vouchers · Updated {new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" })}</div>
-    <h1 style={{ fontSize: "clamp(1.8rem,4.5vw,2.8rem)", fontWeight: 800, lineHeight: 1.2, margin: "0 auto 0.75rem" }}>
-      <span style={{ background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Udemy Microsoft Exam Vouchers</span><br />
-      <span style={{ color: "var(--text)" }}>AZ-900 · AZ-104 · AZ-500 & 5 More</span>
-    </h1>
-    <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "680px", margin: "0 auto 1.5rem", lineHeight: 1.7 }}>
-      All 8 official Microsoft vouchers on Udemy — every one a flat 10% off retail (fundamentals ~$99, associate and
-      expert ~$165). Each voucher is valid at least 9 months and schedules through Pearson VUE, online or in person.
-      Associate and Expert exams offer a Retake Assurance bundle so a first-attempt failure does not mean paying full price twice.
-    </p>
-    <img src="/assets/images/vouchers/provider-microsoft.svg" alt="Microsoft exam vouchers — AZ-900, AZ-104, AZ-500" width="480" height="270" loading="eager" fetchpriority="high" style={{ width: "100%", maxWidth: "720px", height: "auto", borderRadius: "16px", border: "1px solid var(--border)", margin: "0 auto 1.5rem", display: "block", background: "#fff" }} />
-    <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center", flexWrap: "wrap" }}>
-      <a href={ALL_VOUCHERS_URL} target="_blank" rel="sponsored noopener noreferrer" class="btn btn-primary btn-lg" style={{ borderRadius: "999px" }}>Browse All Microsoft Vouchers →</a>
-      <a href="/udemy-certification-vouchers" class="btn btn-ghost btn-lg" style={{ borderRadius: "999px" }}>All Providers</a>
+
+<section class="vp-hero">
+  <div class="container vp-hero-grid">
+    <div>
+      <div class="vp-eyebrow">Microsoft Vouchers · Audited {updatedLong}</div>
+      <h1>
+        <span class="vp-gradient">Udemy Microsoft Exam Vouchers {currentYear}</span>
+        <span class="vp-title-sub">50 live pages, 33 current exams</span>
+      </h1>
+      <p class="vp-lede">
+        Udemy has <strong>50 live Microsoft voucher pages</strong>, but only <strong>33 match current exams</strong>.
+        MS-102 is bookable until November 30, 2026; 16 pages are retired or legacy. Vouchers cost
+        <strong>$89.10 for Fundamentals</strong> and <strong>$148.50 for Associate, Expert and Specialty</strong> — about 10% below Microsoft list.
+      </p>
+      <div class="vp-chips">
+        <span class="vp-chip"><strong>33</strong> current exams</span>
+        <span class="vp-chip">From <strong>$89.10</strong></span>
+        <span class="vp-chip">16 retired pages flagged</span>
+        <span class="vp-chip">Exam-specific vouchers</span>
+      </div>
+      <div class="vp-hero-actions">
+        <a href={ALL_VOUCHERS_URL} target="_blank" rel="sponsored noopener noreferrer" class="btn btn-primary btn-lg" style={{ borderRadius: "999px" }}>Browse All 50 Pages →</a>
+        <a href="#featured" class="btn btn-ghost btn-lg" style={{ borderRadius: "999px" }}>See Top 8 Vouchers</a>
+      </div>
+      <p class="vp-meta">
+        By <a href="/about#author">Josh Smith</a>, Founder & Editor · Reviewed {updatedLong} ·
+        Sources: <a href="https://learn.microsoft.com/en-us/credentials/support/retired-certification-exams" target="_blank" rel="noopener noreferrer">Microsoft retired exams</a> and <a href="https://www.udemy.com/all-certification-vouchers/" target="_blank" rel="noopener noreferrer">Udemy voucher catalogue</a>
+      </p>
+      <p class="vp-disclosure">Sponsored — CourseSpeak may earn a commission at no extra cost to you. <a href="/affiliate-disclosure">Affiliate Disclosure</a></p>
     </div>
-    <p style={{ fontSize: "0.78rem", color: "var(--muted)", marginTop: "0.9rem" }}>Sponsored — CourseSpeak may earn a commission at no extra cost to you. <a href="/affiliate-disclosure" style={{ color: "var(--brand)" }}>Affiliate Disclosure</a></p>
+    <aside class="vp-hero-card" aria-label="Top Microsoft vouchers">
+      <div class="vp-hero-card-head">
+        <div>
+          <span class="vp-kicker">Top picks</span>
+          <strong>Most-booked Microsoft exams</strong>
+        </div>
+        <span class="vp-live">Prices live</span>
+      </div>
+      {quickPicks.map((p) => (
+        <a class="vp-quick-row" href={p.voucher.url} target="_blank" rel="sponsored noopener noreferrer">
+          <span class="vp-quick-info"><strong>{p.voucher.code}</strong><span>{p.label}</span></span>
+          <span class="vp-quick-price"><strong>{voucherPrice(p.voucher)}</strong><span>Udemy</span></span>
+        </a>
+      ))}
+      <div class="vp-hero-card-foot">
+        <span>Microsoft list vs Udemy checked {updatedLong}</span>
+        <a href="#featured">Top 8 →</a>
+      </div>
+    </aside>
   </div>
 </section>
-<section style={{ paddingBottom: "2rem" }}>
-  <div class="container"><div class="stat-grid" style={{ gridTemplateColumns: "repeat(3,1fr)", maxWidth: "600px" }}>
-    <div class="stat-box"><div class="stat-value">8</div><div class="stat-label">Official vouchers</div></div>
-    <div class="stat-box"><div class="stat-value">10%</div><div class="stat-label">Flat discount</div></div>
-    <div class="stat-box"><div class="stat-value">≥9 mo</div><div class="stat-label">Validity</div></div>
-  </div></div>
-</section>
-<section style={{ padding: "1rem 1rem 3rem" }}>
-  <div class="container" style={{ maxWidth: "1080px" }}>
-    <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
-      <span class="section-title">Full list</span>
-      <h2 class="section-heading">All 8 Microsoft Exam Vouchers</h2>
-      <p style={{ color: "var(--muted)", fontSize: "0.9rem" }}>Fundamentals first, then Associate, then Expert — the order Microsoft's own learning paths recommend.</p>
+
+<section id="featured" class="vp-listing">
+  <div class="container" style={{ maxWidth: "1180px" }}>
+    <div class="vp-section-head">
+      <div>
+        <span class="section-title">Best eight</span>
+        <h2>8 Microsoft vouchers worth buying first</h2>
+        <p>The highest-demand current exams across Azure, data, security, endpoint and DevOps — Fundamentals at $89.10, role-based exams at $148.50. All eight are bookable today; the full 50-page catalogue follows below.</p>
+      </div>
+      <a class="vp-head-link" href="#catalog">All 50 pages ↓</a>
     </div>
-    {Object.entries(groups).map(([cat, list]) => (
-      <div style={{ marginBottom: "2rem" }}>
-        <h3 style={{ fontSize: "1.05rem", fontWeight: 800, margin: "0 0 0.9rem" }}>{cat}</h3>
-        <p style={{ margin: "0.35rem 0 1rem", color: "var(--muted)", fontSize: "0.88rem", lineHeight: 1.65 }}>{microsoftGroupBlurbs[cat]}</p>
-        <div class="grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1rem" }}>
-          {list.map((vv) => (
-            <div class="voucher-card">
-              <img src={vv.image} alt={vv.title} width="480" height="270" loading="lazy" />
-              <div style={{ padding: "1.1rem 1.2rem", display: "flex", flexDirection: "column", gap: "0.5rem", flex: 1 }}>
-                <span style={{ fontSize: "0.72rem", fontWeight: 800, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--brand)" }}>{vv.code}</span>
-                <div style={{ fontWeight: 700 }}>{vv.title}</div>
-                <p style={{ margin: 0, color: "var(--muted)", fontSize: "0.83rem", lineHeight: 1.6 }}>{vv.blurb}</p>
-                <a href={vv.url} target="_blank" rel="sponsored noopener noreferrer" class="btn btn-primary" style={{ borderRadius: "8px", marginTop: "0.3rem" }}>Get Voucher →</a>
-              </div>
+    <div class="vp-voucher-grid">
+      {microsoftVouchers.map((vv) => (
+        <a class="vp-voucher-card" href={vv.url} target="_blank" rel="sponsored noopener noreferrer">
+          <div class="vp-voucher-media"><img src={vv.image} alt={vv.title} width="480" height="270" loading="lazy" /></div>
+          <div class="vp-voucher-body">
+            <span class="vp-voucher-code">{vv.code}{vv.badge ? ` · ${vv.badge}` : ""}</span>
+            <div class="vp-voucher-title">{vv.title}</div>
+            <p class="vp-voucher-blurb">{vv.blurb}</p>
+            {vv.note && <p class="vp-voucher-note">{vv.note}</p>}
+            <div class="vp-voucher-footer">
+              <span class="vp-voucher-price">{voucherPrice(vv)}<span>Udemy</span></span>
+              <span class="vp-voucher-cta">Get voucher →</span>
             </div>
-          ))}
-        </div>
+          </div>
+        </a>
+      ))}
+    </div>
+    <div class="callout" style={{ marginTop: "1.2rem" }}>
+      <h3 style={{ margin: "0 0 0.4rem", fontSize: "1rem" }}>Why these eight?</h3>
+      <p style={{ margin: 0, color: "var(--muted)", fontSize: "0.9rem", lineHeight: 1.7 }}>They cover the main Microsoft career paths and are the exams employers ask about most: AZ-900 and DP-900 for fundamentals, AZ-104 for Azure administration, MD-102 for endpoints, SC-200 for security operations, DP-300 for Azure SQL, AZ-400 for DevOps and AZ-305 for architecture. The other 42 live pages are in the catalogue below — including 16 you should avoid.</p>
+    </div>
+  </div>
+</section>
+
+<section style={{ padding: "0 1rem 2rem" }}>
+  <div class="container" style={{ maxWidth: "1080px" }}>
+    <div class="callout" style={{ marginBottom: "1rem" }}>
+      <h2 style={{ margin: "0 0 0.5rem", fontSize: "1.1rem" }}>Quick answer: which Microsoft voucher do you need?</h2>
+      <p style={{ margin: "0.35rem 0", color: "var(--muted)", fontSize: "0.9rem", lineHeight: 1.7 }}><strong style={{ color: "var(--text)" }}>First Microsoft cert:</strong> AZ-900 for Azure or DP-900 for data — about $89.10 each, no prerequisites, 2–4 weeks of study.</p>
+      <p style={{ margin: "0.35rem 0", color: "var(--muted)", fontSize: "0.9rem", lineHeight: 1.7 }}><strong style={{ color: "var(--text)" }}>Best Azure job value:</strong> AZ-104 at about $148.50. It is the core administrator cert and the prerequisite most Azure job posts expect.</p>
+      <p style={{ margin: "0.35rem 0", color: "var(--muted)", fontSize: "0.9rem", lineHeight: 1.7 }}><strong style={{ color: "var(--text)" }}>Security and data:</strong> SC-200 for SOC analysts, SC-300 for identity, DP-700 for data engineering, DP-600 for Fabric analytics, PL-300 for Power BI.</p>
+      <p style={{ margin: "0.35rem 0", color: "var(--muted)", fontSize: "0.9rem", lineHeight: 1.7 }}><strong style={{ color: "var(--text)" }}>Do not buy:</strong> AI-900, DP-100, AI-102, AZ-204, AZ-500, AZ-800, AZ-801, PL-200, PL-400, PL-500, PL-600, MB-240, MB-280, MB-335, MB-700 or 62-193. Those exams are retired.</p>
+      <p style={{ margin: "0.35rem 0", color: "var(--muted)", fontSize: "0.9rem", lineHeight: 1.7 }}><strong style={{ color: "var(--text)" }}>Need a retake:</strong> add Retake Assurance at purchase on select exams. It covers one extra attempt on the same voucher code and cannot be added later.</p>
+    </div>
+    <nav class="vp-anchor-bar" aria-label="On this page">
+      <a href="#featured">1. Top 8 vouchers</a>
+      <a href="#prices">2. Voucher prices</a>
+      <a href="#retirements">3. 2026 exam reset</a>
+      <a href="#catalog">4. All 50 pages</a>
+      <a href="#which">5. Which voucher</a>
+      <a href="#redeem">6. Buy & redeem</a>
+      <a href="#retake">7. Retake Assurance</a>
+      <a href="#compare">8. Udemy vs direct</a>
+      <a href="#legit">9. Legitimacy</a>
+      <a href="#worth">10. Is it worth it?</a>
+      <a href="#study">11. How to prepare</a>
+      <a href="#faq">12. FAQ</a>
+    </nav>
+  </div>
+</section>
+
+<section id="prices" style={{ padding: "1rem 1rem 2.5rem" }}>
+  <div class="container" style={{ maxWidth: "1080px" }}>
+    <span class="section-title">Prices</span>
+    <h2 class="section-heading">How much do Udemy Microsoft vouchers cost?</h2>
+    <p style={{ color: "var(--muted)", fontSize: "0.95rem", lineHeight: 1.75, maxWidth: "840px", margin: "0.75rem 0 1.25rem" }}>
+      Microsoft prices exams by level, not by individual certification. Udemy resells one prepaid attempt at about 10% below the US list price.
+      The important distinction is between <strong style={{ color: "var(--text)" }}>voucher-only</strong> (one attempt) and the
+      <strong style={{ color: "var(--text)" }}>+ Retake Assurance bundle</strong> (two attempts on select exams). They are separate products, and the bundle is not a discount on a single exam.
+    </p>
+    <div class="table-wrap"><table class="compare-table">
+      <thead><tr><th>Level</th><th>Microsoft list (1 attempt)</th><th>Udemy voucher-only</th><th>Retake Assurance</th><th>Typical exams</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Fundamentals</strong></td><td>$99</td><td><strong>$89.10</strong></td><td>Not offered on every page — check before buying</td><td>AZ-900, DP-900, SC-900, PL-900, GH-900</td></tr>
+        <tr><td><strong>Associate</strong></td><td>$165</td><td><strong>$148.50</strong></td><td>Available on select exams: AZ-104, MD-102, SC-200 and DP-300 showed it at review</td><td>AZ-104, SC-200, DP-300, MD-102, MS-700, PL-300, MB-310, GH-300</td></tr>
+        <tr><td><strong>Expert</strong></td><td>$165</td><td><strong>$148.50</strong></td><td>Available on select exams — AZ-305 showed it, AZ-400 did not at review</td><td>AZ-305, AZ-400, SC-100</td></tr>
+        <tr><td><strong>Specialty</strong></td><td>$165</td><td><strong>$148.50</strong></td><td>Check the individual voucher page</td><td>AZ-120, AZ-140, DP-420</td></tr>
+      </tbody>
+    </table></div>
+    <p style={{ color: "var(--muted)", fontSize: "0.8rem", margin: "0.7rem 0 1.25rem", lineHeight: 1.6 }}>
+      Snapshot: November 3, 2026, USD, before tax. Microsoft list prices vary by country; Udemy rotates regional pricing and campaigns.
+      Retake Assurance is not a standard inclusion, and its availability can change — confirm the option on the live voucher page before paying.
+    </p>
+
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: "1rem" }}>
+      <div class="callout">
+        <h3 style={{ margin: "0 0 0.4rem", fontSize: "0.95rem" }}>Voucher-only is the honest comparison</h3>
+        <p style={{ margin: 0, color: "var(--muted)", fontSize: "0.86rem", lineHeight: 1.7 }}>One attempt for $89.10 or $148.50. If you are scoring above 85% on two timed practice exams, this is the cheapest path. The 10% saving is modest, so compare the live price with Microsoft's fee in your country.</p>
+      </div>
+      <div class="callout" style={{ borderLeftColor: "#d97706" }}>
+        <h3 style={{ margin: "0 0 0.4rem", fontSize: "0.95rem" }}>The bundle is insurance, not a discount</h3>
+        <p style={{ margin: 0, color: "var(--muted)", fontSize: "0.86rem", lineHeight: 1.7 }}>It only wins if you actually need the retake. On a $165 Associate exam, one extra attempt at the bundle price is cheaper than paying the full fee twice. If you pass first time, the premium is not refunded.</p>
+      </div>
+    </div>
+    <p style={{ color: "var(--muted)", fontSize: "0.9rem", lineHeight: 1.75, margin: "1.25rem 0 0" }}>
+      Udemy coupons never apply to vouchers. Udemy credits can sometimes be applied at checkout, but the sticker price is the price.
+      Do not buy a discounted voucher for a retired exam — it cannot be redeemed, and vouchers are non-refundable.
+    </p>
+  </div>
+</section>
+
+<section id="retirements" style={{ padding: "1rem 1rem 2.5rem", background: "var(--bg-secondary)" }}>
+  <div class="container" style={{ maxWidth: "1080px" }}>
+    <span class="section-title">2026 reset</span>
+    <h2 class="section-heading">Microsoft exam retirements: the 2026 reset</h2>
+    <p style={{ color: "var(--muted)", fontSize: "0.95rem", lineHeight: 1.75, maxWidth: "860px", margin: "0.75rem 0 1.25rem" }}>
+      Microsoft retired 15 role-based exams between June 1 and October 30, 2026, and MS-102 follows on November 30.
+      Most replacements are new AI-era credentials, and most do not have a Udemy voucher page yet. This is the table the Udemy catalogue does not show you.
+    </p>
+    <div class="table-wrap"><table class="compare-table">
+      <thead><tr><th>Exam</th><th>Code</th><th>Retired</th><th>Replacement</th><th>Udemy page status</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Azure Data Scientist Associate</strong></td><td>DP-100</td><td>June 1, 2026</td><td>AI-300</td><td>Page live — do not buy</td></tr>
+        <tr><td><strong>Azure AI Fundamentals</strong></td><td>AI-900</td><td>June 30, 2026</td><td>AI-901</td><td>Page live — do not buy</td></tr>
+        <tr><td><strong>Azure AI Engineer Associate</strong></td><td>AI-102</td><td>June 30, 2026</td><td>AI-103</td><td>Page live — do not buy</td></tr>
+        <tr><td><strong>Power Automate RPA Developer</strong></td><td>PL-500</td><td>June 30, 2026</td><td>No direct replacement</td><td>Page live — do not buy</td></tr>
+        <tr><td><strong>Power Platform Solution Architect Expert</strong></td><td>PL-600</td><td>June 30, 2026</td><td>AB-100 path</td><td>Page live — do not buy</td></tr>
+        <tr><td><strong>Dynamics 365 Field Service Functional Consultant</strong></td><td>MB-240</td><td>June 30, 2026</td><td>AB-250 (adjacent)</td><td>Page live — do not buy</td></tr>
+        <tr><td><strong>Dynamics 365 Supply Chain Management Functional Consultant Expert</strong></td><td>MB-335</td><td>June 30, 2026</td><td>AB-100 path</td><td>Page live — do not buy</td></tr>
+        <tr><td><strong>Dynamics 365 Finance and Operations Apps Solution Architect Expert</strong></td><td>MB-700</td><td>June 30, 2026</td><td>AB-100 path</td><td>Page live — do not buy</td></tr>
+        <tr><td><strong>Azure Developer Associate</strong></td><td>AZ-204</td><td>July 31, 2026</td><td>AI-200</td><td>Page live — do not buy</td></tr>
+        <tr><td><strong>Dynamics 365 Customer Experience Analyst</strong></td><td>MB-280</td><td>July 31, 2026</td><td>AB-210</td><td>Page live — do not buy</td></tr>
+        <tr><td><strong>Azure Security Engineer Associate</strong></td><td>AZ-500</td><td>August 31, 2026</td><td>SC-500</td><td>Page live — do not buy</td></tr>
+        <tr><td><strong>Power Platform Functional Consultant</strong></td><td>PL-200</td><td>August 31, 2026</td><td>AB-410</td><td>Page live — do not buy</td></tr>
+        <tr><td><strong>Windows Server Hybrid Administrator Associate (Part 1)</strong></td><td>AZ-800</td><td>September 30, 2026</td><td>AZ-802</td><td>Page live — do not buy</td></tr>
+        <tr><td><strong>Windows Server Hybrid Administrator Associate (Part 2)</strong></td><td>AZ-801</td><td>September 30, 2026</td><td>AZ-802</td><td>Page live — do not buy</td></tr>
+        <tr><td><strong>Power Platform Developer</strong></td><td>PL-400</td><td>October 30, 2026</td><td>No direct replacement</td><td>Page live — do not buy</td></tr>
+        <tr><td><strong>Microsoft 365 Administrator Expert</strong></td><td>MS-102</td><td>November 30, 2026</td><td>AB-650 (Associate level)</td><td>Bookable until November 30, 2026</td></tr>
+        <tr><td><strong>Microsoft Certified Educator</strong></td><td>62-193</td><td>Legacy</td><td>None</td><td>Legacy listing — not role-based</td></tr>
+      </tbody>
+    </table></div>
+    <p style={{ color: "var(--muted)", fontSize: "0.8rem", margin: "0.7rem 0 1.25rem", lineHeight: 1.6 }}>Dates checked against Microsoft Learn retirement announcements on November 3, 2026. Microsoft can change schedules; confirm the exam page before booking.</p>
+
+    <h3 style={{ fontSize: "1.05rem", margin: "1.5rem 0 0.5rem" }}>What the reset means for buyers</h3>
+    <ul style={{ margin: 0, paddingLeft: "1.2rem", color: "var(--muted)", fontSize: "0.92rem", lineHeight: 1.85 }}>
+      <li><strong style={{ color: "var(--text)" }}>The voucher is tied to the exam, not the certification family.</strong> A retired exam voucher cannot be redirected to its replacement. This is the opposite of AWS's level-wide vouchers.</li>
+      <li><strong style={{ color: "var(--text)" }}>Most replacement codes have no Udemy voucher page yet.</strong> AI-901, AI-103, AI-300, AI-200, SC-500, AZ-802, AB-410 and AB-650 all returned no Udemy voucher page at review. If you need one now, book direct with Microsoft.</li>
+      <li><strong style={{ color: "var(--text)" }}>MS-102 is the only current page with a published retirement date.</strong> It is still bookable until November 30, 2026. After that, AB-650 is the path, but it is Associate-level, not a like-for-like Expert replacement.</li>
+      <li><strong style={{ color: "var(--text)" }}>62-193 is a legacy educator exam.</strong> It is not part of the role-based certification catalogue and should not be compared with AZ-900 or AZ-104.</li>
+      <li><strong style={{ color: "var(--text)" }}>Do not buy a retired page because it is discounted.</strong> The code cannot be redeemed, the voucher is non-refundable, and Udemy's page remaining live does not make the exam bookable.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="catalog" style={{ padding: "1rem 1rem 3rem", background: "var(--bg-secondary)" }}>
+  <div class="container" style={{ maxWidth: "1080px" }}>
+    <span class="section-title">Full catalogue</span>
+    <h2 class="section-heading">All 50 live Microsoft voucher pages on Udemy</h2>
+    <p style={{ color: "var(--muted)", fontSize: "0.95rem", lineHeight: 1.75, maxWidth: "860px", margin: "0.75rem 0 0.5rem" }}>
+      Grouped by Microsoft family. "Current" means the exam is bookable today. "Retiring" means it is bookable until the date in the note. "Retired" means the Udemy page is still live but the exam cannot be booked — do not buy it.
+    </p>
+    <div class="legend">
+      <span class="status-pill" style={statusStyle("current")}>Current — {msCurrent} exams</span>
+      <span class="status-pill" style={statusStyle("retiring")}>Retiring — {msRetiring} exam</span>
+      <span class="status-pill" style={statusStyle("retired")}>Retired — {msRetired} pages</span>
+    </div>
+    {familyGroups.map(({ family, entries }) => (
+      <div style={{ marginBottom: "2.25rem" }}>
+        <h3 style={{ fontSize: "1.05rem", fontWeight: 800, margin: "0 0 0.35rem" }}>{family} <span style={{ color: "var(--muted)", fontWeight: 600, fontSize: "0.85rem" }}>· {entries.length} pages</span></h3>
+        <p style={{ margin: "0 0 0.9rem", color: "var(--muted)", fontSize: "0.88rem", lineHeight: 1.65 }}>{microsoftFamilyBlurbs[family]}</p>
+        <div class="table-wrap"><table class="compare-table catalog-table">
+          <thead><tr><th>Exam</th><th>Code</th><th>Level</th><th>Status</th><th>Note</th><th>Voucher page</th></tr></thead>
+          <tbody>
+            {entries.map((e) => (
+              <tr>
+                <td><strong>{e.name}</strong></td>
+                <td>{e.code}</td>
+                <td>{e.level}</td>
+                <td><span class="status-pill" style={statusStyle(e.status)}>{statusLabel(e.status)}</span></td>
+                <td><span style={{ color: "var(--muted)", fontSize: "0.8rem" }}>{e.note || "Bookable now."}</span></td>
+                <td>
+                  {e.status === "retired" ? (
+                    <span style={{ color: "var(--muted)", fontSize: "0.8rem" }}>Legacy — do not buy</span>
+                  ) : (
+                    <a href={e.url} target="_blank" rel="sponsored noopener noreferrer" style={{ color: "var(--brand)", fontWeight: 600 }}>View voucher →</a>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table></div>
       </div>
     ))}
-    <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "12px", padding: "1.5rem" }}>
-      <h3 style={{ margin: "0 0 0.5rem", fontSize: "1rem" }}>AZ-104 study plan that actually works</h3>
-      <p style={{ color: "var(--muted)", fontSize: "0.92rem", lineHeight: 1.7, margin: 0 }}>Budget 8–12 weeks: identity and governance first, then storage, networking, and compute, with a free Azure account for every lab. Score 85%+ on two timed practice exams before booking. The voucher + Retake Assurance bundle removes the fear of booking early — which is exactly what keeps most candidates studying. Compare <a href="/udemy-aws-exam-vouchers" style={{ color: "var(--brand)", fontWeight: 600 }}>AWS vouchers</a> and <a href="/udemy-comptia-exam-vouchers" style={{ color: "var(--brand)", fontWeight: 600 }}>CompTIA vouchers</a>.</p>
+    <div class="callout" style={{ borderLeftColor: "#d97706" }}>
+      <h3 style={{ margin: "0 0 0.4rem", fontSize: "1rem" }}>50 pages does not mean 50 current exams</h3>
+      <p style={{ margin: 0, color: "var(--muted)", fontSize: "0.9rem", lineHeight: 1.7 }}>{msTotal} live pages break down as {msCurrent} current exams, {msRetiring} retiring exam and {msRetired} retired or legacy pages. The retired rows stay in the table so you can recognise an old page if you land on it from search — not because the voucher is still usable.</p>
     </div>
   </div>
 </section>
-<section style={{ padding: "2rem 1rem 4rem", background: "var(--bg-secondary)" }}>
+
+<section id="which" style={{ padding: "2rem 1rem 3rem" }}>
+  <div class="container" style={{ maxWidth: "1080px" }}>
+    <span class="section-title">Choose your track</span>
+    <h2 class="section-heading">Which Microsoft voucher should you buy?</h2>
+    <p style={{ color: "var(--muted)", fontSize: "0.95rem", lineHeight: 1.75, maxWidth: "840px", margin: "0.75rem 0 1.5rem" }}>
+      Buy the current exam that matches the job you want. Microsoft vouchers are exam-specific and non-refundable, so a retired code is an expensive mistake.
+    </p>
+    <div class="choice-grid">
+      <div class="choice-card">
+        <h3>Fundamentals — $89.10</h3>
+        <p class="price">AZ-900, DP-900, SC-900, PL-900, GH-900</p>
+        <p>The zero-prerequisite entry point. AZ-900 is the broad Azure vocabulary cert; DP-900 covers data concepts; SC-900 covers security, compliance and identity; PL-900 covers Power Platform; GH-900 covers GitHub. AI-900 is retired — do not buy it.</p>
+        <p><strong style={{ color: "var(--text)" }}>Choose if:</strong> this is your first Microsoft cert, or you need a cheap credible cloud signal on a résumé.</p>
+        <p><a href="/topics/microsoft-azure" style={{ color: "var(--brand)", fontWeight: 600 }}>Azure courses →</a> · <a href="/topics/data-analysis" style={{ color: "var(--brand)", fontWeight: 600 }}>Data courses →</a></p>
+      </div>
+      <div class="choice-card">
+        <h3>Azure — $148.50</h3>
+        <p class="price">AZ-104, AZ-305, AZ-400, AZ-700, AZ-120, AZ-140</p>
+        <p>The core Azure path: AZ-104 for administrators, AZ-305 for architects, AZ-400 for DevOps, AZ-700 for networking, AZ-120 for SAP workloads and AZ-140 for virtual desktop. AZ-204, AZ-500, AZ-800 and AZ-801 are retired.</p>
+        <p><strong style={{ color: "var(--text)" }}>Choose if:</strong> you build or operate Azure infrastructure and already have fundamentals-level knowledge.</p>
+        <p><a href="/topics/microsoft-azure" style={{ color: "var(--brand)", fontWeight: 600 }}>Azure courses →</a> · <a href="/topics/azure-kubernetes-service-aks" style={{ color: "var(--brand)", fontWeight: 600 }}>AKS courses →</a></p>
+      </div>
+      <div class="choice-card">
+        <h3>Data & AI — $148.50</h3>
+        <p class="price">DP-300, DP-420, DP-600, DP-700</p>
+        <p>Azure SQL administration, Cosmos DB, Microsoft Fabric analytics and Fabric data engineering. AI-102 and DP-100 are retired; their replacements AI-103 and AI-300 do not have Udemy voucher pages yet. DP-203 retired in 2025 and is no longer a live page.</p>
+        <p><strong style={{ color: "var(--text)" }}>Choose if:</strong> you work with databases, analytics engineering or Fabric, or you are moving into AI data roles.</p>
+        <p><a href="/topics/microsoft-fabric" style={{ color: "var(--brand)", fontWeight: 600 }}>Fabric courses →</a> · <a href="/topics/data-engineering" style={{ color: "var(--brand)", fontWeight: 600 }}>Data engineering courses →</a></p>
+      </div>
+      <div class="choice-card">
+        <h3>Security — $148.50</h3>
+        <p class="price">SC-200, SC-300, SC-401, SC-100</p>
+        <p>Four current security exams: SC-200 for SOC analysts, SC-300 for identity and access, SC-401 for information security administration, and SC-100 for cybersecurity architects. AZ-500 is retired; SC-500 has no Udemy page yet.</p>
+        <p><strong style={{ color: "var(--text)" }}>Choose if:</strong> you work in a SOC, identity team or security architecture role, or you are moving from IT admin to security.</p>
+        <p><a href="/topics/microsoft-sentinel" style={{ color: "var(--brand)", fontWeight: 600 }}>Sentinel courses →</a> · <a href="/topics/microsoft-entra-id-azure-active-directory" style={{ color: "var(--brand)", fontWeight: 600 }}>Entra ID courses →</a></p>
+      </div>
+      <div class="choice-card">
+        <h3>Microsoft 365 — $148.50</h3>
+        <p class="price">MD-102, MS-700, MS-721</p>
+        <p>Endpoint, Teams and collaboration administration. MD-102 covers Intune and Windows endpoint management; MS-700 covers Teams administration; MS-721 covers collaboration communications. MS-102 retires on November 30, 2026.</p>
+        <p><strong style={{ color: "var(--text)" }}>Choose if:</strong> you manage Windows endpoints, Microsoft 365 tenants or Teams voice and collaboration.</p>
+        <p><a href="/topics/microsoft-intune" style={{ color: "var(--brand)", fontWeight: 600 }}>Intune courses →</a> · <a href="/topics/microsoft-teams" style={{ color: "var(--brand)", fontWeight: 600 }}>Teams courses →</a></p>
+      </div>
+      <div class="choice-card">
+        <h3>Power Platform, Dynamics & GitHub — $148.50</h3>
+        <p class="price">PL-300, MB-230/310/330/500/800/820, GH-100/200/300/500</p>
+        <p>PL-300 is the only current Power Platform voucher; PL-200, PL-400, PL-500 and PL-600 are retired. Six Dynamics 365 functional and developer exams remain current. All four role-based GitHub vouchers — administration, Actions, Copilot and Advanced Security — are current.</p>
+        <p><strong style={{ color: "var(--text)" }}>Choose if:</strong> you work in business applications, ERP/CRM, BI or developer tooling.</p>
+        <p><a href="/topics/microsoft-power-platform" style={{ color: "var(--brand)", fontWeight: 600 }}>Power Platform courses →</a> · <a href="/topics/github" style={{ color: "var(--brand)", fontWeight: 600 }}>GitHub courses →</a></p>
+      </div>
+    </div>
+    <div style={{ marginTop: "1.25rem", background: "var(--card)", border: "1px solid var(--border)", borderRadius: "12px", padding: "1rem 1.2rem" }}>
+      <p style={{ margin: 0, color: "var(--muted)", fontSize: "0.9rem", lineHeight: 1.75 }}><strong style={{ color: "var(--text)" }}>Fast decision:</strong> first cert → AZ-900. Azure admin → AZ-104. Azure architect → AZ-305 after AZ-104. DevOps → AZ-400. Security ops → SC-200. Identity → SC-300. Data engineering → DP-700. Fabric analytics → DP-600. Power BI → PL-300. Endpoints → MD-102. Teams → MS-700. Dynamics finance → MB-310. Business Central → MB-800. GitHub Copilot → GH-300.</p>
+    </div>
+  </div>
+</section>
+
+<section id="redeem" style={{ padding: "1rem 1rem 2.5rem", background: "var(--bg-secondary)" }}>
+  <div class="container" style={{ maxWidth: "900px" }}>
+    <span class="section-title">Redemption</span>
+    <h2 class="section-heading">How to buy and redeem a Microsoft exam voucher</h2>
+    <p style={{ color: "var(--muted)", fontSize: "0.95rem", lineHeight: 1.75, margin: "0.75rem 0 1.25rem" }}>
+      Udemy sells the code; Microsoft owns the certification and Pearson VUE delivers the exam. Buying and booking are two separate steps — do them in this order.
+    </p>
+    <ol style={{ margin: 0, paddingLeft: "1.3rem", color: "var(--muted)", fontSize: "0.94rem", lineHeight: 1.9 }}>
+      <li><strong style={{ color: "var(--text)" }}>Confirm the exam is current.</strong> Check the code in the catalogue above and on Microsoft Learn. Retired exams cannot be booked, even if the Udemy page is live.</li>
+      <li><strong style={{ color: "var(--text)" }}>Choose voucher-only or + Retake Assurance.</strong> Decide before checkout. Retake Assurance cannot be added later, and it is not offered on every exam.</li>
+      <li><strong style={{ color: "var(--text)" }}>Pay on Udemy.</strong> A card or Udemy credits can be used; coupons do not apply to vouchers.</li>
+      <li><strong style={{ color: "var(--text)" }}>Copy the code from My learning → Certifications.</strong> Udemy also emails it, but your account is the source of truth. Keep the expiry date.</li>
+      <li><strong style={{ color: "var(--text)" }}>Sign in to Microsoft Learn.</strong> Open Profile → Credentials → Certifications, choose the exam and continue to Pearson VUE.</li>
+      <li><strong style={{ color: "var(--text)" }}>Schedule online or at a test centre.</strong> Paste the voucher code at the payment step. Vouchers are valid only in the country of purchase.</li>
+      <li><strong style={{ color: "var(--text)" }}>Book early enough to change the appointment.</strong> Microsoft's standard rule is at least 24 hours; some voucher terms use 72 hours. The voucher expiry date does not move.</li>
+    </ol>
+    <div class="callout" style={{ marginTop: "1.25rem", borderLeftColor: "#d97706" }}>
+      <h3 style={{ margin: "0 0 0.4rem", fontSize: "0.95rem" }}>Before you pay, check six things</h3>
+      <p style={{ margin: 0, color: "var(--muted)", fontSize: "0.88rem", lineHeight: 1.75 }}>The exam code is current · the voucher expiry date · whether Retake Assurance is included · your country's eligibility · that the name on your Microsoft profile matches your ID · that the exam is not retiring before your test date.</p>
+    </div>
+  </div>
+</section>
+
+<section id="retake" style={{ padding: "2rem 1rem 2.5rem" }}>
+  <div class="container" style={{ maxWidth: "900px" }}>
+    <span class="section-title">Retake cover</span>
+    <h2 class="section-heading">How Microsoft Retake Assurance works</h2>
+    <p style={{ color: "var(--muted)", fontSize: "0.95rem", lineHeight: 1.75, margin: "0.75rem 0 1rem" }}>
+      Retake Assurance is Udemy's optional Microsoft retake add-on. It is available on select exams, not every voucher page.
+      It must be bought with the original voucher, covers one extra attempt, and reuses the same voucher code.
+    </p>
+    <ol style={{ margin: 0, paddingLeft: "1.3rem", color: "var(--muted)", fontSize: "0.94rem", lineHeight: 1.9 }}>
+      <li><strong style={{ color: "var(--text)" }}>Check the voucher page shows the + Retake option.</strong> If it is not offered, you cannot add it later.</li>
+      <li><strong style={{ color: "var(--text)" }}>Buy it with the original voucher.</strong> It cannot be added after checkout or after you fail.</li>
+      <li><strong style={{ color: "var(--text)" }}>Take the first exam through Pearson VUE.</strong> Normal Microsoft scheduling and ID rules apply.</li>
+      <li><strong style={{ color: "var(--text)" }}>If you fail, rebook the same exam.</strong> Use the same voucher code. Microsoft's retake policy still applies: wait 24 hours after the first failure before rebooking.</li>
+      <li><strong style={{ color: "var(--text)" }}>Sit the retake before the voucher expires.</strong> The retake has an expiration date too, and it cannot be extended.</li>
+      <li><strong style={{ color: "var(--text)" }}>If you pass first time, the add-on expires unused.</strong> It is non-refundable.</li>
+    </ol>
+    <div class="table-wrap" style={{ marginTop: "1.25rem" }}><table class="compare-table">
+      <thead><tr><th>Feature</th><th>Microsoft Retake Assurance</th><th>CompTIA Retake Assurance</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Bought with the voucher</strong></td><td>Yes — cannot be added later</td><td>Yes — cannot be added later</td></tr>
+        <tr><td><strong>Code after a failure</strong></td><td>Same voucher code</td><td>Same voucher code</td></tr>
+        <tr><td><strong>Availability</strong></td><td>Select Microsoft exams only</td><td>Select CompTIA exams only</td></tr>
+        <tr><td><strong>Retake wait</strong></td><td>24 hours after the first failure</td><td>No wait after the first failure; 14 days before a third attempt</td></tr>
+        <tr><td><strong>Expiry</strong></td><td>Retake before the voucher expires</td><td>Retake before the voucher expires</td></tr>
+        <tr><td><strong>Refund if you pass</strong></td><td>No</td><td>No</td></tr>
+      </tbody>
+    </table></div>
+    <p style={{ color: "var(--muted)", fontSize: "0.9rem", lineHeight: 1.75, margin: "1rem 0 0" }}>
+      <strong style={{ color: "var(--text)" }}>The rules:</strong> one extra attempt only, non-refundable, non-transferable, and not refunded if you pass first time.
+      Microsoft's retake policy allows five attempts in 12 months, with a 24-hour wait after the first failure and a 14-day wait between later attempts.
+    </p>
+  </div>
+</section>
+
+<section id="compare" style={{ padding: "1rem 1rem 2.5rem", background: "var(--bg-secondary)" }}>
+  <div class="container" style={{ maxWidth: "1000px" }}>
+    <span class="section-title">Head to head</span>
+    <h2 class="section-heading">Udemy voucher vs booking direct with Microsoft</h2>
+    <p style={{ color: "var(--muted)", fontSize: "0.95rem", lineHeight: 1.75, maxWidth: "840px", margin: "0.75rem 0 1.25rem" }}>
+      A Udemy voucher is convenient, but it is not automatically the best deal — especially if the exam you need is a new replacement code that Udemy has not listed yet.
+    </p>
+    <div class="table-wrap"><table class="compare-table">
+      <thead><tr><th>Feature</th><th>Udemy Microsoft voucher</th><th>Direct with Microsoft / Pearson VUE</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Price</strong></td><td>$89.10 for Fundamentals, $148.50 for Associate/Expert/Specialty</td><td>$99 / $165 list per attempt; local currency in many countries</td></tr>
+        <tr><td><strong>Retake</strong></td><td>Optional Retake Assurance on select exams, bought upfront, same code</td><td>Pay again after a failed attempt; Microsoft retake policy applies</td></tr>
+        <tr><td><strong>Validity</strong></td><td>At least 9 months; expiry cannot be extended</td><td>No voucher to expire — pay when you schedule</td></tr>
+        <tr><td><strong>Region</strong></td><td>Valid only in the country of purchase</td><td>Local Microsoft pricing in many countries</td></tr>
+        <tr><td><strong>Cancellation</strong></td><td>Voucher non-refundable; appointment changes at least 24 hours ahead, 72 hours on some voucher terms</td><td>Microsoft reschedule/cancel policy; 24 hours standard</td></tr>
+        <tr><td><strong>Best for</strong></td><td>One-stop prep + exam + retake, and a fixed USD price</td><td>New replacement exams not yet on Udemy, or maximum flexibility</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<section id="legit" style={{ padding: "2rem 1rem 2.5rem" }}>
+  <div class="container" style={{ maxWidth: "900px" }}>
+    <span class="section-title">Trust check</span>
+    <h2 class="section-heading">Are Udemy Microsoft vouchers legitimate?</h2>
+    <p style={{ color: "var(--muted)", fontSize: "0.95rem", lineHeight: 1.75, margin: "0.75rem 0 1rem" }}>
+      Yes — with one distinction that matters. Udemy is the <strong style={{ color: "var(--text)" }}>seller of the voucher</strong>, not the exam provider.
+      Microsoft owns the certification and Pearson VUE delivers the test. That is why the code is redeemed inside the Microsoft/Pearson VUE checkout, not inside Udemy.
+    </p>
+    <ul style={{ margin: 0, paddingLeft: "1.2rem", color: "var(--muted)", fontSize: "0.92rem", lineHeight: 1.85 }}>
+      <li><strong style={{ color: "var(--text)" }}>Who sells it:</strong> Udemy, on udemy.com. The receipt and voucher code come from Udemy.</li>
+      <li><strong style={{ color: "var(--text)" }}>Who delivers the exam:</strong> Pearson VUE, Microsoft's testing provider. You schedule and reschedule through Microsoft Learn.</li>
+      <li><strong style={{ color: "var(--text)" }}>Who issues the certification:</strong> Microsoft. Udemy cannot issue, renew or verify a Microsoft certification.</li>
+      <li><strong style={{ color: "var(--text)" }}>How to verify your code:</strong> it appears in My learning → Certifications and is accepted at the Microsoft/Pearson VUE payment step.</li>
+    </ul>
+    <h3 style={{ fontSize: "1rem", margin: "1.5rem 0 0.5rem" }}>Refunds, expiry and transfers</h3>
+    <p style={{ color: "var(--muted)", fontSize: "0.92rem", lineHeight: 1.8, margin: 0 }}>
+      Udemy Microsoft vouchers and Retake Assurance are non-refundable and non-transferable. They are valid for at least nine months from purchase, and the expiry date cannot be extended. A voucher is valid only in the country where you bought it.
+      If you cancel an exam appointment under Microsoft's policy, that affects the appointment, not the voucher purchase. Late changes or a no-show can forfeit the voucher.
+    </p>
+    <div class="callout" style={{ marginTop: "1.25rem", borderLeftColor: "#c0392b" }}>
+      <h3 style={{ margin: "0 0 0.4rem", fontSize: "0.95rem" }}>Red flags</h3>
+      <p style={{ margin: 0, color: "var(--muted)", fontSize: "0.88rem", lineHeight: 1.75 }}>A seller who asks for a bank transfer, sends a code by direct message, or offers a price far below Microsoft's list fee. Vouchers are non-transferable, so a code from a stranger may not work. Buy from the official Udemy page or Microsoft directly.</p>
+    </div>
+  </div>
+</section>
+
+<section id="worth" style={{ padding: "1rem 1rem 2.5rem", background: "var(--bg-secondary)" }}>
+  <div class="container" style={{ maxWidth: "1000px" }}>
+    <span class="section-title">Value check</span>
+    <h2 class="section-heading">Are Udemy Microsoft vouchers worth it in 2026?</h2>
+    <p style={{ color: "var(--muted)", fontSize: "0.95rem", lineHeight: 1.75, maxWidth: "840px", margin: "0.75rem 0 1.5rem" }}>
+      It depends on which exam you need. For a current Fundamentals or Associate exam, the 10% saving is real and the convenience is high. For a replacement code that Udemy has not listed yet, direct with Microsoft is the only option.
+    </p>
+    <div class="choice-grid">
+      <div class="choice-card">
+        <h3>Voucher-only wins when…</h3>
+        <p>You need a current exam, the live price is below Microsoft's list fee, and you are already scoring above 85% on timed practice exams. Pair it with a discounted prep course and keep the total under the cost of a direct exam plus full-price training.</p>
+      </div>
+      <div class="choice-card">
+        <h3>Retake Assurance wins when…</h3>
+        <p>You are attempting a $165 Associate or Expert exam where a second full fee is painful, or it is your first role-based exam and a failed attempt would derail your timeline. Check that the exam page actually offers it before relying on it.</p>
+      </div>
+      <div class="choice-card">
+        <h3>Direct with Microsoft wins when…</h3>
+        <p>You need a replacement exam — AI-901, AI-103, AI-300, AI-200, SC-500, AZ-802, AB-410 or AB-650 — because Udemy has not listed a voucher for those codes yet. Direct is also better if you need local-currency pricing or maximum date flexibility.</p>
+      </div>
+      <div class="choice-card">
+        <h3>Other legitimate ways to pay less</h3>
+        <p>Employer or academic bulk vouchers, Microsoft Learn challenges and event vouchers, and coupon-discounted prep courses. Coupons work on courses, never on the voucher itself. Microsoft's official learning paths and practice assessments are free.</p>
+      </div>
+    </div>
+    <p style={{ color: "var(--muted)", fontSize: "0.9rem", lineHeight: 1.75, margin: "1.25rem 0 0" }}>
+      For the broader coupon strategy, see the <a href="/udemy-coupons-guide" style={{ color: "var(--brand)", fontWeight: 600 }}>Udemy coupons guide</a> and the step-by-step <a href="/how-to-redeem-coupon" style={{ color: "var(--brand)", fontWeight: 600 }}>coupon redemption guide</a>.
+    </p>
+  </div>
+</section>
+
+<section id="study" style={{ padding: "2rem 1rem 2.5rem" }}>
+  <div class="container" style={{ maxWidth: "900px" }}>
+    <span class="section-title">Before you book</span>
+    <h2 class="section-heading">How to prepare so you don't waste the voucher</h2>
+    <p style={{ color: "var(--muted)", fontSize: "0.95rem", lineHeight: 1.75, margin: "0.75rem 0 1rem" }}>
+      Most candidates need 2–4 weeks for a Fundamentals exam and 8–12 weeks for an Associate or Expert exam. Microsoft exams are scenario-heavy, so course completion alone is not enough: use the official skills outline, hands-on labs in a free tenant or Azure subscription, and two timed practice runs above 85%.
+    </p>
+    <ul style={{ margin: 0, paddingLeft: "1.2rem", color: "var(--muted)", fontSize: "0.92rem", lineHeight: 1.85 }}>
+      <li><strong style={{ color: "var(--text)" }}>Use the official study guide for the current code.</strong> Microsoft publishes the skills measured and weightings for every exam. Study to the code on the voucher, not a retired outline.</li>
+      <li><strong style={{ color: "var(--text)" }}>Do the labs.</strong> AZ-104, AZ-400, SC-200 and DP-300 reward hands-on work in Azure, Entra ID, Sentinel, Defender and Azure SQL. Watching videos is not enough.</li>
+      <li><strong style={{ color: "var(--text)" }}>Do not book before two clean practice runs.</strong> A voucher is a prepaid attempt, not a diagnostic. Rescheduling is allowed, but the expiry date does not move.</li>
+      <li><strong style={{ color: "var(--text)" }}>Check the retirement calendar before booking.</strong> If your exam has a published retirement date, leave enough room to sit it before the cutoff, or study the replacement instead.</li>
+      <li><strong style={{ color: "var(--text)" }}>Match the course to the current code.</strong> AI-103, AI-300, AI-200, SC-500 and AZ-802 materials are still catching up. Check the course's last-updated date before buying.</li>
+      <li><strong style={{ color: "var(--text)" }}>Plan the renewal.</strong> Fundamentals certifications do not expire; Associate and Expert certifications need a free online renewal each year. Put a calendar reminder in place after you pass.</li>
+    </ul>
+  </div>
+</section>
+
+<section style={{ padding: "0 1rem 2rem" }}>
+  <div class="container" style={{ maxWidth: "900px" }}>
+    <div style={{ display: "flex", gap: "1rem", alignItems: "center", flexWrap: "wrap", background: "var(--card)", border: "1px solid var(--border)", borderRadius: "14px", padding: "1.1rem 1.25rem" }}>
+      <img src="/images/author.jpg" alt="Josh Smith, founder and editor of CourseSpeak" width="72" height="72" loading="lazy" style={{ width: "72px", height: "72px", borderRadius: "50%", objectFit: "cover", flexShrink: 0 }} />
+      <div style={{ flex: 1, minWidth: "240px" }}>
+        <p style={{ margin: 0, fontWeight: 700, fontSize: "0.95rem" }}>Josh Smith · Founder & Editor, CourseSpeak</p>
+        <p style={{ margin: "0.35rem 0 0", color: "var(--muted)", fontSize: "0.86rem", lineHeight: 1.65 }}>
+          Josh has spent 8+ years testing Udemy coupons and certification voucher offers. He audited all 50 Microsoft voucher pages, checked every retirement date and verified the Retake Assurance terms in this guide on {updatedLong}.
+        </p>
+        <p style={{ margin: "0.35rem 0 0", color: "var(--muted)", fontSize: "0.82rem" }}>
+          <a href="/about#author" style={{ color: "var(--brand)" }}>About the author</a> · <a href="/contact" style={{ color: "var(--brand)" }}>Report a correction</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style={{ padding: "0 1rem 3rem" }}>
+  <div class="container" style={{ maxWidth: "1000px" }}>
+    <div class="related-grid">
+      <a href="/udemy-certification-vouchers"><strong>All certification vouchers →</strong><span>77 pages, 58 current exams across AWS, CompTIA and Microsoft</span></a>
+      <a href="/udemy-comptia-exam-vouchers"><strong>CompTIA exam vouchers →</strong><span>15 products, current codes and Retake Assurance</span></a>
+      <a href="/udemy-aws-exam-vouchers"><strong>AWS exam vouchers →</strong><span>12 products, current codes and Second Chance</span></a>
+      <a href="/udemy-coupons-guide"><strong>Udemy coupons guide →</strong><span>How to stack course discounts without wasting a voucher</span></a>
+      <a href="/topics/microsoft-azure"><strong>Azure courses →</strong><span>AZ-900, AZ-104 and AZ-305 prep on Udemy</span></a>
+      <a href="/topics/microsoft-fabric"><strong>Fabric courses →</strong><span>DP-600 and DP-700 prep on Udemy</span></a>
+      <a href="/topics/microsoft-sentinel"><strong>Sentinel courses →</strong><span>SC-200 security operations prep</span></a>
+      <a href="/topics/github-copilot"><strong>GitHub Copilot courses →</strong><span>GH-300 prep on Udemy</span></a>
+    </div>
+  </div>
+</section>
+
+<section id="faq" style={{ padding: "2rem 1rem 4rem", background: "var(--bg-secondary)" }}>
   <div class="container" style={{ maxWidth: "900px" }}>
     <h2 class="section-heading" style={{ textAlign: "center", marginBottom: "1.5rem" }}>Microsoft Voucher FAQ</h2>
     <div style={{ display: "grid", gap: "0.75rem" }}>
@@ -105,8 +600,8 @@ const jsonLd = { "@context": "https://schema.org", "@graph": [
     </div>
     <div class="cta-box" style={{ marginTop: "2.5rem" }}>
       <span class="cta-eyebrow">Commit today</span>
-      <h2>Save 10% on Your Microsoft Exam</h2>
-      <p class="cta-subtext">Pearson VUE scheduling · Retake Assurance · 9+ months validity.</p>
+      <h2>Book a Current Microsoft Exam</h2>
+      <p class="cta-subtext">33 current exams · MS-102 bookable until Nov 30 · Retake Assurance on select exams · 9+ months validity.</p>
       <div class="cta-actions"><a href={ALL_VOUCHERS_URL} target="_blank" rel="sponsored noopener noreferrer" class="btn btn-primary btn-lg" style="border-radius:999px">Get Microsoft Vouchers →</a></div>
     </div>
   </div>

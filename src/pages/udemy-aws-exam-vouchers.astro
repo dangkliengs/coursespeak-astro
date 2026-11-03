@@ -1,14 +1,19 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { awsVouchers, awsGroupBlurbs, ALL_VOUCHERS_URL } from "../data/vouchers";
+import "../styles/voucher-v2.css";
+import { awsVouchers, ALL_VOUCHERS_URL, voucherPrice } from "../data/vouchers";
 const currentYear = new Date().getFullYear();
 const lastModified = new Date().toISOString().split("T")[0];
 const updatedLong = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 const canonicalUrl = "https://coursespeak.com/udemy-aws-exam-vouchers";
 const pageTitle = `Udemy AWS Exam Vouchers ${currentYear}: Prices, Second Chance & Codes`;
 const pageDescription = `Compare all 12 Udemy AWS exam vouchers in ${currentYear} — voucher-only vs Second Chance prices, current exam codes, and the AWS exam changes through January 2027.`;
-const groups: Record<string, typeof awsVouchers> = {};
-for (const vv of awsVouchers) { (groups[vv.category] ||= []).push(vv); }
+
+const quickPicks = [
+  { voucher: awsVouchers[0], label: "Cloud Practitioner · foundational" },
+  { voucher: awsVouchers[2], label: "Solutions Architect · associate" },
+  { voucher: awsVouchers[7], label: "Solutions Architect · professional" },
+];
 
 const faqs = [
   { q: "Which AWS vouchers can I buy on Udemy?", a: "Udemy lists 12 voucher products covering 10 current exams: Foundational (Cloud Practitioner CLF-C02, AI Practitioner AIF-C01), Associate (Solutions Architect SAA-C03, Developer DVA-C03, Data Engineer DEA-C01, CloudOps SOA-C03, ML Engineer MLA-C02), Professional (Solutions Architect SAP-C03, DevOps Engineer DOP-C02), and Specialty (Security SCS-C03). Two legacy Specialty listings — Machine Learning MLS-C01 (retired March 31, 2026) and Advanced Networking ANS-C01 (retires December 31, 2026) — remain purchasable because vouchers are tier-wide. Associate vouchers work across all Associate exams; Professional/Specialty vouchers across all active Pro/Specialty exams." },
@@ -66,44 +71,93 @@ const jsonLd = { "@context": "https://schema.org", "@graph": [
   @media(max-width:768px){.grid-3,.choice-grid,.related-grid,.toc{grid-template-columns:1fr!important}.compare-table{min-width:680px}}
 </style>
 
-<section style={{ padding: "4rem 1rem 2rem", textAlign: "center" }}>
-  <div style={{ maxWidth: "900px", margin: "0 auto" }}>
-    <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>AWS Vouchers · Checked {updatedLong}</div>
-    <h1 style={{ fontSize: "clamp(1.8rem,4.5vw,2.8rem)", fontWeight: 800, lineHeight: 1.2, margin: "0 auto 0.75rem" }}>
-      <span style={{ background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Udemy AWS Exam Vouchers {currentYear}</span><br />
-      <span style={{ color: "var(--text)" }}>Prices, Current Codes & Exam Changes</span>
-    </h1>
-    <p style={{ color: "var(--muted)", fontSize: "0.86rem", margin: "0 auto 1rem", lineHeight: 1.6 }}>
-      By <a href="/about#author" style={{ color: "var(--brand)" }}>Josh Smith</a>, Founder & Editor · Reviewed {updatedLong} ·
-      Sources: <a href="https://aws.amazon.com/certification/policies/before-testing/" target="_blank" rel="noopener noreferrer" style={{ color: "var(--brand)" }}>AWS exam pricing</a> and <a href="https://www.udemy.com/all-certification-vouchers/" target="_blank" rel="noopener noreferrer" style={{ color: "var(--brand)" }}>Udemy voucher catalogue</a>
-    </p>
-    <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "720px", margin: "0 auto 0.75rem", lineHeight: 1.7 }}>
-      Udemy lists <strong style={{ color: "var(--text)" }}>12 AWS voucher products</strong>, but only <strong style={{ color: "var(--text)" }}>10 map to exams you can book today</strong>.
-      The other two are legacy Specialty listings that still work because vouchers are level-wide, not exam-specific.
-      Voucher-only prices start at $90 for Foundational, $135 for Associate and $270 for Professional/Specialty — roughly 10% below the AWS list price.
-    </p>
-    <p style={{ color: "var(--muted)", fontSize: "0.9rem", maxWidth: "720px", margin: "0 auto 1.5rem", lineHeight: 1.7 }}>
-      Second Chance is <em>not</em> included at those prices. The optional retake bundle costs $115.50, $177.80 or $348.80.
-      This guide separates the two, flags the exam codes changing between November 2026 and January 2027, and shows when booking direct with AWS is actually cheaper.
-    </p>
-    <img src="/assets/images/vouchers/provider-aws.svg" alt="AWS exam vouchers — Cloud Practitioner, Solutions Architect and Specialty" width="480" height="270" loading="eager" fetchpriority="high" style={{ width: "100%", maxWidth: "720px", height: "auto", borderRadius: "16px", border: "1px solid var(--border)", margin: "0 auto 1.5rem", display: "block", background: "#fff" }} />
-    <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center", flexWrap: "wrap" }}>
-      <a href={ALL_VOUCHERS_URL} target="_blank" rel="sponsored noopener noreferrer" class="btn btn-primary btn-lg" style={{ borderRadius: "999px" }}>Browse All AWS Vouchers →</a>
-      <a href="#prices" class="btn btn-ghost btn-lg" style={{ borderRadius: "999px" }}>Compare Prices</a>
+<section class="vp-hero">
+  <div class="container vp-hero-grid">
+    <div>
+      <div class="vp-eyebrow">AWS Vouchers · Checked {updatedLong}</div>
+      <h1>
+        <span class="vp-gradient">Udemy AWS Exam Vouchers {currentYear}</span>
+        <span class="vp-title-sub">Prices, current codes & exam changes</span>
+      </h1>
+      <p class="vp-lede">
+        Udemy lists <strong>12 AWS voucher products</strong> for <strong>10 current exams</strong>.
+        Voucher-only prices: <strong>$90 Foundational</strong>, <strong>$135 Associate</strong> and <strong>$270 Professional/Specialty</strong> — about 10% below AWS list.
+        Second Chance bundles cost $115.50–$348.80.
+      </p>
+      <div class="vp-chips">
+        <span class="vp-chip"><strong>10</strong> current exams</span>
+        <span class="vp-chip">From <strong>$90</strong></span>
+        <span class="vp-chip">Second Chance available</span>
+        <span class="vp-chip">9+ months validity</span>
+      </div>
+      <div class="vp-hero-actions">
+        <a href={ALL_VOUCHERS_URL} target="_blank" rel="sponsored noopener noreferrer" class="btn btn-primary btn-lg" style={{ borderRadius: "999px" }}>Browse All 12 Vouchers →</a>
+        <a href="#vouchers" class="btn btn-ghost btn-lg" style={{ borderRadius: "999px" }}>See Voucher List</a>
+      </div>
+      <p class="vp-meta">
+        By <a href="/about#author">Josh Smith</a>, Founder & Editor · Reviewed {updatedLong} ·
+        Sources: <a href="https://aws.amazon.com/certification/policies/before-testing/" target="_blank" rel="noopener noreferrer">AWS exam pricing</a> and <a href="https://www.udemy.com/all-certification-vouchers/" target="_blank" rel="noopener noreferrer">Udemy voucher catalogue</a>
+      </p>
+      <p class="vp-disclosure">Sponsored — CourseSpeak may earn a commission at no extra cost to you. <a href="/affiliate-disclosure">Affiliate Disclosure</a></p>
     </div>
-    <p style={{ fontSize: "0.78rem", color: "var(--muted)", marginTop: "0.9rem" }}>Sponsored — CourseSpeak may earn a commission at no extra cost to you. <a href="/affiliate-disclosure" style={{ color: "var(--brand)" }}>Affiliate Disclosure</a></p>
+    <aside class="vp-hero-card" aria-label="Top AWS vouchers">
+      <div class="vp-hero-card-head">
+        <div>
+          <span class="vp-kicker">Top picks</span>
+          <strong>Most-booked AWS exams</strong>
+        </div>
+        <span class="vp-live">Prices live</span>
+      </div>
+      {quickPicks.map((p) => (
+        <a class="vp-quick-row" href={p.voucher.url} target="_blank" rel="sponsored noopener noreferrer">
+          <span class="vp-quick-info"><strong>{p.voucher.code}</strong><span>{p.label}</span></span>
+          <span class="vp-quick-price"><strong>{voucherPrice(p.voucher)}</strong><span>Udemy</span></span>
+        </a>
+      ))}
+      <div class="vp-hero-card-foot">
+        <span>Retail vs Udemy checked {updatedLong}</span>
+        <a href="#vouchers">All 12 →</a>
+      </div>
+    </aside>
   </div>
 </section>
 
-<section style={{ paddingBottom: "2rem" }}>
-  <div class="container"><div class="stat-grid" style={{ gridTemplateColumns: "repeat(3,1fr)", maxWidth: "650px" }}>
-    <div class="stat-box"><div class="stat-value">12</div><div class="stat-label">Voucher products</div></div>
-    <div class="stat-box"><div class="stat-value">10</div><div class="stat-label">Current exams</div></div>
-    <div class="stat-box"><div class="stat-value">$90</div><div class="stat-label">Lowest voucher-only</div></div>
-  </div></div>
+<section id="vouchers" class="vp-listing">
+  <div class="container" style={{ maxWidth: "1180px" }}>
+    <div class="vp-section-head">
+      <div>
+        <span class="section-title">Voucher list</span>
+        <h2>All 12 AWS voucher products on Udemy</h2>
+        <p>10 current exams + 2 legacy Specialty listings. Prices are tier-wide: Foundational $90, Associate $135, Professional/Specialty $270. Every card links to the official Udemy listing.</p>
+      </div>
+      <a class="vp-head-link" href="#prices">Compare prices ↓</a>
+    </div>
+    <div class="vp-voucher-grid">
+      {awsVouchers.map((vv) => (
+        <a class="vp-voucher-card" href={vv.url} target="_blank" rel="sponsored noopener noreferrer">
+          <div class="vp-voucher-media"><img src={vv.image} alt={vv.title} width="480" height="270" loading="lazy" /></div>
+          <div class="vp-voucher-body">
+            <span class="vp-voucher-code">{vv.code}{vv.badge ? ` · ${vv.badge}` : ""}</span>
+            <div class="vp-voucher-title">{vv.title}</div>
+            <p class="vp-voucher-blurb">{vv.blurb}</p>
+            {vv.note && <p class="vp-voucher-note">{vv.note}</p>}
+            <div class="vp-voucher-footer">
+              <span class="vp-voucher-price">{voucherPrice(vv)}<span>Udemy</span></span>
+              <span class="vp-voucher-cta">Get voucher →</span>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+    <p class="vp-list-note">AWS vouchers are <em>tier-wide</em>, not exam-specific. A Foundational voucher covers CLF-C02 or AIF-C01; an Associate voucher covers all five Associate exams; a Professional/Specialty voucher covers SAP-C03, DOP-C02 and SCS-C03. Pick the exam at Pearson VUE checkout.</p>
+    <div class="callout" style={{ marginTop: "1.2rem" }}>
+      <h3 style={{ margin: "0 0 0.4rem", fontSize: "1rem" }}>Why 12 products for 10 exams?</h3>
+      <p style={{ margin: 0, color: "var(--muted)", fontSize: "0.9rem", lineHeight: 1.7 }}>Udemy lists a separate product page for each exam name, but the underlying voucher is valid for every exam at that level. The two legacy Specialty pages (MLS-C01 and ANS-C01) remain on sale as Professional/Specialty vouchers even though those specific exams retired or are retiring. You are buying the level, not the exam name.</p>
+    </div>
+  </div>
 </section>
 
-<section style={{ padding: "0 1rem 1.5rem" }}>
+<section style={{ padding: "0 1rem 2rem" }}>
   <div class="container" style={{ maxWidth: "1080px" }}>
     <div class="callout" style={{ marginBottom: "1rem" }}>
       <h2 style={{ margin: "0 0 0.5rem", fontSize: "1.1rem" }}>Quick answer: which AWS voucher do you need?</h2>
@@ -112,19 +166,19 @@ const jsonLd = { "@context": "https://schema.org", "@graph": [
       <p style={{ margin: "0.35rem 0", color: "var(--muted)", fontSize: "0.9rem", lineHeight: 1.7 }}><strong style={{ color: "var(--text)" }}>Need a safety net:</strong> add Second Chance at purchase — $115.50 / $177.80 / $348.80. It cannot be added after you fail.</p>
       <p style={{ margin: "0.35rem 0", color: "var(--muted)", fontSize: "0.9rem", lineHeight: 1.7 }}><strong style={{ color: "var(--text)" }}>Already AWS certified?</strong> Check the 50% discount voucher in your AWS Certification Account first — it can beat every Udemy price on this page.</p>
     </div>
-    <nav class="toc" aria-label="On this page">
-      <a href="#prices">1. Voucher prices vs AWS list</a>
-      <a href="#changes">2. Exam changes: 2026 – January 2027</a>
-      <a href="#vouchers">3. All 12 voucher products</a>
-      <a href="#which">4. Which voucher to buy</a>
-      <a href="#redeem">5. How to buy and redeem</a>
-      <a href="#second-chance">6. How Second Chance works</a>
-      <a href="#discount">7. The 50% AWS discount voucher</a>
-      <a href="#compare">8. Udemy vs booking direct</a>
-      <a href="#legit">9. Legitimacy, refunds and expiry</a>
+    <nav class="vp-anchor-bar" aria-label="On this page">
+      <a href="#vouchers">1. All 12 vouchers</a>
+      <a href="#prices">2. Voucher prices</a>
+      <a href="#changes">3. Exam changes</a>
+      <a href="#which">4. Which voucher</a>
+      <a href="#redeem">5. Buy & redeem</a>
+      <a href="#second-chance">6. Second Chance</a>
+      <a href="#discount">7. 50% discount</a>
+      <a href="#compare">8. Udemy vs direct</a>
+      <a href="#legit">9. Legitimacy</a>
       <a href="#worth">10. Is it worth it?</a>
       <a href="#study">11. How to prepare</a>
-      <a href="#faq">12. AWS voucher FAQ</a>
+      <a href="#faq">12. FAQ</a>
     </nav>
   </div>
 </section>
@@ -197,42 +251,6 @@ const jsonLd = { "@context": "https://schema.org", "@graph": [
       <li><strong style={{ color: "var(--text)" }}>ANS-C01 has no replacement.</strong> If you want a networking specialty, book it before December 31, 2026; otherwise spend the voucher on SCS-C03.</li>
       <li><strong style={{ color: "var(--text)" }}>MLS-C01 is retired.</strong> The listing is still sold as a tier-wide Professional/Specialty voucher, not as a route to the old Machine Learning Specialty certification.</li>
     </ul>
-  </div>
-</section>
-
-<section id="vouchers" style={{ padding: "2rem 1rem 3rem" }}>
-  <div class="container" style={{ maxWidth: "1080px" }}>
-    <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
-      <span class="section-title">Full list</span>
-      <h2 class="section-heading">All 12 AWS voucher products on Udemy</h2>
-      <p style={{ color: "var(--muted)", fontSize: "0.9rem", maxWidth: "760px", margin: "0.6rem auto 0" }}>10 current exams + 2 legacy Specialty listings. The code on each card is the current code; where a listing is legacy, the note explains what the voucher still covers.</p>
-    </div>
-    {Object.entries(groups).map(([cat, list]) => (
-      <div style={{ marginBottom: "2rem" }}>
-        <h3 style={{ fontSize: "1.05rem", fontWeight: 800, margin: "0 0 0.9rem" }}>{cat}</h3>
-        <p style={{ margin: "0.35rem 0 1rem", color: "var(--muted)", fontSize: "0.88rem", lineHeight: 1.65 }}>{awsGroupBlurbs[cat]}</p>
-        <div class="grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1rem" }}>
-          {list.map((vv) => (
-            <div class="voucher-card">
-              <img src={vv.image} alt={vv.title} width="480" height="270" loading="lazy" />
-              <div style={{ padding: "1.1rem 1.2rem", display: "flex", flexDirection: "column", gap: "0.5rem", flex: 1 }}>
-                <span style={{ fontSize: "0.72rem", fontWeight: 800, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--brand)" }}>{vv.code}{vv.badge ? ` · ${vv.badge}` : ""}</span>
-                <div style={{ fontWeight: 700 }}>{vv.title}</div>
-                <p style={{ margin: 0, color: "var(--muted)", fontSize: "0.83rem", lineHeight: 1.6 }}>{vv.blurb}</p>
-                {vv.note && (
-                  <p style={{ margin: 0, padding: "0.45rem 0.6rem", borderLeft: `3px solid ${vv.status === "retired" ? "#c0392b" : vv.status === "retiring" ? "#d97706" : "var(--brand)"}`, background: "var(--bg-secondary)", borderRadius: "0 6px 6px 0", fontSize: "0.78rem", lineHeight: 1.5, color: "var(--muted)" }}>{vv.note}</p>
-                )}
-                <a href={vv.url} target="_blank" rel="sponsored noopener noreferrer" class="btn btn-primary" style={{ borderRadius: "8px", marginTop: "0.3rem" }}>Get Voucher →</a>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    ))}
-    <div class="callout">
-      <h3 style={{ margin: "0 0 0.4rem", fontSize: "1rem" }}>Why 12 products for 10 exams?</h3>
-      <p style={{ margin: 0, color: "var(--muted)", fontSize: "0.9rem", lineHeight: 1.7 }}>Udemy lists a separate product page for each exam name, but the underlying voucher is valid for every exam at that level. The two legacy Specialty pages (MLS-C01 and ANS-C01) remain on sale as Professional/Specialty vouchers even though those specific exams retired or are retiring. You are buying the level, not the exam name.</p>
-    </div>
   </div>
 </section>
 
@@ -462,9 +480,9 @@ const jsonLd = { "@context": "https://schema.org", "@graph": [
 <section style={{ padding: "0 1rem 3rem" }}>
   <div class="container" style={{ maxWidth: "1000px" }}>
     <div class="related-grid">
-      <a href="/udemy-certification-vouchers"><strong>All certification vouchers →</strong><span>35 products across AWS, CompTIA and Microsoft</span></a>
-      <a href="/udemy-comptia-exam-vouchers"><strong>CompTIA exam vouchers →</strong><span>Security+, Network+, A+ and more</span></a>
-      <a href="/udemy-microsoft-exam-vouchers"><strong>Microsoft exam vouchers →</strong><span>AZ-900, AZ-104, AZ-500 and AI-102</span></a>
+      <a href="/udemy-certification-vouchers"><strong>All certification vouchers →</strong><span>77 pages, 58 current exams across AWS, CompTIA and Microsoft</span></a>
+      <a href="/udemy-comptia-exam-vouchers"><strong>CompTIA exam vouchers →</strong><span>Security+, Network+, A+ and Retake Assurance</span></a>
+      <a href="/udemy-microsoft-exam-vouchers"><strong>Microsoft exam vouchers →</strong><span>50 live pages, 33 current exams</span></a>
       <a href="/udemy-coupons-guide"><strong>Udemy coupons guide →</strong><span>How to stack course discounts without wasting a voucher</span></a>
       <a href="/topics/aws-certified-solutions-architect-associate"><strong>SAA-C03 courses →</strong><span>Solutions Architect Associate prep on Udemy</span></a>
       <a href="/topics/aws-certified-developer-associate"><strong>DVA-C03 courses →</strong><span>Developer Associate prep on Udemy</span></a>
