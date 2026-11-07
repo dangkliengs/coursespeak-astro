@@ -1,8 +1,8 @@
 // Central data for Udemy Certification Exam Vouchers (CourseSpeak)
-// Affiliate: Udemy Impact c/6564357/4028133/39854
+// Affiliate: Udemy Impact c/6564357/4052981/39854
 // Images: /assets/images/vouchers/*.svg (proper exam-ticket artwork, shared set).
 
-export const AFFILIATE_BASE = "https://trk.udemy.com/c/6564357/4028133/39854";
+export const AFFILIATE_BASE = "https://trk.udemy.com/c/6564357/4052981/39854";
 export const ALL_VOUCHERS_URL = `${AFFILIATE_BASE}?u=https%3A%2F%2Fwww.udemy.com%2Fall-certification-vouchers%2F`;
 
 function v(path: string) {
