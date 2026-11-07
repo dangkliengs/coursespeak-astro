@@ -24,20 +24,28 @@ interface Instructor {
 // DATA AGGREGATION
 // ─────────────────────────────────────────────
 const deals: Deal[] = await readDeals();
+// Keyed by instructor SLUG (case-insensitive) so casing variants
+// ("CYVITRIX Learning" vs "Cyvitrix Learning") merge into one entry.
 const instructorMap = new Map<string, Instructor>();
+const nameVotes = new Map<string, Map<string, number>>();
 
 // ... parseInstructors removed (using import)
 
 deals.forEach((deal: Deal) => {
   if (!deal.instructor) return;
-  
+
   // Split comma-separated instructors
   const instructorNames = parseInstructors(deal.instructor);
-  
+
   // Add course to each individual instructor
   instructorNames.forEach((instructorName) => {
-    if (!instructorMap.has(instructorName)) {
-      instructorMap.set(instructorName, {
+    const slug = createInstructorSlug(instructorName);
+    if (!slug) return;
+    if (!nameVotes.has(slug)) nameVotes.set(slug, new Map());
+    const votes = nameVotes.get(slug)!;
+    votes.set(instructorName, (votes.get(instructorName) ?? 0) + 1);
+    if (!instructorMap.has(slug)) {
+      instructorMap.set(slug, {
         name: instructorName,
         courses: [],
         totalStudents: 0,
@@ -50,7 +58,7 @@ deals.forEach((deal: Deal) => {
       });
     }
 
-    const inst = instructorMap.get(instructorName)!;
+    const inst = instructorMap.get(slug)!;
     inst.courses.push(deal);
     inst.totalStudents += deal.students || 0;
     if (deal.rating) {
@@ -70,12 +78,19 @@ deals.forEach((deal: Deal) => {
 });
 
 const instructors: Instructor[] = Array.from(instructorMap.values())
-  .map((inst) => ({
-    ...inst,
-    courseCount: inst.courses.length,
-    avgRating: Number(inst.avgRating.toFixed(1)),
-    avgDiscount: Math.round(inst.avgDiscount),
-  }))
+  .map((inst) => {
+    // Display name = most frequent casing variant for this slug.
+    const slug = createInstructorSlug(inst.name);
+    const v = nameVotes.get(slug);
+    const best = v ? [...v.entries()].sort((a, b) => b[1] - a[1])[0][0] : inst.name;
+    return {
+      ...inst,
+      name: best,
+      courseCount: inst.courses.length,
+      avgRating: Number(inst.avgRating.toFixed(1)),
+      avgDiscount: Math.round(inst.avgDiscount),
+    };
+  })
   .sort((a, b) => b.courses.length - a.courses.length);
 
 // ─────────────────────────────────────────────

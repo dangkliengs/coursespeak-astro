@@ -25,39 +25,40 @@ interface InstructorData {
 export async function getStaticPaths() {
   const allDeals = await readDeals();
   
-  // Group deals by INDIVIDUAL instructor (split comma-separated names)
-  const instructorMap = new Map<string, Deal[]>();
-  
+  // Group deals by instructor SLUG (case-insensitive) so casing variants
+  // ("CYVITRIX Learning" vs "Cyvitrix Learning") merge into one page.
+  // Display name = most frequent variant (e.g. "CYVITRIX Learning").
+  const instructorMap = new Map<string, { votes: Map<string, number>; courses: Deal[] }>();
+
   allDeals.forEach((deal) => {
     const instructors = parseInstructors(deal.instructor);
-    
+
     // Add this course to each individual instructor
     instructors.forEach((instructorName) => {
-      if (!instructorMap.has(instructorName)) {
-        instructorMap.set(instructorName, []);
+      const slug = createInstructorSlug(instructorName);
+      if (!slug) return;
+      if (!instructorMap.has(slug)) {
+        instructorMap.set(slug, { votes: new Map(), courses: [] });
       }
-      instructorMap.get(instructorName)!.push(deal);
+      const entry = instructorMap.get(slug)!;
+      entry.votes.set(instructorName, (entry.votes.get(instructorName) ?? 0) + 1);
+      entry.courses.push(deal);
     });
   });
-  
-  // Filter instructors with 3+ courses and create paths
+
+  // Filter instructors with 1+ courses and create paths
   const paths = [];
-  const seen = new Set();
-  
-  for (const [name, courses] of instructorMap.entries()) {
+
+  for (const [slug, { votes, courses }] of instructorMap.entries()) {
     if (courses.length >= 1) {
-      const slug = createInstructorSlug(name);
-      
-      if (!seen.has(slug)) {
-        seen.add(slug);
-        paths.push({
-          params: { instructor: slug },
-          props: { 
-            instructorName: name,
-            instructorSlug: slug 
-          }
-        });
-      }
+      const instructorName = [...votes.entries()].sort((a, b) => b[1] - a[1])[0][0];
+      paths.push({
+        params: { instructor: slug },
+        props: {
+          instructorName,
+          instructorSlug: slug
+        }
+      });
     }
   }
   
@@ -73,19 +74,22 @@ const allDeals = await readDeals();
 
 // Fallback: if props not available (SSR mode), resolve slug → display name (never use raw slug as name)
 if (!instructorName && instructor) {
-  const slugToName = new Map<string, string>();
+  // Vote per slug so casing variants merge; most frequent variant wins.
+  const slugVotes = new Map<string, Map<string, number>>();
 
   allDeals.forEach((deal) => {
     for (const name of parseInstructors(deal.instructor)) {
       for (const key of instructorSlugLookupKeys(name)) {
-        slugToName.set(key, name);
+        if (!slugVotes.has(key)) slugVotes.set(key, new Map());
+        const v = slugVotes.get(key)!;
+        v.set(name, (v.get(name) ?? 0) + 1);
       }
     }
   });
 
-  const mapped = slugToName.get(instructor);
-  if (mapped) {
-    instructorName = mapped;
+  const votes = slugVotes.get(instructor);
+  if (votes) {
+    instructorName = [...votes.entries()].sort((a, b) => b[1] - a[1])[0][0];
     instructorSlug = instructor;
   }
 }
@@ -100,13 +104,11 @@ if (!instructorSlug) {
   instructorSlug = createInstructorSlug(instructorName);
 }
 
-// Filter deals for this instructor (check if instructorName is in comma-separated list)
+// Filter deals for this instructor by SLUG (case-insensitive), so casing
+// variants ("CYVITRIX Learning" vs "Cyvitrix Learning") all match.
 // Urutkan kursus berdasarkan enrollment (terbanyak dulu)
 const instructorCourses = allDeals
-  .filter(d => {
-    const instructors = parseInstructors(d.instructor);
-    return instructors.includes(instructorName);
-  })
+  .filter(d => parseInstructors(d.instructor).some(n => createInstructorSlug(n) === instructorSlug))
   .sort((a, b) => (b.students ?? 0) - (a.students ?? 0));
 
 // Calculate instructor stats (students data comes from deals.json)
