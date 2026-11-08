@@ -71,7 +71,7 @@ const submitLabel = isEdit ? "Save Changes" : "Create Deal";
         </div>
         <div>
           <label class="adm-label" for="url">Course URL (with coupon code) *</label>
-          <input class="adm-input code" id="url" name="url" type="url" required placeholder="https://trk.udemy.com/.../?couponCode=CODE" value={deal?.url ?? ""} />
+          <textarea class="adm-input code adm-url-input" id="url" name="url" rows="3" required spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="https://trk.udemy.com/c/6564357/3227798/39854?prodsku=course.7136123&u=https://www.udemy.com/course/nama-course/?couponCode=CODE">{deal?.url ?? ""}</textarea>
         </div>
         <div>
           <label class="adm-label" for="coupon">Coupon Code</label>
@@ -203,6 +203,8 @@ const submitLabel = isEdit ? "Save Changes" : "Create Deal";
   .rte-preview li { margin-bottom: 0.3em; }
   .rte-preview a { color: var(--adm-accent); }
   .rte-empty { color: var(--adm-faint); }
+  /* Course URL: tampil penuh, wrap per baris (URL 130–200 char), tidak scroll horizontal */
+  .adm-url-input { resize: vertical; min-height: 4.5rem; overflow-wrap: anywhere; word-break: break-all; white-space: pre-wrap; line-height: 1.6; }
 </style>
 
 <script>
@@ -342,6 +344,9 @@ const submitLabel = isEdit ? "Save Changes" : "Create Deal";
         if (!isNaN(num)) payload[key] = num;
       } else if (key === "expiresAt" && raw) {
         payload[key] = `${raw}:00+07:00`;
+      } else if ((key === "url" || key === "image") && raw) {
+        // textarea URL bisa ke-enter tanpa sengaja — URL tidak boleh berisi spasi/newline
+        payload[key] = raw.replace(/\s+/g, "");
       } else if (raw) {
         payload[key] = raw;
       }

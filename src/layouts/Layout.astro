@@ -67,7 +67,7 @@ const currentPath = Astro.url.pathname;
     {canonicalURL.includes('/deal/') && !canonicalURL.includes('.amp') && (
       <link rel="amphtml" href={canonicalURL.replace(/\/$/, '') + '.amp/'} />
     )}
-    
+
     <!-- Performance & SEO Meta Tags -->
     <meta name="theme-color" content="#080b12" />
     <meta name="msapplication-TileColor" content="#080b12" />
@@ -77,17 +77,17 @@ const currentPath = Astro.url.pathname;
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="CourseSpeak" />
-    
+
     <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin />
-    
+
     <!-- DNS prefetch for external domains -->
     <link rel="dns-prefetch" href="//www.udemy.com" />
     <link rel="dns-prefetch" href="//www.coursera.org" />
     <link rel="dns-prefetch" href="//www.edx.org" />
-    
+
     <!-- Resource hints -->
     <link rel="preload" href="/favicon.svg" as="image" type="image/svg+xml" />
     <meta name="generator" content={Astro.generator} />
@@ -558,11 +558,11 @@ const currentPath = Astro.url.pathname;
 
     <!-- Breadcrumb Navigation -->
     {currentPath !== '/' && !currentPath.startsWith('/deal/') && (
-      <nav 
-        aria-label="Breadcrumb" 
-        class="container" 
-        style={{ 
-          padding: "12px 0", 
+      <nav
+        aria-label="Breadcrumb"
+        class="container"
+        style={{
+          padding: "12px 0",
           fontSize: "0.85rem",
           borderBottom: "1px solid var(--border)",
           textAlign: "center"
@@ -577,106 +577,106 @@ const currentPath = Astro.url.pathname;
               <span>Home</span>
             </a>
           </li>
-          
+
           {/* Build breadcrumb based on path */}
           {currentPath === '/deals' && (
             <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
             <li><span style={{ color: "var(--text)", fontWeight: 500 }}>All Deals</span></li></>
           )}
-          
+
           {currentPath === '/categories' && (
             <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
             <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Categories</span></li></>
           )}
-          
+
           {currentPath.startsWith('/categories/') && (
             <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
             <li><a href="/categories" style={{ color: "var(--muted)", textDecoration: "none" }}>Categories</a></li>
             <li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
             <li><span style={{ color: "var(--text)", fontWeight: 500 }}>{currentPath.split('/')[2]?.replace(/-/g, ' ')?.replace(/\b\w/g, l => l.toUpperCase()) || 'Category'}</span></li></>
           )}
-          
+
           {currentPath === '/topics' && (
             <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
             <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Topics</span></li></>
           )}
-          
+
           {currentPath.startsWith('/topics/') && (
             <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
             <li><a href="/topics" style={{ color: "var(--muted)", textDecoration: "none" }}>Topics</a></li>
             <li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
             <li><span style={{ color: "var(--text)", fontWeight: 500 }}>{currentPath.split('/')[2]?.replace(/-/g, ' ')?.replace(/\b\w/g, l => l.toUpperCase()) || 'Topic'}</span></li></>
           )}
-          
+
           {currentPath === '/popular' && (
             <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
             <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Popular</span></li></>
           )}
-          
+
           {currentPath === '/instructors' && (
             <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
             <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Instructors</span></li></>
           )}
-          
+
           {currentPath.startsWith('/instructor/') && (
             <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
             <li><a href="/instructors" style={{ color: "var(--muted)", textDecoration: "none" }}>Instructors</a></li>
             <li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
             <li><span style={{ color: "var(--text)", fontWeight: 500 }}>{currentPath.split('/')[2]?.replace(/-/g, ' ')?.replace(/\b\w/g, l => l.toUpperCase()) || 'Instructor'}</span></li></>
           )}
-          
+
           {currentPath === '/blog' && (
             <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
             <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Blog</span></li></>
           )}
-          
+
           {currentPath.startsWith('/blog/') && (
             <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
             <li><a href="/blog" style={{ color: "var(--muted)", textDecoration: "none" }}>Blog</a></li>
             <li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
             <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Post</span></li></>
           )}
-          
+
           {currentPath === '/about' && (
             <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
             <li><span style={{ color: "var(--text)", fontWeight: 500 }}>About</span></li></>
           )}
-          
+
           {currentPath === '/contact' && (
             <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
             <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Contact</span></li></>
           )}
-          
+
           {currentPath === '/privacy' && (
             <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
             <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Privacy Policy</span></li></>
           )}
-          
+
           {currentPath === '/terms' && (
             <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
             <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Terms of Service</span></li></>
           )}
-          
+
           {currentPath === '/sitemap' && (
             <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
             <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Sitemap</span></li></>
           )}
-          
+
           {currentPath === '/how-to-redeem-coupon' && (
             <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
             <li><span style={{ color: "var(--text)", fontWeight: 500 }}>How to Redeem</span></li></>
           )}
-          
+
           {currentPath === '/udemy-coupons-guide' && (
             <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
             <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Udemy Guide</span></li></>
           )}
-          
+
           {currentPath === '/platforms' && (
             <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
             <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Compare Platforms</span></li></>
           )}
-          
+
           {currentPath.startsWith('/platforms/') && (
             <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
             <li><a href="/platforms" style={{ color: "var(--muted)", textDecoration: "none" }}>Compare Platforms</a></li>
@@ -695,13 +695,13 @@ const currentPath = Astro.url.pathname;
             <li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
             <li><span style={{ color: "var(--text)", fontWeight: 500 }}>{currentPath.includes('comptia') ? 'CompTIA' : currentPath.includes('aws') ? 'AWS' : 'Microsoft'}</span></li></>
           )}
-          
+
           {/* Fallback for other pages */}
-          {!['/deals', '/categories', '/topics', '/popular', '/instructors', '/blog', '/about', '/contact', '/privacy', '/terms', '/sitemap', '/how-to-redeem-coupon', '/udemy-coupons-guide', '/platforms', '/udemy-certification-vouchers', '/udemy-comptia-exam-vouchers', '/udemy-aws-exam-vouchers', '/udemy-microsoft-exam-vouchers'].includes(currentPath) && 
-           !currentPath.startsWith('/categories/') && 
-           !currentPath.startsWith('/topics/') && 
-           !currentPath.startsWith('/instructor/') && 
-           !currentPath.startsWith('/blog/') && 
+          {!['/deals', '/categories', '/topics', '/popular', '/instructors', '/blog', '/about', '/contact', '/privacy', '/terms', '/sitemap', '/how-to-redeem-coupon', '/udemy-coupons-guide', '/platforms', '/udemy-certification-vouchers', '/udemy-comptia-exam-vouchers', '/udemy-aws-exam-vouchers', '/udemy-microsoft-exam-vouchers'].includes(currentPath) &&
+           !currentPath.startsWith('/categories/') &&
+           !currentPath.startsWith('/topics/') &&
+           !currentPath.startsWith('/instructor/') &&
+           !currentPath.startsWith('/blog/') &&
            !currentPath.startsWith('/platforms/') && (
             <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
             <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Page</span></li></>
@@ -837,15 +837,15 @@ const currentPath = Astro.url.pathname;
               </svg>
               <span style="color:#fff;">CourseSpeak</span>
             </h3>
-            <p style={{ 
-              fontSize: "0.9rem", 
+            <p style={{
+              fontSize: "0.9rem",
               lineHeight: "1.5",
               color: "#8a7e6a",
               marginBottom: "16px"
             }}>
               Free Udemy courses daily — verified 100% off coupons across 400+ topics. Learn without limits, zero cost.
             </p>
-            
+
             {/* Social Media Widget */}
             <div style={{
               display: "flex",
@@ -853,9 +853,9 @@ const currentPath = Astro.url.pathname;
               marginTop: "16px",
               flexWrap: "wrap"
             }}>
-              <a 
+              <a
                 href="https://www.facebook.com/CourseSpeakOfficial/"
-                target="_blank" 
+                target="_blank"
                 rel="me noopener noreferrer"
                 style={{
                   display: "flex",
@@ -893,10 +893,10 @@ const currentPath = Astro.url.pathname;
                   Facebook
                 </span>
               </a>
-              
-              <a 
-                href="https://x.com/courses_peak" 
-                target="_blank" 
+
+              <a
+                href="https://x.com/courses_peak"
+                target="_blank"
                 rel="me noopener noreferrer"
                 style={{
                   display: "flex",
@@ -934,10 +934,10 @@ const currentPath = Astro.url.pathname;
                   X / Twitter
                 </span>
               </a>
-              
-              <a 
-                href="https://www.linkedin.com/company/coursespeak" 
-                target="_blank" 
+
+              <a
+                href="https://www.linkedin.com/company/coursespeak"
+                target="_blank"
                 rel="me noopener noreferrer"
                 style={{
                   display: "flex",
@@ -978,7 +978,7 @@ const currentPath = Astro.url.pathname;
             </div>
           </div>
           <div>
-            <h4 style={{ 
+            <h4 style={{
               background: "linear-gradient(135deg, #D4AF37 0%, #E8C547 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
@@ -998,8 +998,8 @@ const currentPath = Astro.url.pathname;
                 }}>Top Instructors</a>
               </li>
               <li style={{ marginBottom: "12px" }}>
-                <a href="/about" style={{ 
-                  color: "#a09888", 
+                <a href="/about" style={{
+                  color: "#a09888",
                   textDecoration: "none",
                   fontSize: "0.9rem",
                   fontWeight: "500",
@@ -1007,8 +1007,8 @@ const currentPath = Astro.url.pathname;
                 }}>About CourseSpeak</a>
               </li>
               <li style={{ marginBottom: "12px" }}>
-                <a href="/udemy-coupons-guide" style={{ 
-                  color: "#a09888", 
+                <a href="/udemy-coupons-guide" style={{
+                  color: "#a09888",
                   textDecoration: "none",
                   fontSize: "0.9rem",
                   fontWeight: "500",
@@ -1016,17 +1016,17 @@ const currentPath = Astro.url.pathname;
                 }}>How to Get Free Udemy Coupons</a>
               </li>
               <li style={{ marginBottom: "12px" }}>
-                <a href="/udemy-personal-plan" style={{ 
-                  color: "#a09888", 
+                <a href="/udemy-personal-plan" style={{
+                  color: "#a09888",
                   textDecoration: "none",
                   fontSize: "0.9rem",
                   fontWeight: "500",
                   transition: "all 0.3s ease"
-                }}>Udemy Personal Plan Review</a>
+                }}>Udemy Personal Plan Coupon Code</a>
               </li>
               <li style={{ marginBottom: "12px" }}>
-                <a href="/how-to-redeem-coupon" style={{ 
-                  color: "#a09888", 
+                <a href="/how-to-redeem-coupon" style={{
+                  color: "#a09888",
                   textDecoration: "none",
                   fontSize: "0.9rem",
                   fontWeight: "500",
@@ -1037,7 +1037,7 @@ const currentPath = Astro.url.pathname;
           </div>
 
           <div>
-            <h4 style={{ 
+            <h4 style={{
               background: "linear-gradient(135deg, #D4AF37 0%, #E8C547 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
@@ -1048,8 +1048,8 @@ const currentPath = Astro.url.pathname;
             }}>Compare Platforms</h4>
             <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
               <li style={{ marginBottom: "12px" }}>
-                <a href="/platforms" style={{ 
-                  color: "#a09888", 
+                <a href="/platforms" style={{
+                  color: "#a09888",
                   textDecoration: "none",
                   fontSize: "0.9rem",
                   fontWeight: "500",
@@ -1057,8 +1057,8 @@ const currentPath = Astro.url.pathname;
                 }}>Platform Comparison Guide</a>
               </li>
               <li style={{ marginBottom: "12px" }}>
-                <a href="/platforms/udemy-vs-coursera" style={{ 
-                  color: "#a09888", 
+                <a href="/platforms/udemy-vs-coursera" style={{
+                  color: "#a09888",
                   textDecoration: "none",
                   fontSize: "0.9rem",
                   fontWeight: "500",
@@ -1066,8 +1066,8 @@ const currentPath = Astro.url.pathname;
                 }}>Udemy vs Coursera</a>
               </li>
               <li style={{ marginBottom: "12px" }}>
-                <a href="/platforms/udemy-vs-edx" style={{ 
-                  color: "#a09888", 
+                <a href="/platforms/udemy-vs-edx" style={{
+                  color: "#a09888",
                   textDecoration: "none",
                   fontSize: "0.9rem",
                   fontWeight: "500",
@@ -1075,8 +1075,8 @@ const currentPath = Astro.url.pathname;
                 }}>Udemy vs edX</a>
               </li>
               <li style={{ marginBottom: "12px" }}>
-                <a href="/platforms/udemy-vs-skillshare" style={{ 
-                  color: "#a09888", 
+                <a href="/platforms/udemy-vs-skillshare" style={{
+                  color: "#a09888",
                   textDecoration: "none",
                   fontSize: "0.9rem",
                   fontWeight: "500",
@@ -1084,8 +1084,8 @@ const currentPath = Astro.url.pathname;
                 }}>Udemy vs Skillshare</a>
               </li>
               <li style={{ marginBottom: "12px" }}>
-                <a href="/platforms/udemy-vs-pluralsight" style={{ 
-                  color: "#a09888", 
+                <a href="/platforms/udemy-vs-pluralsight" style={{
+                  color: "#a09888",
                   textDecoration: "none",
                   fontSize: "0.9rem",
                   fontWeight: "500",
@@ -1093,8 +1093,8 @@ const currentPath = Astro.url.pathname;
                 }}>Udemy vs Pluralsight</a>
               </li>
               <li style={{ marginBottom: "12px" }}>
-                <a href="/platforms/udemy-vs-linkedin-learning" style={{ 
-                  color: "#a09888", 
+                <a href="/platforms/udemy-vs-linkedin-learning" style={{
+                  color: "#a09888",
                   textDecoration: "none",
                   fontSize: "0.9rem",
                   fontWeight: "500",
@@ -1102,8 +1102,8 @@ const currentPath = Astro.url.pathname;
                 }}>Udemy vs LinkedIn Learning</a>
               </li>
               <li style={{ marginBottom: "12px" }}>
-                <a href="/platforms/udemy-alternatives" style={{ 
-                  color: "#a09888", 
+                <a href="/platforms/udemy-alternatives" style={{
+                  color: "#a09888",
                   textDecoration: "none",
                   fontSize: "0.9rem",
                   fontWeight: "500",
@@ -1113,7 +1113,7 @@ const currentPath = Astro.url.pathname;
             </ul>
           </div>
           <div>
-            <h4 style={{ 
+            <h4 style={{
               background: "linear-gradient(135deg, #D4AF37 0%, #E8C547 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
@@ -1238,10 +1238,10 @@ const currentPath = Astro.url.pathname;
         newsletterForm.addEventListener('submit', function(e) {
           e.preventDefault();
           const emailInput = newsletterForm.querySelector('input[type="email"]') as HTMLInputElement;
-          
+
           if (emailInput) {
             const email = emailInput.value.trim();
-            
+
             if (email) {
               // Show success message inline
               const successMsg = document.createElement('p');
@@ -1250,19 +1250,19 @@ const currentPath = Astro.url.pathname;
               successMsg.style.fontWeight = '600';
               successMsg.style.marginTop = '1rem';
               successMsg.style.textAlign = 'center';
-              
+
               // Remove any existing success message
               const existingMsg = newsletterForm.querySelector('.success-message');
               if (existingMsg) {
                 existingMsg.remove();
               }
-              
+
               // Add success class for styling
               successMsg.className = 'success-message';
               newsletterForm.appendChild(successMsg);
-              
+
               emailInput.value = '';
-              
+
               // Remove message after 5 seconds
               setTimeout(() => {
                 successMsg.remove();
@@ -1275,17 +1275,17 @@ const currentPath = Astro.url.pathname;
               errorMsg.style.fontWeight = '600';
               errorMsg.style.marginTop = '1rem';
               errorMsg.style.textAlign = 'center';
-              
+
               // Remove any existing error message
               const existingMsg = newsletterForm.querySelector('.error-message');
               if (existingMsg) {
                 existingMsg.remove();
               }
-              
+
               // Add error class for styling
               errorMsg.className = 'error-message';
               newsletterForm.appendChild(errorMsg);
-              
+
               // Remove message after 3 seconds
               setTimeout(() => {
                 errorMsg.remove();
@@ -1304,7 +1304,7 @@ const currentPath = Astro.url.pathname;
         backToTopBtn.style.transform = show ? 'translateY(0) scale(1)' : 'translateY(16px) scale(0.9)';
         backToTopBtn.style.pointerEvents = show ? 'auto' : 'none';
       });
-      
+
       if (backToTopBtn) {
         backToTopBtn.addEventListener('click', () => {
           window.scrollTo({
