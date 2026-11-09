@@ -125,7 +125,8 @@
     "image": "https://img-c.udemycdn.com/user/200_H/254053004_fc58_3.jpg"
   },
   "fastbit-embedded-brain-academy": {
-    "image": "https://img-c.udemycdn.com/user/200_H/16788470_446c_8.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/16788470_446c_8.jpg",
+    "about": "Best selling microcontroller programming and RTOS course creators having over 65,000+ active students and dedicated co-instructor team to help you in your embedded programming journey.\n\nWe have published courses on embedded C, microcontroller programming, RTOS programming, embedded Linux, and Linux device driver development.\n\nIf you are starting your career in the domain of embedded programming or if you want to learn how to program the microcontroller and its peripherals coding from scratch, then you are at the right place.\n\nEnroll in the courses created by us, and we hope you will not be disappointed.\n\nWhat we do?\n\nWe leverage the power of the internet to bring online courses at your fingertip in the domain of embedded systems and programming, microcontrollers, real-time operating systems, firmware development, embedded Linux, and device drivers. Thanks to Udemy.\n\nOur primary goal is to teach embedded systems enjoyably with examples and lots of animations, which help our students excel in this field.\n\nWe have carefully crafted all these online courses to help students access industry-standard professional training with a very low price tag, thus saving your time, effort, and money.\n\nTry our courses, and we are sure that the courses will make you feel you made the right choice.\n\nRead full reviews to understand more about the courses.\n\n==>Learning order of FastBit Embedded Brain Academy Courses<==\n\nIf you are a beginner in the field of embedded systems, you can take our courses in the below-mentioned order.\n\nThis is just a recommendation from the instructor for beginners.\n\n1) Microcontroller Embedded C Programming: absolute beginners(Embedded C)\n\n2) Embedded Systems Programming on ARM Cortex-M3/M4 Processor(ARM Cortex M4 Processor specific)\n\n3) Mastering Microcontroller with Embedded Driver Development(MCU1)\n\n4) Mastering Microcontroller: TIMERS, PWM, CAN, RTC,LOW POWER(MCU2)\n\n5) Mastering Microcontroller: STM32-LTDC, LCD-TFT, LVGL(MCU3)\n\n6) Embedded System Design using UML State Machines(State machine)\n\n7) Mastering RTOS: Hands-on FreeRTOS and STM32Fx with Debugging(RTOS)\n\n8) ARM Cortex M Microcontroller DMA Programming Demystified(DMA)\n\n9) STM32Fx Microcontroller Custom Bootloader Development(Bootloader)\n\n10) Embedded Linux Step by Step using Beaglebone Black(Linux)\n\n11) Linux device driver programming using Beaglebone Black(LDD1)\n\n\n\nOther programming courses\n\n1) Master The Rust Programming Language : Beginner To Advanced\n\n2) Embedded Rust Development with STM32 : Absolute Beginners\n\n\n\n* FastBit EBA is an online embedded software training wing of Bharati Software"
   },
   "kiran-nayak": {
     "image": "https://img-c.udemycdn.com/user/200_H/56803600_8c8b_3.jpg"
@@ -505,7 +506,8 @@
     "about": "Ahmed Baraka is an Oracle database specialist with 25 years of hands-on experience designing and running high-availability environments. He focuses on RAC, ASM, Data Guard, GoldenGate, WebLogic, Oracle Database Appliance, and Enterprise Manager, and has worked with international teams in Australia and Abu Dhabi. Ahmed’s courses translate real production scenarios into practical, step-by-step training so learners build job-ready skills in administration, performance, HA, and migration."
   },
   "antonio-brandi": {
-    "image": "https://img-c.udemycdn.com/user/200_H/56447286_1dce_2.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/56447286_1dce_2.jpg",
+    "about": "Hey, I'm Antonio Brandi and I'm glad you are here!\n\n\n\nI am a Robotics Engineer specialized in Autonomous Navigation for Robot applications with several years of experience working with ROS and mobile robots both for industrial and commercial applications.\n\nActually I'm working with the brightest minds in the field of ROS and Robotics at Pal Robotics.\n\n\n\nDespite having an Engineering background, I'm a ROS self learner and I know how tough and demotivating it can be rushing through all the concepts and documentations. Furthermore, I genuinely think that the best way to learn something is to scratch your head and build something real that you can interact and play with.\n\nThat's why my courses will handle both the required theoretical background and its implementation in the real world!\n\n\n\nRemember to have fun and experimenting while learning"
   },
   "jason-cannon": {
     "image": "https://img-c.udemycdn.com/user/200_H/278531_86c0_4.jpg"
@@ -639,7 +641,8 @@
     "image": "https://img-c.udemycdn.com/user/200_H/38531438_f2ed_2.jpg"
   },
   "web-academy-by-harsha-vardhan": {
-    "image": "https://img-c.udemycdn.com/user/200_H/41532630_f626_4.jpg"
+    "image": "https://img-c.udemycdn.com/user/200_H/41532630_f626_4.jpg",
+    "about": "My strength is I can make complicated things simple and will provide detailed knowledge about each and every concept, and I will be happy if people learn skills from my videos and build their careers.\n\n\n\nI am a web & frontend lover, developer, architect, instructor to make web easy for you.\n\n\n\nMy expertise is mostly on following technologies:\n\nC#, Asp.Net Core, Microservices, Azure, Asp.Net Mvc, Asp.Net, Python, React, Angular, JavaScript, jQuery, Bootstrap, NodeJS, HTML, CSS\n\n\n\nThis is not an academic university but an online learning channel."
   },
   "tech-journey-with-ankit-by-ankit-jain": {
     "image": "https://img-c.udemycdn.com/user/200_H/315707583_04bb.jpg"
@@ -1123,5 +1126,9 @@
   "chetan-agrawal": {
     "image": "https://img-c.udemycdn.com/user/200_H/37838678_90bb_3.jpg",
     "about": "I'm Chetan Agrawal, a former Senior Solutions Architect at AWS with over 21 years of experience in the IT industry, including 7 years at AWS across UK and India.\n\nHere, I bring that real-world experience into my courses, helping 150,000+ students worldwide build practical AWS and cloud skills and prepare for industry-recognized certifications.\n\nFurther, through my YouTube channel, AWSwithChetan, I've also built a community of 105,000+ subscribers focused on learning AWS, Cloud and AI technologies.\n\nI strongly believe in learning by doing, which is why my courses are packed with hands-on labs, practical demonstrations, and real-world examples. My aim is to compress years of real-world AWS and cloud experience into a few weeks of practical learning, helping you becoming ready and build confidence much faster.\n\n\n\nSo, whether you're just starting your cloud journey or looking to advance your AWS skills, I'm excited to be part of your learning journey.\n\n\n\nHappy learning, and see you inside the course!"
+  },
+  "jonathan-cacace": {
+    "image": "https://img-c.udemycdn.com/user/200_H/147067236_fe35.jpg",
+    "about": "I am an enthusiastic R&D software developer specializing in advanced robotic applications, with over 10 years of experience working with various robotic platforms.\n\nAs an instructor, I served as a professor at the University of Naples \"Federico II\" for 5 years, where I taught the following courses:\n\nRobotics Lab: Programming simulated and real robots for M. Sc. students in Automation Engineering.\n\nMobile Robotics: Programming wheeled robots to navigate unknown environments for M. Sc. students in Engineering for Autonomous Vehicles.\n\nAdditionally, I am the author of three books (with a fourth in progress) focused on using ROS and ROS 2 to program robots."
   }
 }
