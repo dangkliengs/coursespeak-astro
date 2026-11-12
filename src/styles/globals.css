@@ -234,21 +234,8 @@ h2{ font-size:22px; margin:20px 0; }
     padding: 4px;
   }
   
-  .brand-name {
-    font-size: 0.95rem;
-  }
-  
-  .brand-tagline {
-    font-size: 0.55rem;
-  }
-  
-  .brand-icon {
-    width: 34px;
-    height: 34px;
-  }
-  .brand-icon svg {
-    width: 22px;
-    height: 22px;
+  .brand-logo {
+    height: 38px;
   }
   
   .nav-item {

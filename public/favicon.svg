@@ -1,14 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
-  <defs>
-    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#f5c842"/>
-      <stop offset="100%" stop-color="#e8a317"/>
-    </linearGradient>
-  </defs>
-  <rect x="4" y="4" width="56" height="56" rx="14" fill="#0f1320"/>
-  <path d="M32 18L10 32l22 14 22-14L32 18z" fill="url(#g)" opacity=".15"/>
-  <path d="M32 18L10 32l22 14 22-14L32 18z" fill="none" stroke="url(#g)" stroke-width="2.5" stroke-linejoin="round"/>
-  <path d="M14 33.5v8L32 56l18-14.5v-8" fill="url(#g)" opacity=".15"/>
-  <path d="M14 33.5v8L32 56l18-14.5v-8" fill="none" stroke="url(#g)" stroke-width="2.5" stroke-linejoin="round"/>
-  <path d="M22 37l10 6 10-6" fill="none" stroke="url(#g)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <defs><linearGradient id="fg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F8E39B"/><stop offset=".45" stop-color="#D4AF37"/><stop offset="1" stop-color="#A9790A"/></linearGradient></defs>
+  <rect x="2" y="2" width="60" height="60" rx="17" fill="#F5F0E1"/>
+  <rect x="6" y="6" width="52" height="52" rx="13" fill="url(#fg)"/>
+  <text x="32" y="43" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="27" font-weight="900" font-style="italic" fill="#0A0D14" letter-spacing="-2">CS</text>
 </svg>
