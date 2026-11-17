@@ -17,8 +17,6 @@ const rows = allDeals.map((d) => ({
   image: d.image ?? "",
   category: d.category,
   subcategory: d.subcategory ?? "",
-  price: d.price,
-  originalPrice: d.originalPrice ?? 0,
   coupon: d.coupon ?? "",
   instructor: d.instructor ?? "",
   updatedAt: d.updatedAt ?? d.createdAt ?? "",
@@ -93,7 +91,6 @@ const staleCount = rows.filter((r) => !r.expired && staleDays(r.updatedAt) >= 7)
           <tr>
             <th>Title</th>
             <th>Category</th>
-            <th>Price</th>
             <th>Coupon Code</th>
             <th>Updated</th>
             <th style="text-align:right;">Actions</th>
@@ -125,9 +122,6 @@ const staleCount = rows.filter((r) => !r.expired && staleDays(r.updatedAt) >= 7)
                 {r.subcategory && <div class="adm-sub">{r.subcategory}</div>}
               </td>
               <td>
-                <span class="adm-price">${r.price ?? 0}{r.originalPrice ? <s>${r.originalPrice}</s> : null}</span>
-              </td>
-              <td>
                 {r.coupon ? (
                   <code class="adm-coupon">{r.coupon}</code>
                 ) : (
@@ -144,7 +138,7 @@ const staleCount = rows.filter((r) => !r.expired && staleDays(r.updatedAt) >= 7)
             </tr>
           ))}
           <tr id="emptyRow" class="adm-empty-row" style="display:none;">
-            <td colspan="6">
+            <td colspan="5">
               <div class="adm-empty">
                 <div style="font-size:1.6rem;line-height:1;" aria-hidden="true">🔍</div>
                 <p style="margin:.75rem 0 0;">No deals found for <strong id="emptyQuery"></strong></p>
@@ -164,7 +158,7 @@ const staleCount = rows.filter((r) => !r.expired && staleDays(r.updatedAt) >= 7)
 
 <style is:global>
   @media (max-width:1150px){
-    .adm-table th:nth-child(5),.adm-table td:nth-child(5){display:none;}
+    .adm-table th:nth-child(4),.adm-table td:nth-child(4){display:none;}
   }
   @media (max-width:950px){
     .adm-table th:nth-child(2),.adm-table td:nth-child(2){display:none;}
