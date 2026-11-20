@@ -829,15 +829,15 @@ const siteNavLd = {
             <li><span style={{ color: "var(--text)", fontWeight: 500 }}>Exam Vouchers</span></li></>
           )}
 
-          {['/udemy-comptia-exam-vouchers','/udemy-aws-exam-vouchers','/udemy-microsoft-exam-vouchers'].includes(currentPath) && (
+          {['/udemy-comptia-exam-vouchers','/udemy-aws-exam-vouchers','/udemy-microsoft-exam-vouchers','/udemy-linux-foundation-exam-vouchers'].includes(currentPath) && (
             <><li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
             <li><a href="/udemy-certification-vouchers" style={{ color: "var(--muted)", textDecoration: "none" }}>Exam Vouchers</a></li>
             <li aria-hidden="true" style={{ color: "var(--muted)" }}>/</li>
-            <li><span style={{ color: "var(--text)", fontWeight: 500 }}>{currentPath.includes('comptia') ? 'CompTIA' : currentPath.includes('aws') ? 'AWS' : 'Microsoft'}</span></li></>
+            <li><span style={{ color: "var(--text)", fontWeight: 500 }}>{currentPath.includes('comptia') ? 'CompTIA' : currentPath.includes('aws') ? 'AWS' : currentPath.includes('linux') ? 'Linux Foundation' : 'Microsoft'}</span></li></>
           )}
 
           {/* Fallback for other pages */}
-          {!['/deals', '/categories', '/topics', '/popular', '/instructors', '/blog', '/about', '/contact', '/privacy', '/terms', '/sitemap', '/how-to-redeem-coupon', '/udemy-coupons-guide', '/platforms', '/udemy-certification-vouchers', '/udemy-comptia-exam-vouchers', '/udemy-aws-exam-vouchers', '/udemy-microsoft-exam-vouchers'].includes(currentPath) &&
+          {!['/deals', '/categories', '/topics', '/popular', '/instructors', '/blog', '/about', '/contact', '/privacy', '/terms', '/sitemap', '/how-to-redeem-coupon', '/udemy-coupons-guide', '/platforms', '/udemy-certification-vouchers', '/udemy-comptia-exam-vouchers', '/udemy-aws-exam-vouchers', '/udemy-microsoft-exam-vouchers', '/udemy-linux-foundation-exam-vouchers'].includes(currentPath) &&
            !currentPath.startsWith('/categories/') &&
            !currentPath.startsWith('/topics/') &&
            !currentPath.startsWith('/instructor/') &&
@@ -1013,6 +1013,7 @@ const siteNavLd = {
               <li><a href="/udemy-comptia-exam-vouchers" class="footer-link">CompTIA Exam Vouchers</a></li>
               <li><a href="/udemy-aws-exam-vouchers" class="footer-link">AWS Exam Vouchers</a></li>
               <li><a href="/udemy-microsoft-exam-vouchers" class="footer-link">Microsoft Exam Vouchers</a></li>
+              <li><a href="/udemy-linux-foundation-exam-vouchers" class="footer-link">Linux Foundation Vouchers</a></li>
             </ul>
           </div>
         </div>

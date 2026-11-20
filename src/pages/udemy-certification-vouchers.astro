@@ -10,6 +10,7 @@ import {
   ALL_VOUCHERS_URL,
   voucherPageCount,
   currentExamCount,
+  linuxVoucherCount,
   voucherPrice,
 } from "../data/vouchers";
 
@@ -18,8 +19,8 @@ const lastModified = new Date().toISOString().split("T")[0];
 const updatedLong = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 const canonicalUrl = "https://coursespeak.com/udemy-certification-vouchers";
 
-const pageTitle = `Udemy Exam Vouchers ${currentYear}: ${voucherPageCount} Products, ${currentExamCount} Exams`;
-const pageDescription = `Compare ${voucherPageCount} official Udemy certification voucher pages in ${currentYear} — ${currentExamCount} current exams across CompTIA, AWS and Microsoft. Current prices, exam retirements, Second Chance and Retake Assurance.`;
+const pageTitle = `Udemy Certification Vouchers ${currentYear}: Save on AWS, CompTIA, Microsoft & Linux Foundation Exams`;
+const pageDescription = `Compare ${voucherPageCount} official Udemy certification voucher pages in ${currentYear} — ${currentExamCount} current exams across CompTIA, AWS and Microsoft, plus ${linuxVoucherCount} Linux Foundation vouchers (CKA, CKS, CNPE). Save on AWS, CompTIA, Microsoft & Linux Foundation vouchers. Current prices, exam retirements, Second Chance and Retake Assurance.`;
 
 const allVoucherPages = [
   ...comptiaVouchers.map((vv) => ({ code: vv.code, name: vv.title, url: vv.url })),
@@ -78,11 +79,12 @@ const heroPicks = [
     <div>
       <div class="vp-eyebrow">Exam Vouchers · Checked {updatedLong}</div>
       <h1>
-        <span class="vp-gradient">Udemy Certification Exam Vouchers</span>
-        <span class="vp-title-sub">{voucherPageCount} pages, {currentExamCount} current exams</span>
+        <span class="vp-gradient">Udemy Certification Vouchers {currentYear}</span>
+        <span class="vp-title-sub">{voucherPageCount} pages, {currentExamCount} current exams · AWS, CompTIA, Microsoft, plus {linuxVoucherCount} Linux Foundation vouchers</span>
       </h1>
       <p class="vp-lede">
-        Udemy lists <strong>{voucherPageCount} official voucher pages</strong> across CompTIA, AWS and Microsoft, but only
+        Udemy lists <strong>{voucherPageCount} official voucher pages</strong> across CompTIA, AWS and Microsoft, plus
+        <strong>{linuxVoucherCount} Linux Foundation vouchers</strong> (CKA, CKS, CNPE), but only
         <strong>{currentExamCount} map to exams you can book today</strong>. The gap is mostly Microsoft: 50 live pages,
         33 current exams, 1 retiring and 16 retired or legacy. Prices start at <strong>$89.10</strong>.
       </p>
@@ -168,8 +170,8 @@ const heroPicks = [
       <h2 class="section-heading">Browse Vouchers by Provider</h2>
       <p style={{ color: "var(--muted)", maxWidth: "700px", margin: "0.5rem auto 0", lineHeight: 1.65 }}>CompTIA for IT support and cybersecurity careers, AWS for cloud roles, Microsoft for Azure, data, security and Microsoft 365 paths. Every card below links to the official Udemy voucher page.</p>
     </div>
-    <div class="grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1.25rem" }}>
-      {(["comptia", "aws", "microsoft"] as const).map((key) => (
+    <div class="grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "1.25rem" }}>
+      {(["comptia", "aws", "microsoft", "linux"] as const).map((key) => (
         <a class="provider-card" href={providerMeta[key].page}>
           <img src={providerMeta[key].image} alt={`${providerMeta[key].name} exam vouchers`} width="480" height="270" loading="lazy" />
           <div style={{ padding: "1.25rem 1.4rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
@@ -189,7 +191,7 @@ const heroPicks = [
     <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
       <span class="section-title">What you save</span>
       <h2 class="section-heading">Retail vs Udemy Voucher Prices</h2>
-      <p style={{ color: "var(--muted)", fontSize: "0.9rem", maxWidth: "700px", margin: "0.5rem auto 0" }}>Indicative retail fees (US, 2026) versus the Udemy voucher price. CompTIA pricing varies between 10% and 12.5% off; AWS and Microsoft are about 10%. Confirm the live price on each voucher page.</p>
+      <p style={{ color: "var(--muted)", fontSize: "0.9rem", maxWidth: "700px", margin: "0.5rem auto 0" }}>Indicative retail fees (US, 2026) versus the Udemy voucher price. CompTIA pricing varies between 10% and 12.5% off; AWS and Microsoft are about 10%; Linux Foundation is a flat 30% off ($445 → $311.50, two attempts included, no retake add-on). Confirm the live price on each voucher page.</p>
     </div>
     <div class="table-wrap"><table class="compare-table">
       <thead><tr><th>Exam</th><th>Code</th><th>Retail (approx)</th><th>Via Udemy</th><th>Retake option</th></tr></thead>
@@ -203,6 +205,9 @@ const heroPicks = [
         <tr><td>Microsoft Fundamentals</td><td>AZ-900 / DP-900</td><td>$99</td><td>$89.10</td><td>Not offered on every page</td></tr>
         <tr><td>Microsoft Associate</td><td>AZ-104 / SC-200 / DP-300</td><td>$165</td><td>$148.50</td><td>Retake Assurance on select exams</td></tr>
         <tr><td>Microsoft Expert</td><td>AZ-305 / AZ-400</td><td>$165</td><td>$148.50</td><td>Retake Assurance on select exams</td></tr>
+        <tr><td><strong>CKA</strong><br /><span style={{ color: "var(--muted)", fontSize: "0.8rem" }}>Linux Foundation</span></td><td>$445</td><td><strong>$311.50</strong></td><td>$133.50 (30%)</td><td>2 (included)</td><td>Redeem in 6 months; exam in 12 months</td></tr>
+        <tr><td><strong>CKS</strong><br /><span style={{ color: "var(--muted)", fontSize: "0.8rem" }}>Linux Foundation</span></td><td>$445</td><td><strong>$311.50</strong></td><td>$133.50 (30%)</td><td>2 (included)</td><td>Redeem in 6 months; exam in 12 months</td></tr>
+        <tr><td><strong>CNPE</strong><br /><span style={{ color: "var(--muted)", fontSize: "0.8rem" }}>Linux Foundation</span></td><td>$445</td><td><strong>$311.50</strong></td><td>$133.50 (30%)</td><td>2 (included)</td><td>Redeem in 6 months; exam in 12 months</td></tr>
       </tbody>
     </table></div>
     <p style={{ color: "var(--muted)", fontSize: "0.8rem", margin: "0.75rem 0 0", lineHeight: 1.6 }}>Voucher-only prices shown; Second Chance and Retake Assurance are optional bundles that cost more. US list prices; regional pricing varies. Microsoft retake availability differs by exam — check the live page before relying on it.</p>
