@@ -1,13 +1,17 @@
 ---
+import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
-import "../styles/voucher-v2.css";
+import "../styles/voucher-hub.css";
+import allDeals from "../data/deals.json";
 import {
   comptiaVouchers,
   awsVouchers,
   microsoftVouchers,
   microsoftCatalog,
+  linuxVouchers,
   providerMeta,
-  ALL_VOUCHERS_URL,
+  ALL_VOUCHERS_HUB_URL,
+  SECOND_CHANCE_URL,
   voucherPageCount,
   currentExamCount,
   linuxVoucherCount,
@@ -20,275 +24,563 @@ const updatedLong = new Date().toLocaleDateString("en-US", { year: "numeric", mo
 const canonicalUrl = "https://coursespeak.com/udemy-certification-vouchers";
 
 const pageTitle = `Udemy Certification Vouchers ${currentYear}: Save on AWS, CompTIA, Microsoft & Linux Foundation Exams`;
-const pageDescription = `Compare ${voucherPageCount} official Udemy certification voucher pages in ${currentYear} — ${currentExamCount} current exams across CompTIA, AWS and Microsoft, plus ${linuxVoucherCount} Linux Foundation vouchers (CKA, CKS, CNPE). Save on AWS, CompTIA, Microsoft & Linux Foundation vouchers. Current prices, exam retirements, Second Chance and Retake Assurance.`;
+const pageDescription = `Compare ${voucherPageCount} official Udemy certification voucher pages in ${currentYear} — ${currentExamCount} current exams across CompTIA, AWS and Microsoft, plus ${linuxVoucherCount} Linux Foundation vouchers (CKA, CKS, CNPE). Prices, retake rules, validity and exam codes checked ${updatedLong}.`;
+const pageKeywords = "Udemy certification vouchers, Udemy exam vouchers, AWS exam vouchers, CompTIA vouchers, Microsoft vouchers, Linux Foundation vouchers, CKA, CKS, CNPE, Second Chance, Retake Assurance, certification exam discount";
+
+const sources = [
+  { label: "Udemy all certification vouchers", url: ALL_VOUCHERS_HUB_URL },
+  { label: "AWS certification exam pricing", url: "https://aws.amazon.com/certification/certification-exams/" },
+  { label: "Microsoft retired certification exams", url: "https://learn.microsoft.com/en-us/credentials/support/retired-certification-exams" },
+  { label: "Linux Foundation CKA", url: "https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/" },
+  { label: "Linux Foundation CKS", url: "https://training.linuxfoundation.org/certification/certified-kubernetes-security-specialist/" },
+  { label: "Linux Foundation CNPE", url: "https://training.linuxfoundation.org/certification/certified-cloud-native-platform-engineer-cnpe/" },
+];
 
 const allVoucherPages = [
   ...comptiaVouchers.map((vv) => ({ code: vv.code, name: vv.title, url: vv.url })),
   ...awsVouchers.map((vv) => ({ code: vv.code, name: vv.title, url: vv.url })),
   ...microsoftCatalog.map((e) => ({ code: e.code, name: e.name, url: e.url })),
 ];
+const linuxVoucherPages = linuxVouchers.map((vv) => ({ code: vv.code, name: vv.title, url: vv.url }));
+
+// Real, still-live coupon deals from the daily catalogue, matched to the voucher exams.
+const getDeal = (id: string) => {
+  const deal = allDeals.find((d) => String(d.id) === id);
+  return deal && Date.parse(String(deal.expiresAt)) > Date.now() ? deal : null;
+};
+const coursePickIds = [
+  { id: "1731", provider: "CompTIA", topic: "/topics/comptia-security-plus", why: "Security+ SY0-701 prep — the voucher's matching exam" },
+  { id: "9691", provider: "CompTIA", topic: "/topics/comptia-a", why: "A+ Core 1 220-1201 hands-on prep" },
+  { id: "151", provider: "AWS", topic: "/topics/aws-certified-solutions-architect-associate", why: "SAA-C03 associate architect prep" },
+  { id: "143", provider: "AWS", topic: "/topics/aws-certified-cloud-practitioner", why: "CLF-C02 foundational cloud prep" },
+  { id: "5316", provider: "Microsoft", topic: "/topics/microsoft-azure-fundamentals", why: "AZ-900 fundamentals prep" },
+  { id: "5319", provider: "Microsoft", topic: "/topics/it-certifications", why: "AZ-104 administrator exam prep" },
+];
+const coursePicks = coursePickIds
+  .map((pick) => ({ ...pick, deal: getDeal(pick.id) }))
+  .filter((pick) => pick.deal !== null);
+
+// Each provider card opens a different, provider-specific official voucher listing.
+const providerVoucherUrl: Record<string, string> = {
+  comptia: comptiaVouchers[3].url,
+  aws: awsVouchers[2].url,
+  microsoft: microsoftVouchers[0].url,
+  linux: linuxVouchers[0].url,
+};
 
 const faqs = [
-  { q: "How do Udemy certification exam vouchers work?", a: "A voucher is a prepaid exam seat. You buy it on Udemy for roughly 10% less than the retail exam fee, receive a voucher code in My learning → Certifications, then enter that code at the payment step when you schedule with Pearson VUE. AWS, Microsoft and CompTIA all use Pearson VUE delivery. Exams can be taken online with a proctor or in person at a test centre." },
-  { q: "How much money do I actually save?", a: "About 10% on AWS and Microsoft; CompTIA is often 10–12.5% off. Examples: CompTIA Security+ $439 retail vs about $384–$395 on Udemy; A+ $274 per core vs about $240–$247; AWS Cloud Practitioner $100 vs $90; Microsoft AZ-900 $99 vs $89.10; Microsoft AZ-104 $165 vs $148.50. The bigger saving comes from pairing the voucher with a discounted prep course instead of paying full price for training." },
-  { q: "What is the difference between Second Chance and Retake Assurance?", a: "Second Chance is the AWS retake product: if you fail, report the result in My learning → Certifications within 9 months, Udemy verifies it, and a new voucher code usually arrives within 7 days. Retake Assurance is used on CompTIA and select Microsoft exams: if you fail, you rebook the same exam with the same voucher code — there is no claim and no new code. Both must be bought with the original voucher, cover exactly one extra attempt, and are not refunded if you pass first time." },
-  { q: "Can I use an Udemy coupon code to discount a voucher?", a: "No. Udemy coupons and site-wide promo codes never apply to exam voucher purchases — this is stated on every Udemy voucher page. Udemy credits can sometimes be applied, and coupons do apply to the prep courses themselves. The cheapest overall path is a coupon-discounted prep course plus the voucher." },
-  { q: "How long are vouchers valid, and are they refundable?", a: "At least 9 months from the date of purchase, including retake coverage. Vouchers, Second Chance and Retake Assurance are non-refundable and non-transferable, valid only in the country of purchase, and an expired voucher's value is forfeited. The exam retirement date can shorten a voucher's useful life even if the printed expiry is later." },
-  { q: "Which certification should I start with?", a: "Complete beginners: CompTIA Tech+ or A+, AWS Cloud Practitioner CLF-C02, or Microsoft AZ-900 — all foundational with no prerequisites. Aspiring cloud engineers: AWS Solutions Architect Associate SAA-C03 or Microsoft AZ-104. Aspiring security analysts: CompTIA Security+ SY0-701, then CySA+ CS0-004. Each provider page lists exams in recommended order." },
-  { q: "How do I schedule, reschedule, or troubleshoot my exam?", a: "Udemy does not handle scheduling — booking, rescheduling, ID checks and technical issues go through Pearson VUE and the certification provider. After purchase, copy your code from My learning → Certifications and paste it in the payment step on the provider's scheduling site: AWS Certification, Microsoft Learn → Credentials, or your CompTIA account. If a code will not apply, verify the exact exam code and country, then contact the provider's support." },
-  { q: "What happens if a voucher is out of stock?", a: "Voucher stock is limited and popular exams sell out. Udemy advises checking back regularly — vouchers can also surface inside eligible prep courses under the Overview tab. Use any waiting time to finish the prep course and practice exams so you are ready the moment stock returns." },
-  { q: "Why are there 77 voucher pages but only 58 current exams?", a: "The count is 15 CompTIA + 12 AWS + 50 Microsoft pages = 77. Current exams are 15 CompTIA + 10 AWS + 33 Microsoft = 58. The gap is Microsoft: 16 of its 50 pages are retired or legacy, and one more (MS-102) retires on November 30, 2026. AWS also has two legacy Specialty listings that remain usable because its vouchers are level-wide." },
-  { q: "Which Microsoft exams retired in 2026?", a: "Fifteen role-based Microsoft exams retired between June and October 2026: AI-900, DP-100, AI-102, AZ-204, AZ-500, AZ-800, AZ-801, PL-200, PL-400, PL-500, PL-600, MB-240, MB-280, MB-335 and MB-700. MS-102 retires on November 30, 2026. The Microsoft page flags all 16 retired or legacy pages and explains which replacement codes have no Udemy voucher yet." },
+  { q: "How do Udemy certification exam vouchers work?", cat: "basics", a: "A voucher is a prepaid exam seat. You buy it on Udemy for roughly 10% less than the retail exam fee, receive a voucher code in My learning → Certifications, then enter that code at the payment step when you schedule with Pearson VUE (AWS, Microsoft, CompTIA) or the Linux Foundation My Portal and PSI (Linux Foundation). Exams can be taken online with a proctor or at a test centre, depending on the provider." },
+  { q: "How much money do I actually save?", cat: "price", a: "About 10% on AWS and Microsoft, 10–12.5% on CompTIA, and a flat 30% on Linux Foundation. Examples checked November 2026: CompTIA Security+ $439 retail vs about $384–$395 on Udemy; A+ $274 per core vs about $240–$247; AWS Cloud Practitioner $100 vs $90; Microsoft AZ-900 $99 vs $89.10; Linux Foundation CKA/CKS/CNPE $445 vs $311.50 (a $133.50 saving). The bigger saving usually comes from pairing the voucher with a coupon-discounted prep course." },
+  { q: "Which Linux Foundation vouchers does Udemy sell?", cat: "linux", a: "Udemy currently lists four Linux Foundation vouchers: CKA, CKAD, CKS and CNPE, each at $311.50 against the $445 list price. CourseSpeak's dedicated guide covers the three role tracks in depth — CKA (administrator), CKS (security specialist) and CNPE (platform engineer) — and notes CKAD as the developer-focused alternative." },
+  { q: "What is the difference between Second Chance and Retake Assurance?", cat: "retake", a: "Second Chance is the AWS retake product: if you fail, report the result in My learning → Certifications within 9 months, Udemy verifies it, and a new voucher code usually arrives within 7 days. Retake Assurance is used on CompTIA and select Microsoft exams: if you fail, you rebook the same exam with the same voucher code — there is no claim and no new code. Both must be bought with the original voucher, cover exactly one extra attempt, and are not refunded if you pass first time. Linux Foundation vouchers include two attempts as standard." },
+  { q: "Can I use an Udemy coupon code to discount a voucher?", cat: "price", a: "No. Udemy coupons and site-wide promo codes never apply to exam voucher purchases — this is stated on every Udemy voucher page. Udemy credits can sometimes be applied, and coupons do apply to the prep courses themselves. The cheapest overall path is a coupon-discounted prep course plus the voucher." },
+  { q: "How long are vouchers valid, and are they refundable?", cat: "rules", a: "CompTIA, AWS and Microsoft vouchers are valid for at least 9 months from purchase, including retake coverage. Udemy's Linux Foundation vouchers must be redeemed within 6 months of purchase, then the exam must be taken within 12 months of redemption. Vouchers and retake add-ons are non-refundable and non-transferable, valid only in the country of purchase, and an expired voucher's value is forfeited." },
+  { q: "Which certification should I start with?", cat: "choice", a: "Complete beginners: CompTIA Tech+ or A+, AWS Cloud Practitioner CLF-C02, or Microsoft AZ-900 — all foundational with no prerequisites. Aspiring cloud engineers: AWS Solutions Architect Associate SAA-C03 or Microsoft AZ-104. Aspiring security analysts: CompTIA Security+ SY0-701, then CySA+ CS0-004. Kubernetes roles: Linux Foundation CKA first, then CKS after CKA is passed. Each provider guide lists exams in recommended order." },
+  { q: "How do I schedule, reschedule, or troubleshoot my exam?", cat: "rules", a: "Udemy does not handle scheduling — booking, rescheduling, ID checks and technical issues go through Pearson VUE and the certification provider. After purchase, copy your code from My learning → Certifications and paste it in the payment step on the provider's scheduling site: AWS Certification, Microsoft Learn → Credentials, or your CompTIA account. Linux Foundation candidates redeem in My Portal, then schedule through PSI. If a code will not apply, verify the exact exam code and country, then contact the provider's support." },
+  { q: "What happens if a voucher is out of stock?", cat: "rules", a: "Voucher stock is limited and popular exams sell out. Udemy advises checking back regularly — vouchers can also surface inside eligible prep courses under the Overview tab. Use any waiting time to finish the prep course and practice exams so you are ready the moment stock returns." },
+  { q: "Why are there 77 voucher pages but only 58 current exams?", cat: "basics", a: "The count is 15 CompTIA + 12 AWS + 50 Microsoft pages = 77. Current exams are 15 CompTIA + 10 AWS + 33 Microsoft = 58. The gap is Microsoft: 16 of its 50 pages are retired or legacy, and one more (MS-102) retires on November 30, 2026. AWS also has two legacy Specialty listings that remain usable because its vouchers are level-wide. Linux Foundation vouchers are tracked separately and are not included in either figure." },
+  { q: "Which Microsoft exams retired in 2026?", cat: "microsoft", a: "Fifteen role-based Microsoft exams retired between June and October 2026: AI-900, DP-100, AI-102, AZ-204, AZ-500, AZ-800, AZ-801, PL-200, PL-400, PL-500, PL-600, MB-240, MB-280, MB-335 and MB-700. MS-102 retires on November 30, 2026. The Microsoft guide flags all 16 retired or legacy pages and explains which replacement codes have no Udemy voucher yet." },
+  { q: "Are Udemy exam vouchers legitimate?", cat: "basics", a: "Yes. Udemy is an authorised seller of exam vouchers for these providers. The voucher is a prepaid code issued by the certification provider; you still schedule and take the official exam through the provider's proctoring system. The certification you earn is identical to one booked direct — the discount comes from Udemy subsidising the exam fee, not from a different exam." },
+  { q: "Can I use a voucher bought in one country in another?", cat: "rules", a: "No. Udemy vouchers are valid only in the country of purchase. This matters for travellers and cross-border teams: buy the voucher in the country where you will sit the exam, and make sure the name on your provider account matches your government ID exactly." },
+  { q: "Can I transfer a voucher to someone else or change the name?", cat: "rules", a: "No. Vouchers are non-transferable and tied to the buyer's identity. The name on your certification account must match your photo ID on exam day. If you buy a voucher for an employee, have them redeem and schedule it under their own account rather than trying to move the code later." },
+  { q: "What if my exam retires before I use the voucher?", cat: "rules", a: "An exam retirement can shorten a voucher's useful life even if the printed expiry is later. Check the provider's retirement notices before buying — the Microsoft guide flags retired 2026 exams and MS-102's November 30, 2026 retirement. AWS vouchers are level-wide, which makes them more resilient to a single exam code changing." },
+  { q: "Do vouchers include training courses?", cat: "basics", a: "No. A voucher buys exam attempts only; it does not include a prep course. The exception is a Linux Foundation bundle bought directly from LF, which can add a course or subscription. On Udemy, buy the voucher and a discounted prep course separately — coupons apply to the course, not to the voucher." },
+  { q: "Can I get a refund if I pass on the first attempt with a retake bundle?", cat: "retake", a: "No. Second Chance and Retake Assurance are non-refundable, and the retake fee is not returned if you pass first time. Price the add-on as insurance, not as a deposit. Linux Foundation's two attempts are included in the standard price, so there is no separate retake premium to forfeit." },
+  { q: "What is the cheapest voucher on Udemy?", cat: "price", a: "Microsoft Fundamentals AZ-900 and DP-900 are about $89.10 against a $99 list price, and AWS Cloud Practitioner CLF-C02 is $90 against $100. CompTIA Tech+ starts around $116. Prices vary by country and campaign, so check the live page for your region before buying." },
+  { q: "Can I pay with Udemy credits?", cat: "price", a: "Udemy credits can sometimes be applied at checkout to voucher purchases, but coupon codes cannot. Credits are account-specific and their availability varies; treat them as a bonus rather than a guaranteed discount." },
+  { q: "Do Linux Foundation vouchers include the Killer.sh simulator?", cat: "linux", a: "Linux Foundation exam registration includes two Killer.sh simulator attempts, each with 36 hours of access from activation. Udemy's voucher page advertises the two exam attempts, so confirm simulator access in your Linux Foundation portal after redemption." },
+  { q: "Does Udemy sell vouchers for Google, IBM or Oracle certifications?", cat: "basics", a: "Not in the catalogues CourseSpeak tracks. The Udemy voucher programme covers CompTIA, AWS, Microsoft and Linux Foundation exams. Other providers' exams are booked directly with the certification body." },
 ];
 
 const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
-    { "@type": "WebPage", "@id": `${canonicalUrl}#webpage`, url: canonicalUrl, name: pageTitle, description: pageDescription, image: "https://coursespeak.com/images/og/og-default.png", isPartOf: { "@id": "https://coursespeak.com/#website" }, inLanguage: "en-US", datePublished: "2025-01-01", dateModified: lastModified, author: { "@id": "https://coursespeak.com/#author" }, breadcrumb: { "@id": `${canonicalUrl}#breadcrumb` } },
+    {
+      "@type": "WebPage",
+      "@id": `${canonicalUrl}#webpage`,
+      url: canonicalUrl,
+      name: pageTitle,
+      description: pageDescription,
+      image: "https://coursespeak.com/images/og/og-default.png",
+      isPartOf: { "@id": "https://coursespeak.com/#website" },
+      publisher: { "@id": "https://coursespeak.com/#organization" },
+      inLanguage: "en-US",
+      datePublished: "2025-01-01",
+      dateModified: lastModified,
+      author: { "@id": "https://coursespeak.com/#author" },
+      breadcrumb: { "@id": `${canonicalUrl}#breadcrumb` },
+      mainEntity: { "@id": `${canonicalUrl}#vouchers` },
+      keywords: pageKeywords,
+      about: [
+        { "@type": "Thing", name: "Udemy certification exam vouchers", sameAs: ["https://www.udemy.com/all-certification-vouchers/"] },
+        { "@type": "Organization", name: "CompTIA", sameAs: ["https://www.comptia.org/"] },
+        { "@type": "Organization", name: "Amazon Web Services", sameAs: ["https://aws.amazon.com/certification/"] },
+        { "@type": "Organization", name: "Microsoft", sameAs: ["https://learn.microsoft.com/en-us/credentials/"] },
+        { "@type": "Organization", name: "Linux Foundation", sameAs: ["https://training.linuxfoundation.org/certification/"] },
+      ],
+      citation: sources.map((s) => s.url),
+      speakable: { "@type": "SpeakableSpecification", cssSelector: ["#quick-answer", ".hb-sub", "#faq"] },
+    },
     { "@type": "BreadcrumbList", "@id": `${canonicalUrl}#breadcrumb`, itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: "https://coursespeak.com" }, { "@type": "ListItem", position: 2, name: "Exam Vouchers", item: canonicalUrl }] },
     { "@type": "ItemList", "@id": `${canonicalUrl}#vouchers`, name: `Udemy Certification Exam Vouchers ${currentYear}`, numberOfItems: allVoucherPages.length, itemListElement: allVoucherPages.map((vv, i) => ({ "@type": "ListItem", position: i + 1, url: vv.url, name: `${vv.name} (${vv.code})` })) },
+    { "@type": "ItemList", "@id": `${canonicalUrl}#linux-vouchers`, name: `Linux Foundation Exam Vouchers ${currentYear}`, numberOfItems: linuxVoucherPages.length, itemListElement: linuxVoucherPages.map((vv, i) => ({ "@type": "ListItem", position: i + 1, url: vv.url, name: `${vv.name} (${vv.code})` })) },
     { "@type": "FAQPage", "@id": `${canonicalUrl}#faq`, mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
-    { "@type": "Person", "@id": "https://coursespeak.com/#author", name: "Josh Smith", jobTitle: "Founder & Editor, CourseSpeak", url: "https://coursespeak.com/about" },
+    {
+      "@type": "HowTo",
+      "@id": `${canonicalUrl}#how-to-buy`,
+      name: `How to buy and use a Udemy certification voucher in ${currentYear}`,
+      description: "Compare voucher pages, check the live price, buy on Udemy, copy the code from My learning, and apply it when scheduling with the certification provider.",
+      totalTime: "PT10M",
+      estimatedCost: { "@type": "MonetaryAmount", value: "89.10", currency: "USD" },
+      step: [
+        { "@type": "HowToStep", position: 1, name: "Choose the right provider", text: "Match the voucher to your role: CompTIA for IT support and security, AWS for cloud, Microsoft for Azure and Microsoft 365, Linux Foundation for Kubernetes and platform engineering.", url: `${canonicalUrl}#decision` },
+        { "@type": "HowToStep", position: 2, name: "Check the live price", text: "Compare the Udemy voucher price with the provider list price. Expect around 10% off on AWS, Microsoft and CompTIA, and 30% off on Linux Foundation.", url: `${canonicalUrl}#prices` },
+        { "@type": "HowToStep", position: 3, name: "Buy the voucher and any retake cover", text: "Second Chance (AWS) and Retake Assurance (CompTIA, selected Microsoft) must be bought with the original voucher. Udemy coupons do not apply to vouchers.", url: `${canonicalUrl}#rules` },
+        { "@type": "HowToStep", position: 4, name: "Copy the code", text: "Find the code in My learning → Certifications. It is also emailed after purchase.", url: `${canonicalUrl}#steps` },
+        { "@type": "HowToStep", position: 5, name: "Schedule and pay with the code", text: "Schedule through Pearson VUE (AWS, Microsoft, CompTIA) or Linux Foundation My Portal and PSI, then paste the code at payment.", url: `${canonicalUrl}#steps` },
+      ],
+    },
+    { "@type": "Person", "@id": "https://coursespeak.com/#author", name: "Josh Smith", jobTitle: "Founder & Editor, CourseSpeak", url: "https://coursespeak.com/about", knowsAbout: ["Udemy certification vouchers", "AWS certification", "CompTIA certification", "Microsoft certification", "Kubernetes certification"] },
   ],
 };
 
-const topPicks = [comptiaVouchers[3], awsVouchers[2], microsoftVouchers[0], comptiaVouchers[1], awsVouchers[0], microsoftVouchers[2]];
-const heroPicks = [
-  { voucher: comptiaVouchers[3], label: "CompTIA · most-booked security" },
-  { voucher: awsVouchers[2], label: "AWS · associate architect" },
-  { voucher: microsoftVouchers[0], label: "Microsoft · Azure fundamentals" },
+const ticker = [
+  { name: "CompTIA Security+", note: "Most-booked security voucher", price: comptiaVouchers[3] ? voucherPrice(comptiaVouchers[3]) : "$384–$395", href: "/udemy-comptia-exam-vouchers", color: "var(--brand)" },
+  { name: "AWS SAA-C03", note: "Associate-level favourite", price: voucherPrice(awsVouchers[2]), href: "/udemy-aws-exam-vouchers", color: "var(--brand)" },
+  { name: "Microsoft AZ-900", note: "Azure fundamentals entry point", price: voucherPrice(microsoftVouchers[0]), href: "/udemy-microsoft-exam-vouchers", color: "var(--brand)" },
+  { name: "Microsoft AZ-104", note: "Azure administrator associate", price: "$148.50", href: "/udemy-microsoft-exam-vouchers", color: "var(--brand)" },
 ];
 ---
-<Layout title={pageTitle} description={pageDescription} canonical={canonicalUrl} type="article" image="/images/og/og-default.png">
-<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-<style>
-  .voucher-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,border-color .2s}
-  .voucher-card:hover{transform:translateY(-3px);border-color:var(--brand)}
-  .voucher-card img{width:100%;height:150px;object-fit:cover;background:#fff}
-  .provider-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;text-decoration:none;color:var(--text);display:flex;flex-direction:column;transition:transform .2s,border-color .2s}
-  .provider-card:hover{transform:translateY(-3px);border-color:var(--brand)}
-  .provider-card img{width:100%;height:170px;object-fit:cover;background:#fff}
-  .compare-table{width:100%;border-collapse:collapse;font-size:.86rem;background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-  .compare-table th,.compare-table td{padding:.7rem .9rem;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
-  .compare-table thead th{background:var(--bg-secondary);font-weight:700}
-  @media(max-width:768px){.grid-3{grid-template-columns:1fr!important}.table-wrap{overflow-x:auto}.compare-table{min-width:680px}}
-</style>
 
-<section class="vp-hero">
-  <div class="container vp-hero-grid">
+<Layout title={pageTitle} description={pageDescription} keywords={pageKeywords} publishedTime="2025-01-01" modifiedTime={lastModified} canonical={canonicalUrl} type="article" image="/images/og/og-default.png">
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+<section class="hb-hero">
+  <div class="hb-hero-inner">
     <div>
-      <div class="vp-eyebrow">Exam Vouchers · Checked {updatedLong}</div>
-      <h1>
-        <span class="vp-gradient">Udemy Certification Vouchers {currentYear}</span>
-        <span class="vp-title-sub">{voucherPageCount} pages, {currentExamCount} current exams · AWS, CompTIA, Microsoft, plus {linuxVoucherCount} Linux Foundation vouchers</span>
-      </h1>
-      <p class="vp-lede">
-        Udemy lists <strong>{voucherPageCount} official voucher pages</strong> across CompTIA, AWS and Microsoft, plus
-        <strong>{linuxVoucherCount} Linux Foundation vouchers</strong> (CKA, CKS, CNPE), but only
-        <strong>{currentExamCount} map to exams you can book today</strong>. The gap is mostly Microsoft: 50 live pages,
-        33 current exams, 1 retiring and 16 retired or legacy. Prices start at <strong>$89.10</strong>.
+      <span class="hb-eyebrow"><span class="hb-dot"></span> Voucher command center · checked <time datetime={lastModified}>{updatedLong}</time></span>
+      <h1 class="hb-title">Udemy Certification <span>Vouchers {currentYear}</span></h1>
+      <p class="hb-sub">
+        Every voucher page we track, every price that matters, and the rules that decide whether you save money or waste an attempt.
+        <strong>{voucherPageCount} voucher pages</strong> and <strong>{currentExamCount} current exams</strong> across CompTIA, AWS and Microsoft —
+        verified in one place, with matching prep courses you can add for a few dollars.
       </p>
-      <div class="vp-chips">
-        <span class="vp-chip"><strong>{voucherPageCount}</strong> voucher pages</span>
-        <span class="vp-chip"><strong>{currentExamCount}</strong> current exams</span>
-        <span class="vp-chip">16 retired pages flagged</span>
-        <span class="vp-chip">From <strong>$89.10</strong></span>
+      <div class="hb-metrics">
+        <div class="hb-metric"><b>{voucherPageCount}</b><span>voucher pages tracked</span></div>
+        <div class="hb-metric"><b>{currentExamCount}</b><span>current exams</span></div>
+        <div class="hb-metric"><b>10–12.5%</b><span>typical voucher saving</span></div>
       </div>
-      <div class="vp-hero-actions">
-        <a href={ALL_VOUCHERS_URL} target="_blank" rel="sponsored noopener noreferrer" class="btn btn-primary btn-lg" style={{ borderRadius: "999px" }}>Browse All {voucherPageCount} Vouchers →</a>
-        <a href="#top" class="btn btn-ghost btn-lg" style={{ borderRadius: "999px" }}>See Top 6</a>
+      <div class="hb-actions">
+        <a href={ALL_VOUCHERS_HUB_URL} target="_blank" rel="sponsored noopener noreferrer" class="hb-btn hb-btn-primary">Browse all {voucherPageCount} vouchers →</a>
+        <a href={SECOND_CHANCE_URL} target="_blank" rel="sponsored noopener noreferrer" class="hb-btn hb-btn-ghost">Second Chance voucher →</a>
+        <a href="#quick-answer" class="hb-btn-quiet">Read the 60-second answer ↓</a>
       </div>
-      <p class="vp-meta">
-        By <a href="/about#author">Josh Smith</a>, Founder & Editor · Reviewed {updatedLong} ·
-        Sources: <a href="https://www.udemy.com/all-certification-vouchers/" target="_blank" rel="noopener noreferrer">Udemy voucher catalogue</a> and <a href="https://learn.microsoft.com/en-us/credentials/support/retired-certification-exams" target="_blank" rel="noopener noreferrer">vendor retirement notices</a>
+      <p class="hb-meta">
+        By <a href="/about#author">Josh Smith</a>, Founder &amp; Editor · Reviewed <time datetime={lastModified}>{updatedLong}</time> ·
+        Sources: <a href={ALL_VOUCHERS_HUB_URL} target="_blank" rel="noopener noreferrer">Udemy catalogue</a>,
+        <a href="https://aws.amazon.com/certification/certification-exams/" target="_blank" rel="noopener noreferrer">AWS pricing</a>,
+        <a href="https://learn.microsoft.com/en-us/credentials/support/retired-certification-exams" target="_blank" rel="noopener noreferrer">Microsoft retirements</a> and
+        <a href="https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/" target="_blank" rel="noopener noreferrer">Linux Foundation</a>.
+        Sponsored — we may earn a commission at no extra cost. <a href="/affiliate-disclosure">Disclosure</a>
       </p>
-      <p class="vp-disclosure">Sponsored — CourseSpeak may earn a commission at no extra cost to you. <a href="/affiliate-disclosure">Affiliate Disclosure</a></p>
     </div>
-    <aside class="vp-hero-card" aria-label="Top certification vouchers">
-      <div class="vp-hero-card-head">
-        <div>
-          <span class="vp-kicker">Top picks</span>
-          <strong>One best-seller per provider</strong>
-        </div>
-        <span class="vp-live">Prices live</span>
-      </div>
-      {heroPicks.map((p) => (
-        <a class="vp-quick-row" href={p.voucher.url} target="_blank" rel="sponsored noopener noreferrer">
-          <span class="vp-quick-info"><strong>{p.voucher.code}</strong><span>{p.label}</span></span>
-          <span class="vp-quick-price"><strong>{voucherPrice(p.voucher)}</strong><span>Udemy</span></span>
+    <aside class="hb-ticker" aria-label="Live voucher snapshot">
+      <div class="hb-ticker-head"><b>Voucher snapshot</b><span><span class="hb-dot"></span> Checked</span></div>
+      {ticker.map((t) => (
+        <a class="hb-ticker-row" href={t.href} style={{ textDecoration: "none" }}>
+          <span class="hb-ticker-name" style={{ color: t.color }}>{t.name}</span>
+          <span class="hb-ticker-note">{t.note}</span>
+          <span class="hb-ticker-price"><b>{t.price}</b><span>Udemy</span></span>
         </a>
       ))}
-      <div class="vp-hero-card-foot">
-        <span>Retail vs Udemy checked {updatedLong}</span>
-        <a href="#top">Top 6 →</a>
-      </div>
+      <div class="hb-ticker-foot">List prices and regional availability change. Confirm at checkout before paying.</div>
     </aside>
   </div>
 </section>
 
-<section id="top" class="vp-listing">
-  <div class="container" style={{ maxWidth: "1180px" }}>
-    <div class="vp-section-head">
-      <div>
-        <span class="section-title">Most popular</span>
-        <h2>Top 6 vouchers by demand</h2>
-        <p>The entry-point and job-getter exams most CourseSpeak readers buy first — three CompTIA, two AWS and one Microsoft, with the live Udemy price on every card.</p>
-      </div>
-      <a class="vp-head-link" href="#prices">Compare all prices ↓</a>
+<div class="hb-rail">
+  <div class="hb-rail-inner">
+    <a href="#quick-answer">01 Quick answer</a>
+    <a href="#decision">02 Pick your path</a>
+    <a href="#providers">03 Providers</a>
+    <a href="#provider-compare">04 Side by side</a>
+    <a href="#prices">05 Prices</a>
+    <a href="#courses">06 Prep courses</a>
+    <a href="#rules">07 Rules</a>
+    <a href="#examples">08 Real maths</a>
+    <a href="#roadmap">09 Roadmap</a>
+    <a href="#mistakes">10 Mistakes</a>
+    <a href="#evidence">11 Evidence</a>
+    <a href="#steps">12 How to buy</a>
+    <a href="#faq">13 FAQ</a>
+  </div>
+  <div class="hb-progress" id="hb-progress"></div>
+</div>
+
+<section class="hb-section" id="quick-answer">
+  <div class="hb-answer">
+    <span class="hb-answer-label">Answer first · fact-checked {updatedLong}</span>
+    <h2>Udemy certification vouchers: the 60-second answer</h2>
+    <p>
+      Udemy sells prepaid exam vouchers for selected <strong>CompTIA, AWS and Microsoft</strong> certifications.
+      CourseSpeak tracks <strong>{voucherPageCount} voucher pages</strong> covering <strong>{currentExamCount} current exams</strong> across those three providers.
+      Savings are typically <strong>about 10%</strong> on AWS and Microsoft and <strong>10–12.5%</strong> on CompTIA. Every voucher is non-refundable,
+      country-locked, and excludes training. Udemy coupons discount prep courses, never the voucher itself.
+      A separate Linux Foundation voucher set exists but is not included in the {voucherPageCount}/{currentExamCount} figures.
+    </p>
+    <ul>
+      <li><strong>Cheapest standard seat:</strong> Microsoft Fundamentals at about $89.10, or AWS Cloud Practitioner at $90. Typical savings are 10–12.5% across the main three providers.</li>
+      <li><strong>Retake cover:</strong> AWS Second Chance and CompTIA/selected Microsoft Retake Assurance must be bought upfront. Linux Foundation includes two attempts.</li>
+      <li><strong>Validity:</strong> at least 9 months for CompTIA/AWS/Microsoft. Linux Foundation Udemy vouchers: redeem within 6 months, sit the exam within 12 months of redemption.</li>
+      <li><strong>Scheduling:</strong> Pearson VUE for AWS, Microsoft and CompTIA; Linux Foundation My Portal then PSI.</li>
+      <li><strong>Before you buy:</strong> check the exam code, your country, the expiry date and whether the exam is retiring.</li>
+    </ul>
+    <div class="hb-chips">
+      {sources.map((s) => (
+        <a class="hb-chip" href={s.url} target="_blank" rel="noopener noreferrer">{s.label} ↗</a>
+      ))}
     </div>
-    <div class="vp-voucher-grid vp-voucher-grid--3">
-      {topPicks.map((vv) => (
-        <a class="vp-voucher-card" href={vv.url} target="_blank" rel="sponsored noopener noreferrer">
-          <div class="vp-voucher-media"><img src={vv.image} alt={vv.title} width="480" height="270" loading="lazy" /></div>
-          <div class="vp-voucher-body">
-            <span class="vp-voucher-code">{vv.code}</span>
-            <div class="vp-voucher-title">{vv.title}</div>
-            <p class="vp-voucher-blurb">{vv.blurb}</p>
-            <div class="vp-voucher-footer">
-              <span class="vp-voucher-price">{voucherPrice(vv)}<span>Udemy</span></span>
-              <span class="vp-voucher-cta">Get voucher →</span>
+  </div>
+</section>
+
+<section class="hb-section alt" id="decision">
+  <div class="hb-section-inner">
+    <span class="hb-kicker">Decision desk</span>
+    <h2 class="hb-h2">Which voucher actually fits your next move?</h2>
+    <p class="hb-lead">Pick the statement closest to your situation. The recommendation updates instantly — no quiz, no email gate.</p>
+    <div class="hb-decision" style={{ marginTop: "1.4rem" }}>
+      <div class="hb-options" id="hb-decision-form">
+        <label class="hb-option">
+          <input type="radio" name="hb-goal" value="comptia" data-title="Start with CompTIA" data-text="For IT support, networking or security roles, begin with Security+ SY0-701 or A+. Vouchers cover 15 pages, saving roughly 10–12.5% off list, with optional Retake Assurance." data-label="Open the CompTIA guide →" data-link="/udemy-comptia-exam-vouchers" />
+          <span><b>I'm starting in IT support, networking or security</b><small>Foundational and security certifications that employers ask for first.</small></span>
+        </label>
+        <label class="hb-option">
+          <input type="radio" name="hb-goal" value="aws" data-title="Start with AWS" data-text="Cloud and DevOps roles map to AWS. Cloud Practitioner CLF-C02 is the entry point; Solutions Architect Associate SAA-C03 is the job-getter. Vouchers are level-wide and about 10% off." data-label="Open the AWS guide →" data-link="/udemy-aws-exam-vouchers" />
+          <span><b>I'm moving into cloud, DevOps or data</b><small>AWS vouchers are level-wide, so one code covers any exam at that level.</small></span>
+        </label>
+        <label class="hb-option">
+          <input type="radio" name="hb-goal" value="microsoft" data-title="Start with Microsoft" data-text="Azure, data, security and Microsoft 365 roles start with AZ-900, then AZ-104 or SC-200. Microsoft vouchers save about 10%, but 16 pages are retired or legacy — check the code first." data-label="Open the Microsoft guide →" data-link="/udemy-microsoft-exam-vouchers" />
+          <span><b>I work with Azure, data or Microsoft 365</b><small>Just remember that 16 of the 50 voucher pages are retired or legacy.</small></span>
+        </label>
+        <label class="hb-option">
+          <input type="radio" name="hb-goal" value="linux" data-title="Start with Linux Foundation" data-text="Kubernetes administrators should take CKA first, then CKS after CKA is passed. Platform engineers can go straight to CNPE. All three cost $311.50 instead of $445, with two attempts included." data-label="Open the Linux Foundation guide →" data-link="/udemy-linux-foundation-exam-vouchers" />
+          <span><b>I run Kubernetes clusters or build internal platforms</b><small>CKA → CKS → CNPE. Udemy's LF vouchers are a flat 30% off.</small></span>
+        </label>
+      </div>
+      <div class="hb-result" id="hb-result">
+        <h3 id="hb-result-title">Your best starting point</h3>
+        <p id="hb-result-text">Choose a statement on the left. We'll match it to the provider guide with the right exam order, prices and retake rules.</p>
+        <p style={{ marginTop: "0.8rem" }}><a id="hb-result-link" href="#providers">Compare all four providers →</a></p>
+        <p style={{ marginTop: "0.7rem" }}><a href={ALL_VOUCHERS_HUB_URL} target="_blank" rel="sponsored noopener noreferrer" class="hb-btn hb-btn-primary" style={{ fontSize: "0.8rem", padding: "0.6rem 1rem" }}>Get the voucher →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hb-section" id="providers">
+  <div class="hb-section-head-row">
+    <div class="hb-head">
+      <span class="hb-kicker">Browse by provider</span>
+      <h2 class="hb-h2">Four providers, one voucher programme</h2>
+      <p class="hb-lead">Open a guide for the full exam list and current codes, or go straight to the official voucher catalogue. Design, pricing and retake rules differ by provider.</p>
+    </div>
+    <a href={ALL_VOUCHERS_HUB_URL} target="_blank" rel="sponsored noopener noreferrer" class="hb-btn hb-btn-primary">Browse vouchers →</a>
+  </div>
+  <div class="hb-grid4">
+    {(["comptia", "aws", "microsoft", "linux"] as const).map((key) => (
+      <div class="hb-provider">
+        <div class="hb-provider-top" style={{ background: providerMeta[key].color }}></div>
+        <img src={providerMeta[key].image} alt={`${providerMeta[key].name} exam vouchers`} width="480" height="270" loading="lazy" />
+        <div class="hb-provider-body">
+          <div class="hb-provider-count" style={{ color: providerMeta[key].color }}>{providerMeta[key].count} voucher pages</div>
+          <div class="hb-provider-name">{providerMeta[key].name}</div>
+          <div class="hb-provider-best"><strong style={{ color: providerMeta[key].color }}>Best for:</strong> {providerMeta[key].best}</div>
+          <div class="hb-provider-desc">{providerMeta[key].desc}</div>
+          <div class="hb-provider-actions">
+            <a class="hb-provider-voucher" href={providerVoucherUrl[key]} target="_blank" rel="sponsored noopener noreferrer">Get voucher →</a>
+            <a class="hb-provider-link" href={providerMeta[key].page}>Open guide →</a>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<section class="hb-section alt" id="provider-compare">
+  <div class="hb-section-inner">
+    <span class="hb-kicker">Side by side</span>
+    <h2 class="hb-h2">The rules that change your decision</h2>
+    <p class="hb-lead">A voucher is more than a price. Saving and expiry, retake mechanics and scheduling differ enough to change which one you should buy.</p>
+    <div class="hb-table-wrap" style={{ marginTop: "1.5rem" }}>
+      <table class="hb-table">
+        <caption>Snapshot checked <time datetime={lastModified}>{updatedLong}</time>. Sources: <a href={ALL_VOUCHERS_HUB_URL} target="_blank" rel="noopener noreferrer">Udemy voucher catalogue</a> and the official provider pages. Regional prices and availability vary.</caption>
+        <thead><tr><th scope="col">Provider</th><th scope="col">Pages tracked</th><th scope="col">Best for</th><th scope="col">Typical saving</th><th scope="col">Validity</th><th scope="col">Retake cover</th><th scope="col">Scheduling</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">CompTIA</th><td>15</td><td>IT support, networking, cybersecurity</td><td>10–12.5%</td><td>At least 9 months</td><td>Retake Assurance, same code reused</td><td>Pearson VUE, online or centre</td></tr>
+          <tr><th scope="row">AWS</th><td>12 (10 current)</td><td>Cloud, DevOps, data</td><td>About 10%</td><td>At least 9 months</td><td>Second Chance bundle, new code issued</td><td>AWS Certification → Pearson VUE</td></tr>
+          <tr><th scope="row">Microsoft</th><td>50 (33 current)</td><td>Azure, data, security, 365</td><td>About 10%</td><td>At least 9 months</td><td>Retake Assurance on selected exams</td><td>Microsoft Learn → Pearson VUE</td></tr>
+          <tr><th scope="row">Linux Foundation</th><td>{linuxVoucherCount} (separate)</td><td>Kubernetes, SRE, platform engineering</td><td>30% flat</td><td>Redeem in 6 months, exam in 12</td><td>Two attempts included</td><td>LF My Portal → PSI, online only</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style={{ color: "#7c8798", fontSize: "0.78rem", marginTop: "0.8rem" }}>Linux Foundation vouchers are tracked outside the {voucherPageCount}/{currentExamCount} figures. Check the exact exam code and country before purchase.</p>
+  </div>
+</section>
+
+<section class="hb-section" id="prices">
+  <span class="hb-kicker">Price intelligence</span>
+  <h2 class="hb-h2">What you actually save</h2>
+  <p class="hb-lead">The voucher discount is real, but it is not the same across providers. The bars below show indicative US list prices versus Udemy voucher prices; the full table follows.</p>
+  <div class="hb-ladder" style={{ margin: "1.6rem 0 0.8rem" }}>
+    {[
+      { label: "CompTIA Security+", retail: 439, udemy: 389, save: "~$50 (11%)" },
+      { label: "AWS Cloud Practitioner", retail: 100, udemy: 90, save: "$10 (10%)" },
+      { label: "Microsoft AZ-900", retail: 99, udemy: 89.1, save: "$9.90 (10%)" },
+      { label: "Microsoft AZ-104", retail: 165, udemy: 148.5, save: "$16.50 (10%)" },
+    ].map((row) => (
+      <div class="hb-ladder-row">
+        <div class="hb-ladder-label">{row.label}</div>
+        <div class="hb-track">
+          <div class="hb-track-retail" style={{ width: "100%" }}></div>
+          <div class="hb-track-voucher" style={{ width: `${Math.round((row.udemy / row.retail) * 100)}%` }}></div>
+        </div>
+        <div class="hb-ladder-save">{row.save}</div>
+      </div>
+    ))}
+    <div class="hb-ladder-legend"><span><i style={{ background: "rgba(255,255,255,.16)" }}></i>Provider list price</span><span><i style={{ background: "#d4af37" }}></i>Udemy voucher price</span></div>
+  </div>
+  <div class="hb-table-wrap">
+    <table class="hb-table">
+      <caption>Indicative US prices checked <time datetime={lastModified}>{updatedLong}</time>. Sources: <a href={ALL_VOUCHERS_HUB_URL} target="_blank" rel="noopener noreferrer">Udemy</a>, <a href="https://aws.amazon.com/certification/certification-exams/" target="_blank" rel="noopener noreferrer">AWS</a>, <a href="https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/" target="_blank" rel="noopener noreferrer">Linux Foundation</a>. Snapshot, not a live quote.</caption>
+      <thead><tr><th scope="col">Exam</th><th scope="col">Code</th><th scope="col">List price</th><th scope="col">Udemy voucher</th><th scope="col">Retake / attempts</th><th scope="col">Voucher window</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">CompTIA Security+</th><td>SY0-701</td><td>$439</td><td>~$384–$395</td><td>Retake Assurance bundle</td><td>At least 9 months</td></tr>
+        <tr><th scope="row">CompTIA A+ (per core)</th><td>220-1201 / 220-1202</td><td>$274</td><td>~$240–$247</td><td>Retake Assurance per core</td><td>At least 9 months</td></tr>
+        <tr><th scope="row">CompTIA Network+</th><td>N10-009</td><td>$399</td><td>~$349–$359</td><td>Retake Assurance bundle</td><td>At least 9 months</td></tr>
+        <tr><th scope="row">AWS Cloud Practitioner</th><td>CLF-C02</td><td>$100</td><td>$90</td><td>Second Chance $115.50</td><td>At least 9 months</td></tr>
+        <tr><th scope="row">AWS Associate</th><td>SAA-C03 and peers</td><td>$150</td><td>$135</td><td>Second Chance $177.80</td><td>At least 9 months</td></tr>
+        <tr><th scope="row">AWS Professional / Specialty</th><td>SAP-C03 / DOP-C02 / SCS-C03</td><td>$300</td><td>$270</td><td>Second Chance $348.80</td><td>At least 9 months</td></tr>
+        <tr><th scope="row">Microsoft Fundamentals</th><td>AZ-900 / DP-900</td><td>$99</td><td>$89.10</td><td>Not on every page</td><td>At least 9 months</td></tr>
+        <tr><th scope="row">Microsoft Associate</th><td>AZ-104 / SC-200 / DP-300</td><td>$165</td><td>$148.50</td><td>Retake Assurance on select exams</td><td>At least 9 months</td></tr>
+        <tr><th scope="row">Microsoft Expert</th><td>AZ-305 / AZ-400</td><td>$165</td><td>$148.50</td><td>Retake Assurance on select exams</td><td>At least 9 months</td></tr>
+        <tr><th scope="row">Linux Foundation CKA</th><td>CKA</td><td>$445</td><td><strong style={{ color: "#f5d76e" }}>$311.50</strong></td><td>Two attempts included</td><td>Redeem 6 months, exam 12 months</td></tr>
+        <tr><th scope="row">Linux Foundation CKS</th><td>CKS</td><td>$445</td><td><strong style={{ color: "#f5d76e" }}>$311.50</strong></td><td>Two attempts included</td><td>Redeem 6 months, exam 12 months</td></tr>
+        <tr><th scope="row">Linux Foundation CNPE</th><td>CNPE</td><td>$445</td><td><strong style={{ color: "#f5d76e" }}>$311.50</strong></td><td>Two attempts included</td><td>Redeem 6 months, exam 12 months</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style={{ color: "#7c8798", fontSize: "0.78rem", marginTop: "0.8rem" }}>Second Chance and Retake Assurance are optional bundles that cost more than voucher-only. Microsoft retake availability differs by exam. Regional pricing varies.</p>
+</section>
+
+<section class="hb-section alt" id="courses">
+  <div class="hb-section-inner">
+    <div class="hb-section-head-row">
+      <div class="hb-head">
+        <span class="hb-kicker">Complete the package</span>
+        <h2 class="hb-h2">Prep courses that match these vouchers</h2>
+        <p class="hb-lead">A voucher buys the exam seat, not the training. These are live, discounted Udemy deals from CourseSpeak's daily catalogue — matched to the exam you are booking. Coupon codes work here, never on the voucher.</p>
+      </div>
+      <a href="/deals" class="hb-btn hb-btn-ghost">Browse all deals →</a>
+    </div>
+    <div class="hb-courses">
+      {coursePicks.map((course) => (
+        <div class="hb-course">
+          <Image src={course.deal!.image} alt={course.deal!.title} width={480} height={270} loading="lazy" />
+          <div class="hb-course-body">
+            <div class="hb-course-provider" style={{ color: course.provider === "AWS" ? "var(--brand)" : course.provider === "Microsoft" ? "var(--brand)" : "var(--brand)" }}>{course.provider} · {course.why}</div>
+            <h3 class="hb-course-title">{course.deal!.title}</h3>
+            <div class="hb-course-meta">★ {course.deal!.rating} · {Number(course.deal!.students).toLocaleString("en-US")} students · {course.deal!.duration}</div>
+            <div class="hb-course-price">${course.deal!.price}<s>${course.deal!.originalPrice}</s></div>
+            <div class="hb-course-actions">
+              <a class="hb-course-cta" href={course.deal!.url} target="_blank" rel="sponsored noopener noreferrer">Get course →</a>
+              <a class="hb-course-topic" href={course.topic}>Topic →</a>
             </div>
           </div>
-        </a>
-      ))}
-    </div>
-    <nav class="vp-anchor-bar" aria-label="On this page" style={{ marginTop: "1.4rem", marginBottom: 0 }}>
-      <a href="#top">1. Top 6 vouchers</a>
-      <a href="#providers">2. Browse by provider</a>
-      <a href="#prices">3. Retail vs Udemy</a>
-      <a href="#steps">4. How to buy</a>
-      <a href="#roadmap">5. Which exam first</a>
-      <a href="#faq">6. FAQ</a>
-    </nav>
-  </div>
-</section>
-
-<section id="providers" style={{ padding: "1rem 1rem 3rem" }}>
-  <div class="container" style={{ maxWidth: "1080px" }}>
-    <div style={{ textAlign: "center", marginBottom: "1.75rem" }}>
-      <span class="section-title">Pick your track</span>
-      <h2 class="section-heading">Browse Vouchers by Provider</h2>
-      <p style={{ color: "var(--muted)", maxWidth: "700px", margin: "0.5rem auto 0", lineHeight: 1.65 }}>CompTIA for IT support and cybersecurity careers, AWS for cloud roles, Microsoft for Azure, data, security and Microsoft 365 paths. Every card below links to the official Udemy voucher page.</p>
-    </div>
-    <div class="grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "1.25rem" }}>
-      {(["comptia", "aws", "microsoft", "linux"] as const).map((key) => (
-        <a class="provider-card" href={providerMeta[key].page}>
-          <img src={providerMeta[key].image} alt={`${providerMeta[key].name} exam vouchers`} width="480" height="270" loading="lazy" />
-          <div style={{ padding: "1.25rem 1.4rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-            <div style={{ fontSize: "0.75rem", fontWeight: 800, color: providerMeta[key].color, textTransform: "uppercase", letterSpacing: "0.05em" }}>{providerMeta[key].count} voucher pages</div>
-            <h3 style={{ margin: 0, fontSize: "1.15rem", fontWeight: 800 }}>{providerMeta[key].name} Exam Vouchers</h3>
-            <p style={{ margin: 0, color: "var(--muted)", fontSize: "0.88rem", lineHeight: 1.6 }}>{providerMeta[key].desc}</p>
-            <span style={{ color: "var(--brand)", fontWeight: 700, fontSize: "0.9rem" }}>View all →</span>
-          </div>
-        </a>
-      ))}
-    </div>
-  </div>
-</section>
-
-<section id="prices" style={{ padding: "1rem 1rem 3rem", background: "var(--bg-secondary)" }}>
-  <div class="container" style={{ maxWidth: "1080px" }}>
-    <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
-      <span class="section-title">What you save</span>
-      <h2 class="section-heading">Retail vs Udemy Voucher Prices</h2>
-      <p style={{ color: "var(--muted)", fontSize: "0.9rem", maxWidth: "700px", margin: "0.5rem auto 0" }}>Indicative retail fees (US, 2026) versus the Udemy voucher price. CompTIA pricing varies between 10% and 12.5% off; AWS and Microsoft are about 10%; Linux Foundation is a flat 30% off ($445 → $311.50, two attempts included, no retake add-on). Confirm the live price on each voucher page.</p>
-    </div>
-    <div class="table-wrap"><table class="compare-table">
-      <thead><tr><th>Exam</th><th>Code</th><th>Retail (approx)</th><th>Via Udemy</th><th>Retake option</th></tr></thead>
-      <tbody>
-        <tr><td>CompTIA Security+</td><td>SY0-701</td><td>$439</td><td>~$384–$395</td><td>Retake Assurance bundle</td></tr>
-        <tr><td>CompTIA A+ (per core)</td><td>220-1201 / 220-1202</td><td>$274</td><td>~$240–$247</td><td>Retake Assurance (per core)</td></tr>
-        <tr><td>CompTIA Network+</td><td>N10-009</td><td>$399</td><td>~$349–$359</td><td>Retake Assurance bundle</td></tr>
-        <tr><td>AWS Cloud Practitioner</td><td>CLF-C02</td><td>$100</td><td>$90 voucher-only</td><td>Second Chance bundle $115.50</td></tr>
-        <tr><td>AWS Associate (SAA-C03 etc.)</td><td>SAA-C03</td><td>$150</td><td>$135 voucher-only</td><td>Second Chance bundle $177.80</td></tr>
-        <tr><td>AWS Professional / Specialty</td><td>SAP-C03 / DOP-C02 / SCS-C03</td><td>$300</td><td>$270 voucher-only</td><td>Second Chance bundle $348.80</td></tr>
-        <tr><td>Microsoft Fundamentals</td><td>AZ-900 / DP-900</td><td>$99</td><td>$89.10</td><td>Not offered on every page</td></tr>
-        <tr><td>Microsoft Associate</td><td>AZ-104 / SC-200 / DP-300</td><td>$165</td><td>$148.50</td><td>Retake Assurance on select exams</td></tr>
-        <tr><td>Microsoft Expert</td><td>AZ-305 / AZ-400</td><td>$165</td><td>$148.50</td><td>Retake Assurance on select exams</td></tr>
-        <tr><td><strong>CKA</strong><br /><span style={{ color: "var(--muted)", fontSize: "0.8rem" }}>Linux Foundation</span></td><td>$445</td><td><strong>$311.50</strong></td><td>$133.50 (30%)</td><td>2 (included)</td><td>Redeem in 6 months; exam in 12 months</td></tr>
-        <tr><td><strong>CKS</strong><br /><span style={{ color: "var(--muted)", fontSize: "0.8rem" }}>Linux Foundation</span></td><td>$445</td><td><strong>$311.50</strong></td><td>$133.50 (30%)</td><td>2 (included)</td><td>Redeem in 6 months; exam in 12 months</td></tr>
-        <tr><td><strong>CNPE</strong><br /><span style={{ color: "var(--muted)", fontSize: "0.8rem" }}>Linux Foundation</span></td><td>$445</td><td><strong>$311.50</strong></td><td>$133.50 (30%)</td><td>2 (included)</td><td>Redeem in 6 months; exam in 12 months</td></tr>
-      </tbody>
-    </table></div>
-    <p style={{ color: "var(--muted)", fontSize: "0.8rem", margin: "0.75rem 0 0", lineHeight: 1.6 }}>Voucher-only prices shown; Second Chance and Retake Assurance are optional bundles that cost more. US list prices; regional pricing varies. Microsoft retake availability differs by exam — check the live page before relying on it.</p>
-  </div>
-</section>
-
-<section id="steps" style={{ padding: "1rem 1rem 3rem" }}>
-  <div class="container" style={{ maxWidth: "900px" }}>
-    <div style={{ textAlign: "center", marginBottom: "1.75rem" }}>
-      <span class="section-title">How it works</span>
-      <h2 class="section-heading">Buying a Voucher in 6 Steps</h2>
-      <p style={{ color: "var(--muted)", fontSize: "0.92rem" }}>Directly from Udemy's official voucher flow — no coupon codes involved.</p>
-    </div>
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: "1rem" }}>
-      {[
-        ["1 — Train", "Complete an expert-led prep course and practice exams. Use CourseSpeak coupon deals to cut training cost to near zero."],
-        ["2 — Choose cover", "On the voucher page, pick voucher-only or the bundle with Second Chance / Retake Assurance. The safety net cannot be added later."],
-        ["3 — Pay", "Check out with any Udemy-accepted method. Udemy credits apply automatically; coupons do not apply to vouchers."],
-        ["4 — Copy the code", "Find your code under My learning → Certifications. Copy it exactly — codes are case-sensitive."],
-        ["5 — Schedule", "Book on Pearson VUE through AWS Certification, Microsoft Learn or your CompTIA account, paste the code at payment, and sit the exam online or in person."],
-        ["6 — If you fail", "AWS Second Chance: report in My learning within 9 months, Udemy verifies and issues a new code (~7 days). CompTIA/Microsoft Retake Assurance: rebook the same exam with the same code — no claim, no new code."],
-      ].map(([t, d]) => (
-        <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "12px", padding: "1.25rem" }}>
-          <h3 style={{ margin: "0 0 0.4rem", fontSize: "0.95rem", color: "var(--brand)" }}>{t}</h3>
-          <p style={{ margin: 0, color: "var(--muted)", fontSize: "0.88rem", lineHeight: 1.65 }}>{d}</p>
         </div>
       ))}
     </div>
-    <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "12px", padding: "1.5rem", marginTop: "1.5rem" }}>
-      <h3 style={{ margin: "0 0 0.5rem", fontSize: "1rem" }}>Second Chance vs Retake Assurance — the fine print that matters</h3>
-      <ul style={{ margin: 0, paddingLeft: "1.2rem", lineHeight: 1.8, color: "var(--muted)", fontSize: "0.9rem" }}>
-        <li><strong style={{ color: "var(--text)" }}>One extra attempt only.</strong> Neither product covers a third sitting.</li>
-        <li><strong style={{ color: "var(--text)" }}>Non-refundable either way.</strong> Pass first try and the retake fee is not returned — price it as insurance, not a deposit.</li>
-        <li><strong style={{ color: "var(--text)" }}>Expiry works differently.</strong> Second Chance issues a replacement code with a new ≥9-month window. Retake Assurance reuses the original voucher, so the retake must happen before the original expiry.</li>
-        <li><strong style={{ color: "var(--text)" }}>Exam scope differs.</strong> AWS vouchers are level-wide; CompTIA and Microsoft vouchers are exam-specific. A retired exam code cannot be redirected to its replacement.</li>
-        <li><strong style={{ color: "var(--text)" }}>Country-locked.</strong> Vouchers work only in the country of purchase — critical for travellers and cross-border teams.</li>
-      </ul>
+    <p style={{ color: "#7c8798", fontSize: "0.78rem", marginTop: "1rem" }}>Course prices and coupons expire — each card shows the live deal captured in the catalogue. Confirm the price and coupon at checkout.</p>
+  </div>
+</section>
+
+<section class="hb-section" id="rules">
+  <div class="hb-section-inner">
+    <span class="hb-kicker">The fine print</span>
+    <h2 class="hb-h2">Three rules that decide whether the voucher is worth it</h2>
+    <p class="hb-lead">Most bad voucher purchases are not about price — they are about expiry, retakes and booking rules. Read these before you pay.</p>
+    <div class="hb-trio" style={{ marginTop: "1.5rem" }}>
+      <div class="hb-rule">
+        <h3>1. Validity clocks</h3>
+        <p>CompTIA, AWS and Microsoft vouchers last at least 9 months from purchase, including retake coverage.</p>
+        <ul><li>Linux Foundation (Udemy): redeem within 6 months, then sit the exam within 12 months of redemption.</li><li>An exam retirement can shorten a voucher's useful life even if the printed expiry is later.</li></ul>
+      </div>
+      <div class="hb-rule">
+        <h3>2. Retake mechanics</h3>
+        <p>Second Chance (AWS) issues a brand-new code after you report a failed result; Retake Assurance (CompTIA, select Microsoft) reuses the same code.</p>
+        <ul><li>Both must be bought with the original voucher — never after a fail.</li><li>One extra attempt only, non-refundable even if you pass first time.</li></ul>
+      </div>
+      <div class="hb-rule">
+        <h3>3. Scheduling &amp; identity</h3>
+        <p>Udemy sells the seat; the provider and its proctor run the exam. Name mismatches and country locks cause real failures.</p>
+        <ul><li>Pearson VUE for AWS, Microsoft and CompTIA; LF My Portal → PSI for Linux Foundation.</li><li>Vouchers are country-locked and the name on your account must match your photo ID.</li></ul>
+      </div>
     </div>
   </div>
 </section>
 
-<section id="roadmap" style={{ padding: "1rem 1rem 3rem" }}>
-  <div class="container" style={{ maxWidth: "900px" }}>
-    <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
-      <span class="section-title">Roadmap</span>
-      <h2 class="section-heading">Which Exam First? A Practical Order</h2>
+<section class="hb-section" id="examples">
+  <span class="hb-kicker">Real maths</span>
+  <h2 class="hb-h2">Three purchases, worked out</h2>
+  <p class="hb-lead">The headline percentage only matters once you translate it into dollars and compare it against the retake you might need.</p>
+  <div class="hb-examples" style={{ marginTop: "1.5rem" }}>
+    <div class="hb-example">
+      <div class="hb-exam">CompTIA · first security cert</div>
+      <div class="hb-math"><s>$439</s> → ~$389</div>
+      <div class="hb-save">Save about $50</div>
+      <p>Security+ is the most-booked CompTIA voucher. Add Retake Assurance at checkout if a second attempt would otherwise cost $439.</p>
     </div>
-    <div style={{ display: "grid", gap: "0.9rem" }}>
-      {[
-        ["Start here (no experience)", "CompTIA Tech+ → A+ → Network+ · AWS Cloud Practitioner CLF-C02 · Microsoft AZ-900. Any of these validates fundamentals to employers within 4–8 weeks of study."],
-        ["First cloud job", "AWS Solutions Architect Associate SAA-C03 or Microsoft AZ-104. Both are the most-requested cloud certs in job posts and pair directly with hands-on labs."],
-        ["Security track", "Security+ SY0-701 → CySA+ CS0-004 → PenTest+ PT0-003 → SecurityX CAS-005. Security+ is the baseline many SOC and government-contractor roles require."],
-        ["Data & AI track", "CompTIA Data+ → AWS Data Engineer DEA-C01 → AWS ML Engineer MLA-C02; or Microsoft DP-900 → DP-700 for data engineering and AI-901 → AI-103 for AI. Book AI-901 and AI-103 direct with Microsoft until Udemy lists vouchers."],
-        ["Microsoft caution", "Skip AI-900, DP-100, AI-102, AZ-204, AZ-500, AZ-800, AZ-801, PL-200, PL-400, PL-500, PL-600, MB-240, MB-280, MB-335 and MB-700. Those exams are retired; the Microsoft page flags every dead page."],
-      ].map(([t, d]) => (
-        <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "12px", padding: "1.25rem 1.4rem" }}>
-          <h3 style={{ margin: "0 0 0.35rem", fontSize: "0.98rem" }}>{t}</h3>
-          <p style={{ margin: 0, color: "var(--muted)", fontSize: "0.9rem", lineHeight: 1.7 }}>{d}</p>
+    <div class="hb-example">
+      <div class="hb-exam">AWS · foundational</div>
+      <div class="hb-math"><s>$100</s> → $90</div>
+      <div class="hb-save">Save $10 (10%)</div>
+      <p>Second Chance costs $115.50 total, so it is cheaper than paying $100 again if you fail — but only if you actually need the retake.</p>
+    </div>
+    <div class="hb-example">
+      <div class="hb-exam">Linux Foundation · Kubernetes</div>
+      <div class="hb-math"><s>$445</s> → $311.50</div>
+      <div class="hb-save">Save $133.50 (30%)</div>
+      <p>Two attempts are included, and the voucher is exam-specific. Redeem within 6 months, then book within 12 months of redemption.</p>
+    </div>
+  </div>
+</section>
+
+<section class="hb-section alt" id="roadmap">
+  <div class="hb-section-inner">
+    <span class="hb-kicker">Roadmap</span>
+    <h2 class="hb-h2">Which exam first? A practical order</h2>
+    <p class="hb-lead">Buy the exam that matches the job you want next, not the one with the shortest course. This order works for most candidates.</p>
+    <div class="hb-timeline" style={{ marginTop: "1.6rem" }}>
+      <div class="hb-step"><h3>1. No experience yet</h3><p>CompTIA Tech+ or A+, AWS Cloud Practitioner CLF-C02, Microsoft AZ-900 or Linux Foundation CKA for Kubernetes roles. All are entry points with no prerequisites.</p></div>
+      <div class="hb-step"><h3>2. First cloud job</h3><p>AWS Solutions Architect Associate SAA-C03 or Microsoft AZ-104. Both appear constantly in job posts and pair directly with hands-on labs.</p></div>
+      <div class="hb-step"><h3>3. Security track</h3><p>Security+ SY0-701 → CySA+ CS0-004 → PenTest+ PT0-003 → SecurityX CAS-005. For Kubernetes security, pass CKA first, then CKS.</p></div>
+      <div class="hb-step"><h3>4. Kubernetes and platform engineering</h3><p>CKA establishes cluster administration. CKS adds security and requires CKA. CNPE targets senior platform engineers working with GitOps, CRDs and observability.</p></div>
+      <div class="hb-step"><h3>5. Data and AI</h3><p>CompTIA Data+ → AWS Data Engineer DEA-C01, or Microsoft DP-900 → DP-700. Book newly announced AI exams direct with the provider until Udemy lists vouchers.</p></div>
+      <div class="hb-step"><h3>6. Avoid dead ends</h3><p>Skip the 15 Microsoft exams that retired in 2026, plus MS-102 after November 30, 2026. Check each provider guide for the current codes before paying.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="hb-section" id="mistakes">
+  <span class="hb-kicker">Avoid these</span>
+  <h2 class="hb-h2">Eight ways to waste a voucher</h2>
+  <p class="hb-lead">A voucher is a prepaid exam seat with an expiry date, not a discount you can bank indefinitely.</p>
+  <div class="hb-mistakes" style={{ marginTop: "1.5rem" }}>
+    <div class="hb-mistake"><b>01</b><div><strong>Buying before you study</strong>A voucher does not make you ready. Book when you can schedule within the validity window.</div></div>
+    <div class="hb-mistake"><b>02</b><div><strong>Ignoring the redemption clock</strong>Udemy Linux Foundation vouchers expire for redemption after 6 months even if you have not opened them.</div></div>
+    <div class="hb-mistake"><b>03</b><div><strong>Buying CKS before passing CKA</strong>CKS requires a passed CKA. The redemption clock keeps running while you wait.</div></div>
+    <div class="hb-mistake"><b>04</b><div><strong>Assuming coupons work</strong>Udemy coupon codes never discount vouchers. They work on prep courses.</div></div>
+    <div class="hb-mistake"><b>05</b><div><strong>Buying a retired exam code</strong>16 Microsoft pages are retired or legacy and MS-102 retires November 30, 2026.</div></div>
+    <div class="hb-mistake"><b>06</b><div><strong>Forgetting the country lock</strong>Vouchers only work in the country of purchase. Cross-border teams get caught by this.</div></div>
+    <div class="hb-mistake"><b>07</b><div><strong>Skipping the retake decision</strong>Second Chance and Retake Assurance cannot be added after checkout. Decide upfront.</div></div>
+    <div class="hb-mistake"><b>08</b><div><strong>Mismatched identity</strong>Your provider account name must match your government ID exactly, or you will not be admitted.</div></div>
+  </div>
+</section>
+
+<section class="hb-section alt" id="evidence">
+  <div class="hb-section-inner">
+    <span class="hb-kicker">Evidence log</span>
+    <h2 class="hb-h2">How we verify this page</h2>
+    <p class="hb-lead">Prices, codes and rules were checked against the official sources below on <time datetime={lastModified}>{updatedLong}</time>. Prices are a snapshot, not a live quote.</p>
+    <div class="hb-evidence" style={{ marginTop: "1.5rem" }}>
+      {sources.map((s) => (
+        <div class="hb-source">
+          <b>{s.label}</b>
+          <span>Primary source for current prices, exam codes and voucher terms. Checked {updatedLong}.</span>
+          <a href={s.url} target="_blank" rel="noopener noreferrer">Open source ↗</a>
         </div>
       ))}
     </div>
+    <p style={{ color: "#7c8798", fontSize: "0.8rem", marginTop: "1rem", lineHeight: 1.7 }}>Methodology: we compare the Udemy voucher page with the certification provider's own price and policy pages, then flag retirements and regional caveats. If a primary source changes, the snapshot on this page becomes stale — always confirm at checkout.</p>
   </div>
 </section>
 
-<section id="faq" style={{ padding: "2rem 1rem 4rem", background: "var(--bg-secondary)" }}>
-  <div class="container" style={{ maxWidth: "900px" }}>
-    <h2 class="section-heading" style={{ textAlign: "center", marginBottom: "1.5rem" }}>Exam Voucher FAQ</h2>
-    <div style={{ display: "grid", gap: "0.75rem" }}>
+<section class="hb-section" id="steps">
+  <span class="hb-kicker">Execution</span>
+  <h2 class="hb-h2">Buy and redeem in five steps</h2>
+  <p class="hb-lead">Udemy sells the voucher; the certification provider owns the exam. Buying and booking are two separate actions.</p>
+  <div class="hb-timeline" style={{ marginTop: "1.6rem" }}>
+    <div class="hb-step"><h3>1. Match the exam to your goal</h3><p>Use the decision desk above or the provider guides. Check the exact code, version and country before paying.</p></div>
+    <div class="hb-step"><h3>2. Compare the live price</h3><p>Check the Udemy voucher price against the provider list price. Expect ~10% for AWS, Microsoft and CompTIA, 30% for Linux Foundation.</p></div>
+    <div class="hb-step"><h3>3. Buy the voucher and any retake cover</h3><p>Second Chance and Retake Assurance must be selected at purchase. Udemy coupons do not apply; credits sometimes do.</p></div>
+    <div class="hb-step"><h3>4. Copy the code from My learning → Certifications</h3><p>The code is also emailed. Keep the purchase date — that starts the redemption or validity clock.</p></div>
+    <div class="hb-step"><h3>5. Schedule and pay with the code</h3><p>Pearson VUE for AWS, Microsoft and CompTIA; Linux Foundation My Portal → PSI. Paste the code at payment, then run the system test before exam day.</p></div>
+  </div>
+</section>
+
+<section class="hb-section alt" id="faq">
+  <div class="hb-section-inner">
+    <span class="hb-kicker">Questions answered</span>
+    <h2 class="hb-h2">Voucher FAQ</h2>
+    <p class="hb-lead">The same questions appear in the FAQPage structured data above, so search engines and AI assistants can quote the answers directly.</p>
+    <div class="hb-faq" style={{ marginTop: "1.5rem" }}>
       {faqs.map((f) => (
-        <details style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "12px", padding: "1.1rem 1.25rem" }}>
-          <summary style={{ fontWeight: 700, cursor: "pointer" }}>{f.q}</summary>
-          <p style={{ color: "var(--muted)", margin: "0.6rem 0 0", lineHeight: 1.7, fontSize: "0.92rem" }}>{f.a}</p>
+        <details>
+          <summary>{f.q}<span class="hb-faq-tag">{f.cat}</span></summary>
+          <p>{f.a}</p>
         </details>
       ))}
     </div>
-    <div class="cta-box" style={{ marginTop: "2.5rem" }}>
-      <span class="cta-eyebrow">Commit today</span>
-      <h2>Find Your Current Exam Voucher</h2>
-      <p class="cta-subtext">{voucherPageCount} pages · {currentExamCount} current exams · 9+ months validity · Pearson VUE scheduling.</p>
-      <div class="cta-actions"><a href={ALL_VOUCHERS_URL} target="_blank" rel="sponsored noopener noreferrer" class="btn btn-primary btn-lg" style="border-radius:999px">Browse All {voucherPageCount} Vouchers →</a></div>
+  </div>
+</section>
+
+<section class="hb-section">
+  <div class="hb-author">
+    <img src="/images/author.jpg" alt="Josh Smith, founder and editor of CourseSpeak" width="70" height="70" loading="lazy" />
+    <div>
+      <b>Josh Smith · Founder &amp; Editor, CourseSpeak</b>
+      <p>Josh has spent 8+ years testing Udemy coupons and certification voucher offers. He checked the {voucherPageCount} voucher pages, {currentExamCount} current exam mappings, Linux Foundation terms and retake rules in this guide on <time datetime={lastModified}>{updatedLong}</time>. See <a href="/about#author" style={{ color: "var(--brand)" }}>author profile</a> or <a href="/contact" style={{ color: "var(--brand)" }}>report a correction</a>.</p>
     </div>
   </div>
 </section>
+
+<section class="hb-band">
+  <span class="hb-kicker">Ready when you are</span>
+  <h2>Don't pay full price for the exam seat</h2>
+  <p>Compare the live voucher price with the provider list price, check the expiry and retake rules, then buy with the official Udemy link.</p>
+  <div class="hb-actions">
+    <a href={ALL_VOUCHERS_HUB_URL} target="_blank" rel="sponsored noopener noreferrer" class="hb-btn hb-btn-primary">Browse all {voucherPageCount} vouchers →</a>
+    <a href="#courses" class="hb-btn hb-btn-ghost">Add a prep course →</a>
+    <a href={SECOND_CHANCE_URL} target="_blank" rel="sponsored noopener noreferrer" class="hb-btn-quiet">Second Chance voucher →</a>
+  </div>
+</section>
+
+<script>
+  const form = document.querySelector('#hb-decision-form');
+  const title = document.querySelector('#hb-result-title');
+  const text = document.querySelector('#hb-result-text');
+  const link = document.querySelector('#hb-result-link');
+  form?.addEventListener('change', (event) => {
+    const input = event.target;
+    if (!(input instanceof HTMLInputElement)) return;
+    if (title) title.textContent = input.dataset.title || 'Your best starting point';
+    if (text) text.textContent = input.dataset.text || '';
+    if (link && input.dataset.link) {
+      link.setAttribute('href', input.dataset.link);
+      link.textContent = input.dataset.label || 'Open the guide →';
+    }
+  });
+  const progress = document.querySelector('#hb-progress');
+  const updateProgress = () => {
+    const height = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = height > 0 ? (window.scrollY / height) * 100 : 0;
+    if (progress) (progress as HTMLElement).style.width = `${pct}%`;
+  };
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
+</script>
+
+<div class="hb-mobile-cta" aria-label="Quick actions">
+  <a href={ALL_VOUCHERS_HUB_URL} target="_blank" rel="sponsored noopener noreferrer" class="hb-btn hb-btn-primary">Browse vouchers →</a>
+  <a href="#courses" class="hb-btn hb-btn-ghost">Prep courses ↓</a>
+</div>
 </Layout>

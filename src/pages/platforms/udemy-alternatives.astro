@@ -1,4 +1,4 @@
-?---
+---
 import Layout from "../../layouts/Layout.astro";
 import AuthorCard from "../../components/AuthorCard.astro";
 import { Image } from "astro:assets";
@@ -8,133 +8,322 @@ const lastModified = new Date().toISOString().split("T")[0];
 const monthYear = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long" });
 const canonicalUrl = "https://coursespeak.com/platforms/udemy-alternatives";
 
-const altUrls: Record<string, string> = {
-  Coursera: "https://www.coursera.org",
-  edX: "https://www.edx.org",
-  Skillshare: "https://www.skillshare.com",
-  Pluralsight: "https://www.pluralsight.com",
-  "LinkedIn Learning": "https://www.linkedin.com/learning",
-  freeCodeCamp: "https://www.freecodecamp.org",
-  "Khan Academy": "https://www.khanacademy.org",
-  "MIT OpenCourseWare": "https://ocw.mit.edu",
-  "Google Skillshop": "https://skillshop.exceedlms.com",
-  YouTube: "https://www.youtube.com",
-};
-
-const related = [
-  { slug: "udemy-vs-coursera", label: "Udemy vs Coursera" },
-  { slug: "udemy-vs-edx", label: "Udemy vs edX" },
-  { slug: "udemy-vs-skillshare", label: "Udemy vs Skillshare" },
-  { slug: "udemy-vs-pluralsight", label: "Udemy vs Pluralsight" },
-  { slug: "udemy-vs-linkedin-learning", label: "Udemy vs LinkedIn Learning" },
-];
-
-const pageTitle = `10 Best Udemy Alternatives in ${currentYear} (Free & Paid) | CourseSpeak`;
-const pageDescription = `Looking for Udemy alternatives in ${currentYear}? We compare Coursera, edX, Skillshare, Pluralsight, LinkedIn Learning, and 100% free options like freeCodeCamp and Khan Academy.`;
+const pageTitle = `Best Udemy Alternatives & Competitors (${currentYear}): 12 Platforms Compared | CourseSpeak`;
+const pageDescription = `The 12 best Udemy alternatives in ${currentYear}, compared on price, certificates and course quality — Coursera, edX, Codecademy, DataCamp, Pluralsight and more.`;
 
 const alternatives = [
   {
+    id: "coursera",
     name: "Coursera",
-    tag: "Best for university credentials",
-    pricing: "Free audit / $39–$79 per month",
-    desc: "Courses and professional certificates from Stanford, Yale, Google, and IBM. The best choice when the certificate itself matters to employers or your resume.",
-    pros: ["University & industry certificates", "Online degrees", "Structured learning paths", "Financial aid available"],
-    cons: ["Graded work & certificates cost money", "Subscription model for most specializations"],
+    tag: "Best for credentials employers recognize",
+    price: "$59/month or about $399/year for Coursera Plus; individual Specializations and certificates typically $49–$79/month.",
+    tablePrice: "$59/mo; $399/yr (often ~$239)",
+    tableBest: "Recognized career credentials",
+    cert: "High — university and company issued",
+    pick: "Best credentials",
+    desc: "If the reason you are leaving Udemy is that its certificate means nothing on a resume, Coursera is the most direct fix. It partners with more than 450 universities and companies — Stanford, Google, IBM, Meta and Michigan among them — and courses pass an institutional review before they go live. The Professional Certificates (Google Data Analytics, IBM AI Engineering, Meta Front-End Developer) are the credentials recruiters actually recognize from this category, and most take three to six months at a few hours a week.",
+    beats: "Consistency and credentials. You will not find a padded two-hour masterclass from an anonymous instructor. Grading is real, deadlines are real, and the certificate names the university or company, not just the platform.",
+    udemyWins: "Speed and price for a single tactical skill. If you need a specific Excel function or Figma workflow by Friday, a $15 Udemy course is faster and cheaper than a full Specialization.",
+    bestFor: "Career changers and anyone whose employer or industry values named credentials.",
+    skipIf: "You learn in bursts and would not finish two courses in a month; at $59/month, Plus only makes sense with steady use.",
+    url: "https://www.coursera.org",
+    compare: "/platforms/udemy-vs-coursera",
+    cta: "Explore Coursera",
   },
   {
+    id: "edx",
     name: "edX",
-    tag: "Best for academic rigor & MicroMasters",
-    pricing: "Free audit / $50–$300 verified",
-    desc: "Founded by Harvard and MIT. University-level courses, MicroMasters programs, and credit-eligible credentials that can count toward a degree.",
-    pros: ["Harvard/MIT-backed credentials", "Credit-eligible programs", "Academic depth"],
-    cons: ["Theory-heavy, less hands-on", "Verified certificates are pricey"],
+    tag: "Best free university courses",
+    price: "Free to audit. Verified certificates are priced per course by the school, often $50–$300. MicroMasters and executive education cost more.",
+    tablePrice: "Free audit; verified certs per course",
+    tableBest: "Free university courses",
+    cert: "High — university issued",
+    pick: "Best free option",
+    desc: "Founded by Harvard and MIT in 2012, edX still carries that DNA: courses from Harvard, Berkeley, Columbia, Oxford, TU Delft and others, most of them auditable for free. It is now owned by 2U, which went through a Chapter 11 restructuring in 2024 and emerged as a private company. The platform kept operating throughout and the free audit track survived, but it is fair to know before you trust it with a multi-course program.",
+    beats: "Depth and rigor. edX courses are university courses: longer lectures, real readings, graded problem sets. CS50, Harvard's introduction to computer science, is the most-recommended free programming course on the internet and it lives here.",
+    udemyWins: "Practicality and pace. edX is slow and theoretical by design. If you need to ship a website rather than understand computation, Codecademy or Udemy gets you there sooner.",
+    bestFor: "Learners who want university-quality material without university prices, and degree-seekers testing the water.",
+    skipIf: "You need job-ready practical skills quickly.",
+    url: "https://www.edx.org",
+    compare: "/platforms/udemy-vs-edx",
+    cta: "Browse edX courses",
   },
   {
-    name: "Skillshare",
-    tag: "Best for creative skills",
-    pricing: "~$168/year subscription",
-    desc: "Short, project-based classes in illustration, design, video, and photography. Ideal for exploring creative hobbies without committing to a long course.",
-    pros: ["Short, inspiring classes", "Creative focus", "Community & class projects"],
-    cons: ["No certificates", "Subscription required", "Weak in tech/business topics"],
+    id: "codecademy",
+    name: "Codecademy",
+    tag: "Best for learning to code from zero",
+    price: "Free tier with basic courses. Plus $14.99/month billed annually; Pro $19.99/month billed annually (more month-to-month).",
+    tablePrice: "Plus $14.99/mo; Pro $19.99/mo (annual)",
+    tableBest: "Learning to code from zero",
+    cert: "Medium — industry-recognized in coding",
+    pick: "Best for coding",
+    desc: "Udemy teaches coding by video. Codecademy teaches it by making you write code in the browser from the first lesson, with immediate feedback when it breaks. For a beginner that difference is not cosmetic; it is the difference between recognizing syntax and being able to produce it. The catalog covers Python, JavaScript, HTML and CSS, SQL, Java, C++, Go, and structured Career Paths for front-end, back-end, full-stack and data roles.",
+    beats: "Practice volume and structure. A Career Path is a sequenced curriculum with checkpoints, not a playlist. You cannot passively watch your way to the end.",
+    udemyWins: "Depth on specific stacks and instructor personality. The best Udemy instructors go deeper on a single framework than Codecademy does, and you own the course forever for $15.",
+    bestFor: "Absolute beginners and career changers who learn by doing.",
+    skipIf: "You need anything outside programming and data, or you are already intermediate and want depth rather than drills.",
+    url: "https://www.codecademy.com",
+    cta: "Try Codecademy free",
   },
   {
+    id: "datacamp",
+    name: "DataCamp",
+    tag: "Best for data science and analytics",
+    price: "Premium is around $11/month billed annually during frequent promotions (list about $28/month), or about $35 month-to-month. Recent annual sale price: roughly $132/year.",
+    tablePrice: "~$11/mo billed annually; $35/mo monthly",
+    tableBest: "Data science and analytics",
+    cert: "Medium — respected in the data industry",
+    pick: "Best for data",
+    desc: "DataCamp does one thing: data. Python, R, SQL, Power BI, Tableau, Excel, machine learning and, more recently, AI and LLM engineering, all taught through short video segments followed by in-browser coding exercises on real datasets. The career tracks map cleanly to job titles, and the skill assessments give you a benchmark you can quote.",
+    beats: "A coherent path. Udemy's data catalog is thousands of overlapping courses of wildly different quality; DataCamp is one curriculum that builds. The exercises mean you are typing pandas code within minutes, not watching someone else do it.",
+    udemyWins: "A single deep course. If you want 40 hours on one topic, a top Udemy course goes further than DataCamp's four-hour modules. At list price, DataCamp also costs about the same per year as Coursera Plus, which has a far broader catalog.",
+    bestFor: "Aspiring analysts, data scientists, and anyone who needs SQL and Python for data work.",
+    skipIf: "Your goal is web development, cloud, or anything outside data.",
+    url: "https://www.datacamp.com",
+    cta: "Start DataCamp free",
+  },
+  {
+    id: "pluralsight",
     name: "Pluralsight",
-    tag: "Best for IT, cloud & tech professionals",
-    pricing: "From ~$29/month",
-    desc: "Hands-on tech learning with skill assessments, cloud sandboxes, and certifications. Popular with developers, cloud engineers, and IT teams.",
-    pros: ["Hands-on labs & assessments", "Up-to-date tech content", "Team/enterprise plans"],
-    cons: ["Expensive for individuals", "Tech-only focus"],
+    tag: "Best for IT, cloud and security certifications",
+    price: "Core Tech around $21/month billed yearly; specialized AI+, Cloud+, Data+ and Security+ plans around $24.50/month; Complete around $39/month billed yearly.",
+    tablePrice: "Core $21/mo; Complete $39/mo (annual)",
+    tableBest: "IT, cloud and security certs",
+    cert: "Medium — maps to vendor certifications",
+    pick: "Best for IT certs",
+    desc: "For working technologists, Pluralsight has the deepest current library here: 6,500+ courses across AWS, Azure, Google Cloud, security, data, DevOps and software development, plus Skill IQ assessments that place you at a level and learning paths mapped to certification exams. It is also the platform most likely to be paid for by your employer, which is worth asking before you buy it yourself.",
+    beats: "Currency and labs. Cloud consoles change monthly and Pluralsight retires and rebuilds courses accordingly, where a 2021 Udemy AWS course keeps selling. The sandboxes let you practice in a real environment without a personal cloud bill.",
+    udemyWins: "Exam-specific practice tests and price. Stephane Maarek's AWS courses and Jon Bonso's practice exams remain the most-recommended single resources for the AWS associate exams, at $15 each.",
+    bestFor: "IT professionals working toward AWS, Azure, CompTIA or Cisco credentials, and developers keeping current.",
+    skipIf: "You want business, creative or non-technical courses; Pluralsight has none.",
+    url: "https://www.pluralsight.com",
+    compare: "/platforms/udemy-vs-pluralsight",
+    cta: "Explore Pluralsight",
   },
   {
+    id: "zero-to-mastery",
+    name: "Zero to Mastery",
+    tag: "Best bootcamp-style developer training",
+    price: "$299/year (about $25/month against a listed $588) or $1,299 lifetime. The 170+ course library is included on every plan.",
+    tablePrice: "$299/yr or $1,299 lifetime",
+    tableBest: "Bootcamp-style developer paths",
+    cert: "Low to medium",
+    pick: "Best bootcamp-style",
+    desc: "Zero to Mastery was founded by Andrei Neagoie, who built his reputation with some of Udemy's highest-rated development courses before leaving to run his own platform. That history is the pitch: ZTM courses look like Udemy's best — video plus coding exercises — but sit inside sequenced career paths, every instructor is vetted, and courses are updated rather than abandoned. The private Discord community, with active job-hunt and code-review channels, is the feature students mention most.",
+    beats: "Curation and community. You get Udemy-style teaching quality without the marketplace noise, and a room full of people on the same path.",
+    udemyWins: "Breadth and one-off purchases. ZTM covers programming and adjacent tech only, and at $299/year it is the wrong buy for a single course.",
+    bestFor: "Self-taught developers who want a bootcamp's structure at a fraction of a bootcamp's price.",
+    skipIf: "You need courses outside programming.",
+    url: "https://www.zerotomastery.io",
+    cta: "See ZTM career paths",
+  },
+  {
+    id: "udacity",
+    name: "Udacity",
+    tag: "Best mentored, project-graded programs",
+    price: "All Access is about $249/month at list, often discounted to around $113/month, with multi-month bundles available. Most programs are designed for three to four months at ten hours a week.",
+    tablePrice: "~$113–$249/mo; bundles available",
+    tableBest: "Mentored, project-graded programs",
+    cert: "Medium to high in technical hiring",
+    pick: "Best mentored program",
+    desc: "Udacity sits between a course platform and a bootcamp. Its Nanodegree programs are built with companies such as AWS, Microsoft and Google, every project is reviewed by a human with written feedback, and you get mentor support along the way. That review layer is the thing no other platform on this list offers, and it is why Nanodegrees are respected in technical hiring in a way generic completion certificates are not.",
+    beats: "Accountability. Graded projects, reviewer feedback and a deadline structure mean you finish with a portfolio, not a certificate of having pressed play.",
+    udemyWins: "Everything about price. Udacity is a considered purchase for a career move, not a place to pick up a skill. If you cannot commit ten hours a week, the monthly fee will bleed you.",
+    bestFor: "People making a deliberate move into AI, data, cloud or software roles who want human feedback on their work.",
+    skipIf: "You are exploring rather than committing.",
+    url: "https://www.udacity.com",
+    cta: "Browse Udacity programs",
+  },
+  {
+    id: "educative",
+    name: "Educative",
+    tag: "Cheapest developer subscription, text-based",
+    price: "Unlimited plans list at roughly $278, $378 and $478/year, but 50% promotions are common, bringing the entry tier to about $139 for the first year. Watch the renewal price.",
+    tablePrice: "$278–$478/yr; often 50% off",
+    tableBest: "Text-based dev interview prep",
+    cert: "Low",
+    pick: "Cheapest dev subscription",
+    desc: "Educative is the platform for developers who would rather read than watch. Courses are interactive text with embedded code playgrounds, which means you can skim, search and copy, and finish in a fraction of the video time. The library (2,400+ courses) leans toward system design, interview preparation and language deep-dives; Grokking the System Design Interview is the best-known title and a staple of FAANG interview prep.",
+    beats: "Speed for experienced developers and the interview-prep catalog. Reading a system-design course is far faster than a 20-hour video, and Udemy has nothing comparable in that niche.",
+    udemyWins: "Beginners and visual learners. Educative assumes you can already read code; a first-time programmer will do better with Codecademy or a top Udemy course.",
+    bestFor: "Working developers preparing for interviews or learning a second language.",
+    skipIf: "You are new to programming or learn best from video.",
+    url: "https://www.educative.io",
+    cta: "Explore Educative",
+  },
+  {
+    id: "linkedin-learning",
     name: "LinkedIn Learning",
-    tag: "Best for professional soft skills",
-    pricing: "From ~$39/month",
-    desc: "Business, leadership, Excel, and professional development courses. Certificates post directly to your LinkedIn profile — great for visibility.",
-    pros: ["Resume/LinkedIn integration", "Short professional courses", "Often bundled with Premium"],
-    cons: ["Subscription cost", "Less depth than Udemy"],
+    tag: "Business and software skills on your profile",
+    price: "No standalone subscription in most markets. Included with LinkedIn Premium, whose price LinkedIn shows after sign-in; eligible members can try Premium free for a month.",
+    tablePrice: "Included with LinkedIn Premium",
+    tableBest: "Business and software skills",
+    cert: "Low to medium — visible on LinkedIn",
+    pick: "Best for LinkedIn visibility",
+    desc: "LinkedIn Learning (the former Lynda.com) offers 20,000+ professionally produced courses across business, technology and creative software, and completion badges post directly to your LinkedIn profile. Production quality is uniformly high and courses are short, which cuts both ways.",
+    beats: "Consistency and workplace credibility. Every course is produced to a standard, and a badge on LinkedIn is at least visible to the recruiters who use the platform.",
+    udemyWins: "Depth and price. LinkedIn Learning courses are typically one to three hours and stop at intermediate. If you would buy Premium only for the courses, compare its price with Coursera Plus.",
+    bestFor: "Professionals who already hold LinkedIn Premium or whose employer provides it.",
+    skipIf: "You want to go deep on any technical subject.",
+    url: "https://www.linkedin.com/learning",
+    compare: "/platforms/udemy-vs-linkedin-learning",
+    cta: "Explore LinkedIn Learning",
   },
   {
-    name: "freeCodeCamp",
-    tag: "Best 100% free for coding",
-    pricing: "$0 forever",
-    desc: "Completely free coding curriculum covering HTML, CSS, JavaScript, Python, data science, and more, with certificates and a large open-source community.",
-    pros: ["100% free", "Project-based", "Recognized open-source community"],
-    cons: ["Self-paced discipline required", "Coding only"],
+    id: "masterclass",
+    name: "MasterClass",
+    tag: "Best production value for creative and personal skills",
+    price: "Plans are billed annually and start around $10/month depending on the tier and current promotion (one to six devices); separate certificate courses run $250–$400 each.",
+    tablePrice: "From ~$10/mo billed annually",
+    tableBest: "Creative and personal skills",
+    cert: "None for the membership",
+    pick: "Best production value",
+    desc: "MasterClass is not trying to do what Udemy does. Its 200+ classes are taught by famous practitioners — Gordon Ramsay, Martin Scorsese, Serena Williams, Annie Leibovitz — and shot like documentaries. You are buying perspective and inspiration from the top of a field, not step-by-step drills.",
+    beats: "The instructors and the craft. Nothing on Udemy has this caliber of teacher or this production budget.",
+    udemyWins: "Practical outcomes. MasterClass has no assignments, no feedback and, for the membership, no certificate. If you want to be able to do the thing rather than think differently about it, a $15 Udemy course with exercises is the better buy.",
+    bestFor: "Creative learners and hobbyists who want to hear from the best in a field.",
+    skipIf: "You need job skills or graded practice.",
+    url: "https://www.masterclass.com",
+    cta: "Explore MasterClass",
+  },
+  {
+    id: "domestika",
+    name: "Domestika",
+    tag: "Best value for hands-on creative courses",
+    price: "Plus is about $164.50 for the first year, renewing at about $329, or around $33.90 month-to-month. Individual courses are usually $10–$40 on the ever-present discounts, and 1,000+ are free to watch.",
+    tablePrice: "$164.50 first year; renews ~$329",
+    tableBest: "Hands-on creative courses",
+    cert: "None",
+    pick: "Best creative value",
+    desc: "Domestika is the creative-skills platform that MasterClass and Skillshare shoppers most often overlook. Courses in illustration, design, photography, animation, crafts and 3D are taught by working professionals, filmed to a consistently high standard, and structured around a final project you actually complete. It grew out of Spain and Latin America, so many courses are subtitled rather than English-native, which bothers some learners and not others.",
+    beats: "Production quality and project structure for creative subjects, at a similar price. Udemy's creative catalog is thin and inconsistent by comparison.",
+    udemyWins: "Software-specific technical tutorials (a deep Blender or After Effects course) and anything outside the arts.",
+    bestFor: "Illustrators, designers, photographers and makers who want to finish a real piece of work.",
+    skipIf: "Subtitles frustrate you or you need technical rather than creative training.",
+    url: "https://www.domestika.org",
+    cta: "Explore Domestika",
+  },
+  {
+    id: "skillshare",
+    name: "Skillshare",
+    tag: "Creative community for hobbyists",
+    price: "About $168/year on the annual plan, with a seven-day free trial. Skillshare shows pricing only after sign-up, and month-to-month billing may only be offered in its mobile apps.",
+    tablePrice: "~$168/yr",
+    tableBest: "Creative hobbies",
+    cert: "Class certificates, no employer weight",
+    pick: "Best for creative hobbies",
+    desc: "Skillshare is the closest thing to Udemy in format — an open marketplace of short video classes — but pointed at creative work: illustration, design, photography, writing, productivity. Classes are project-based and the community feedback on shared projects is its distinctive feature.",
+    beats: "For creative hobbies, a subscription beats buying courses one at a time, and the project galleries give you an audience.",
+    udemyWins: "Everything technical, business or career-related, and anyone who wants to own a course permanently. Skillshare has the same open-marketplace quality variance Udemy does, with a smaller catalog.",
+    bestFor: "Creative hobbyists who will take several short classes a month.",
+    skipIf: "You want professional depth or a credential.",
+    url: "https://www.skillshare.com",
+    compare: "/platforms/udemy-vs-skillshare",
+    cta: "Explore Skillshare",
+  },
+];
+
+const freeOptions = [
+  {
+    name: "edX audit track",
+    badge: "Free",
+    desc: "Most edX courses can be taken free for their estimated length without the certificate. For a university-quality introduction to almost any subject, this is the answer.",
+    url: "https://www.edx.org",
+  },
+  {
+    name: "Coursera Preview",
+    badge: "Free",
+    desc: "Most Coursera courses give you the first module free, graded work included, with full free access on select courses.",
+    url: "https://www.coursera.org",
   },
   {
     name: "Khan Academy",
-    tag: "Best free for academics",
-    pricing: "$0 forever",
-    desc: "Free, world-class lessons in math, science, economics, and humanities from elementary to college level. Perfect for structured academic fundamentals.",
-    pros: ["100% free", "Excellent math/science content", "Practice exercises with feedback"],
-    cons: ["Not career-oriented", "No professional certificates"],
+    badge: "Free forever",
+    desc: "A nonprofit, entirely free, and the best structured math, science and economics curriculum online for anyone from school level to early university.",
+    url: "https://www.khanacademy.org",
+  },
+  {
+    name: "freeCodeCamp",
+    badge: "Free forever",
+    desc: "Thousands of hours of hands-on web development, Python, data analysis and machine learning with free verified certifications and a real project portfolio.",
+    url: "https://www.freecodecamp.org",
   },
   {
     name: "MIT OpenCourseWare",
-    tag: "Best free university content",
-    pricing: "$0 forever",
-    desc: "Actual MIT course materials — lecture notes, videos, and assignments — free to everyone. Ideal for deep, self-directed academic learning.",
-    pros: ["Real MIT course material", "100% free", "Academic depth"],
-    cons: ["No guidance or support", "No certificates"],
+    badge: "Free forever",
+    desc: "Complete MIT course materials, lectures included, with no enrollment at all. Ideal for deep, self-directed academic learning.",
+    url: "https://ocw.mit.edu",
   },
   {
     name: "Google Skillshop",
-    tag: "Best free for Google certifications",
-    pricing: "$0 forever",
-    desc: "Free training and certifications for Google Ads, Analytics, and other Google tools. Directly valuable for digital marketing careers.",
-    pros: ["100% free", "Recognized Google certificates", "Practical marketing skills"],
-    cons: ["Google products only"],
+    badge: "Free",
+    desc: "Free training and certifications for Google Ads, Analytics and other Google tools — directly useful for digital marketing careers.",
+    url: "https://skillshop.exceedlms.com",
   },
   {
     name: "YouTube",
-    tag: "Best free for everything",
-    pricing: "$0",
-    desc: "Huge free library of tutorials for nearly every skill. Great for quick answers, though content quality varies and it's completely unstructured.",
-    pros: ["Completely free", "Vast library", "No signup needed"],
-    cons: ["Unstructured", "Variable quality", "No certificates or guidance"],
+    badge: "Free",
+    desc: "The largest free tutorial library on the internet. Great for quick answers, terrible for structure. Use it to fill gaps, not to build a curriculum.",
+    url: "https://www.youtube.com",
   },
+];
+
+const related = [
+  { href: "/platforms/udemy-vs-coursera", label: "Udemy vs Coursera" },
+  { href: "/platforms/udemy-vs-edx", label: "Udemy vs edX" },
+  { href: "/platforms/udemy-vs-skillshare", label: "Udemy vs Skillshare" },
+  { href: "/platforms/udemy-vs-pluralsight", label: "Udemy vs Pluralsight" },
+  { href: "/platforms/udemy-vs-linkedin-learning", label: "Udemy vs LinkedIn Learning" },
+  { href: "/platforms", label: "All platform comparisons" },
+  { href: "/udemy-personal-plan", label: "Udemy Personal Plan review" },
+  { href: "/udemy-coupons-guide", label: "Udemy coupons guide" },
+  { href: "/deals", label: "Free Udemy coupons" },
 ];
 
 const faqs = [
   {
-    q: "What is the best free alternative to Udemy?",
-    a: "For coding, freeCodeCamp is excellent. For academics, Khan Academy and MIT OpenCourseWare are unbeatable. But the closest drop-in replacement for Udemy's paid courses is Udemy itself — verified 100% off coupons on CourseSpeak make premium Udemy courses free, so you don't need an alternative to learn without paying.",
+    q: "What is better than Udemy?",
+    a: "It depends on what Udemy failed to give you. For recognized credentials, Coursera and edX offer university and company-issued certificates Udemy cannot match. For learning to code, Codecademy's in-browser exercises beat video lectures. For data, DataCamp; for IT certifications, Pluralsight; for a mentored program, Udacity. Udemy's real advantage is a single well-rated course for $10 to $20 that you own forever.",
   },
   {
-    q: "Which platform is better than Udemy?",
-    a: "No single platform is 'better' across the board. Coursera and edX beat Udemy on credentials, Skillshare beats it for short creative classes, and Pluralsight beats it for hands-on tech labs. Udemy wins on price (free with coupons), depth, and variety.",
+    q: "Is Coursera better than Udemy now that they have merged?",
+    a: "Coursera completed its all-stock acquisition of Udemy on 11 May 2026, but the two platforms still operate separately with different catalogs, pricing and certificates. Coursera is better if you need an employer-recognized credential and structured, institution-reviewed courses. Udemy is better for a quick, cheap course on a specific skill. Choosing between them is now choosing between two products of one company.",
   },
   {
-    q: "Is there a platform like Udemy that is completely free?",
-    a: "freeCodeCamp (coding), Khan Academy (academics), and MIT OpenCourseWare (university material) are fully free. For a Udemy-style experience — hundreds of practical courses at $0 — use verified 100% off coupons from CourseSpeak.",
+    q: "Is Udemy shutting down after the Coursera merger?",
+    a: "No. Coursera has said that for now nothing changes for Udemy learners or instructors: courses, subscriptions, certificates and instructor agreements all continue. The two platforms are not being integrated on day one. Udemy's stock stopped trading, but the website and catalog remain online.",
   },
   {
-    q: "Are Udemy alternatives with certificates free?",
-    a: "Most platforms with valuable certificates charge for them (Coursera, edX). Two exceptions: freeCodeCamp and Google Skillshop both issue free, recognized certificates. Udemy also gives a free completion certificate when you enroll via a 100% off coupon.",
+    q: "What is the best Udemy alternative for coding?",
+    a: "Codecademy is the best alternative for learning to code from scratch, because you write and run code from the first lesson with immediate feedback. Codecademy Pro is $19.99/month billed annually and includes Career Paths for front-end, back-end, full-stack and data roles. Zero to Mastery ($299/year) is better if you prefer video and want a structured bootcamp-style path, and Educative suits experienced developers who prefer text.",
   },
   {
-    q: "Should I use more than one learning platform?",
-    a: "Yes. The most effective strategy is to use free Udemy coupons for practical skills and combine them with a credential platform like Coursera or edX when you need recognized certificates. There's no reason to restrict yourself to a single platform.",
+    q: "Are there free alternatives to Udemy?",
+    a: "Yes. edX lets you audit most courses free without the certificate, and Coursera offers a free preview of the first module on most courses. Khan Academy and freeCodeCamp are nonprofits with entirely free structured curricula, and freeCodeCamp issues free verified certifications. MIT OpenCourseWare publishes complete MIT courses, and Google Skillshop offers free certifications for Google tools.",
+  },
+  {
+    q: "What is the cheapest Udemy alternative with a subscription?",
+    a: "Udemy's own Personal Plan starts around $13/month for a curated set of 28,000+ courses. Among the alternatives, Educative is the cheapest developer subscription when its usual 50% offer is running (about $139 for the first year, $278 list), but it covers programming only and the price rises at renewal. Domestika Plus is about $164.50 for the first year for creative courses. For broad career skills, Coursera Plus at roughly $399/year (often discounted to about $239) is the best value per course.",
+  },
+  {
+    q: "Is the Udemy Personal Plan a good alternative to buying courses?",
+    a: "Only if you will take several courses a month. The Personal Plan starts around $13/month and covers a curated 28,000+ courses rather than the full catalog, and a Personal Plan bought on udemy.com is not covered by the 30-day refund that applies to single courses. For one or two courses, buying them individually on sale for $10 to $20 each is cheaper and you keep them forever.",
+  },
+  {
+    q: "What are the best Udemy alternatives for selling courses?",
+    a: "Udemy pays instructors 37% of sales it generates and 97% of sales made through the instructor's own coupon or link, and Udemy controls the sale price. Self-hosted platforms such as Teachable, Thinkific, Kajabi, LearnWorlds and Podia let you set prices and keep most of the revenue, but you bring your own students. Many instructors use Udemy for discovery and their own platform for premium versions.",
+  },
+  {
+    q: "Can you use Udemy for free?",
+    a: "Partly. Udemy has a large set of free courses, but free enrollments lose the instructor Q&A and the certificate of completion, and the same quality lottery applies. A better route is a verified 100% off coupon, which gives you the full paid experience at $0. CourseSpeak publishes these coupons daily, alongside free structured options such as edX audit, Coursera's first-module preview, Khan Academy and freeCodeCamp.",
+  },
+  {
+    q: "Is Udemy a legit site?",
+    a: "Yes. Udemy is a real marketplace with 272,000+ courses, now owned by Coursera, and courses you buy keep lifetime access. The catch is quality, not legitimacy: anyone can publish, so check the rating count, reviews and last-updated date before you buy.",
+  },
+  {
+    q: "What is the best Udemy alternative for business teams?",
+    a: "Udemy Business itself is the first comparison: its Team plan is around $30/month per user, billed annually, for 2 to 50 people, and the Enterprise plan is quoted for larger organizations. The main alternatives are Coursera for Business for credentials, Pluralsight for technical teams that need labs, and LinkedIn Learning if your company already pays for LinkedIn tools.",
   },
 ];
 
@@ -180,12 +369,14 @@ const jsonLd = {
       "@type": "ItemList",
       "@id": `${canonicalUrl}#alternatives`,
       "name": "Best Udemy Alternatives",
+      "numberOfItems": alternatives.length,
       "itemListElement": alternatives.map((alt, i) => ({
         "@type": "ListItem",
         "position": i + 1,
         "item": {
           "@type": "Organization",
           "name": alt.name,
+          "url": alt.url,
           "description": `${alt.tag}. ${alt.desc}`,
         },
       })),
@@ -204,47 +395,215 @@ const jsonLd = {
 ---
 
 <style>
-  .toc { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.35rem; }
-  .toc a { font-size: 0.875rem; color: var(--brand); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
-  .toc span { font-size: 0.7rem; color: var(--muted); width: 18px; font-weight: 600; }
-  .alt-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; }
-  .alt-card h2 { color: var(--text); margin: 0 0 0.25rem; font-size: 1.3rem; display: flex; align-items: center; gap: 0.75rem; }
-  .alt-rank { background: linear-gradient(135deg, #D4AF37 0%, #C5A028 100%); color: #1a1814; font-size: 0.85rem; font-weight: 800; width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .alt-tag { display: inline-block; background: rgba(212,167,55,0.1); color: var(--brand); border: 1px solid rgba(212,167,55,0.3); font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 20px; margin-bottom: 0.75rem; }
-  .alt-meta { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.75rem; }
-  .alt-meta strong { color: var(--text); }
-  .alt-card p { color: var(--muted); line-height: 1.7; margin-bottom: 0.75rem; }
-  .alt-lists { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-  .alt-lists ul { margin: 0; padding-left: 1.1rem; line-height: 1.7; color: var(--muted); font-size: 0.9rem; }
-  .alt-lists h4 { margin: 0 0 0.35rem; font-size: 0.85rem; color: var(--text); text-transform: uppercase; letter-spacing: 0.04em; }
-  .prose h2 { color: var(--text); margin-top: 2rem; }
-  .prose p, .prose li { color: var(--muted); line-height: 1.75; }
-  .verdict { background: rgba(212,167,55,0.08); border: 1px solid rgba(212,167,55,0.3); border-radius: 14px; padding: 1.25rem 1.5rem; color: var(--text); font-size: 1rem; line-height: 1.7; }
-  .verdict strong { color: var(--brand); }
-  .related { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem; }
-  .related a { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 0.85rem 1rem; text-decoration: none; color: var(--brand); font-weight: 700; font-size: 0.85rem; transition: border-color 0.2s ease, transform 0.2s ease; }
+  .article-body { min-width: 0; }
+  .article-body h2 {
+    color: var(--text);
+    margin: 2.75rem 0 0.9rem;
+    font-size: clamp(1.4rem, 2.4vw, 1.85rem);
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    scroll-margin-top: 90px;
+  }
+  .article-body h3 { color: var(--text); font-size: 1.08rem; margin: 1.6rem 0 0.45rem; }
+  .article-body p { color: var(--muted); line-height: 1.8; margin: 0 0 1rem; }
+  .article-body ul, .article-body ol { color: var(--muted); line-height: 1.8; padding-left: 1.25rem; margin: 0 0 1.25rem; }
+  .article-body li { margin-bottom: 0.4rem; }
+  .inline-link { color: var(--brand); font-weight: 600; }
+  .inline-link:hover { text-decoration: underline; }
+
+  .quick-verdict {
+    background: linear-gradient(135deg, rgba(212,167,55,0.11) 0%, rgba(212,167,55,0.03) 100%);
+    border: 1px solid rgba(212,167,55,0.35);
+    border-left: 4px solid var(--brand);
+    border-radius: 14px;
+    padding: 1.35rem 1.5rem;
+    margin: 0 0 2rem;
+  }
+  .quick-verdict .qv-label {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--brand); margin-bottom: 0.6rem;
+  }
+  .quick-verdict p { margin: 0 0 0.65rem; color: var(--text); line-height: 1.75; font-size: 0.97rem; }
+  .quick-verdict p:last-child { margin-bottom: 0; }
+  .quick-verdict a { color: var(--brand); font-weight: 700; }
+
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    margin: 1.25rem 0 1.5rem;
+    background: var(--card);
+    -webkit-overflow-scrolling: touch;
+  }
+  .alt-table { width: 100%; border-collapse: collapse; min-width: 780px; font-size: 0.88rem; }
+  .alt-table th, .alt-table td {
+    padding: 0.8rem 0.9rem; text-align: left; vertical-align: top;
+    border-bottom: 1px solid var(--border); line-height: 1.55;
+  }
+  .alt-table thead th {
+    background: var(--bg-secondary); color: var(--text);
+    font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap;
+  }
+  .alt-table tbody tr:last-child td { border-bottom: none; }
+  .alt-table tbody tr:hover { background: rgba(212,167,55,0.035); }
+  .alt-table td { color: var(--muted); }
+  .alt-table td:first-child { color: var(--text); font-weight: 700; white-space: nowrap; }
+  .alt-table td:first-child a { color: inherit; }
+  .alt-table td:first-child a:hover { color: var(--brand); }
+  .alt-table .pick { color: var(--brand); font-weight: 700; }
+
+  .alt-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin: 0 0 1.25rem;
+    scroll-margin-top: 90px;
+  }
+  .alt-head { display: flex; align-items: flex-start; gap: 0.85rem; margin-bottom: 0.7rem; }
+  .alt-rank {
+    background: linear-gradient(135deg, #D4AF37 0%, #C5A028 100%);
+    color: #1a1814; font-size: 0.85rem; font-weight: 800;
+    width: 30px; height: 30px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 0.15rem;
+  }
+  .alt-title-wrap { min-width: 0; }
+  .alt-title { margin: 0 0 0.3rem; font-size: 1.3rem; font-weight: 800; line-height: 1.25; }
+  .alt-title a { color: var(--text); }
+  .alt-title a:hover { color: var(--brand); }
+  .alt-tag {
+    display: inline-block;
+    background: rgba(212,167,55,0.1);
+    color: var(--brand);
+    border: 1px solid rgba(212,167,55,0.3);
+    font-size: 0.72rem; font-weight: 700;
+    padding: 0.18rem 0.6rem; border-radius: 20px;
+  }
+  .alt-price {
+    font-size: 0.84rem; color: var(--muted);
+    background: var(--bg-secondary); border: 1px solid var(--border);
+    border-radius: 8px; padding: 0.5rem 0.75rem; margin-bottom: 0.9rem; line-height: 1.55;
+  }
+  .alt-price strong { color: var(--text); }
+  .alt-desc { color: var(--muted); line-height: 1.75; margin: 0 0 1rem; }
+  .alt-split { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.9rem; }
+  .alt-box { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; padding: 0.9rem 1rem; }
+  .alt-box h4 {
+    margin: 0 0 0.35rem; font-size: 0.7rem; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--brand);
+  }
+  .alt-box p { margin: 0; font-size: 0.88rem; line-height: 1.65; color: var(--muted); }
+  .alt-fit { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem; font-size: 0.88rem; }
+  .alt-fit div { border-left: 2px solid var(--border); padding-left: 0.75rem; color: var(--muted); line-height: 1.6; }
+  .alt-fit strong {
+    color: var(--text); display: block; font-size: 0.7rem; text-transform: uppercase;
+    letter-spacing: 0.05em; margin-bottom: 0.15rem;
+  }
+  .alt-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .btn-brand, .btn-outline {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    font-weight: 700; font-size: 0.85rem; padding: 0.6rem 1.1rem;
+    border-radius: 9px; text-decoration: none; transition: all 0.2s ease;
+  }
+  .btn-brand { background: var(--brand); color: #1a1814; }
+  .btn-brand:hover { background: var(--brand-hover); transform: translateY(-1px); }
+  .btn-outline { border: 1px solid var(--border); color: var(--brand); }
+  .btn-outline:hover { border-color: var(--brand); background: rgba(212,167,55,0.06); }
+
+  .test-box {
+    background: var(--bg-secondary);
+    border: 1px dashed rgba(212,167,55,0.4);
+    border-radius: 14px;
+    padding: 1.25rem 1.4rem;
+    margin: 1.25rem 0 1.75rem;
+  }
+  .test-box h3 { margin: 0 0 0.5rem; color: var(--text); font-size: 1rem; }
+  .test-box p { margin: 0; font-size: 0.92rem; line-height: 1.75; }
+  .test-box p + p { margin-top: 0.65rem; }
+
+  .free-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(235px, 1fr));
+    gap: 0.85rem; margin: 1.25rem 0;
+  }
+  .free-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1.1rem 1.2rem; }
+  .free-card .free-badge {
+    display: inline-block; font-size: 0.62rem; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.07em; color: var(--brand); background: rgba(212,167,55,0.1);
+    border: 1px solid rgba(212,167,55,0.25); border-radius: 20px;
+    padding: 0.12rem 0.5rem; margin-bottom: 0.45rem;
+  }
+  .free-card h3 { margin: 0 0 0.35rem; font-size: 1rem; color: var(--text); }
+  .free-card p { font-size: 0.86rem; line-height: 1.65; margin: 0 0 0.6rem; }
+  .free-card a { color: var(--brand); font-size: 0.8rem; font-weight: 700; }
+
+  .pick-list { display: grid; gap: 0.6rem; margin: 1.2rem 0; }
+  .pick-row {
+    display: grid; grid-template-columns: 230px 1fr; gap: 1rem;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 0.9rem 1.1rem;
+  }
+  .pick-row strong { color: var(--text); font-size: 0.88rem; }
+  .pick-row span { color: var(--muted); font-size: 0.88rem; line-height: 1.65; }
+  .pick-row span a { color: var(--brand); font-weight: 600; }
+
+  .method {
+    background: var(--bg-secondary); border: 1px solid var(--border);
+    border-radius: 14px; padding: 1.25rem 1.4rem;
+  }
+  .method p { font-size: 0.92rem; }
+  .method p:last-child { margin-bottom: 0; }
+
+  .faq-list { display: grid; gap: 0.7rem; margin: 1.25rem 0; }
+  .faq-list .faq-answer { color: var(--muted); }
+
+  .related {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.75rem; margin: 1.25rem 0;
+  }
+  .related a {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 0.85rem 1rem; color: var(--brand); font-weight: 700; font-size: 0.85rem;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
   .related a:hover { border-color: var(--brand); transform: translateY(-1px); }
-  @media (max-width: 640px) {
-    .alt-lists { grid-template-columns: 1fr; }
+
+  .cta-box { margin-top: 2rem; }
+  .cta-box h2 { margin: 0 0 0.75rem; }
+
+  @media (max-width: 760px) {
+    .alt-split, .alt-fit { grid-template-columns: 1fr; }
+    .pick-row { grid-template-columns: 1fr; gap: 0.25rem; }
   }
 </style>
 
-<Layout title={pageTitle} description={pageDescription} type="article" canonical={canonicalUrl} image="/images/og/og-udemy-alternatives.png" ogImageType="image/png">
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  type="article"
+  canonical={canonicalUrl}
+  image="/images/og/og-udemy-alternatives.png"
+  ogImageType="image/png"
+  keywords="udemy alternatives, best udemy alternatives, udemy competitors, sites like udemy, free udemy alternatives, coursera vs udemy, online learning platforms 2026"
+  publishedTime="2025-01-01"
+  modifiedTime={lastModified}
+>
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
-  <section style={{ padding: "4rem 1rem 2rem", textAlign: "center" }}>
-    <div style={{ maxWidth: "900px", margin: "0 auto" }}>
+  <section style={{ padding: "3.5rem 1rem 2rem", textAlign: "center" }}>
+    <div style={{ maxWidth: "960px", margin: "0 auto" }}>
       <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.35rem 0.85rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
         <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-        Platform Guide — Updated {monthYear}
+        Alternatives — Updated {monthYear}
       </div>
       <h1 style={{ fontSize: "clamp(1.8rem, 4.5vw, 2.8rem)", fontWeight: 800, lineHeight: 1.2, margin: "0 auto 0.75rem" }}>
-        <span style={{ background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>10 Best Udemy Alternatives</span>
+        <span style={{ background: "linear-gradient(135deg, var(--brand) 0%, hsl(35, 90%, 68%) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Best Udemy Alternatives & Competitors</span>
         <br />
-        <span style={{ color: "var(--text)" }}>Free & Paid Platforms Compared for {currentYear}</span>
+        <span style={{ color: "var(--text)" }}>12 Platforms Compared for {currentYear}</span>
       </h1>
-      <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "680px", margin: "0 auto 1.5rem", lineHeight: 1.6 }}>
-        Whether you want recognized certificates, creative classes, hands-on tech labs, or 100% free learning — here are the best alternatives to Udemy in {currentYear}, ranked by use case and value.
+      <p style={{ color: "var(--muted)", fontSize: "1rem", maxWidth: "720px", margin: "0 auto 1.5rem", lineHeight: 1.7 }}>
+        Udemy has 272,000+ courses. Finding a good one is the hard part. We compared 12 platforms on price, quality control, certificate value and hands-on practice — and ranked them by what each is actually good for.
       </p>
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "1rem", flexWrap: "wrap", fontSize: "0.8rem", color: "var(--muted)" }}>
         <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
@@ -253,16 +612,20 @@ const jsonLd = {
         </span>
         <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
-          Updated <time datetime={lastModified}>{new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})}</time>
+          Updated <time datetime={lastModified}>{new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</time>
         </span>
         <span style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--muted)"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
-            8 min read
+          16 min read
         </span>
       </div>
+      <p style={{ color: "var(--muted-light)", fontSize: "0.75rem", margin: "0.9rem auto 0", maxWidth: "620px" }}>
+        Independent comparison. Some outbound links are affiliate links; our rankings are by fit, not commission.{" "}
+        <a href="/affiliate-disclosure" style={{ color: "var(--brand)" }}>How we make money</a>.
+      </p>
       <Image
         src="/images/og/og-udemy-alternatives.png"
-        alt="Best Udemy alternatives - free course platforms compared in 2026"
+        alt="Best Udemy alternatives and competitors — 12 platforms compared in 2026"
         width={1200}
         height={630}
         loading="eager"
@@ -272,115 +635,305 @@ const jsonLd = {
     </div>
   </section>
 
-  <nav style={{ background: "var(--card)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)", padding: "1.5rem 1rem" }}>
-    <div class="container" style={{ maxWidth: "900px" }}>
-      <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,167,55,0.1)", padding: "0.3rem 0.75rem", borderRadius: "20px", marginBottom: "0.75rem", fontSize: "0.68rem", fontWeight: 700, color: "var(--brand)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
-        On this page
-      </div>
-      <ol class="toc">
-        {[
-          ["#list", "The 10 alternatives"],
-          ["#quick-pick", "Which should you pick?"],
-          ["#note", "The best alternative is free Udemy"],
-          ["#faq", "FAQ"],
-        ].map(([href, label], i) => (
-          <li>
-            <a href={href as string}>
-              <span>{i + 1}.</span>
-              {label as string}
-            </a>
-          </li>
-        ))}
-      </ol>
-    </div>
-  </nav>
+  <article style={{ padding: "1rem 1rem 4rem" }}>
+    <div class="pp-grid">
+      <div class="article-body">
 
-  <article style={{ padding: "3rem 1rem 4rem" }}>
-    <div class="container" style={{ maxWidth: "900px" }}>
+        <div id="verdict" class="quick-verdict">
+          <span class="qv-label">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            Quick verdict
+          </span>
+          <p>
+            <strong>For most people:</strong> Coursera for a credential employers recognize, edX for free university courses, Codecademy for coding from zero, DataCamp for data, and Pluralsight for IT certifications. If you just need one course on one tool, stay on Udemy and wait for a sale — or grab a verified 100% off coupon on <a href="/deals">CourseSpeak</a> and get the full course for $0.
+          </p>
+          <p>
+            <strong>Cheapest real subscriptions:</strong> Udemy's own Personal Plan from about $13/month, then Educative (list $278/year, frequently 50% off) and Domestika Plus (about $164.50 for the first year, creative courses only).
+          </p>
+          <p>
+            <strong>What changed this year:</strong> Coursera completed its combination with Udemy on 11 May 2026. The brands still operate separately, but the most-searched "Udemy alternative" is now Udemy's parent company. We explain what that means below.
+          </p>
+        </div>
 
-      <div id="list">
+        <p>
+          Udemy built its reputation on one promise: any skill, one course, one low price. That promise still works when you find a good course. The trouble is finding one in a catalog of 272,000+ titles, where half the courses have fewer than 243 enrollments and 12.6% have never been rated.
+        </p>
+        <p>
+          We compared twelve platforms on the things Udemy is weakest at — quality control, predictable pricing, credential value, hands-on practice and current content — and ranked them by what each is actually good for. Several platforms below are affiliate partners and several are not; the non-affiliates stay because leaving them out would make the list less useful. Prices are indicative and were checked in November 2026. Always confirm at checkout.
+        </p>
+
+        <h2 id="why">Why people look for a Udemy alternative in {currentYear}</h2>
+        <p>
+          The complaints have not changed much in five years. What has changed is the evidence behind them — and the ownership.
+        </p>
+
+        <h3>Quality is a lottery</h3>
+        <p>
+          There is no editorial gate on Udemy. Class Central's January 2026 analysis of the full catalog found 272,000+ courses, a median of just 243 enrollments per course, and a top 20% of courses that collects 91% of all enrollments. Ratings help, but a 4.6 on a course last updated in 2019 is a warning, not a recommendation.
+        </p>
+
+        <h3>The prices are fiction until the sale starts</h3>
+        <p>
+          Around 39% of Udemy courses carry a list price above $200, yet the realistic price is $10 to $20 during the near-constant promotions. That is fine once you know the game, but it trains you to distrust every number on the site. The honest move is to decide what a course is worth to you and never pay list price.
+        </p>
+
+        <h3>The certificate is decorative</h3>
+        <p>
+          A Udemy certificate of completion is a PDF with your name on it. It is not accredited, not proctored, and not recognized by employers the way a Google or IBM Professional Certificate is. If a credential is the reason you are learning, Udemy is the wrong tool.
+        </p>
+
+        <h3>Courses are getting shorter, not deeper</h3>
+        <p>
+          Average course length has fallen to about 3.8 hours, down from 7.7 hours in early 2023. Some of that is healthy — fewer 40-hour marathons — but a lot of it is two-hour "complete" courses that stop where the hard part begins. Structured platforms such as Codecademy, DataCamp and Zero to Mastery force a curriculum on you, which is what most self-taught learners actually need.
+        </p>
+
+        <h3>The Personal Plan is not the whole catalog</h3>
+        <p>
+          Udemy's subscription starts around $13/month and covers a curated set of 28,000+ courses, not the full marketplace. A Personal Plan bought on udemy.com also does not get the 30-day refund that individual courses do. If you were hoping for a Netflix of Udemy, read our <a class="inline-link" href="/udemy-personal-plan">Personal Plan review</a> before you pay.
+        </p>
+
+        <h3>And now Udemy belongs to Coursera</h3>
+        <p>
+          Coursera completed its combination with Udemy on 11 May 2026. Udemy stopped trading, each Udemy share converted into 0.8 Coursera shares, and the combined company claims 315,000 courses and roughly 290 million registered learners. Coursera says nothing changes for learners for now: your Udemy courses, subscriptions and certificates stay where they are, and the two sites continue to operate separately. But the company has targeted $115 million in annual cost savings, and a marketplace that already relies on instructor goodwill is exactly where cost pressure tends to show up first. The sensible response is not panic; it is knowing where else you would go.
+        </p>
+
+        <h2 id="criteria">What to look for in a Udemy alternative</h2>
+        <p>
+          Judge any replacement on the five things Udemy is weakest at. A platform that fixes two or three of these for your use case is a genuine upgrade; one that only offers a bigger catalog is not.
+        </p>
+        <ul>
+          <li><strong>Quality control.</strong> Who decides what gets published? University and company partners (Coursera, edX), in-house instructional teams (Codecademy, DataCamp, Educative), a vetted instructor roster (Zero to Mastery, MasterClass), or an open marketplace (Udemy, Skillshare). The first three tiers deliver far more consistent courses.</li>
+          <li><strong>Pricing you can predict.</strong> Subscriptions with a posted annual price beat marketplaces with rotating sales. Check whether the headline price is billed annually, whether it renews at a higher rate (Domestika and Educative both do), and whether a free tier exists.</li>
+          <li><strong>Credential value.</strong> Only a handful of online credentials move a resume: Coursera's Google, IBM and Meta Professional Certificates; edX MicroMasters and university certificates; vendor certifications that Pluralsight prepares you for; and Udacity Nanodegrees, which are respected in tech hiring because they are project-graded. Everything else, Udemy included, is proof of effort rather than proof of skill.</li>
+          <li><strong>Hands-on practice.</strong> Watching someone code is not learning to code. Codecademy, DataCamp, Educative and Pluralsight run exercises and labs in the browser; Udacity and Zero to Mastery grade or review real projects. Udemy is video with the occasional quiz.</li>
+          <li><strong>Currency of content.</strong> Ask how the platform handles a course that goes stale. Subscription platforms retire and rebuild courses; on a marketplace, a 2017 course keeps selling as long as its rating holds. For AI tooling, cloud services or JavaScript frameworks, this matters more than any other criterion.</li>
+        </ul>
+
+        <div class="test-box">
+          <h3>A five-minute test before you subscribe anywhere</h3>
+          <p>
+            Search the catalog for the exact topic you need before paying, because a 10,000-course library with two weak courses on your subject is worse than one excellent $15 course. Read the refund and cancellation terms: Coursera Plus annual has a 14-day refund window, Udemy gives 30 days on individual course purchases (not on a Personal Plan bought on udemy.com), and MasterClass allows 30 days, but annual subscriptions on most platforms are non-refundable after the trial.
+          </p>
+          <p>
+            Then note the renewal price, which on Domestika and Educative is roughly double the first-year rate, and check the course dates. A platform can be excellent in general and still be selling you a 2020 course on a tool that has changed twice since.
+          </p>
+        </div>
+
+        <h2 id="compare">Udemy alternatives at a glance: 12 platforms compared</h2>
+        <p>
+          Annual prices are what you pay upfront; "per month" figures on annual plans are the effective rate, not a monthly bill. Prices were re-checked in November 2026 and move often.
+        </p>
+        <div class="table-wrap">
+          <table class="alt-table">
+            <thead>
+              <tr>
+                <th>Platform</th>
+                <th>Price</th>
+                <th>Best for</th>
+                <th>Certificate value</th>
+                <th>Our pick</th>
+              </tr>
+            </thead>
+            <tbody>
+              {alternatives.map((alt) => (
+                <tr>
+                  <td><a href={`#${alt.id}`}>{alt.name}</a></td>
+                  <td>{alt.tablePrice}</td>
+                  <td>{alt.tableBest}</td>
+                  <td>{alt.cert}</td>
+                  <td class="pick">{alt.pick}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="alternatives">The 12 Udemy alternatives, reviewed</h2>
+        <p>
+          Each review covers the same four questions: what the platform does well, where it beats Udemy, where Udemy still wins, and who should skip it. Use the table above to jump to the one that fits your goal.
+        </p>
+
         {alternatives.map((alt, i) => (
-          <section class="alt-card" aria-label={`${alt.name} — ${alt.tag}`}>
-            <h2><span class="alt-rank">{i + 1}</span><a href={altUrls[alt.name]} target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none">{alt.name}</a></h2>
-            <span class="alt-tag">{alt.tag}</span>
-            <div class="alt-meta"><strong>Pricing:</strong> {alt.pricing}</div>
-            <p>{alt.desc}</p>
-            <div class="alt-lists">
-              <div>
-                <h4>Pros</h4>
-                <ul>{alt.pros.map((p) => <li>{p}</li>)}</ul>
+          <section class="alt-card" id={alt.id} aria-label={`${alt.name} — ${alt.tag}`}>
+            <div class="alt-head">
+              <span class="alt-rank">{i + 1}</span>
+              <div class="alt-title-wrap">
+                <h3 class="alt-title"><a href={alt.url} target="_blank" rel="noopener noreferrer">{alt.name}</a></h3>
+                <span class="alt-tag">{alt.tag}</span>
               </div>
-              <div>
-                <h4>Cons</h4>
-                <ul>{alt.cons.map((c) => <li>{c}</li>)}</ul>
+            </div>
+            <div class="alt-price"><strong>Pricing:</strong> {alt.price}</div>
+            <p class="alt-desc">{alt.desc}</p>
+            <div class="alt-split">
+              <div class="alt-box">
+                <h4>Where it beats Udemy</h4>
+                <p>{alt.beats}</p>
               </div>
+              <div class="alt-box">
+                <h4>Where Udemy still wins</h4>
+                <p>{alt.udemyWins}</p>
+              </div>
+            </div>
+            <div class="alt-fit">
+              <div><strong>Best for</strong>{alt.bestFor}</div>
+              <div><strong>Skip if</strong>{alt.skipIf}</div>
+            </div>
+            <div class="alt-actions">
+              <a class="btn-brand" href={alt.url} target="_blank" rel="noopener noreferrer">{alt.cta} →</a>
+              {alt.compare && <a class="btn-outline" href={alt.compare}>Read the head-to-head</a>}
             </div>
           </section>
         ))}
-      </div>
 
-      <div class="prose" style={{ marginTop: "3rem" }}>
-        <h2 id="quick-pick">Which Udemy Alternative Should You Pick?</h2>
-        <ul>
-          <li><strong>Recognized certificate or degree:</strong> Coursera or edX.</li>
-          <li><strong>Creative design/illustration classes:</strong> Skillshare.</li>
-          <li><strong>Hands-on IT, cloud, and tech labs:</strong> Pluralsight.</li>
-          <li><strong>Professional soft skills & resume integration:</strong> LinkedIn Learning.</li>
-          <li><strong>Learn to code 100% free:</strong> freeCodeCamp.</li>
-          <li><strong>Math, science, and academics:</strong> Khan Academy or MIT OpenCourseWare.</li>
-          <li><strong>Free Google Ads/Analytics certifications:</strong> Google Skillshop.</li>
-          <li><strong>Quick answers on any topic:</strong> YouTube.</li>
-        </ul>
-
-        <h2 id="note">The Best "Alternative" Is Free Udemy Itself</h2>
+        <h2 id="free">Free alternatives to Udemy that are actually worth your time</h2>
         <p>
-          Here's the honest take: nothing matches Udemy's combination of depth, variety, and value — especially when instructors publish <strong>100% off coupons</strong>. On <a href="/deals" style={{ color: "var(--brand)", fontWeight: 600 }}>CourseSpeak</a> we verify and list hundreds of these coupons daily, which means you get the full premium Udemy experience — lifetime access, quizzes, resources, and a certificate — for $0. Before paying for any alternative, check if the course you want is available free on Udemy today.
+          Udemy has a large free tier too, but the same quality lottery applies and free enrollments lose the instructor Q&A and certificate. These are the free options we would point a friend to instead.
+        </p>
+        <div class="free-grid">
+          {freeOptions.map((option) => (
+            <div class="free-card">
+              <span class="free-badge">{option.badge}</span>
+              <h3>{option.name}</h3>
+              <p>{option.desc}</p>
+              <a href={option.url} target="_blank" rel="noopener noreferrer">Open {option.name} →</a>
+            </div>
+          ))}
+        </div>
+        <p>
+          The honest caveat: free courses have a completion problem. Nobody finishes what they did not pay for, and none of these give you the accountability of a graded program. If you keep starting free courses and not finishing, that is the signal to pay for structure, not to find more free courses. For Udemy specifically, a verified 100% off coupon is the best of both worlds: full paid access, no cost. See today's <a class="inline-link" href="/deals">free Udemy coupons</a>.
         </p>
 
-        <div class="verdict">
-          <strong>Bottom line:</strong> Use free Udemy coupons for practical skills, add Coursera or edX when you need a recognized credential, and turn to the truly free platforms (freeCodeCamp, Khan Academy, Skillshop) for specialized or academic learning. Combining platforms costs you almost nothing and gets you the best of everything.
+        <h2 id="pick">Which Udemy alternative should you pick?</h2>
+        <p>
+          The right alternative depends on what you were trying to get from Udemy. Match your situation below.
+        </p>
+        <div class="pick-list">
+          <div class="pick-row">
+            <strong>You want a credential for a career change</strong>
+            <span>Coursera Plus. Pick a Google, IBM or Meta Professional Certificate and finish it inside two to three months of the subscription. For a bigger commitment with human feedback, choose Udacity.</span>
+          </div>
+          <div class="pick-row">
+            <strong>You want to learn to code from nothing</strong>
+            <span>Codecademy Pro for the first three months, then Zero to Mastery or a top Udemy course for depth on your chosen stack.</span>
+          </div>
+          <div class="pick-row">
+            <strong>You want to work in data</strong>
+            <span>DataCamp for the fundamentals and a benchmark, then a Coursera Professional Certificate for the resume line.</span>
+          </div>
+          <div class="pick-row">
+            <strong>You work in IT and need certifications</strong>
+            <span>Pluralsight for the learning paths and labs, plus Udemy practice exams for the specific test.</span>
+          </div>
+          <div class="pick-row">
+            <strong>You are an experienced developer preparing for interviews</strong>
+            <span>Educative, and nothing else on this list comes close for system design.</span>
+          </div>
+          <div class="pick-row">
+            <strong>You want free, university-quality material</strong>
+            <span>edX audit track, Khan Academy and freeCodeCamp. MIT OpenCourseWare for complete course materials.</span>
+          </div>
+          <div class="pick-row">
+            <strong>You want creative skills</strong>
+            <span>Domestika to make things, MasterClass to learn how the best think, Skillshare for a stream of short creative projects.</span>
+          </div>
+          <div class="pick-row">
+            <strong>You just need one course on one tool</strong>
+            <span>Stay on Udemy. Wait for the sale that is always about to start, pay $10 to $20, and own it forever. Or check <a href="/deals">CourseSpeak</a> for a verified 100% off coupon.</span>
+          </div>
+          <div class="pick-row">
+            <strong>You are buying for a business team</strong>
+            <span>Udemy Business, Coursera for Business, Pluralsight for technical teams that need labs, or LinkedIn Learning if your company already pays for LinkedIn.</span>
+          </div>
         </div>
 
-        <h2 id="related">Head-to-Head Platform Comparisons</h2>
+        <h2 id="methodology">How we compared these platforms</h2>
+        <div class="method">
+          <p>
+            We re-read every price on this page from the vendor's public pricing or checkout page where accessible in November 2026. Where a login wall or regional pricing prevented a direct read, we say so and use the most recent dated figure we have. Course counts are the vendors' own published figures.
+          </p>
+          <p>
+            Udemy catalog statistics come from <a class="inline-link" href="https://www.classcentral.com/report/udemy-by-the-numbers/" target="_blank" rel="noopener noreferrer">Class Central's January 2026 analysis</a>. Merger details come from Coursera's investor communications, including the 11 May 2026 completion announcement. Every affiliate link is disclosed, and our ranking is by fit for the learner, not by commission; several of the twelve platforms pay us nothing.
+          </p>
+        </div>
+
+        <h2 id="faq">Frequently asked questions about Udemy alternatives</h2>
+        <div class="faq-list">
+          {faqs.map((faq) => (
+            <details class="faq-item">
+              <summary>
+                {faq.q}
+                <svg class="fi" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+              </summary>
+              <div class="faq-answer">{faq.a}</div>
+            </details>
+          ))}
+        </div>
+
+        <AuthorCard />
+
+        <h2 id="related">Related comparisons</h2>
         <div class="related">
-          {related.map((r) => <a href={`/platforms/${r.slug}`}>{r.label}</a>)}
+          {related.map((link) => <a href={link.href}>{link.label}</a>)}
+        </div>
+
+        <div class="cta-box">
+          <span class="cta-eyebrow">The cheapest option is still Udemy</span>
+          <h2>Want Udemy itself for $0?</h2>
+          <p class="cta-subtext">
+            Verified 100% off coupons give you the full paid experience — lifetime access, quizzes, resources and a certificate — at no cost. We publish new ones every day.
+          </p>
+          <div class="cta-actions">
+            <a class="btn btn-primary btn-lg" href="/deals">
+              Browse free Udemy coupons
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+            </a>
+          </div>
+          <div class="cta-features">
+            <span><span class="cta-dot"></span>Updated daily</span>
+            <span><span class="cta-dot"></span>Verified before publishing</span>
+            <span><span class="cta-dot"></span>No subscription needed</span>
+          </div>
         </div>
 
       </div>
+
+      <aside class="pp-sidebar">
+        <nav class="pp-toc" aria-label="On this page">
+          <h4>On this page</h4>
+          <ol>
+            <li><a href="#verdict">Quick verdict</a></li>
+            <li><a href="#why">Why people switch</a></li>
+            <li><a href="#criteria">What to look for</a></li>
+            <li><a href="#compare">12 platforms at a glance</a></li>
+            <li><a href="#alternatives">The 12 alternatives</a></li>
+            <li><a href="#free">Free alternatives</a></li>
+            <li><a href="#pick">Which should you pick?</a></li>
+            <li><a href="#methodology">How we compared</a></li>
+            <li><a href="#faq">FAQ</a></li>
+          </ol>
+        </nav>
+
+        <nav class="pp-toc" aria-label="Top picks">
+          <h4>Top picks</h4>
+          <ol>
+            <li><a href="#coursera">1. Coursera — credentials</a></li>
+            <li><a href="#codecademy">2. Codecademy — coding</a></li>
+            <li><a href="#datacamp">3. DataCamp — data</a></li>
+            <li><a href="#pluralsight">4. Pluralsight — IT certs</a></li>
+          </ol>
+        </nav>
+
+        <div class="pp-cta">
+          <p>Want Udemy for free instead?</p>
+          <a href="/deals">Browse 100% off coupons</a>
+        </div>
+
+        <div class="pp-trust">
+          <span>✓ Independent rankings</span>
+          <span>✓ Prices checked November 2026</span>
+          <span>✓ Affiliate links disclosed</span>
+        </div>
+      </aside>
     </div>
   </article>
-
-  <section style={{ padding: "4rem 1rem", background: "var(--bg-secondary)" }}>
-    <div class="container" style={{ maxWidth: "900px" }}>
-      <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
-        <h2 class="section-heading" id="faq">Udemy Alternatives FAQ</h2>
-        <p style={{ color: "var(--muted)", maxWidth: "600px", margin: "0.5rem auto 0" }}>Quick answers to the questions we hear most.</p>
-      </div>
-      <div class="faq-grid">
-        {faqs.map((faq) => (
-          <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "14px", padding: "1.25rem 1.5rem" }}>
-            <h3 style={{ margin: "0 0 0.5rem", fontSize: "1rem", color: "var(--text)", fontWeight: 700 }}>{faq.q}</h3>
-            <p style={{ margin: 0, color: "var(--muted)", lineHeight: 1.7, fontSize: "0.95rem" }}>{faq.a}</p>
-          </div>
-        ))}
-      </div>
-      <div style={{ marginTop: "2.5rem" }}>
-        <AuthorCard />
-      </div>
-      <div style={{ textAlign: "center", marginTop: "3rem" }}>
-        <p style={{ color: "var(--muted)", marginBottom: "1rem" }}>Ready to start learning for free?</p>
-        <a href="/deals" style={{
-          display: "inline-flex", alignItems: "center", gap: "0.5rem",
-          padding: "0.875rem 2rem", borderRadius: "12px",
-          background: "var(--brand)", color: "#1a1814",
-          textDecoration: "none", fontWeight: 700, fontSize: "1rem",
-          boxShadow: "0 4px 20px -4px hsla(45,95%,58%,0.4)"
-        }}>
-          Browse Free Udemy Coupons
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
-        </a>
-      </div>
-    </div>
-  </section>
 </Layout>

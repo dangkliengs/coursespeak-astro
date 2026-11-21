@@ -8,6 +8,10 @@ export const ALL_VOUCHERS_URL = `${AFFILIATE_BASE}?u=https%3A%2F%2Fwww.udemy.com
 // Linux Foundation campaign (CKA, CKS, CNPE)
 export const LF_AFFILIATE_BASE = "https://trk.udemy.com/c/6564357/4058277/39854";
 
+// All-vouchers hub link uses the LF campaign; Second Chance uses the original campaign.
+export const ALL_VOUCHERS_HUB_URL = `${LF_AFFILIATE_BASE}?u=https%3A%2F%2Fwww.udemy.com%2Fall-certification-vouchers%2F`;
+export const SECOND_CHANCE_URL = AFFILIATE_BASE;
+
 function v(path: string) {
   return `${AFFILIATE_BASE}?u=https%3A%2F%2Fwww.udemy.com%2Fcertification-vouchers%2F${path}%2F`;
 }
@@ -208,10 +212,10 @@ export const linuxVoucherCount = linuxVouchers.length;
 export const microsoftCurrentCount = microsoftCatalog.filter((x) => x.status === "current").length;
 
 export const providerMeta = {
-  comptia: { name: "CompTIA", count: 15, color: "#C20D00", page: "/udemy-comptia-exam-vouchers", image: "/assets/images/vouchers/provider-comptia.svg", desc: "Security+ SY0-701, A+ 220-1201/1202, Network+ N10-009, CySA+ CS0-004, PenTest+ PT0-003, Linux+ XK0-006, Cloud+ CV0-004, DataSys+ DS0-002, DataAI DY0-001 and more." },
-  aws: { name: "AWS", count: 12, color: "#FF9900", page: "/udemy-aws-exam-vouchers", image: "/assets/images/vouchers/provider-aws.svg", desc: "Cloud Practitioner CLF-C02, Solutions Architect SAA-C03, Professional SAP-C03, Developer DVA-C03, Security SCS-C03. 12 voucher products, 10 current exams. Pearson VUE scheduling." },
-  microsoft: { name: "Microsoft", count: 50, color: "#00A4EF", page: "/udemy-microsoft-exam-vouchers", image: "/assets/images/vouchers/provider-microsoft.svg", desc: "50 live voucher pages, 33 current exams — AZ-900, AZ-104, AZ-305, AZ-400, SC-200, DP-300, MD-102 and more. Retired 2026 exam pages are flagged." },
-  linux: { name: "Linux Foundation", count: 3, color: "#326CE5", page: "/udemy-linux-foundation-exam-vouchers", image: "/assets/images/vouchers/provider-linux-foundation.svg", desc: "CKA, CKS & CNPE — $311.50 vs $445 direct, 30% off, two exam attempts. CKAD at $311.50 too." },
+  comptia: { name: "CompTIA", count: 15, best: "IT support, networking & cybersecurity careers", color: "#C20D00", page: "/udemy-comptia-exam-vouchers", image: "/assets/images/vouchers/provider-comptia.svg", desc: "Security+ SY0-701, A+ 220-1201/1202, Network+ N10-009, CySA+ CS0-004, PenTest+ PT0-003, Linux+ XK0-006, Cloud+ CV0-004, DataSys+ DS0-002, DataAI DY0-001 and more." },
+  aws: { name: "AWS", count: 12, best: "Cloud, DevOps & data roles", color: "#FF9900", page: "/udemy-aws-exam-vouchers", image: "/assets/images/vouchers/provider-aws.svg", desc: "Cloud Practitioner CLF-C02, Solutions Architect SAA-C03, Professional SAP-C03, Developer DVA-C03, Security SCS-C03. 12 voucher products, 10 current exams. Pearson VUE scheduling." },
+  microsoft: { name: "Microsoft", count: 50, best: "Azure, data, security & Microsoft 365", color: "#00A4EF", page: "/udemy-microsoft-exam-vouchers", image: "/assets/images/vouchers/provider-microsoft.svg", desc: "50 live voucher pages, 33 current exams — AZ-900, AZ-104, AZ-305, AZ-400, SC-200, DP-300, MD-102 and more. Retired 2026 exam pages are flagged." },
+  linux: { name: "Linux Foundation", count: 3, best: "Kubernetes, SRE & platform engineering", color: "#326CE5", page: "/udemy-linux-foundation-exam-vouchers", image: "/assets/images/vouchers/provider-linux-foundation.svg", desc: "CKA, CKS & CNPE — $311.50 vs $445 direct, 30% off, two exam attempts. CKAD at $311.50 too." },
 };
 
 export const comptiaGroupBlurbs: Record<string, string> = {

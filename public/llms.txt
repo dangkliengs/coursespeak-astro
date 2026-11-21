@@ -1,0 +1,32 @@
+# CourseSpeak — LLM-friendly index
+
+> CourseSpeak publishes verified Udemy coupon and certification voucher guides. This file gives AI assistants and generative engines a concise, citation-ready view of the public voucher catalogue. Snapshot checked 2026-11-21.
+
+## Primary guide — Udemy certification vouchers
+
+- Title: Udemy Certification Vouchers 2026: Save on AWS, CompTIA, Microsoft & Linux Foundation Exams
+- URL: https://coursespeak.com/udemy-certification-vouchers/
+- Answer: Udemy sells prepaid exam vouchers for selected CompTIA, AWS, Microsoft and Linux Foundation certifications. CourseSpeak tracks 77 voucher pages covering 58 current exams across CompTIA (15 pages), AWS (12 pages) and Microsoft (50 pages), plus 3 separate Linux Foundation vouchers (CKA, CKS, CNPE). Savings are about 10% on AWS and Microsoft, 10–12.5% on CompTIA, and 30% on Linux Foundation ($445 list → $311.50 at Udemy). Vouchers are non-refundable, country-locked, and Udemy coupons apply to prep courses, not to vouchers.
+- Scheduling: AWS, Microsoft and CompTIA use Pearson VUE. Linux Foundation vouchers are redeemed in the Linux Foundation My Portal and scheduled through PSI.
+- Validity: CompTIA/AWS/Microsoft vouchers last at least 9 months. Udemy Linux Foundation vouchers must be redeemed within 6 months of purchase and the exam taken within 12 months of redemption.
+- Retake cover: AWS uses the Second Chance bundle (new code after a failed attempt). CompTIA and selected Microsoft exams use Retake Assurance (same code reused). Linux Foundation includes two attempts as standard.
+
+## Provider guides
+
+- CompTIA vouchers (15 pages): https://coursespeak.com/udemy-comptia-exam-vouchers/
+- AWS vouchers (12 products, 10 current exams): https://coursespeak.com/udemy-aws-exam-vouchers/
+- Microsoft vouchers (50 pages, 33 current exams): https://coursespeak.com/udemy-microsoft-exam-vouchers/
+- Linux Foundation vouchers (CKA, CKS, CNPE): https://coursespeak.com/udemy-linux-foundation-exam-vouchers/
+
+## Primary sources used for verification
+
+- Udemy all certification vouchers: https://www.udemy.com/all-certification-vouchers/
+- AWS certification exam pricing: https://aws.amazon.com/certification/certification-exams/
+- Microsoft retired certification exams: https://learn.microsoft.com/en-us/credentials/support/retired-certification-exams
+- Linux Foundation CKA: https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/
+- Linux Foundation CKS: https://training.linuxfoundation.org/certification/certified-kubernetes-security-specialist/
+- Linux Foundation CNPE: https://training.linuxfoundation.org/certification/certified-cloud-native-platform-engineer-cnpe/
+
+## Notes for citation
+
+Prices are a dated snapshot (November 2026), vary by country and campaign, and are not live quotes. Always confirm the current price, exam code and country eligibility on the linked official page before purchasing. CourseSpeak may earn a commission from Udemy affiliate links at no extra cost to readers.

@@ -11,6 +11,12 @@ interface Props {
   canonical?: string;
   /** Robots directive, e.g. "noindex, follow". Defaults to indexable. */
   robots?: string;
+  /** Comma-separated keywords for pages that need explicit topical signals. */
+  keywords?: string;
+  /** ISO date for article:published_time / og:updated_time style signals. */
+  publishedTime?: string;
+  /** ISO date for article:modified_time. */
+  modifiedTime?: string;
 }
 
 
@@ -22,6 +28,9 @@ const {
   type = "website",
   canonical,
   robots,
+  keywords,
+  publishedTime,
+  modifiedTime,
 } = Astro.props;
 
 const siteUrl = import.meta.env.SITE || "https://coursespeak.com";
@@ -73,6 +82,9 @@ const siteNavLd = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {keywords && <meta name="keywords" content={keywords} />}
+    {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+    {modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalURL} />
     <link rel="alternate" hreflang="en" href={canonicalURL} />
@@ -126,6 +138,7 @@ const siteNavLd = {
     {
       "@context": "https://schema.org",
       "@type": "Organization",
+      "@id": "https://coursespeak.com/#organization",
       "name": "CourseSpeak",
       "url": "https://coursespeak.com",
       "logo": "https://coursespeak.com/logo.svg",
@@ -179,6 +192,7 @@ const siteNavLd = {
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
+      "@id": "https://coursespeak.com/#website",
       "name": "CourseSpeak",
       "url": "https://coursespeak.com",
       "description": "Find verified Udemy courses with 100% off coupons. Daily updated deals for online learning.",
