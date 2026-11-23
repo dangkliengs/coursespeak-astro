@@ -298,6 +298,82 @@ const siteNavLd = {
         top: 0;
       }
 
+      /* ── Black Friday deal bar (above the site header) ── */
+      .top-alert {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 20px;
+        background: linear-gradient(90deg, #080b12 0%, #0f1420 100%);
+        border-bottom: 1px solid rgba(212, 167, 55, 0.35);
+        color: var(--text);
+        font-size: 15px;
+      }
+      .top-alert .alert-message {
+        flex: 1 1 auto;
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-width: 120px;
+      }
+      .top-alert .alert-message strong { color: var(--brand); }
+      .top-alert .alert-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-shrink: 0;
+      }
+      .top-alert .alert-button {
+        display: inline-flex;
+        align-items: center;
+        background: linear-gradient(135deg, #B8860B 0%, #D4AF37 25%, #E8C547 50%, #D4AF37 75%, #B8860B 100%);
+        color: #080b12;
+        font-weight: 700;
+        padding: 8px 18px;
+        border-radius: 999px;
+        text-decoration: none;
+        font-size: 14px;
+        white-space: nowrap;
+        box-shadow: 0 0 18px -4px rgba(212, 167, 55, 0.45);
+        transition: filter 0.2s ease, transform 0.2s ease;
+      }
+      .top-alert .alert-button:hover {
+        filter: brightness(1.08);
+        transform: translateY(-1px);
+      }
+      .top-alert .close-btn {
+        background: none;
+        border: none;
+        color: var(--muted);
+        font-size: 20px;
+        cursor: pointer;
+        padding: 0;
+        line-height: 1;
+      }
+      .top-alert .close-btn:hover { color: var(--text); }
+      @media (max-width: 600px) {
+        .top-alert {
+          flex-direction: column;
+          align-items: stretch;
+          padding: 14px;
+          gap: 10px;
+        }
+        .top-alert .alert-message {
+          white-space: normal;
+          width: 100%;
+        }
+        .top-alert .alert-actions {
+          justify-content: space-between;
+          width: 100%;
+        }
+        .top-alert .alert-button {
+          flex: 1;
+          justify-content: center;
+        }
+      }
+
       .site-header {
         background: linear-gradient(180deg, rgba(212, 167, 55, 0.12) 0%, rgba(212, 167, 55, 0.04) 100%);
         border-bottom: 1px solid rgba(212, 167, 55, 0.35);
@@ -625,6 +701,13 @@ const siteNavLd = {
   </head>
   <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
+    <div class="top-alert" id="siteAlert" role="region" aria-label="Black Friday deal">
+      <span class="alert-message">🔥 Black Friday is live: <strong>courses from $9.99</strong>. Biggest sale of the year — ends Nov 27.</span>
+      <span class="alert-actions">
+        <a href="https://trk.udemy.com/c/6564357/4121290/39854" target="_blank" rel="noopener noreferrer" class="alert-button">Get Deals</a>
+        <button class="close-btn" id="siteAlertClose" aria-label="Dismiss Black Friday deal">✕</button>
+      </span>
+    </div>
     <header role="banner" class="site-header">
       <nav
         itemscope
@@ -1125,6 +1208,17 @@ const siteNavLd = {
     </button>
 
     <script>
+      // Black Friday alert: hide once dismissed (persisted per visitor)
+      try {
+        const siteAlert = document.getElementById('siteAlert');
+        const siteAlertClose = document.getElementById('siteAlertClose');
+        if (siteAlert && localStorage.getItem('cs-alert-hidden') === '1') siteAlert.style.display = 'none';
+        if (siteAlertClose) siteAlertClose.addEventListener('click', () => {
+          if (siteAlert) siteAlert.style.display = 'none';
+          try { localStorage.setItem('cs-alert-hidden', '1'); } catch {}
+        });
+      } catch {}
+
       // Newsletter form feedback
       const newsletterForm = document.querySelector('footer form');
       if (newsletterForm) {
